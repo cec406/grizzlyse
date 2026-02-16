@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grizzly System Engineering - IT Solutions in Helena, MT</title>
+    <meta name="description" content="Custom IT solutions in Helena, Montana: server builds, coding, networks, cybersecurity, repairs, and more.">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:Arial, sans-serif; line-height:1.5; color:#333; background:#f4f4f4; }
+        .container { max-width:1100px; margin:0 auto; padding:0 15px; }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color:white; padding:0.8rem 0; position:fixed; width:100%; top:0; z-index:1000;
+            box-shadow:0 2px 4px rgba(0,0,0,0.1);
+        }
+        nav { display:flex; justify-content:space-between; align-items:center; }
+        .logo { font-size:1.3rem; font-weight:bold; }
+        .nav-links { display:flex; list-style:none; gap:1.5rem; }
+        .nav-links a { color:white; text-decoration:none; font-size:0.95rem; transition:color 0.3s; }
+        .nav-links a:hover { color:#3498db; }
+        .hamburger { display:none; flex-direction:column; cursor:pointer; }
+        .hamburger span { width:22px; height:3px; background:white; margin:2px 0; }
+
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), 
+                        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+            color:white; text-align:center; padding:120px 0 70px; margin-top:60px;
+        }
+        .hero h1 { font-size:2.6rem; margin-bottom:0.5rem; }
+        .hero .tagline { font-size:1.3rem; margin-bottom:1.2rem; font-weight:300; }
+
+        .btn {
+            display:inline-block; background:#3498db; color:white; padding:9px 22px;
+            text-decoration:none; border-radius:5px; font-size:0.95rem; transition:background 0.3s;
+        }
+        .btn:hover { background:#2980b9; }
+
+        section { padding:40px 0; }
+        h2 { text-align:center; font-size:1.9rem; margin-bottom:1.5rem; color:#2c3e50; }
+
+        .about { background:white; }
+        .about-content { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; align-items:center; }
+        .about-text p { font-size:0.95rem; margin-bottom:0.8rem; }
+        .about-image img { 
+            max-width:220px; height:auto; border-radius:8px; 
+            background:transparent !important; border:none; display:block; margin:0 auto;
+        }
+
+        .services { background:#f4f4f4; }
+        .services-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.2rem; }
+        .service-card {
+            background:white; padding:1.2rem; border-radius:8px; text-align:center;
+            box-shadow:0 3px 8px rgba(0,0,0,0.08); transition:transform 0.3s;
+        }
+        .service-card:hover { transform:translateY(-4px); }
+        .service-card h3 { color:#2c3e50; margin-bottom:0.6rem; font-size:1.2rem; }
+        .service-card p { font-size:0.9rem; }
+
+        .contact { background:white; }
+        .contact-content { text-align:center; max-width:600px; margin:0 auto; }
+        .contact-info p { font-size:1.1rem; margin:0.8rem 0; }
+
+        footer { background:#2c3e50; color:white; text-align:center; padding:1.2rem 0; font-size:0.85rem; }
+
+        @media (max-width:768px) {
+            .hamburger { display:flex; }
+            .nav-links { position:fixed; left:-100%; top:55px; flex-direction:column; background:#2c3e50; width:100%; text-align:center; transition:0.3s; padding:1.2rem 0; }
+            .nav-links.active { left:0; }
+            .hero h1 { font-size:2.1rem; }
+            .hero .tagline { font-size:1.1rem; }
+            .hero { padding:100px 0 50px; margin-top:55px; }
+            .about-content { grid-template-columns:1fr; }
+            .about-image img { max-width:180px; }
+            .services-grid { grid-template-columns:1fr; }
+            section { padding:30px 0; }
+            h2 { font-size:1.7rem; margin-bottom:1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <div class="logo">Grizzly System Engineering</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span><span></span><span></span>
+            </div>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Grizzly Proof Your Tech Future</h1>
+            <p class="tagline">Custom IT Solutions for Home and Business</p>
+            <a href="#contact" class="btn">Get in Touch</a>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About Grizzly System Engineering</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Servicing the Helana, Montana area, Grizzly System Engineering delivers reliable IT solutions. We specialize in enterprise server builds, custom coding & automation, secure networks, and cybersecurity for homes and businesses statewide.</p>
+                    <p>We focus on strength, reliability, and precision for every project.</p>
+                </div>
+                <div class="about-image">
+                    <img src="grizzly-logo.png" alt="Grizzly System Engineering Logo">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <div class="container">
+            <h2>Our Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Custom PC & Server Builds</h3>
+                    <p>Design and assemble high-performance computers and servers tailored to your workload, from gaming rigs to enterprise-grade machines.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Network Building & Internet Setup</h3>
+                    <p>Install and configure robust networks, including high-speed internet solutions like Starlink, for seamless home or business connectivity.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Home & Business Tech Setup</h3>
+                    <p>Full-service integration of smart home devices (e.g., Ring doorbells) and business systems for efficiency and security.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Computer Repair & Optimization</h3>
+                    <p>Diagnose, repair, and tune up your devices to run faster and more reliably, extending their lifespan.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Cybersecurity & Pentesting</h3>
+                    <p>Protect your data with comprehensive security audits, penetration testing, and proactive defense strategies.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Data Recovery & Digital Forensics</h3>
+                    <p>Recover lost files from damaged drives and conduct thorough forensic investigations for legal or personal needs.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Custom Applications & Coding Projects</h3>
+                    <p>Develop bespoke software, apps, and scripts to automate tasks and streamline your operations.</p>
+                </div>
+                <div class="service-card">
+                    <h3>General IT Services</h3>
+                    <p>End-to-end support for any tech challenge, ensuring your systems are always up and running.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Grizzly Proof Your Tech!</h3>
+                    <p><strong>Phone:</strong> (406) 439-8127</p>
+                    <p><strong>Email:</strong> info@grizzlyse.com</p>
+                    <p>Call, text, or email — we're ready to help.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Grizzly System Engineering | Helena, MT</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
