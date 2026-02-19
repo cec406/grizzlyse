@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Recovery & Digital Forensics - Grizzly System Engineering | Montana</title>
+    <meta name="description" content="Data recovery from failed drives and digital forensics services in East Helena, Montana. Recover lost files, unlock locked computers, and preserve evidence for homes and businesses statewide.">
+    <meta name="keywords" content="data recovery Montana, hard drive recovery Helena, digital forensics East Helena, forgotten password unlock Montana, locked computer access, file recovery services">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:Arial, sans-serif; line-height:1.7; color:#333; background:#f4f4f4; }
+        .container { max-width:1100px; margin:0 auto; padding:0 15px; }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color:white; padding:0.8rem 0; position:fixed; width:100%; top:0; z-index:1000;
+            box-shadow:0 2px 6px rgba(0,0,0,0.15);
+        }
+        nav { display:flex; justify-content:space-between; align-items:center; }
+        .logo { font-size:1.4rem; font-weight:bold; }
+        .nav-links { display:flex; list-style:none; gap:1.8rem; }
+        .nav-links a { color:white; text-decoration:none; font-size:1rem; transition:color 0.3s; }
+        .nav-links a:hover { color:#3498db; }
+        .hamburger { display:none; flex-direction:column; cursor:pointer; }
+        .hamburger span { width:24px; height:3px; background:white; margin:4px 0; transition:0.3s; }
+
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
+                        url('https://www.dataclinic.co.uk/wp-content/uploads/2023/05/hard-drive-data-recovery.jpg') center/cover no-repeat;
+            /* Swap suggestion: Use hard drive recovery or forensic tools image from options above; upload as '/recovery-hero.jpg' for custom fit */
+            color:white; text-align:center; padding:140px 0 80px; margin-top:60px;
+        }
+        .hero h1 { font-size:2.8rem; margin-bottom:0.6rem; }
+        .hero .tagline { font-size:1.4rem; margin-bottom:1.4rem; font-weight:300; }
+        .hero .back-link { color:#ddd; font-size:1.1rem; margin-top:1rem; display:inline-block; }
+
+        .btn {
+            display:inline-block; background:#3498db; color:white; padding:10px 24px;
+            text-decoration:none; border-radius:6px; font-size:1rem; transition:background 0.3s;
+        }
+        .btn:hover { background:#2980b9; }
+
+        section { padding:50px 0; }
+        h2 { text-align:center; font-size:2.1rem; margin-bottom:1.8rem; color:#2c3e50; }
+
+        .content-section { background:white; padding:2.5rem; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.08); margin-bottom:2rem; }
+        .content-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:center; }
+        .content-text p { margin-bottom:1.2rem; }
+        .content-text ul { list-style-type:disc; padding-left:1.8rem; margin:1.2rem 0; }
+        .content-text li { margin-bottom:0.9rem; font-size:1.05rem; }
+
+        .about-image img { 
+            max-width:280px; height:auto; border-radius:8px; 
+            background:transparent !important; border:none; display:block; margin:0 auto;
+            transition: transform 0.3s ease;
+        }
+        .about-image img:hover { transform: scale(1.05); }
+
+        .contact { background:#f8f9fa; }
+        .contact-content { text-align:center; max-width:700px; margin:0 auto; }
+        .contact-info p { font-size:1.15rem; margin:1.2rem 0; }
+
+        footer { background:#2c3e50; color:white; text-align:center; padding:1.5rem 0; font-size:0.9rem; }
+
+        @media (max-width:768px) {
+            .hamburger { display:flex; }
+            .nav-links { position:fixed; left:-100%; top:60px; flex-direction:column; background:#2c3e50; width:100%; text-align:center; transition:0.4s; padding:1.5rem 0; }
+            .nav-links.active { left:0; }
+            .hero h1 { font-size:2.3rem; }
+            .hero .tagline { font-size:1.2rem; }
+            .hero { padding:110px 0 60px; margin-top:55px; }
+            .content-grid { grid-template-columns:1fr; }
+            .about-image img { max-width:220px; }
+            section { padding:40px 0; }
+            h2 { font-size:1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="container">
+            <div class="logo">Grizzly System Engineering</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/#about">About</a></li>
+                <li><a href="/#services">Services</a></li>
+                <li><a href="/#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span><span></span><span></span>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Data Recovery & Digital Forensics</h1>
+            <p class="tagline">Recover Lost Files and Unlock Devices – Secure, Careful Handling in Montana</p>
+            <a href="/#services" class="back-link">← Back to All Services</a>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <h2>Why Choose Grizzly for Recovery & Forensics?</h2>
+            <div class="content-grid">
+                <div class="content-text">
+                    <p>We offer careful data recovery and basic digital forensics services right here in East Helena, Montana. Whether files were lost to drive failure, accidental deletion, formatting, or corruption, or you need to unlock a personal device you own, we work to retrieve what matters—grizzly-tough and respectful of privacy in remote or home setups.</p>
+                    <ul>
+                        <li>Data recovery from failed HDDs, SSDs, USB drives, SD cards, and RAID arrays (non-destructive methods where possible)</li>
+                        <li>Recovery of accidentally deleted or formatted files, including photos, documents, and backups</li>
+                        <li>Unlocking locked computers (forgotten Windows passwords or locked accounts on devices you own, using bootable tools like Hiren's)</li>
+                        <li>Basic digital forensics (preserving evidence from drives/devices for personal or small business needs, chain-of-custody handling)</li>
+                        <li>Secure data handling and verification of recovered files</li>
+                        <li>Advice on backups and prevention to avoid future loss</li>
+                    </ul>
+                    <p>Perfect for: families recovering family photos/videos, small businesses salvaging important records, rural Montana users with failed external drives, or individuals locked out of their own machines (owner-verified access only).</p>
+                    <p>Note: All services are for lawful purposes on devices you own or have permission to access.</p>
+                </div>
+                <div class="about-image">
+                    <img src="grizzly-logo.png" alt="Grizzly System Engineering - Strong transparent grizzly bear logo for data recovery and digital forensics in Montana">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact-section" class="contact">
+        <div class="container">
+            <h2>Ready to Recover Your Data or Unlock Your Device?</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <p><strong>Phone:</strong> <a href="tel:+14064398127">(406) 439-8127</a> – Call or text</p>
+                    <p><strong>Email:</strong> <a href="mailto:info@grizzlyse.com">info@grizzlyse.com</a></p>
+                    <p>Tell us what happened (drive failure, deletion, locked out of Windows, etc.), the device type (HDD/SSD/laptop/external), and any important files or access details. The more info, the better we can help.</p>
+
+                    <!-- Your Zoho Contact Form -->
+                    <script type="text/javascript">function zforms_open_window(url, height, width){var leftPos = 0;var topPos = 0;if(screen){leftPos = (screen.width - width) / 2;topPos = (screen.height - height) / 2;window.open(url, null, 'width='+width+',height='+height+',left='+leftPos+',top='+topPos+', toolbar=0, location=0, status=1, scrollbars=1, resizable=1');}}</script>
+                    <a href='https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0' title="Contact Us for Data Recovery & Digital Forensics" target='_blank' onclick="zforms_open_window(this.href, 648, 700); return false" class="btn" style="font-size:1.1rem; padding:12px 30px;">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Grizzly System Engineering | East Helena, Montana – Reliable Custom IT Solutions Statewide</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
