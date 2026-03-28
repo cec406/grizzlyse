@@ -24,7 +24,6 @@
     </style>
 </head>
 <body>
-
 <div class="container">
     <header>
         <a href="index.html" class="back-link">← Return to Capabilities</a>
@@ -32,70 +31,63 @@
     </header>
 
     <h1>The Engineering Lab</h1>
-    <p style="font-size: 1.2rem; opacity: 0.8; max-width: 700px;">A hardened, production-grade environment for testing DevSecOps pipelines, offensive security research, and tactical situational awareness platforms.</p>
+    <p style="font-size: 1.2rem; opacity: 0.8; max-width: 700px;">A high-performance environment engineered for the rigorous testing of tactical infrastructure, situational awareness platforms, and defensive DevSecOps pipelines.</p>
 
     <div class="lab-section">
-        <h2>Hardware & Physical Layer</h2>
+        <h2>Hardware Architecture</h2>
         <div class="grid">
             <div class="spec-card">
-                <h3>Main Compute</h3>
+                <h3>Enterprise Compute</h3>
                 <ul>
-                    <li>Dell PowerEdge R630 (Enterprise Virtualization)</li>
-                    <li>AMD Ryzen 9 5950X (Secure Dev Workstation)</li>
-                    <li>Dell OptiPlex 7050 Micro (Edge Nodes)</li>
+                    <li>Dell PowerEdge R630 Hypervisor Node</li>
+                    <li>AMD Ryzen 9 5950X / RX 7900 GRE Workstation</li>
+                    <li>Dell OptiPlex 7050 Micro Cluster</li>
                 </ul>
             </div>
             <div class="spec-card">
-                <h3>Networking & Connectivity</h3>
+                <h3>Networking & Edge</h3>
                 <ul>
-                    <li>Cisco Catalyst Gigabit Backbone</li>
-                    <li>Starlink / SATCOM Failover Integration</li>
-                    <li>Tailscale VPN Mesh (Zero Trust Remote Access)</li>
-                    <li>Cloudflare Tunnels (Secure Ingress)</li>
+                    <li>Cisco Catalyst 1G/10G Backbone</li>
+                    <li>Integrated SATCOM / Starlink Gateway</li>
+                    <li>Cloudflare Tunnel Ingress (Identity-Aware)</li>
                 </ul>
             </div>
             <div class="spec-card">
-                <h3>Storage & NAS</h3>
+                <h3>Resilient Storage</h3>
                 <ul>
-                    <li>RAID-Z2 Redundancy Pools</li>
-                    <li>Remote Encrypted NAS Access</li>
-                    <li>Automated Off-site Data Syncing</li>
+                    <li>ZFS-Managed RAID-Z2 Arrays</li>
+                    <li>Encrypted NAS Remote Access</li>
+                    <li>Automated Off-site Off-boarding</li>
                 </ul>
             </div>
         </div>
     </div>
 
     <div class="lab-section">
-        <h2>Observability & Defensive Architecture</h2>
+        <h2>Ecosystem & Observability</h2>
         
         <div class="project-card">
-            <span class="tag">MONITORING</span>
+            <span class="tag">DEFENSIVE ARCHITECTURE</span>
+            <h3>Wazuh SIEM + CrowdSec Active Defense</h3>
+            <p>A multi-layered defensive posture. Wazuh provides unified monitoring and endpoint detection (EDR), while CrowdSec agents utilize bouncers for automated brute-force mitigation across all VM and container endpoints.</p>
+        </div>
+
+        <div class="project-card">
+            <span class="tag">REAL-TIME OBSERVABILITY</span>
             <h3>Prometheus & Grafana Dashboard</h3>
-            <p>Full-stack observability for all infrastructure components. Prometheus handles time-series data collection while Grafana provides a "Single Pane of Glass" for real-time performance and health visualization.</p>
+            <p>Critical metrics visualization for the entire stack. Prometheus handles time-series data collection while custom Grafana dashboards provide a "Single Pane of Glass" for monitoring infrastructure health and system alerts.</p>
         </div>
 
         <div class="project-card">
-            <span class="tag">SIEM / EDR</span>
-            <h3>Wazuh Security Monitoring</h3>
-            <p>Centralized Security Information and Event Management (SIEM). Deployment of Wazuh agents across all VMs and containers for real-time log analysis, file integrity monitoring, and vulnerability detection.</p>
+            <span class="tag">ZERO TRUST ACCESS</span>
+            <h3>Tailscale Mesh & Secure Tunnels</h3>
+            <p>Implementation of a Zero Trust remote access strategy using Tailscale. This ensures secure, peer-to-peer connectivity to lab resources without the high-risk posture of traditional port forwarding.</p>
         </div>
 
         <div class="project-card">
-            <span class="tag">ACTIVE DEFENSE</span>
-            <h3>CrowdSec & Brute Force Mitigation</h3>
-            <p>Multi-layered IP reputation and brute-force defense. Utilizing CrowdSec agents with localized bouncers to automatically ban malicious actors at the firewall level across the entire infrastructure.</p>
-        </div>
-
-        <div class="project-card">
-            <span class="tag">SECURE INGRESS</span>
-            <h3>Identity-Aware Access (Cloudflare)</h3>
-            <p>Accessing localized resources without open firewall ports. Implementing Cloudflare Tunnels to provide encrypted, authenticated ingress to specialized services behind a secure edge.</p>
-        </div>
-
-        <div class="project-card">
-            <span class="tag">ORCHESTRATION</span>
-            <h3>Virtualization Stack</h3>
-            <p>Proxmox VE Cluster managing segregated LXC and KVM environments. Automated snapshotting and Infrastructure-as-Code testing for situational awareness tools like TAK Server.</p>
+            <span class="tag">TACTICAL MISSION SUPPORT</span>
+            <h3>Virtualized TAK Server Stack</h3>
+            <p>Deployment of situational awareness (CoT) services within a segregated Proxmox environment. Optimized for data-heavy operations and tested for resilience over low-bandwidth SATCOM links.</p>
         </div>
     </div>
 
@@ -103,6 +95,5 @@
         COORDINATES: EAST HELENA, MT // SECURE ENVIRONMENT
     </footer>
 </div>
-
 </body>
 </html>
