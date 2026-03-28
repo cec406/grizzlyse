@@ -57,37 +57,43 @@
                 <ul>
                     <li>ZFS-Managed RAID-Z2 Arrays</li>
                     <li>Encrypted NAS Remote Access</li>
-                    <li>Automated Off-site Off-boarding</li>
+                    <li>Automated Off-site Replication</li>
                 </ul>
             </div>
         </div>
     </div>
 
     <div class="lab-section">
-        <h2>Ecosystem & Observability</h2>
+        <h2>Defense-in-Depth Ecosystem</h2>
         
         <div class="project-card">
-            <span class="tag">DEFENSIVE ARCHITECTURE</span>
-            <h3>Wazuh SIEM + CrowdSec Active Defense</h3>
-            <p>A multi-layered defensive posture. Wazuh provides unified monitoring and endpoint detection (EDR), while CrowdSec agents utilize bouncers for automated brute-force mitigation across all VM and container endpoints.</p>
+            <span class="tag">THREAT DETECTION</span>
+            <h3>Wazuh SIEM & EDR Orchestration</h3>
+            <p>Full-stack visibility across hybrid infrastructure. We deploy localized Wazuh agents across all KVM/LXC instances to provide unified log analysis, file integrity monitoring, and real-time vulnerability detection.</p>
         </div>
 
         <div class="project-card">
-            <span class="tag">REAL-TIME OBSERVABILITY</span>
-            <h3>Prometheus & Grafana Dashboard</h3>
-            <p>Critical metrics visualization for the entire stack. Prometheus handles time-series data collection while custom Grafana dashboards provide a "Single Pane of Glass" for monitoring infrastructure health and system alerts.</p>
+            <span class="tag">ACTIVE DEFENSE</span>
+            <h3>CrowdSec Brute-Force Mitigation</h3>
+            <p>Implementing community-powered IP reputation and automated blocking. Localized bouncers interact with firewall rule-sets to instantaneously neutralize brute-force and credential-stuffing attacks at the edge.</p>
         </div>
 
         <div class="project-card">
-            <span class="tag">ZERO TRUST ACCESS</span>
-            <h3>Tailscale Mesh & Secure Tunnels</h3>
-            <p>Implementation of a Zero Trust remote access strategy using Tailscale. This ensures secure, peer-to-peer connectivity to lab resources without the high-risk posture of traditional port forwarding.</p>
+            <span class="tag">OBSERVABILITY</span>
+            <h3>Prometheus & Grafana Visualization</h3>
+            <p>Telemetry-driven engineering. Custom dashboards provide real-time hardware health and application-level metrics, ensuring high availability for mission-critical situational awareness tools.</p>
+        </div>
+
+        <div class="project-card">
+            <span class="tag">ZERO TRUST</span>
+            <h3>Tailscale Peer-to-Peer Mesh</h3>
+            <p>Secure, peer-to-peer networking that bypasses traditional firewall vulnerabilities. We utilize WireGuard-based Tailscale tunnels to provide authenticated access to sensitive lab resources without exposing public ports.</p>
         </div>
 
         <div class="project-card">
             <span class="tag">TACTICAL MISSION SUPPORT</span>
-            <h3>Virtualized TAK Server Stack</h3>
-            <p>Deployment of situational awareness (CoT) services within a segregated Proxmox environment. Optimized for data-heavy operations and tested for resilience over low-bandwidth SATCOM links.</p>
+            <h3>Hardened TAK Server Environment</h3>
+            <p>Virtualized deployment of Cursor-on-Target (CoT) situational awareness services. Engineered specifically for data-heavy operations and verified for resilience over austere SATCOM and Starlink links.</p>
         </div>
     </div>
 
