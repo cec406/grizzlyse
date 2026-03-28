@@ -3,221 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grizzly System Engineering - Montana Technology Solutions</title>
-    <meta name="description" content="Custom IT solutions in Helena, Montana: server builds, coding, networks, cybersecurity, repairs, Starlink setups, and more. Grizzly-proof your tech.">
-    <meta name="keywords" content="Montana IT services, Helena computer repair, custom servers Montana, Starlink installation Helena, cybersecurity Montana, custom coding East Helena">
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <title>Grizzly System Engineering | DevSecOps & Tactical Infrastructure</title>
     <style>
+        :root {
+            --primary: #3498db;
+            --dark-bg: #0f172a;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:Arial, sans-serif; line-height:1.6; color:#333; background:#f4f4f4; }
-        .container { max-width:1100px; margin:0 auto; padding:0 15px; }
+        body { font-family: 'Inter', sans-serif; line-height:1.6; color: var(--text-main); background:#fff; }
+        .container { max-width:1100px; margin:0 auto; padding:0 24px; }
 
         header {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            color:white; padding:0.8rem 0; position:fixed; width:100%; top:0; z-index:1000;
-            box-shadow:0 2px 6px rgba(0,0,0,0.15);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            color:white; padding:1.2rem 0; position:fixed; width:100%; top:0; z-index:1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        nav { display:flex; justify-content:space-between; align-items:center; }
-        .logo { font-size:1.4rem; font-weight:bold; }
-        .nav-links { display:flex; list-style:none; gap:1.8rem; }
-        .nav-links a { color:white; text-decoration:none; font-size:1rem; transition:color 0.3s; }
-        .nav-links a:hover { color:#3498db; }
-        .hamburger { display:none; flex-direction:column; cursor:pointer; }
-        .hamburger span { width:24px; height:3px; background:white; margin:4px 0; transition:0.3s; }
+        .logo { font-size:1rem; font-weight:800; letter-spacing: 3px; text-transform: uppercase; text-align: center; color: var(--primary); }
 
         .hero {
-            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), 
-                        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
-            /* Swap suggestion: use a Montana-specific one like https://images.unsplash.com/photo-1540979388789-... (Glacier/Montana mountains) */
-            color:white; text-align:center; padding:140px 0 80px; margin-top:60px;
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.9)), 
+                        url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
+            color:white; text-align:center; padding:200px 0 140px;
         }
-        .hero h1 { font-size:2.8rem; margin-bottom:0.6rem; }
-        .hero .tagline { font-size:1.4rem; margin-bottom:1.4rem; font-weight:300; }
+        .hero h1 { font-size:4rem; margin-bottom:1rem; font-weight: 900; letter-spacing: -2px; line-height: 1.1; }
+        .hero .tagline { font-size:1.4rem; margin-bottom:3rem; font-weight:300; color: #94a3b8; max-width: 800px; margin-left: auto; margin-right: auto; }
 
+        .btn-group { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
         .btn {
-            display:inline-block; background:#3498db; color:white; padding:10px 24px;
-            text-decoration:none; border-radius:6px; font-size:1rem; transition:background 0.3s;
+            display:inline-block; background: var(--primary); color:white; padding:18px 40px;
+            text-decoration:none; border-radius:4px; font-size:1rem; font-weight: 700; 
+            transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
         }
-        .btn:hover { background:#2980b9; }
+        .btn-secondary { background: transparent; border: 2px solid var(--primary); }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(52, 152, 219, 0.4); }
 
-        section { padding:50px 0; }
-        h2 { text-align:center; font-size:2.1rem; margin-bottom:1.8rem; color:#2c3e50; }
+        section { padding:120px 0; }
+        h2 { text-align:center; font-size:2.5rem; margin-bottom:4rem; font-weight: 800; color: var(--dark-bg); }
+        
+        .about-content { display:grid; grid-template-columns: 1.3fr 1fr; gap:5rem; align-items:center; }
+        .about-text p { font-size:1.2rem; margin-bottom:1.5rem; color: var(--text-muted); }
+        .highlight { color: var(--primary); font-weight: 700; }
 
-        .about { background:white; }
-        .about-content { display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:center; }
-        .about-text p { font-size:1rem; margin-bottom:1rem; }
-       .about-image img { 
-            max-width: 280px; 
-            height: auto; 
-            border-radius: 8px;          /* Keep a soft corner if you like, or set to 0 for no rounding */
-            background: transparent !important; 
-            border: none; 
-            display: block; 
-            margin: 0 auto;
-            transition: transform 0.3s ease;  /* Optional gentle hover lift */
-}
-.about-image img:hover {
-    transform: scale(1.05);      /* Subtle zoom on hover for interactivity */
-}
-.about-image img:hover {
-    transform: scale(1.05);      /* Subtle zoom on hover for interactivity */
-}
-
-        .services { background:#f8f9fa; }
-        .services-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:1.5rem; }
-        .service-link {
-            text-decoration:none; color:inherit; display:block; cursor:pointer;
+        .capabilities { background: #f1f5f9; }
+        .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:2rem; }
+        
+        .card { 
+            background: var(--card-bg); padding:3.5rem 2.5rem; border-radius:8px; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative; overflow: hidden;
         }
-        .service-card {
-            background:white; padding:1.5rem; border-radius:10px; text-align:center;
-            box-shadow:0 4px 10px rgba(0,0,0,0.08); transition:all 0.3s ease;
-        }
-        .service-link:hover .service-card {
-            transform:translateY(-8px);
-            box-shadow:0 10px 24px rgba(0,0,0,0.15);
-            border:1px solid #3498db;
-        }
-        .service-card h3 { color:#2c3e50; margin-bottom:0.8rem; font-size:1.3rem; }
-        .service-card p { font-size:0.95rem; color:#555; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1); border-color: var(--primary); }
+        .card::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--primary); }
+        .card h3 { color: var(--dark-bg); margin-bottom:1.2rem; font-size:1.4rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .card p { font-size:1rem; color: var(--text-muted); line-height: 1.8; }
 
-        .contact { background:white; }
-        .contact-content { text-align:center; max-width:700px; margin:0 auto; }
-        .contact-info p { font-size:1.15rem; margin:1rem 0; }
-
-        footer { background:#2c3e50; color:white; text-align:center; padding:1.5rem 0; font-size:0.9rem; }
+        .contact-content { text-align:center; max-width:800px; margin:0 auto; }
+        
+        footer { background: var(--dark-bg); color: #94a3b8; text-align:center; padding:5rem 0; border-top: 1px solid rgba(255,255,255,0.05); }
 
         @media (max-width:768px) {
-            .hamburger { display:flex; }
-            .nav-links { position:fixed; left:-100%; top:60px; flex-direction:column; background:#2c3e50; width:100%; text-align:center; transition:0.4s; padding:1.5rem 0; }
-            .nav-links.active { left:0; }
-            .hero h1 { font-size:2.3rem; }
-            .hero .tagline { font-size:1.2rem; }
-            .hero { padding:110px 0 60px; margin-top:55px; }
-            .about-content { grid-template-columns:1fr; }
-            .about-image img { max-width:220px; }
-            .services-grid { grid-template-columns:1fr; }
-            section { padding:40px 0; }
-            h2 { font-size:1.8rem; }
+            .hero h1 { font-size:2.8rem; }
+            .about-content { grid-template-columns:1fr; text-align: center; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <nav class="container">
-            <div class="logo">Grizzly System Engineering LLC</div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <div class="hamburger" onclick="toggleMenu()">
-                <span></span><span></span><span></span>
-            </div>
-        </nav>
+        <div class="container">
+            <div class="logo">Grizzly System Engineering // DevSecOps</div>
+        </div>
     </header>
 
     <section id="home" class="hero">
         <div class="container">
-            <h1>Grizzly Proof Your Tech Future</h1>
-            <p class="tagline">Custom Technology Solutions for Homes & Businesses in Montana</p>
-            <a href="#contact" class="btn">Get in Touch</a>
+            <h1>Shift Left. Scale Out.</h1>
+            <p class="tagline">Automated Infrastructure, Offensive Security, and Hardened Systems Engineering for the Tactical Edge.</p>
+            <div class="btn-group">
+                <a href="#contact" class="btn">Initiate Project Inquiry</a>
+                <a href="lab.html" class="btn btn-secondary">View Engineering Lab</a>
+            </div>
         </div>
     </section>
 
-    <section id="about" class="about">
+    <section id="about">
         <div class="container">
-            <h2>About Grizzly System Engineering LLC</h2>
+            <h2>Modern Engineering. Montana Grit.</h2>
             <div class="about-content">
                 <div class="about-text">
-                    <p>Based in East Helena, Montana, Grizzly System Engineering delivers reliable, no-nonsense technology solutions across the state. We specialize in enterprise-grade server builds, custom coding & automation, secure networks, cybersecurity, and more for homes and businesses.</p>
-                    <p>Built on strength, precision, and Montana grit—we make sure your tech works as hard as you do.</p>
+                    <p>Based in East Helena, <span class="highlight">Grizzly System Engineering LLC</span> builds the infrastructure that powers mission-critical operations. We specialize in the convergence of automated deployment and defensive architecture.</p>
+                    <p>We provide the technical backbone for secure, scalable hardware performance—specializing in <span class="highlight">Infrastructure as Code (IaC)</span> and tactical edge situational awareness platforms for government and enterprise contracts.</p>
                 </div>
                 <div class="about-image">
-                    <img src="grizzly-logo.png" alt="Grizzly System Engineering - Powerful grizzly bear logo symbolizing strong, reliable IT services in Montana">
+                    <img src="grizzly-logo.png" alt="Grizzly System Engineering" style="width:100%; max-width:350px;">
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="services" class="services">
+    <section class="capabilities">
         <div class="container">
-            <h2>Our Services</h2>
-            <div class="services-grid">
-
-                <a href="/custom-pc-server-builds" class="service-link">
-                    <div class="service-card">
-                        <h3>Custom PC & Server Builds</h3>
-                        <p>High-performance custom computers and servers built for your exact needs—gaming, business, remote work, or heavy workloads. Click for examples and details.</p>
-                    </div>
-                </a>
-
-                <a href="/network-internet-setup" class="service-link">
-                    <div class="service-card">
-                        <h3>Network Building & Internet Setup</h3>
-                        <p>Robust wired/wireless networks and high-speed internet installs (Starlink specialist) for seamless connectivity in rural or urban Montana.</p>
-                    </div>
-                </a>
-
-                <a href="/home-business-tech-setup" class="service-link">
-                    <div class="service-card">
-                        <h3>Home & Business Tech Setup</h3>
-                        <p>Full integration of smart devices (Ring, security cams, automation) and business systems for efficiency and peace of mind.</p>
-                    </div>
-                </a>
-
-                <a href="/computer-repair-optimization" class="service-link">
-                    <div class="service-card">
-                        <h3>Computer Repair & Optimization</h3>
-                        <p>Diagnose, fix, clean, and speed up laptops, desktops, and servers to extend life and performance.</p>
-                    </div>
-                </a>
-
-                <a href="/cybersecurity-pentesting" class="service-link">
-                    <div class="service-card">
-                        <h3>Cybersecurity & Pentesting</h3>
-                        <p>Security audits, penetration testing, firewalls, and proactive protection to safeguard your data.</p>
-                    </div>
-                </a>
-
-                <a href="/data-recovery-forensics" class="service-link">
-                    <div class="service-card">
-                        <h3>Data Recovery & Digital Forensics</h3>
-                        <p>Recover lost files from drives and perform forensic analysis when needed.</p>
-                    </div>
-                </a>
-
-                <a href="/custom-applications-coding" class="service-link">
-                    <div class="service-card">
-                        <h3>Custom Applications, Websites & Coding Projects</h3>
-                        <p>Build software, scripts, websites, and automations to streamline your workflows and save time.</p>
-                    </div>
-                </a>
-
-                <a href="/general-it-services" class="service-link">
-                    <div class="service-card">
-                        <h3>General IT Services</h3>
-                        <p>End-to-end support for any tech issue—on-site in the Helena area or remote statewide.</p>
-                    </div>
-                </a>
-
+            <h2>Strategic Capabilities</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Infrastructure as Code</h3>
+                    <p>Automated provisioning of bare-metal and virtualized environments. We architect high-availability clusters and secure container orchestration to eliminate downtime and human error.</p>
+                </div>
+                <div class="card">
+                    <h3>Tactical Edge Computing</h3>
+                    <p>Deploying mission-critical services to austere environments. Specialized in ruggedized compute and situational awareness platforms optimized for satellite-linked networks.</p>
+                </div>
+                <div class="card">
+                    <h3>Offensive Security Ops</h3>
+                    <p>Continuous vulnerability research and rigorous penetration testing. We integrate security audits directly into the system lifecycle to harden assets against sophisticated adversaries.</p>
+                </div>
+                <div class="card">
+                    <h3>Digital Investigations</h3>
+                    <p>Specialized forensic analysis and incident response. We provide technical preservation and recovery for sensitive environments where data integrity is non-negotiable.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="contact">
+    <section id="contact">
         <div class="container">
-            <h2>Contact Us</h2>
             <div class="contact-content">
-                <div class="contact-info">
-                    <h3>Get in Touch</h3>
-                    <p><strong>Location:</strong> East Helena, Montana (serving Helena area & statewide)</p>
-                    <p><strong>Phone:</strong> <a href="tel:+14064398127">(406) 439-8127</a></p>
-                    <p><strong>Email:</strong> <a href="mailto:info@grizzlyse.com">info@grizzlyse.com</a></p>
-                    <script type="text/javascript">function zforms_open_window(url, height, width){var leftPos = 0;var topPos = 0;if(screen){leftPos = (screen.width - width) / 2;topPos = (screen.height - height) / 2;window.open(url, null, 'width='+width+',height='+height+',left='+leftPos+',top='+topPos+', toolbar=0, location=0, status=1, scrollbars=1, resizable=1');}}</script>
-                    <a href='https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0' title="Contact Us for Custom Builds" target='_blank' onclick="zforms_open_window(this.href, 648, 700); return false" class="btn" style="font-size:1.1rem; padding:12px 30px;">Contact Us</a>
-                    <p>Call, text, or email—we're ready to tackle your server builds, networks, coding, or security needs.</p>
+                <h3>Secure a Contract</h3>
+                <p>Available for 1099 consulting, specialized DevSecOps engineering, and government technical forensics.</p>
+                
+                <script type="text/javascript">function zforms_open_window(url, height, width){var leftPos = 0;var topPos = 0;if(screen){leftPos = (screen.width - width) / 2;topPos = (screen.height - height) / 2;window.open(url, null, 'width='+width+',height='+height+',left='+leftPos+',top='+topPos+', toolbar=0, location=0, status=1, scrollbars=1, resizable=1');}}</script>
+                
+                <div style="margin: 40px 0;">
+                    <a href='https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0' target='_blank' onclick="zforms_open_window(this.href, 648, 700); return false" class="btn">Request Capabilities Brief</a>
+                </div>
+
+                <div style="font-weight: 700; color: var(--dark-bg); line-height: 2;">
+                    <p>Location: East Helena, MT</p>
+                    <p>Direct: <a href="mailto:info@grizzlyse.com" style="color: var(--primary); text-decoration: none;">info@grizzlyse.com</a></p>
+                    <p>Phone: <a href="tel:+14064398127" style="color: var(--primary); text-decoration: none;">(406) 439-8127</a></p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 400;">Text or email preferred for initial project scoping.</p>
                 </div>
             </div>
         </div>
@@ -225,21 +156,10 @@
 
     <footer>
         <div class="container">
-            <p>© 2026 Grizzly System Engineering LLC | Reliable, Grizzly-Tough IT Solutions in Montana</p>
+            <p>© 2026 Grizzly System Engineering LLC</p>
+            <p style="margin-top: 20px; font-size: 0.75rem; letter-spacing: 2px; opacity: 0.5;">INFRASTRUCTURE AS CODE • PENTESTING • SATCOM • FORENSICS</p>
         </div>
     </footer>
 
-    <script>
-        function toggleMenu() {
-            document.querySelector('.nav-links').classList.toggle('active');
-        }
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-            });
-        });
-    </script>
 </body>
 </html>
