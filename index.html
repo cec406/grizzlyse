@@ -3,103 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GSE | Engineering Lab</title>
+    <title>Grizzly System Engineering | DevSecOps & Tactical Infrastructure</title>
     <style>
-        :root { --primary: #3498db; --dark: #0f172a; --text: #f1f5f9; --accent: #2ecc71; }
-        body { font-family: 'Inter', sans-serif; background: var(--dark); color: var(--text); line-height: 1.6; margin: 0; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 60px 24px; }
-        header { border-bottom: 1px solid rgba(255,255,255,0.1); padding: 20px 0; display: flex; justify-content: space-between; align-items: center; }
-        .back-link { color: var(--primary); text-decoration: none; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; }
-        h1 { font-size: 3rem; margin-top: 40px; color: #fff; font-weight: 900; }
-        .lab-section { margin-top: 60px; }
-        h2 { color: var(--primary); text-transform: uppercase; letter-spacing: 2px; font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 30px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .spec-card { background: rgba(255,255,255,0.03); padding: 25px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
-        .spec-card h3 { font-size: 1rem; color: var(--primary); margin-bottom: 15px; text-transform: uppercase; }
-        .spec-card ul { list-style: none; padding: 0; margin: 0; font-size: 0.9rem; }
-        .spec-card li { margin-bottom: 8px; padding-left: 15px; position: relative; }
-        .spec-card li::before { content: ">"; position: absolute; left: 0; color: var(--accent); }
-        .project-card { background: rgba(255,255,255,0.02); padding: 40px; border-radius: 12px; margin-bottom: 30px; border-left: 4px solid var(--primary); }
-        .tag { background: rgba(52, 152, 219, 0.2); color: var(--primary); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; display: inline-block; }
+        :root {
+            --primary: #3498db;
+            --dark-bg: #0f172a;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Inter', sans-serif; line-height:1.6; color: var(--text-main); background:#fff; }
+        .container { max-width:1100px; margin:0 auto; padding:0 24px; }
+        header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            color:white; padding:1.2rem 0; position:fixed; width:100%; top:0; z-index:1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .logo { font-size:1rem; font-weight:800; letter-spacing: 3px; text-transform: uppercase; text-align: center; color: var(--primary); }
+        .hero {
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.9)), 
+                        url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
+            color:white; text-align:center; padding:200px 0 140px;
+        }
+        .hero h1 { font-size:4rem; margin-bottom:1rem; font-weight: 900; letter-spacing: -2px; line-height: 1.1; }
+        .hero .tagline { font-size:1.4rem; margin-bottom:3rem; font-weight:300; color: #94a3b8; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .btn-group { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            display:inline-block; background: var(--primary); color:white; padding:18px 40px;
+            text-decoration:none; border-radius:4px; font-size:1rem; font-weight: 700; 
+            transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn-secondary { background: transparent; border: 2px solid var(--primary); }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(52, 152, 219, 0.4); }
+        section { padding:120px 0; }
+        h2 { text-align:center; font-size:2.5rem; margin-bottom:4rem; font-weight: 800; color: var(--dark-bg); }
+        .about-content { display:grid; grid-template-columns: 1.3fr 1fr; gap:5rem; align-items:center; }
+        .about-text p { font-size:1.2rem; margin-bottom:1.5rem; color: var(--text-muted); }
+        .highlight { color: var(--primary); font-weight: 700; }
+        .capabilities { background: #f1f5f9; }
+        .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:2rem; }
+        .card { 
+            background: var(--card-bg); padding:3.5rem 2.5rem; border-radius:8px; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative; overflow: hidden;
+        }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1); border-color: var(--primary); }
+        .card::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--primary); }
+        .card h3 { color: var(--dark-bg); margin-bottom:1.2rem; font-size:1.4rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .card p { font-size:1rem; color: var(--text-muted); line-height: 1.8; }
+        footer { background: var(--dark-bg); color: #94a3b8; text-align:center; padding:5rem 0; border-top: 1px solid rgba(255,255,255,0.05); }
+        @media (max-width:768px) { .hero h1 { font-size:2.8rem; } .about-content { grid-template-columns:1fr; text-align: center; } }
     </style>
 </head>
 <body>
-<div class="container">
     <header>
-        <a href="index.html" class="back-link">← Return to Capabilities</a>
-        <div style="font-size: 0.8rem; opacity: 0.5;">GRIZZLY ENGINEERING LAB // MT-01</div>
+        <div class="container">
+            <div class="logo">Grizzly System Engineering // DevSecOps</div>
+        </div>
     </header>
 
-    <h1>The Engineering Lab</h1>
-    <p style="font-size: 1.2rem; opacity: 0.8; max-width: 700px;">A high-performance environment engineered for the rigorous testing of tactical infrastructure, situational awareness platforms, and defensive DevSecOps pipelines.</p>
-
-    <div class="lab-section">
-        <h2>Hardware Architecture</h2>
-        <div class="grid">
-            <div class="spec-card">
-                <h3>Enterprise Compute</h3>
-                <ul>
-                    <li>Dell PowerEdge R630 Hypervisor Node</li>
-                    <li>AMD Ryzen 9 5950X / RX 7900 GRE Workstation</li>
-                    <li>Dell OptiPlex 7050 Micro Cluster</li>
-                </ul>
-            </div>
-            <div class="spec-card">
-                <h3>Networking & Edge</h3>
-                <ul>
-                    <li>Cisco Catalyst 1G/10G Backbone</li>
-                    <li>Integrated SATCOM / Starlink Gateway</li>
-                    <li>Cloudflare Tunnel Ingress (Identity-Aware)</li>
-                </ul>
-            </div>
-            <div class="spec-card">
-                <h3>Resilient Storage</h3>
-                <ul>
-                    <li>ZFS-Managed RAID-Z2 Arrays</li>
-                    <li>Encrypted NAS Remote Access</li>
-                    <li>Automated Off-site Replication</li>
-                </ul>
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Shift Left. Scale Out.</h1>
+            <p class="tagline">Automated Infrastructure, Offensive Security, and Hardened Systems Engineering for the Tactical Edge.</p>
+            <div class="btn-group">
+                <a href="#contact" class="btn">Initiate Project Inquiry</a>
+                <a href="lab.html" class="btn btn-secondary">View Engineering Lab</a>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="lab-section">
-        <h2>Defense-in-Depth Ecosystem</h2>
-        
-        <div class="project-card">
-            <span class="tag">THREAT DETECTION</span>
-            <h3>Wazuh SIEM & EDR Orchestration</h3>
-            <p>Full-stack visibility across hybrid infrastructure. We deploy localized Wazuh agents across all KVM/LXC instances to provide unified log analysis, file integrity monitoring, and real-time vulnerability detection.</p>
+    <section id="about">
+        <div class="container">
+            <h2>Modern Engineering. Montana Grit.</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Based in East Helena, <span class="highlight">Grizzly System Engineering LLC</span> builds the infrastructure that powers mission-critical operations. We specialize in the convergence of automated deployment and defensive architecture.</p>
+                    <p>We provide the technical backbone for secure, scalable hardware performance—specializing in <span class="highlight">Infrastructure as Code (IaC)</span> and tactical edge situational awareness platforms for government and enterprise contracts.</p>
+                </div>
+                <div class="about-image">
+                    <img src="grizzly-logo.png" alt="Grizzly System Engineering" style="width:100%; max-width:350px;">
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div class="project-card">
-            <span class="tag">ACTIVE DEFENSE</span>
-            <h3>CrowdSec Brute-Force Mitigation</h3>
-            <p>Implementing community-powered IP reputation and automated blocking. Localized bouncers interact with firewall rule-sets to instantaneously neutralize brute-force and credential-stuffing attacks at the edge.</p>
+    <section class="capabilities">
+        <div class="container">
+            <h2>Strategic Capabilities</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Infrastructure as Code</h3>
+                    <p>Automated provisioning of bare-metal and virtualized environments. We architect high-availability clusters and secure container orchestration to eliminate downtime and human error.</p>
+                </div>
+                <div class="card">
+                    <h3>Tactical Edge Computing</h3>
+                    <p>Deploying mission-critical services to austere environments. Specialized in ruggedized compute and situational awareness platforms optimized for satellite-linked networks.</p>
+                </div>
+                <div class="card">
+                    <h3>Offensive Security Ops</h3>
+                    <p>Continuous vulnerability research and rigorous penetration testing. We integrate security audits directly into the system lifecycle to harden assets against sophisticated adversaries.</p>
+                </div>
+                <div class="card">
+                    <h3>Digital Investigations</h3>
+                    <p>Specialized forensic analysis and incident response. We provide technical preservation and recovery for sensitive environments where data integrity is non-negotiable.</p>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div class="project-card">
-            <span class="tag">OBSERVABILITY</span>
-            <h3>Prometheus & Grafana Visualization</h3>
-            <p>Telemetry-driven engineering. Custom dashboards provide real-time hardware health and application-level metrics, ensuring high availability for mission-critical situational awareness tools.</p>
+    <section id="contact">
+        <div class="container">
+            <div class="contact-content">
+                <h3>Secure a Contract</h3>
+                <p>Available for 1099 consulting, specialized DevSecOps engineering, and government technical forensics.</p>
+                <script type="text/javascript">function zforms_open_window(url, height, width){var leftPos = 0;var topPos = 0;if(screen){leftPos = (screen.width - width) / 2;topPos = (screen.height - height) / 2;window.open(url, null, 'width='+width+',height='+height+',left='+leftPos+',top='+topPos+', toolbar=0, location=0, status=1, scrollbars=1, resizable=1');}}</script>
+                <div style="margin: 40px 0;">
+                    <a href='https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0' target='_blank' onclick="zforms_open_window(this.href, 648, 700); return false" class="btn">Request Capabilities Brief</a>
+                </div>
+                <div style="font-weight: 700; color: var(--dark-bg); line-height: 2;">
+                    <p>Location: East Helena, MT</p>
+                    <p>Direct: <a href="mailto:info@grizzlyse.com" style="color: var(--primary); text-decoration: none;">info@grizzlyse.com</a></p>
+                    <p>Phone: <a href="tel:+14064398127" style="color: var(--primary); text-decoration: none;">(406) 439-8127</a></p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); font-weight: 400;">Text or email preferred for initial project scoping.</p>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div class="project-card">
-            <span class="tag">ZERO TRUST</span>
-            <h3>Tailscale Peer-to-Peer Mesh</h3>
-            <p>Secure, peer-to-peer networking that bypasses traditional firewall vulnerabilities. We utilize WireGuard-based Tailscale tunnels to provide authenticated access to sensitive lab resources without exposing public ports.</p>
+    <footer>
+        <div class="container">
+            <p>© 2026 Grizzly System Engineering LLC</p>
+            <p style="margin-top: 20px; font-size: 0.75rem; letter-spacing: 2px; opacity: 0.5;">INFRASTRUCTURE AS CODE • PENTESTING • SATCOM • FORENSICS</p>
         </div>
-
-        <div class="project-card">
-            <span class="tag">TACTICAL MISSION SUPPORT</span>
-            <h3>Hardened TAK Server Environment</h3>
-            <p>Virtualized deployment of Cursor-on-Target (CoT) situational awareness services. Engineered specifically for data-heavy operations and verified for resilience over austere SATCOM and Starlink links.</p>
-        </div>
-    </div>
-
-    <footer style="margin-top: 100px; padding-bottom: 40px; text-align: center; opacity: 0.3; font-size: 0.8rem;">
-        COORDINATES: EAST HELENA, MT // SECURE ENVIRONMENT
     </footer>
-</div>
 </body>
 </html>
