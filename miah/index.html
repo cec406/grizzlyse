@@ -11,28 +11,32 @@
             color: #fff;
             font-family: 'Arial', sans-serif;
             text-align: center;
+            padding: 20px;
         }
-        .container { max-width: 800px; margin: auto; padding: 40px; }
-        h1 { color: #ff99cc; font-size: 3em; }
+        .container { max-width: 600px; margin: auto; }
+        h1 { color: #ff99cc; font-size: 2em; margin-bottom: 20px; }
         
+        /* Mobile-first image stacking */
         .media-area {
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 30px 0;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
         }
         .media-area img {
-            width: 350px;
+            width: 100%;
+            height: auto;
             border: 3px solid #ff99cc;
             border-radius: 15px;
+            display: block;
         }
         
         .poem-box {
             background: #262626;
-            padding: 40px;
+            padding: 25px;
             border-radius: 20px;
-            line-height: 2;
-            font-size: 1.2em;
+            line-height: 1.8;
+            font-size: 1.1em;
         }
     </style>
 </head>
