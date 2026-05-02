@@ -3,134 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Beautiful Miah</title>
+    <title>For My Incredible Wife, Shemiah</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;600&display=swap');
 
-        body { 
-            font-family: 'Playfair Display', serif; 
-            background-color: #fff9f9; 
-            color: #4a4a4a; 
-            margin: 0; 
-            padding: 20px; 
-            display: flex; 
-            justify-content: center;
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #fff;
+            overflow-x: hidden;
         }
-        .card { 
-            max-width: 550px; 
-            background: #ffffff; 
-            padding: 50px; 
-            border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
-            border-top: 8px solid #d4af37; /* Gold accent */
-            position: relative;
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 50px 0;
         }
-        h1 { 
-            font-family: 'Dancing Script', cursive;
-            color: #b05e5e; 
-            text-align: center; 
-            font-size: 3em;
+
+        /* --- Header Section --- */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5em;
+            color: #ff99cc;
+            text-shadow: 2px 2px 4px rgba(255, 153, 204, 0.5);
             margin-bottom: 10px;
         }
-        .subtitle {
-            text-align: center;
-            font-style: italic;
-            color: #888;
-            margin-bottom: 30px;
+
+        .divider {
+            width: 100px;
+            height: 3px;
+            background-color: #ff99cc;
+            margin: 20px auto;
+        }
+
+        /* --- Images Section --- */
+        .image-gallery {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .image-card {
+            background-color: #333;
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 4px 15px rgba(255, 153, 204, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .image-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 153, 204, 0.4);
+        }
+
+        .image-card img {
+            width: 300px;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .image-caption {
+            font-weight: 600;
+            color: #ffb3d9;
+            margin-top: 10px;
             font-size: 1.1em;
+            text-transform: uppercase;
         }
-        .poem { 
-            font-size: 1.2em;
-            line-height: 1.8; 
-            text-align: center; 
-            margin: 40px 0; 
-            color: #333;
-            white-space: pre-line;
-            border-left: 1px solid #eee;
-            border-right: 1px solid #eee;
-            padding: 0 20px;
+
+        /* --- Text/Poem Section --- */
+        .poem-section {
+            background-color: #262626;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .attribute-section {
-            margin-top: 50px;
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: #ffcc99;
+            text-align: center;
+            margin-top: 0;
         }
-        .attribute-item { 
-            margin-bottom: 25px; 
+
+        .poem {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            text-align: center;
+            color: #f2f2f2;
+        }
+
+        .highlight {
+            font-weight: 600;
+            color: #ffe0b3;
+        }
+
+        /* --- Dynamic/Decorative Section --- */
+        .celebration-section {
             text-align: center;
         }
-        .attribute-item strong {
-            display: block;
-            color: #b05e5e;
-            font-size: 1.3em;
-            font-family: 'Dancing Script', cursive;
-            margin-bottom: 5px;
+
+        h3 {
+            font-family: 'Playfair Display', serif;
+            color: #d6f5f5;
         }
-        .attribute-item p {
-            margin: 0;
-            font-size: 1em;
-            line-height: 1.5;
+
+        .special-note {
+            font-size: 1.2rem;
+            color: #ccf2f2;
+            margin-bottom: 20px;
         }
-        .footer { 
-            text-align: center; 
-            margin-top: 60px; 
-            font-size: 0.8em; 
-            color: #bbb;
-            letter-spacing: 2px;
-            font-family: sans-serif;
+
+        /* Basic Confetti Effect (Requires some custom setup but illustrative) */
+        .confetti-container {
+            position: relative;
+            height: 100px;
+            width: 100%;
+            margin: auto;
         }
-        /* Mobile optimization */
-        @media (max-width: 600px) {
-            .card { padding: 25px; }
-            h1 { font-size: 2.2em; }
+
+        .confetti {
+            position: absolute;
+            background: #ff99cc;
+            width: 10px;
+            height: 10px;
+            opacity: 0.7;
         }
+        
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>To My Beautiful Miah</h1>
-        <div class="subtitle">My partner, my love, and the heart of our home.</div>
-        
-        <div class="poem">
-            Ten lives you hold within your care,
-            A brilliance that is far too rare.
-            With wisdom deep and eyes so bright,
-            You fill our world with steady light.
 
-            In every smile, a grace so true,
-            There is no home without just you.
-            More beautiful with every day,
-            In every small and quiet way.
-        </div>
+    <div class="container">
 
-        <div class="attribute-section">
-            <div class="attribute-item">
-                <strong>Your Incredible Mind</strong>
-                <p>I am constantly in awe of your intelligence—how you manage the complexity of our lives with such effortless wisdom.</p>
+        <div class="header">
+            <h1>Shemiah's Celebration Hub</h1>
+            <div class="divider"></div>
+        }
+
+        <div class="image-gallery">
+            <div class="image-card">
+                <img src="https://via.placeholder.com/300x200?text=Happy+Mother's+Day" alt="Happy Mother's Day Picture">
+                <p class="image-caption">My Mother's Day Star</p>
             </div>
-
-            <div class="attribute-item">
-                <strong>A Heart for Ten</strong>
-                <p>To see you mother our children is to see love in its purest form. You give so much of yourself, yet your well never runs dry.</p>
-            </div>
-
-            <div class="attribute-item">
-                <strong>Your Radiant Beauty</strong>
-                <p>Through every year and every season, you only grow more stunning. You are the most beautiful woman I have ever known.</p>
-            </div>
-
-            <div class="attribute-item">
-                <strong>The Anchor of Our Family</strong>
-                <p>When the world gets loud, you are the peace. You keep us grounded, safe, and loved.</p>
-            </div>
-
-            <div class="attribute-item">
-                <strong>My Best Friend</strong>
-                <p>Beyond being a wonderful mother, you are the person I want to share every thought, dream, and day with.</p>
+            <div class="image-card">
+                <img src="https://via.placeholder.com/300x200?text=Happy+Birthday+Shemiah" alt="Happy Birthday Shemiah Picture">
+                <p class="image-caption">Born to Shine: Happy Birthday!</p>
             </div>
         </div>
 
-        <div class="footer">
-            I love you with all my heart! Yours forever, Caleb
+        <div class="poem-section">
+            <h2>To My Beautiful Shemiah</h2>
+            <p class="poem">
+                Born on the fifth, beneath a soft spring sky,<br>
+                A grace resides in you that time cannot defy.<br>
+                With every passing year, your beauty grows profound,<br>
+                A steady, quiet strength where love and truth are found.<br><br>
+                
+                You hold our home with hands so firm and kind,<br>
+                A rarer, deeper soul I know I’ll never find.<br>
+                You teach our <span class="highlight">little ones</span> the path that’s right and true,<br>
+                I see the face of God reflected back in you.<br><br>
+
+                From birthday candles lit to honor your birth date,<br>
+                To Mother’s Day, where we celebrate your noble state.<br>
+                The way you nurture, lead, and guard our sacred space,<br>
+                Proves you walk in wisdom, dignity, and grace.<br><br>
+                
+                My partner, my heart, my anchor in the fray,<br>
+                I celebrate your life and spirit every single day.<br>
+                Happy Birthday, and Happy Mother’s Day,<br>
+                To the one who lights my world in every single way.
+            </p>
         </div>
+
+        <div class="celebration-section">
+            <h3>More Ways to Celebrate</h3>
+            <p class="special-note">This site is just for you!</p>
+            
+            <div class="confetti-container">
+                <div class="confetti" style="left:10%;top:10%"></div>
+                <div class="confetti" style="left:30%;top:50%;background:#ffcc99"></div>
+                <div class="confetti" style="left:50%;top:20%;background:#d6f5f5"></div>
+                <div class="confetti" style="left:70%;top:60%;background:#ffcc99"></div>
+                <div class="confetti" style="left:90%;top:30%"></div>
+            </div>
+
+            </div>
+
     </div>
+
 </body>
 </html>
