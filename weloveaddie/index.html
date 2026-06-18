@@ -5,140 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restitution & Accountability Tracker</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f9;
-            color: #333;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        h1, h2, h3 {
-            color: #2c3e50;
-            border-bottom: 2px solid #ecf0f1;
-            padding-bottom: 8px;
-        }
-        .balance-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-        .balance-box {
-            background: #2c3e50;
-            color: #fff;
-            padding: 20px;
-            border-radius: 6px 6px 0 0;
-            text-align: center;
-            font-size: 20px;
-        }
-        .balance-amount {
-            font-size: 38px;
-            font-weight: bold;
-            color: #2ecc71;
-        }
-        .progress-container {
-            background: #e2e8f0;
-            border-radius: 0 0 6px 6px;
-            height: 20px;
-            width: 100%;
-            overflow: hidden;
-        }
-        .progress-bar {
-            background: #2ecc71;
-            height: 100%;
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            background: #fff;
-            font-size: 14px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f8f9fa;
-        }
-        .milestone-achieved {
-            text-decoration: line-through;
-            color: #95a5a6;
-            background-color: #f2fcf5;
-        }
-        .form-group {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
-            margin-bottom: 25px;
-        }
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 6px;
-            margin-top: 10px;
-        }
-        input[type="number"], input[type="text"], select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #27ae60;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-            font-weight: bold;
-            margin-top: 15px;
-        }
-        button:hover {
-            background-color: #219653;
-        }
-        .log-container {
-            max-height: 250px;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            background: #fafafa;
-            padding: 10px;
-            border-radius: 4px;
-        }
-        .log-item {
-            padding: 6px 0;
-            border-bottom: 1px solid #eee;
-            font-family: monospace;
-        }
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f9; color: #333; }
+        .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1, h2, h3 { color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 8px; }
+        .balance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+        .balance-box { background: #2c3e50; color: #fff; padding: 20px; border-radius: 6px 6px 0 0; text-align: center; font-size: 20px; }
+        .balance-amount { font-size: 38px; font-weight: bold; color: #2ecc71; }
+        .progress-container { background: #e2e8f0; border-radius: 0 0 6px 6px; height: 20px; width: 100%; overflow: hidden; }
+        .progress-bar { background: #2ecc71; height: 100%; width: 0%; transition: width 0.5s ease; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: #fff; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 8px 10px; text-align: left; }
+        th { background-color: #f8f9fa; }
+        .milestone-achieved { text-decoration: line-through; color: #95a5a6; background-color: #f2fcf5; }
+        .form-group { background: #f8f9fa; padding: 20px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 25px; display: none; }
+        .admin-toggle { text-align: right; margin-bottom: 15px; }
+        .admin-toggle a { color: #3498db; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .admin-toggle a:hover { text-decoration: underline; }
+        label { display: block; font-weight: bold; margin-bottom: 6px; margin-top: 10px; }
+        input[type="number"], input[type="text"], select { width: 100%; padding: 10px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #27ae60; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; margin-top: 15px; }
+        button:hover { background-color: #219653; }
+        .log-container { max-height: 250px; overflow-y: auto; border: 1px solid #ddd; background: #fafafa; padding: 10px; border-radius: 4px; }
+        .log-item { padding: 6px 0; border-bottom: 1px solid #eee; font-family: monospace; }
         .positive { color: #27ae60; font-weight: bold; }
         .negative { color: #c0392b; font-weight: bold; }
-        .rate-section {
-            font-weight: bold;
-            background-color: #eaeded;
-        }
+        .rate-section { font-weight: bold; background-color: #eaeded; }
     </style>
 </head>
 <body>
@@ -146,6 +38,10 @@
 <div class="container">
     <h1>Restitution & Accountability Tracker</h1>
     <p>Earn credits through chores or cash payments to satisfy balances and systematically restore privileges across both households.</p>
+
+    <div class="admin-toggle">
+        <a href="#" id="lock-unlock-btn" onclick="toggleAdmin(event)">🔑 Parent Management Portal</a>
+    </div>
 
     <div class="balance-grid">
         <div>
@@ -173,10 +69,7 @@
             <h3>🔓 Privilege Milestones</h3>
             <table>
                 <thead>
-                    <tr>
-                        <th>Target</th>
-                        <th>Privilege Restored</th>
-                    </tr>
+                    <tr><th>Target</th><th>Privilege Restored</th></tr>
                 </thead>
                 <tbody>
                     <tr class="rate-section"><td colspan="2">Dad's House Milestones</td></tr>
@@ -185,7 +78,6 @@
                     <tr id="ms-125"><td>$125.00</td><td>Computer Access</td></tr>
                     <tr id="ms-200"><td>$200.00</td><td>Phone (Upstairs Living Room Only)</td></tr>
                     <tr id="ms-285"><td>$285.00</td><td>Full Phone Privileges (Dad's Debt Cleared)</td></tr>
-                    
                     <tr class="rate-section"><td colspan="2">Mom's House Milestones</td></tr>
                     <tr id="ms-900"><td>$900.00</td><td>Earn Bedroom Door Back (Windshield Cleared)</td></tr>
                 </tbody>
@@ -196,10 +88,7 @@
             <h3>⚙️ Quick Reference Rates</h3>
             <table>
                 <thead>
-                    <tr>
-                        <th>Task / Rule</th>
-                        <th>Value</th>
-                    </tr>
+                    <tr><th>Task / Rule</th><th>Value</th></tr>
                 </thead>
                 <tbody>
                     <tr class="rate-section"><td colspan="2">Chores & Payments (Earnings)</td></tr>
@@ -221,7 +110,6 @@
                     <tr><td>Clean/Vacuum Stairs & Downstairs Area</td><td class="positive">+$1.00</td></tr>
                     <tr><td>Mopping</td><td class="positive">+$1.00</td></tr>
                     <tr><td>Random Laundry (Towels, etc.)</td><td class="positive">+$1.00</td></tr>
-                    
                     <tr class="rate-section"><td colspan="2">Penalties (Deductions)</td></tr>
                     <tr><td>Violent Outburst</td><td class="negative">-$5.00</td></tr>
                     <tr><td>Sneaking Taken Electronics</td><td class="negative">-$4.00</td></tr>
@@ -235,9 +123,8 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" id="admin-form">
         <h3>➕ Add Transaction</h3>
-        
         <label for="target-house">Apply To Household:</label>
         <select id="target-house">
             <option value="dad">Dad's House</option>
@@ -277,28 +164,59 @@
         <input type="number" id="amount" step="0.01" placeholder="Enter amount (negative for penalties)">
 
         <label for="description">Notes / Description:</label>
-        <input type="text" id="description" placeholder="e.g., Cash from extra work, or Unloaded dishwasher">
+        <input type="text" id="description" placeholder="e.g., Cash from extra work">
 
         <button onclick="addTransaction()">Submit Entry</button>
     </div>
 
     <h3>📜 Unified Transaction Log</h3>
     <div class="log-container" id="log">
-        <div class="log-item">System initialized. Trackers ready.</div>
+        <div class="log-item">Loading live sync cloud connection...</div>
     </div>
 </div>
 
-<script>
-    let dadBalance = parseFloat(localStorage.getItem('restitutionBalanceDad')) || 0.00;
-    let momBalance = parseFloat(localStorage.getItem('restitutionBalanceMom')) || 0.00;
-    let savedLogs = JSON.parse(localStorage.getItem('restitutionLogsDual')) || [];
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, set, push, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-    window.onload = function() {
-        updateUI();
-        renderSavedLogs();
+    // 🔴 PARENT CONFIGURATION
+    const PARENT_PIN = "1234"; 
+    const firebaseConfig = {
+        databaseURL: "https://addie-tracker-default-rtdb.firebaseio.com/"
     };
 
-    function presetAmount() {
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let dadBalance = 0.00;
+    let momBalance = 0.00;
+    let savedLogs = [];
+    let isAdminUnlocked = false;
+
+    // Attach control components globally
+    window.toggleAdmin = function(e) {
+        e.preventDefault();
+        const form = document.getElementById('admin-form');
+        const btn = document.getElementById('lock-unlock-btn');
+
+        if (!isAdminUnlocked) {
+            let inputPin = prompt("Enter Parent Management PIN:");
+            if (inputPin === PARENT_PIN) {
+                isAdminUnlocked = true;
+                form.style.display = 'block';
+                btn.innerText = "🔒 Lock Portal";
+            } else if (inputPin !== null) {
+                alert("Incorrect PIN access denied.");
+            }
+        } else {
+            isAdminUnlocked = false;
+            form.style.display = 'none';
+            btn.innerText = "🔑 Parent Management Portal";
+        }
+    };
+
+    window.presetAmount = function() {
         const select = document.getElementById('action-type');
         const amountInput = document.getElementById('amount');
         if (select.value !== 'custom' && select.value !== 'cash') {
@@ -306,9 +224,25 @@
         } else {
             amountInput.value = '';
         }
-    }
+    };
 
-    function addTransaction() {
+    // Live Database Sync Listeners
+    onValue(ref(db, 'balances'), (snapshot) => {
+        const data = snapshot.val() || {};
+        dadBalance = parseFloat(data.dad || 0.00);
+        momBalance = parseFloat(data.mom || 0.00);
+        updateUI();
+    });
+
+    onValue(ref(db, 'logs'), (snapshot) => {
+        const data = snapshot.val() || {};
+        savedLogs = Object.keys(data).map(key => data[key]).reverse();
+        renderLogs();
+    });
+
+    window.addTransaction = function() {
+        if (!isAdminUnlocked) return;
+
         const amountInput = document.getElementById('amount');
         const descInput = document.getElementById('description');
         const select = document.getElementById('action-type');
@@ -333,44 +267,37 @@
             }
         }
 
-        let currentRunning;
         if (house === 'dad') {
-            dadBalance += amount;
-            if (dadBalance < 0) dadBalance = 0;
-            localStorage.setItem('restitutionBalanceDad', dadBalance.toFixed(2));
-            currentRunning = `Dad's Bal: $${dadBalance.toFixed(2)}`;
+            dadBalance = Math.max(0, dadBalance + amount);
         } else {
-            momBalance += amount;
-            if (momBalance < 0) momBalance = 0;
-            localStorage.setItem('restitutionBalanceMom', momBalance.toFixed(2));
-            currentRunning = `Mom's Bal: $${momBalance.toFixed(2)}`;
+            momBalance = Math.max(0, momBalance + amount);
         }
+
+        // Commit balances to cloud
+        set(ref(db, 'balances'), { dad: dadBalance.toFixed(2), mom: momBalance.toFixed(2) });
 
         const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         const date = new Date().toLocaleDateString();
-        const logEntry = { date, time, desc, amount, house: house.toUpperCase(), runningInfo: currentRunning };
-        
-        savedLogs.unshift(logEntry);
-        localStorage.setItem('restitutionLogsDual', JSON.stringify(savedLogs));
+        const currentRunning = house === 'dad' ? `Dad's Bal: $${dadBalance.toFixed(2)}` : `Mom's Bal: $${momBalance.toFixed(2)}`;
 
-        updateUI();
-        renderSavedLogs();
+        // Append log to cloud array list
+        const logsRef = ref(db, 'logs');
+        const newLogRef = push(logsRef);
+        set(newLogRef, { date, time, desc, amount, house: house.toUpperCase(), runningInfo: currentRunning });
 
         amountInput.value = '';
         descInput.value = '';
         select.value = 'custom';
-    }
+    };
 
     function updateUI() {
         document.getElementById('dad-balance').innerText = `$${dadBalance.toFixed(2)}`;
         document.getElementById('mom-balance').innerText = `$${momBalance.toFixed(2)}`;
 
-        let dadPct = (dadBalance / 285) * 100;
-        if (dadPct > 100) dadPct = 100;
+        let dadPct = Math.min(100, (dadBalance / 285) * 100);
         document.getElementById('dad-progress-bar').style.width = dadPct + '%';
 
-        let momPct = (momBalance / 900) * 100;
-        if (momPct > 100) momPct = 100;
+        let momPct = Math.min(100, (momBalance / 900) * 100);
         document.getElementById('mom-progress-bar').style.width = momPct + '%';
 
         updateMilestoneRow('ms-50', dadBalance >= 50);
@@ -382,34 +309,25 @@
     }
 
     function updateMilestoneRow(id, isAchieved) {
-        const row = document.getElementById(id);
-        if (isAchieved) {
-            row.className = 'milestone-achieved';
-        } else {
-            row.className = '';
-        }
+        document.getElementById(id).className = isAchieved ? 'milestone-achieved' : '';
     }
 
-    function renderSavedLogs() {
+    function renderLogs() {
         const log = document.getElementById('log');
         log.innerHTML = '';
-        
         if (savedLogs.length === 0) {
-            log.innerHTML = '<div class="log-item">System initialized. Trackers ready.</div>';
+            log.innerHTML = '<div class="log-item">No records found. Starting initial tracking.</div>';
             return;
         }
-
         savedLogs.forEach(entry => {
             const item = document.createElement('div');
             item.className = 'log-item';
             const sign = entry.amount >= 0 ? "+" : "";
             const colorClass = entry.amount >= 0 ? "positive" : "negative";
-
-            item.innerHTML = `[${entry.date} ${entry.time}] (${entry.house}) ${entry.desc}: <span class="${colorClass}">${sign}$${entry.amount.toFixed(2)}</span> | ${entry.runningInfo}`;
+            item.innerHTML = `[${entry.date} ${entry.time}] (${entry.house}) ${entry.desc}: <span class="${colorClass}">${sign}$${parseFloat(entry.amount).toFixed(2)}</span> | ${entry.runningInfo}`;
             log.appendChild(item);
         });
     }
 </script>
-
 </body>
 </html>
