@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restitution & Accountability Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 8px;
+        }
+        .balance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .balance-box {
+            background: #2c3e50;
+            color: #fff;
+            padding: 20px;
+            border-radius: 6px 6px 0 0;
+            text-align: center;
+            font-size: 20px;
+        }
+        .balance-amount {
+            font-size: 38px;
+            font-weight: bold;
+            color: #2ecc71;
+        }
+        .progress-container {
+            background: #e2e8f0;
+            border-radius: 0 0 6px 6px;
+            height: 20px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .progress-bar {
+            background: #2ecc71;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: #fff;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        .milestone-achieved {
+            text-decoration: line-through;
+            color: #95a5a6;
+            background-color: #f2fcf5;
+        }
+        .form-group {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+            margin-top: 10px;
+        }
+        input[type="number"], input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #219653;
+        }
+        .log-container {
+            max-height: 250px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            background: #fafafa;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .log-item {
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+            font-family: monospace;
+        }
+        .positive { color: #27ae60; font-weight: bold; }
+        .negative { color: #c0392b; font-weight: bold; }
+        .rate-section {
+            font-weight: bold;
+            background-color: #eaeded;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Restitution & Accountability Tracker</h1>
+    <p>Earn credits through chores or cash payments to satisfy balances and systematically restore privileges across both households.</p>
+
+    <div class="balance-grid">
+        <div>
+            <div class="balance-box">
+                Dad's House Progress<br>
+                <span class="balance-amount" id="dad-balance">$0.00</span> / $285
+            </div>
+            <div class="progress-container">
+                <div id="dad-progress-bar" class="progress-bar"></div>
+            </div>
+        </div>
+        <div>
+            <div class="balance-box">
+                Mom's House Progress<br>
+                <span class="balance-amount" id="mom-balance">$0.00</span> / $900
+            </div>
+            <div class="progress-container">
+                <div id="mom-progress-bar" class="progress-bar" style="background: #3498db;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div>
+            <h3>🔓 Privilege Milestones</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Target</th>
+                        <th>Privilege Restored</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="rate-section"><td colspan="2">Dad's House Milestones</td></tr>
+                    <tr id="ms-50"><td>$50.00</td><td>Sleepovers Allowed Again</td></tr>
+                    <tr id="ms-70"><td>$70.00</td><td>TV Privileges</td></tr>
+                    <tr id="ms-125"><td>$125.00</td><td>Computer Access</td></tr>
+                    <tr id="ms-200"><td>$200.00</td><td>Phone (Upstairs Living Room Only)</td></tr>
+                    <tr id="ms-285"><td>$285.00</td><td>Full Phone Privileges (Dad's Debt Cleared)</td></tr>
+                    
+                    <tr class="rate-section"><td colspan="2">Mom's House Milestones</td></tr>
+                    <tr id="ms-900"><td>$900.00</td><td>Earn Bedroom Door Back (Windshield Cleared)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <h3>⚙️ Quick Reference Rates</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task / Rule</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="rate-section"><td colspan="2">Chores & Payments (Earnings)</td></tr>
+                    <tr><td>Outside Earnings (Cash Paid Back)</td><td class="positive">Variable</td></tr>
+                    <tr><td>Watching Kids (per hour average)</td><td class="positive">+$5.00</td></tr>
+                    <tr><td>Fully Cleaning a Bathroom</td><td class="positive">+$3.00</td></tr>
+                    <tr><td>Yard Cleanup (Front & Back)</td><td class="positive">+$3.00</td></tr>
+                    <tr><td>Clean Garage / Box Tear Down / Dump Run</td><td class="positive">+$3.00</td></tr>
+                    <tr><td>Clean Kitchen (excluding dishes)</td><td class="positive">+$2.00</td></tr>
+                    <tr><td>Clean the Laundry Room</td><td class="positive">+$2.00</td></tr>
+                    <tr><td>Clean Out a Vehicle</td><td class="positive">+$2.00</td></tr>
+                    <tr><td>Helping Someone with Room/Laundry</td><td class="positive">+$2.00</td></tr>
+                    <tr><td>Sweeping/vacuuming kitchen and livingrooms</td><td class="positive">+$1.00</td></tr>
+                    <tr><td>Load Dishwasher</td><td class="positive">+$1.00</td></tr>
+                    <tr><td>Unload Dishwasher</td><td class="positive">+$1.00</td></tr>
+                    <tr><td>Feeding Babies</td><td class="positive">+$1.00</td></tr>
+                    <tr><td>Take out ALL Trashes</td><td class="positive">+$1.00</td></tr>
+                    <tr><td>Pick Up a Living Room (each)</td><td class="positive">+$1.00</td></tr>
+                    <tr><td>Clean/Vacuum Stairs & Downstairs Area</td><td class="positive">+$1.00</td></tr>
+                    <tr><td>Mopping</td><td class="positive">+$1.00</td></tr>
+                    <tr><td>Random Laundry (Towels, etc.)</td><td class="positive">+$1.00</td></tr>
+                    <tr><td>Diaper Change</td><td class="positive">+$0.50</td></tr>
+                    
+                    <tr class="rate-section"><td colspan="2">Penalties (Deductions)</td></tr>
+                    <tr><td>Violent Outburst</td><td class="negative">-$5.00</td></tr>
+                    <tr><td>Sneaking Taken Electronics</td><td class="negative">-$4.00</td></tr>
+                    <tr><td>Not Letting Parent Into Room</td><td class="negative">-$3.00</td></tr>
+                    <tr><td>No Listening the First Time</td><td class="negative">-$1.00</td></tr>
+                    <tr><td>Disrespect</td><td class="negative">-$1.00</td></tr>
+                    <tr><td>Rude Comment</td><td class="negative">-$1.00</td></tr>
+                    <tr><td>Value of Something Stolen</td><td class="negative">- $xx</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <h3>➕ Add Transaction</h3>
+        
+        <label for="target-house">Apply To Household:</label>
+        <select id="target-house">
+            <option value="dad">Dad's House</option>
+            <option value="mom">Mom's House</option>
+        </select>
+
+        <label for="action-type">Select Chore or Penalty:</label>
+        <select id="action-type" onchange="presetAmount()">
+            <option value="custom">-- Custom Amount / Stolen Item Value --</option>
+            <option value="cash">-- Cash Payment / Buyback (Type Amount Below) --</option>
+            <option value="5.00">Chore: Watching Kids (+$5.00)</option>
+            <option value="3.00">Chore: Fully Cleaning a Bathroom (+$3.00)</option>
+            <option value="3.00">Chore: Yard Cleanup (+$3.00)</option>
+            <option value="3.00">Chore: Garage/Dump Run Help (+$3.00)</option>
+            <option value="2.00">Chore: Clean Kitchen (no dishes) (+$2.00)</option>
+            <option value="2.00">Chore: Clean Laundry Room (+$2.00)</option>
+            <option value="2.00">Chore: Clean Out Vehicle (+$2.00)</option>
+            <option value="2.00">Chore: Help Room/Laundry (+$2.00)</option>
+            <option value="1.00">Chore: Sweeping/vacuuming kitchen/livingrooms (+$1.00)</option>
+            <option value="1.00">Chore: Load Dishwasher (+$1.00)</option>
+            <option value="1.00">Chore: Unload Dishwasher (+$1.00)</option>
+            <option value="1.00">Chore: Feeding Babies (+$1.00)</option>
+            <option value="1.00">Chore: Take ALL Trash Out (+$1.00)</option>
+            <option value="1.00">Chore: Pick Up Living Room (+$1.00)</option>
+            <option value="1.00">Chore: Clean/Vacuum Stairs (+$1.00)</option>
+            <option value="1.00">Chore: Mopping (+$1.00)</option>
+            <option value="1.00">Chore: Towels/Random Laundry (+$1.00)</option>
+            <option value="0.50">Chore: Diaper Change (+$0.50)</option>
+            <option value="-5.00">Penalty: Violent outburst (-$5.00)</option>
+            <option value="-4.00">Penalty: Sneaking electronics (-$4.00)</option>
+            <option value="-3.00">Penalty: Did not let parent in room (-$3.00)</option>
+            <option value="-1.00">Penalty: Did not listen 1st time (-$1.00)</option>
+            <option value="-1.00">Penalty: Disrespect (-$1.00)</option>
+            <option value="-1.00">Penalty: Rude comment (-$1.00)</option>
+        </select>
+
+        <label for="amount">Amount ($):</label>
+        <input type="number" id="amount" step="0.01" placeholder="Enter amount (negative for penalties)">
+
+        <label for="description">Notes / Description:</label>
+        <input type="text" id="description" placeholder="e.g., Cash from extra work, or Unloaded dishwasher">
+
+        <button onclick="addTransaction()">Submit Entry</button>
+    </div>
+
+    <h3>📜 Unified Transaction Log</h3>
+    <div class="log-container" id="log">
+        <div class="log-item">System initialized. Starting progress at $0.00.</div>
+    </div>
+</div>
+
+<script>
+    let dadBalance = parseFloat(localStorage.getItem('restitutionBalanceDad')) || 0.00;
+    let momBalance = parseFloat(localStorage.getItem('restitutionBalanceMom')) || 0.00;
+    let savedLogs = JSON.parse(localStorage.getItem('restitutionLogsDual')) || [];
+
+    window.onload = function() {
+        updateUI();
+        renderSavedLogs();
+    };
+
+    function presetAmount() {
+        const select = document.getElementById('action-type');
+        const amountInput = document.getElementById('amount');
+        if (select.value !== 'custom' && select.value !== 'cash') {
+            amountInput.value = select.value;
+        } else {
+            amountInput.value = '';
+        }
+    }
+
+    function addTransaction() {
+        const amountInput = document.getElementById('amount');
+        const descInput = document.getElementById('description');
+        const select = document.getElementById('action-type');
+        const houseSelect = document.getElementById('target-house');
+        
+        let amount = parseFloat(amountInput.value);
+        let desc = descInput.value.trim();
+        let house = houseSelect.value;
+
+        if (isNaN(amount)) {
+            alert("Please enter a valid dollar amount.");
+            return;
+        }
+
+        if (desc === "") {
+            if (select.value === 'cash') {
+                desc = "Cash Payment Received";
+            } else if (select.value !== 'custom') {
+                desc = select.options[select.selectedIndex].text.split('(')[0].trim();
+            } else {
+                desc = amount >= 0 ? "Custom Credit" : "Value of Stolen Item/Penalty";
+            }
+        }
+
+        let currentRunning;
+        if (house === 'dad') {
+            dadBalance += amount;
+            if (dadBalance < 0) dadBalance = 0;
+            localStorage.setItem('restitutionBalanceDad', dadBalance.toFixed(2));
+            currentRunning = `Dad's Bal: $${dadBalance.toFixed(2)}`;
+        } else {
+            momBalance += amount;
+            if (momBalance < 0) momBalance = 0;
+            localStorage.setItem('restitutionBalanceMom', momBalance.toFixed(2));
+            currentRunning = `Mom's Bal: $${momBalance.toFixed(2)}`;
+        }
+
+        const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        const date = new Date().toLocaleDateString();
+        const logEntry = { date, time, desc, amount, house: house.toUpperCase(), runningInfo: currentRunning };
+        
+        savedLogs.unshift(logEntry);
+        localStorage.setItem('restitutionLogsDual', JSON.stringify(savedLogs));
+
+        updateUI();
+        renderSavedLogs();
+
+        amountInput.value = '';
+        descInput.value = '';
+        select.value = 'custom';
+    }
+
+    function updateUI() {
+        document.getElementById('dad-balance').innerText = `$${dadBalance.toFixed(2)}`;
+        document.getElementById('mom-balance').innerText = `$${momBalance.toFixed(2)}`;
+
+        let dadPct = (dadBalance / 285) * 100;
+        if (dadPct > 100) dadPct = 100;
+        document.getElementById('dad-progress-bar').style.width = dadPct + '%';
+
+        let momPct = (momBalance / 900) * 100;
+        if (momPct > 100) momPct = 100;
+        document.getElementById('mom-progress-bar').style.width = momPct + '%';
+
+        updateMilestoneRow('ms-50', dadBalance >= 50);
+        updateMilestoneRow('ms-70', dadBalance >= 70);
+        updateMilestoneRow('ms-125', dadBalance >= 125);
+        updateMilestoneRow('ms-200', dadBalance >= 200);
+        updateMilestoneRow('ms-285', dadBalance >= 285);
+        updateMilestoneRow('ms-900', momBalance >= 900);
+    }
+
+    function updateMilestoneRow(id, isAchieved) {
+        const row = document.getElementById(id);
+        if (isAchieved) {
+            row.className = 'milestone-achieved';
+        } else {
+            row.className = '';
+        }
+    }
+
+    function renderSavedLogs() {
+        const log = document.getElementById('log');
+        log.innerHTML = '';
+        
+        if (savedLogs.length === 0) {
+            log.innerHTML = '<div class="log-item">System initialized. Trackers ready.</div>';
+            return;
+        }
+
+        savedLogs.forEach(entry => {
+            const item = document.createElement('div');
+            item.className = 'log-item';
+            const sign = entry.amount >= 0 ? "+" : "";
+            const colorClass = entry.amount >= 0 ? "positive" : "negative";
+
+            item.innerHTML = `[${entry.date} ${entry.time}] (${entry.house}) ${entry.desc}: <span class="${colorClass}">${sign}$${entry.amount.toFixed(2)}</span> | ${entry.runningInfo}`;
+            log.appendChild(item);
+        });
+    }
+</script>
+
+</body>
+</html>
