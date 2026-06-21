@@ -33,31 +33,35 @@
 </head>
 <body class="bg-gray-100 text-gray-900 min-h-screen font-body">
 
+    <!-- Father's Day Banner -->
     <div class="bg-popsGreen-dark text-white text-center py-2 px-4 shadow-md">
         <span class="text-sm font-bold tracking-wider uppercase">Father's Day Tribute</span>
     </div>
 
+    <!-- Header Section -->
     <header class="bg-white shadow-lg">
         <div class="max-w-7xl mx-auto pt-16 pb-8 px-6 text-center">
             <h1 class="text-6xl md:text-7xl font-header font-extrabold text-dadBlue-dark leading-none tracking-tighter">
                 Happy Father's Day,<br> Pops
             </h1>
-            <p class="text-gray-600 mt-4 text-2xl font-semibold italic">Our parafamilias and family leader.</p>
+            <p class="text-gray-600 mt-4 text-2xl font-semibold italic">Our patriarch, guide, and foundational leader.</p>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-6 py-12 space-y-16">
         
+        <!-- Pops' Corner -->
         <section class="grid md:grid-cols-5 gap-12 items-center bg-white p-10 rounded-2xl shadow-xl border border-gray-200">
-            <div class="md:col-span-2 max-w-sm mx-auto bg-gray-100 rounded-xl shadow-inner p-4 border border-gray-300 aspect-square w-full">
-                <img src="pops.jpg" alt="Pops" id="pops-corner-photo" class="object-cover w-full h-full rounded-lg shadow-md" onerror="this.src='https://via.placeholder.com/400?text=Pops'">
+            <!-- Main Featured Frame -->
+            <div class="md:col-span-2 max-w-sm mx-auto bg-stone-900 p-3 rounded shadow-2xl border-8 border-stone-800 aspect-square w-full flex items-center justify-center overflow-hidden">
+                <img src="pops.jpg" alt="Pops" id="pops-corner-photo" class="object-contain max-w-full max-h-full rounded-sm shadow-inner" onerror="this.src='https://via.placeholder.com/400?text=Pops'">
             </div>
 
             <div class="md:col-span-3 space-y-6 text-center md:text-left">
                 <div class="inline-block bg-dadBlue-light text-dadBlue-dark px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest">Family Center</div>
-                <h2 class="text-5xl font-header text-dadBlue font-bold leading-tight">The Parafamilias of Our Family</h2>
+                <h2 class="text-5xl font-header text-dadBlue font-bold leading-tight">The Paterfamilias of Our Family</h2>
                 <p class="text-gray-700 text-xl leading-relaxed">
-                    This site serves as a central hub for the family to show our gratitude. Pops, as our parafamilias, your wisdom, strength, and integrity ground us all. Feel free to leave a Father's Day card or share a favorite photo on the board below.
+                    This site serves as a central hub for the family to show our gratitude. As our paterfamilias, your wisdom, strength, and integrity ground us all. Feel free to leave a Father's Day card or share a favorite photo on the public board below.
                 </p>
                 <a href="#write-card" class="inline-block bg-popsGreen hover:bg-popsGreen-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg transition duration-200">
                     Write A Card
@@ -68,23 +72,27 @@
             </div>
         </section>
 
+        <!-- Favorite Pictures Section -->
         <section id="photo-gallery" class="space-y-6 bg-dadBlue-light p-10 rounded-2xl shadow-inner border border-dadBlue-dark/10">
             <h2 class="text-4xl font-header font-bold text-dadBlue-dark text-center">Shared Photos</h2>
             
-            <div id="gallery-container" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-6">
-                <div class="bg-white rounded-lg shadow-md border-2 border-dashed border-dadBlue/30 hover:border-dadBlue transition duration-150 flex flex-col items-center justify-center p-6 text-center cursor-pointer group aspect-square" onclick="document.getElementById('file-upload').click();">
+            <div id="gallery-container" class="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8 py-6">
+                <!-- Add Photo Frame Button -->
+                <div class="bg-white rounded-lg shadow-md border-4 border-dashed border-dadBlue/30 hover:border-dadBlue transition duration-150 flex flex-col items-center justify-center p-8 text-center cursor-pointer group min-h-[320px] h-80" onclick="document.getElementById('file-upload').click();">
                     <svg class="h-16 w-16 text-dadBlue/60 group-hover:text-dadBlue transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4" />
                     </svg>
-                    <p class="text-dadBlue-dark font-semibold mt-4 text-lg">Add A Photo</p>
-                    <p id="upload-status" class="text-dadBlue/70 text-sm mt-1">Upload to the live gallery</p>
+                    <p class="text-dadBlue-dark font-semibold mt-4 text-xl">Add A Photo</p>
+                    <p id="upload-status" class="text-dadBlue/70 text-sm mt-1">Upload to the live public gallery</p>
                     <input type="file" id="file-upload" class="hidden" accept="image/*" onchange="processAndUploadPhoto(this.files)">
                 </div>
             </div>
         </section>
 
+        <!-- Card Section: Write and Read -->
         <section id="write-card" class="bg-white p-10 rounded-2xl shadow-xl border border-gray-200 space-y-12">
             
+            <!-- Form: Drop a Card -->
             <div id="card-form-container" class="border-b border-gray-200 pb-12">
                 <h2 class="text-4xl font-header font-bold text-gray-800 mb-6">Leave a Card</h2>
                 <form id="card-form" class="grid md:grid-cols-3 gap-6">
@@ -104,6 +112,7 @@
                 </form>
             </div>
 
+            <!-- Public Board -->
             <div class="space-y-6">
                 <h2 class="text-4xl font-header font-bold text-gray-800 text-center">The Public Card Board</h2>
                 <div id="cards-container" class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -174,9 +183,9 @@
 
                 photos.forEach(photo => {
                     const photoDiv = document.createElement('div');
-                    photoDiv.className = 'gallery-item bg-white p-3 rounded-lg shadow-md border border-gray-100 aspect-square';
+                    photoDiv.className = 'gallery-item bg-stone-900 p-3 rounded shadow-2xl border-8 border-stone-800 h-80 flex items-center justify-center overflow-hidden';
                     photoDiv.innerHTML = `
-                        <img src="${photo.imageData}" alt="Memory of Pops" class="object-cover w-full h-full rounded-md shadow-inner">
+                        <img src="${photo.imageData}" alt="Memory of Pops" class="object-contain max-w-full max-h-full rounded-sm shadow-inner">
                     `;
                     galleryContainer.appendChild(photoDiv);
                 });
@@ -224,7 +233,7 @@
                 const img = new Image();
                 img.src = event.target.result;
                 img.onload = async function () {
-                    const maxCoord = 800; 
+                    const maxCoord = 1000; 
                     let width = img.width;
                     let height = img.height;
 
@@ -246,7 +255,7 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
                     
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7); 
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.75); 
                     const timestamp = new Date().getTime();
 
                     try {
