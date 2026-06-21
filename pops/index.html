@@ -5,56 +5,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Father's Day, Pops!</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dadBlue: {
+                            light: '#E1F5FE',
+                            DEFAULT: '#0288D1',
+                            dark: '#01579B',
+                        },
+                        popsGreen: {
+                            light: '#E8F5E9',
+                            DEFAULT: '#388E3C',
+                            dark: '#1B5E20',
+                        },
+                        popsGold: '#FBC02D',
+                    },
+                    fontFamily: {
+                        header: ['"Arial Black"', 'sans-serif'],
+                        body: ['"Trebuchet MS"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-stone-900 text-stone-100 min-h-screen font-sans">
+<body class="bg-gray-100 text-gray-900 min-h-screen font-body">
 
-    <header class="max-w-4xl mx-auto pt-12 pb-6 px-4 text-center border-b border-stone-800">
-        <h1 class="text-4xl md:text-5xl font-serif font-bold text-amber-500 tracking-wide">
-            Happy Father's Day, Pops!
-        </h1>
-        <p class="text-stone-400 mt-2 italic text-lg">The central hub for honoring our family leader and 'parafamilias'.</p>
+    <div class="bg-popsGreen-dark text-white text-center py-2 px-4 shadow-md">
+        <span class="text-sm font-bold tracking-wider">CELEBRATING</span>
+        <span class="text-xl font-header text-popsGold mx-2">THE BEST DAD EVER</span>
+    </div>
+
+    <header class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto pt-16 pb-8 px-6 text-center">
+            <h1 class="text-6xl md:text-7xl font-header font-extrabold text-dadBlue-dark leading-none tracking-tighter">
+                Happy Father's Day,<br> Pops!
+            </h1>
+            <p class="text-gray-600 mt-4 text-2xl font-semibold italic">Your guidance and love mean everything to us.</p>
+        </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-4 py-8 space-y-12">
+    <main class="max-w-7xl mx-auto px-6 py-12 space-y-16">
         
-        <section class="bg-stone-800/50 p-6 rounded-xl border border-stone-800">
-            <div class="max-w-sm mx-auto bg-stone-800 rounded-lg shadow-xl overflow-hidden border border-stone-700 aspect-square">
-                <img src="pops.jpg" alt="Pops" id="pops-photo" class="object-cover w-full h-full">
+        <section class="grid md:grid-cols-5 gap-12 items-center bg-white p-10 rounded-2xl shadow-xl border border-gray-200">
+            <div class="md:col-span-2 max-w-sm mx-auto bg-gray-100 rounded-xl shadow-inner p-4 border border-gray-300">
+                <img src="pops.jpg" alt="Our Pops" id="pops-corner-photo" class="object-cover w-full h-full rounded-lg shadow-md aspect-square">
+            </div>
+
+            <div class="md:col-span-3 space-y-6 text-center md:text-left">
+                <div class="inline-block bg-dadBlue-light text-dadBlue-dark px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest">Pops' Corner</div>
+                <h2 class="text-5xl font-header text-dadBlue font-bold leading-tight">For The Man Who<br> Inspires Us All</h2>
+                <p class="text-gray-700 text-xl leading-relaxed">
+                    This Father's Day, we're all sharing a special memory or message of gratitude for our Pops. Browse the stories, share your own, and maybe even post a favorite photo below to help us honor the man who has given us so much.
+                </p>
+                <a href="#card-form" class="inline-block bg-popsGreen hover:bg-popsGreen-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg transition duration-200">
+                    Write A Card
+                </a>
+                <a href="#photo-gallery" class="inline-block bg-popsGold hover:bg-yellow-500 text-dadBlue-dark font-bold px-8 py-4 rounded-xl shadow-lg transition duration-200 ml-4">
+                    Share A Photo
+                </a>
             </div>
         </section>
 
-        <section class="bg-stone-800/30 border border-stone-800 p-6 rounded-xl">
-            <h2 class="text-2xl font-bold text-stone-200 mb-4">Leave a Father's Day Card</h2>
-            <form id="card-form" class="space-y-4">
-                <div>
-                    <label class="block text-xs uppercase tracking-wider text-stone-400 font-bold mb-1" for="author">Your Name</label>
-                    <input type="text" id="author" required class="w-full bg-stone-900 border border-stone-700 rounded p-2.5 text-stone-100 focus:outline-none focus:border-amber-500">
+        <section id="photo-gallery" class="space-y-6 bg-dadBlue-light p-10 rounded-2xl shadow-inner border border-dadBlue-dark/10">
+            <h2 class="text-4xl font-header font-bold text-dadBlue-dark text-center">Favorite Pictures Of Pops</h2>
+            
+            <div id="gallery-container" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-6">
+                <div class="bg-white rounded-lg shadow-md border-2 border-dashed border-dadBlue/30 hover:border-dadBlue transition duration-150 flex flex-col items-center justify-center p-6 text-center cursor-pointer group" onclick="document.getElementById('file-upload').click();">
+                    <svg class="h-16 w-16 text-dadBlue/60 group-hover:text-dadBlue transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <p class="text-dadBlue-dark font-semibold mt-4 text-lg">Add A Favorite Photo</p>
+                    <p class="text-dadBlue/70 text-sm mt-1">Upload a memory for everyone to enjoy</p>
+                    <input type="file" id="file-upload" class="hidden" accept="image/*" onchange="uploadPhoto(this.files)">
                 </div>
-                <div>
-                    <label class="block text-xs uppercase tracking-wider text-stone-400 font-bold mb-1" for="message">Your Message to Pops</label>
-                    <textarea id="message" rows="4" required class="w-full bg-stone-900 border border-stone-700 rounded p-2.5 text-stone-100 focus:outline-none focus:border-amber-500"></textarea>
+                
                 </div>
-                <button type="submit" class="w-full bg-stone-700 hover:bg-stone-600 text-stone-100 font-semibold py-2 px-4 rounded transition duration-200">
-                    Submit to Pops Card Board
-                </button>
-            </form>
         </section>
 
-        <section class="space-y-4">
-            <h2 class="text-2xl font-bold text-stone-200">Pops Card Board</h2>
-            <div id="cards-container" class="grid sm:grid-cols-2 gap-4">
-                <p class="text-stone-500 italic col-span-2 text-center py-4">Connecting to database...</p>
+        <section id="write-card" class="bg-white p-10 rounded-2xl shadow-xl border border-gray-200 space-y-12">
+            
+            <div id="card-form-container" class="border-b border-gray-200 pb-12">
+                <h2 class="text-4xl font-header font-bold text-gray-800 mb-6">Write a Father's Day Card for Pops</h2>
+                <form id="card-form" class="grid md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1 space-y-4">
+                        <div>
+                            <label class="block text-sm uppercase tracking-wider text-gray-600 font-bold mb-2" for="author">Your Name</label>
+                            <input type="text" id="author" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-4 text-gray-900 text-lg focus:outline-none focus:border-popsGreen">
+                        </div>
+                        <button type="submit" class="w-full bg-popsGreen hover:bg-popsGreen-dark text-white font-semibold py-4 px-6 rounded-lg shadow-lg transition duration-200">
+                            Submit My Card
+                        </button>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm uppercase tracking-wider text-gray-600 font-bold mb-2" for="message">Your Personal Message</label>
+                        <textarea id="message" rows="6" required class="w-full bg-gray-50 border border-gray-300 rounded-lg p-4 text-gray-900 text-lg focus:outline-none focus:border-popsGreen"></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <div class="space-y-6">
+                <h2 class="text-4xl font-header font-bold text-gray-800 text-center">The Public Card Board</h2>
+                <div id="cards-container" class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <p class="text-gray-500 italic col-span-3 text-center py-6">Connecting to database...</p>
+                </div>
             </div>
         </section>
 
     </main>
 
-    <footer class="text-center py-12 text-stone-600 text-xs border-t border-stone-800 mt-12">
-        Built for Pops.
+    <footer class="bg-dadBlue-dark text-white text-center py-16 px-6 mt-16 shadow-inner border-t-2 border-popsGold">
+        <p class="text-sm font-bold uppercase tracking-widest text-popsGold">BUILT WITH INTEGRITY AND PRIDE</p>
+        <p class="text-6xl font-header mt-4 mb-2">We Love You, Pops!</p>
+        <p class="text-lg opacity-80">Honoring our father, guide, and hero.</p>
     </footer>
 
     <script>
+        // Use your provided Realtime Database URL
         const dbUrl = "https://pops-3daa5-default-rtdb.firebaseio.com/cards.json";
+        
+        // --- Shared Cards Functions --- //
+        
         const cardForm = document.getElementById('card-form');
         const cardsContainer = document.getElementById('cards-container');
 
@@ -66,7 +139,7 @@
                 cardsContainer.innerHTML = '';
 
                 if (!data) {
-                    cardsContainer.innerHTML = `<p class="text-stone-500 italic col-span-2 text-center py-4">No cards submitted yet. Be the first!</p>`;
+                    cardsContainer.innerHTML = `<p class="text-gray-500 italic col-span-3 text-center py-8">No cards submitted yet. Be the first!</p>`;
                     return;
                 }
 
@@ -75,18 +148,18 @@
 
                 cards.forEach(card => {
                     const cardDiv = document.createElement('div');
-                    cardDiv.className = 'bg-stone-800 border border-stone-700 p-5 rounded-lg shadow-md flex flex-col justify-between';
+                    cardDiv.className = 'bg-white border border-gray-100 p-6 rounded-xl shadow flex flex-col justify-between';
                     cardDiv.innerHTML = `
-                        <p class="text-stone-300 italic mb-4">"${escapeHtml(card.message)}"</p>
-                        <div class="border-t border-stone-700 pt-2 flex justify-between items-center text-xs text-stone-400">
-                            <span class="font-bold text-amber-500">- ${escapeHtml(card.author)}</span>
+                        <p class="text-gray-800 italic mb-5 leading-relaxed text-lg">"${escapeHtml(card.message)}"</p>
+                        <div class="border-t border-gray-100 pt-4 flex justify-between items-center text-sm text-gray-600 font-semibold">
+                            <span class="text-popsGreen-dark text-lg font-bold">${escapeHtml(card.author)}</span>
                             <span>${escapeHtml(card.date)}</span>
                         </div>
                     `;
                     cardsContainer.appendChild(cardDiv);
                 });
             } catch (error) {
-                cardsContainer.innerHTML = `<p class="text-red-500 italic col-span-2 text-center py-4">Error loading cards. Ensure database rules allow public access.</p>`;
+                cardsContainer.innerHTML = `<p class="text-red-500 italic col-span-3 text-center py-8">Error loading cards. Ensure database rules allow public access.</p>`;
             }
         }
 
@@ -119,9 +192,49 @@
         function escapeHtml(str) {
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
+        
+        // --- Photo Gallery Function --- //
+        
+        // Mock Photo Data - for demonstration purposes until you hook up cloud storage.
+        // We'll simulate fetching/adding photos from the same folder.
+        const galleryContainer = document.getElementById('gallery-container');
+        let mockPhotos = ['gallery1.jpg', 'gallery2.jpg', 'gallery3.jpg'];
+
+        function loadGallery() {
+            // First clear any existing photos, keeping the "Add Photo" block
+            const existingPhotos = galleryContainer.querySelectorAll('.gallery-item');
+            existingPhotos.forEach(item => item.remove());
+
+            // Add mock photos
+            mockPhotos.forEach(photoSrc => {
+                const photoDiv = document.createElement('div');
+                photoDiv.className = 'gallery-item bg-white p-3 rounded-lg shadow-md border border-gray-100 aspect-square';
+                photoDiv.innerHTML = `
+                    <img src="${photoSrc}" alt="Memory" class="object-cover w-full h-full rounded-md shadow-inner">
+                `;
+                galleryContainer.appendChild(photoDiv);
+            });
+        }
+        
+        // Function to simulate photo upload
+        function uploadPhoto(files) {
+            if (files && files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // For a real app, you would upload e.target.result to Firebase Storage
+                    // and store the image URL in the Realtime Database.
+                    // For now, we'll simulate it by adding a new mock photo.
+                    mockPhotos.push(e.target.result);
+                    loadGallery(); // Reload gallery to show the new photo
+                    alert("Mock upload complete. This new image will stay until you refresh the page.");
+                }
+                reader.readAsDataURL(files[0]);
+            }
+        }
 
         // Initial Load
         fetchCards();
+        loadGallery();
     </script>
 </body>
 </html>
