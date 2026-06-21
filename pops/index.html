@@ -43,27 +43,27 @@
             <h1 class="text-6xl md:text-7xl font-header font-extrabold text-dadBlue-dark leading-none tracking-tighter">
                 Happy Father's Day,<br> Pops!
             </h1>
-            <p class="text-gray-600 mt-4 text-2xl font-semibold italic">Your guidance and love mean so much to us.</p>
+            <p class="text-gray-600 mt-4 text-2xl font-semibold italic">Your guidance and love mean everything to us.</p>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-6 py-12 space-y-16">
         
         <section class="grid md:grid-cols-5 gap-12 items-center bg-white p-10 rounded-2xl shadow-xl border border-gray-200">
-            <div class="md:col-span-2 max-w-sm mx-auto bg-gray-100 rounded-xl shadow-inner p-4 border border-gray-300">
-                <img src="pops.jpg" alt="Our Pops" id="pops-corner-photo" class="object-cover w-full h-full rounded-lg shadow-md aspect-square">
+            <div class="md:col-span-2 max-w-sm mx-auto bg-gray-100 rounded-xl shadow-inner p-4 border border-gray-300 aspect-square w-full">
+                <img src="pops.jpg" alt="Our Pops" id="pops-corner-photo" class="object-cover w-full h-full rounded-lg shadow-md" onerror="this.src='https://via.placeholder.com/400?text=Pops'">
             </div>
 
             <div class="md:col-span-3 space-y-6 text-center md:text-left">
                 <div class="inline-block bg-dadBlue-light text-dadBlue-dark px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest">Pops' Corner</div>
                 <h2 class="text-5xl font-header text-dadBlue font-bold leading-tight">For The Man Who<br> Inspires Us All</h2>
                 <p class="text-gray-700 text-xl leading-relaxed">
-                    This Father's Day, we're all sharing a special memory or message of gratitude for our Pops. Our Parafamilias! Browse the stories, share your own, and maybe even post a favorite photo below to help us honor the man who has given us so much.
+                    This Father's Day, we're all sharing a special memory or message of gratitude for our Pops. Browse the stories, share your own, and post your favorite photos below to help us honor him.
                 </p>
-                <a href="#card-form" class="inline-block bg-popsGreen hover:bg-popsGreen-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg transition duration-200">
+                <a href="#write-card" class="inline-block bg-popsGreen hover:bg-popsGreen-dark text-white font-bold px-8 py-4 rounded-xl shadow-lg transition duration-200">
                     Write A Card
                 </a>
-                <a href="#photo-gallery" class="inline-block bg-popsGold hover:bg-yellow-500 text-dadBlue-dark font-bold px-8 py-4 rounded-xl shadow-lg transition duration-200 ml-4">
+                <a href="#photo-gallery" class="inline-block bg-popsGold hover:bg-yellow-500 text-dadBlue-dark font-bold px-8 py-4 rounded-xl shadow-lg transition duration-200 sm:ml-4 mt-4 sm:mt-0">
                     Share A Photo
                 </a>
             </div>
@@ -73,16 +73,15 @@
             <h2 class="text-4xl font-header font-bold text-dadBlue-dark text-center">Favorite Pictures Of Pops</h2>
             
             <div id="gallery-container" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-6">
-                <div class="bg-white rounded-lg shadow-md border-2 border-dashed border-dadBlue/30 hover:border-dadBlue transition duration-150 flex flex-col items-center justify-center p-6 text-center cursor-pointer group" onclick="document.getElementById('file-upload').click();">
+                <div class="bg-white rounded-lg shadow-md border-2 border-dashed border-dadBlue/30 hover:border-dadBlue transition duration-150 flex flex-col items-center justify-center p-6 text-center cursor-pointer group aspect-square" onclick="document.getElementById('file-upload').click();">
                     <svg class="h-16 w-16 text-dadBlue/60 group-hover:text-dadBlue transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4" />
                     </svg>
                     <p class="text-dadBlue-dark font-semibold mt-4 text-lg">Add A Favorite Photo</p>
-                    <p class="text-dadBlue/70 text-sm mt-1">Upload a memory for everyone to enjoy</p>
+                    <p class="text-dadBlue/70 text-sm mt-1">Upload to the live public gallery</p>
                     <input type="file" id="file-upload" class="hidden" accept="image/*" onchange="uploadPhoto(this.files)">
                 </div>
-                
-                </div>
+            </div>
         </section>
 
         <section id="write-card" class="bg-white p-10 rounded-2xl shadow-xl border border-gray-200 space-y-12">
@@ -123,18 +122,17 @@
     </footer>
 
     <script>
-        // Use your provided Realtime Database URL
-        const dbUrl = "https://pops-3daa5-default-rtdb.firebaseio.com/cards.json";
-        
-        // --- Shared Cards Functions --- //
+        const cardsUrl = "https://pops-3daa5-default-rtdb.firebaseio.com/cards.json";
+        const photosUrl = "https://pops-3daa5-default-rtdb.firebaseio.com/photos.json";
         
         const cardForm = document.getElementById('card-form');
         const cardsContainer = document.getElementById('cards-container');
+        const galleryContainer = document.getElementById('gallery-container');
 
         // Fetch cards from Firebase
         async function fetchCards() {
             try {
-                const response = await fetch(dbUrl);
+                const response = await fetch(cardsUrl);
                 const data = await response.json();
                 cardsContainer.innerHTML = '';
 
@@ -143,7 +141,6 @@
                     return;
                 }
 
-                // Convert Firebase object to array, sort by newest first
                 const cards = Object.keys(data).map(key => data[key]).reverse();
 
                 cards.forEach(card => {
@@ -159,7 +156,34 @@
                     cardsContainer.appendChild(cardDiv);
                 });
             } catch (error) {
-                cardsContainer.innerHTML = `<p class="text-red-500 italic col-span-3 text-center py-8">Error loading cards. Ensure database rules allow public access.</p>`;
+                cardsContainer.innerHTML = `<p class="text-red-500 italic col-span-3 text-center py-8">Error loading cards.</p>`;
+            }
+        }
+
+        // Fetch photos from Firebase
+        async function fetchPhotos() {
+            try {
+                const response = await fetch(photosUrl);
+                const data = await response.json();
+                
+                // Clear out everything except the "Add Photo" button box
+                const existingItems = galleryContainer.querySelectorAll('.gallery-item');
+                existingItems.forEach(item => item.remove());
+
+                if (!data) return;
+
+                const photos = Object.keys(data).map(key => data[key]).reverse();
+
+                photos.forEach(photo => {
+                    const photoDiv = document.createElement('div');
+                    photoDiv.className = 'gallery-item bg-white p-3 rounded-lg shadow-md border border-gray-100 aspect-square';
+                    photoDiv.innerHTML = `
+                        <img src="${photo.imageData}" alt="Memory of Pops" class="object-cover w-full h-full rounded-md shadow-inner">
+                    `;
+                    galleryContainer.appendChild(photoDiv);
+                });
+            } catch (error) {
+                console.error("Error loading photos:", error);
             }
         }
 
@@ -175,7 +199,7 @@
                 const newCard = { author, message, date };
 
                 try {
-                    await fetch(dbUrl, {
+                    await fetch(cardsUrl, {
                         method: 'POST',
                         body: JSON.stringify(newCard),
                         headers: { 'Content-Type': 'application/json' }
@@ -183,58 +207,49 @@
                     cardForm.reset();
                     fetchCards();
                 } catch (error) {
-                    alert('Failed to save card. Check your connection or database rules.');
+                    alert('Failed to save card. Check your connection.');
                 }
             }
         });
 
-        // Simple helper to prevent HTML injection
-        function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-        }
-        
-        // --- Photo Gallery Function --- //
-        
-        // Mock Photo Data - for demonstration purposes until you hook up cloud storage.
-        // We'll simulate fetching/adding photos from the same folder.
-        const galleryContainer = document.getElementById('gallery-container');
-        let mockPhotos = ['gallery1.jpg', 'gallery2.jpg', 'gallery3.jpg'];
-
-        function loadGallery() {
-            // First clear any existing photos, keeping the "Add Photo" block
-            const existingPhotos = galleryContainer.querySelectorAll('.gallery-item');
-            existingPhotos.forEach(item => item.remove());
-
-            // Add mock photos
-            mockPhotos.forEach(photoSrc => {
-                const photoDiv = document.createElement('div');
-                photoDiv.className = 'gallery-item bg-white p-3 rounded-lg shadow-md border border-gray-100 aspect-square';
-                photoDiv.innerHTML = `
-                    <img src="${photoSrc}" alt="Memory" class="object-cover w-full h-full rounded-md shadow-inner">
-                `;
-                galleryContainer.appendChild(photoDiv);
-            });
-        }
-        
-        // Function to simulate photo upload
+        // Upload photo to Firebase as Base64 text string
         function uploadPhoto(files) {
             if (files && files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // For a real app, you would upload e.target.result to Firebase Storage
-                    // and store the image URL in the Realtime Database.
-                    // For now, we'll simulate it by adding a new mock photo.
-                    mockPhotos.push(e.target.result);
-                    loadGallery(); // Reload gallery to show the new photo
-                    alert("Mock upload complete. This new image will stay until you refresh the page.");
+                const file = files[0];
+                
+                // Keep image sizes under control for the Realtime Database limits
+                if (file.size > 2 * 1024 * 1024) { 
+                    alert("Please pick an image smaller than 2MB.");
+                    return;
                 }
-                reader.readAsDataURL(files[0]);
+
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const imageData = e.target.result;
+                    const timestamp = new Date().getTime();
+
+                    try {
+                        await fetch(photosUrl, {
+                            method: 'POST',
+                            body: JSON.stringify({ imageData, timestamp }),
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+                        fetchPhotos();
+                    } catch (error) {
+                        alert("Failed to post photo to the live board.");
+                    }
+                };
+                reader.readAsDataURL(file);
             }
         }
 
-        // Initial Load
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        // Run everything on startup
         fetchCards();
-        loadGallery();
+        fetchPhotos();
     </script>
 </body>
 </html>
