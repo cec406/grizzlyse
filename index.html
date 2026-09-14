@@ -3,143 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grizzly System Engineering | Tactical IT & Infrastructure</title>
+    <title>Grizzly System Engineering | Helena IT & Custom Servers</title>
     <style>
         :root {
-            --primary: #3498db;
-            --dark-bg: #0f172a;
+            --primary: #d97706; /* Shifted to a rugged amber/orange to fit 'Grizzly' and industrial feel */
+            --dark-bg: #111827;
             --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
         }
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family: 'Inter', sans-serif; line-height:1.6; color: var(--text-main); background:#fff; }
+        body { font-family: 'Inter', system-ui, sans-serif; line-height:1.6; color: var(--text-main); background:#f9fafb; }
         .container { max-width:1100px; margin:0 auto; padding:0 24px; }
         header {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(17, 24, 39, 0.98);
             color:white; padding:1.2rem 0; position:fixed; width:100%; top:0; z-index:1000;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 2px solid var(--primary);
         }
-        .logo { font-size:1rem; font-weight:800; letter-spacing: 3px; text-transform: uppercase; text-align: center; color: var(--primary); }
+        .logo { font-size:1.1rem; font-weight:800; letter-spacing: 2px; text-transform: uppercase; text-align: center; color: #fff; }
+        .logo span { color: var(--primary); }
         .hero {
-            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.9)), 
-                        url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
-            color:white; text-align:center; padding:200px 0 140px;
+            background: linear-gradient(rgba(17, 24, 39, 0.9), rgba(17, 24, 39, 0.95)), 
+                        url('https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
+            color:white; text-align:center; padding:220px 0 140px;
         }
-        .hero h1 { font-size:4rem; margin-bottom:1rem; font-weight: 900; letter-spacing: -2px; line-height: 1.1; }
-        .hero .tagline { font-size:1.4rem; margin-bottom:3rem; font-weight:300; color: #94a3b8; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .hero h1 { font-size:3.5rem; margin-bottom:1.5rem; font-weight: 900; letter-spacing: -1px; line-height: 1.2; }
+        .hero .tagline { font-size:1.3rem; margin-bottom:3rem; color: #d1d5db; max-width: 800px; margin:left: auto; margin-right: auto; line-height: 1.5; }
         .btn-group { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
         .btn {
-            display:inline-block; background: var(--primary); color:white; padding:18px 40px;
+            display:inline-block; background: var(--primary); color:white; padding:16px 36px;
             text-decoration:none; border-radius:4px; font-size:1rem; font-weight: 700; 
-            transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
+            transition: background 0.2s; text-transform: uppercase; letter-spacing: 1px;
         }
+        .btn:hover { background: #b45309; }
         .btn-secondary { background: transparent; border: 2px solid var(--primary); }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(52, 152, 219, 0.4); }
-        section { padding:120px 0; }
-        h2 { text-align:center; font-size:2.5rem; margin-bottom:4rem; font-weight: 800; color: var(--dark-bg); }
-        .about-content { display:grid; grid-template-columns: 1.3fr 1fr; gap:5rem; align-items:center; }
-        .about-text p { font-size:1.2rem; margin-bottom:1.5rem; color: var(--text-muted); }
-        .highlight { color: var(--primary); font-weight: 700; }
-        .capabilities { background: #f1f5f9; }
+        .btn-secondary:hover { background: rgba(217, 119, 6, 0.1); }
+        section { padding:100px 0; }
+        h2 { text-align:center; font-size:2.5rem; margin-bottom:3rem; font-weight: 900; color: var(--dark-bg); text-transform: uppercase; letter-spacing: 1px;}
+        .about-grid { display:grid; grid-template-columns: 1fr 1fr; gap:4rem; align-items:center; }
+        .ethos-box { background: var(--dark-bg); color: white; padding: 3rem; border-radius: 8px; border-left: 6px solid var(--primary); }
+        .ethos-box h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--primary); }
+        .capabilities { background: #e5e7eb; }
         .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:2rem; }
         .card { 
-            background: var(--card-bg); padding:3.5rem 2.5rem; border-radius:8px; 
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            border: 1px solid rgba(0,0,0,0.05);
-            position: relative; overflow: hidden;
+            background: var(--card-bg); padding:3rem 2.5rem; border-radius:8px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--primary);
         }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1); border-color: var(--primary); }
-        .card::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--primary); }
-        .card h3 { color: var(--dark-bg); margin-bottom:1.2rem; font-size:1.4rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        .card p { font-size:1rem; color: var(--text-muted); line-height: 1.8; }
-        footer { background: var(--dark-bg); color: #94a3b8; text-align:center; padding:5rem 0; border-top: 1px solid rgba(255,255,255,0.05); }
-        @media (max-width:768px) { .hero h1 { font-size:2.8rem; } .about-content { grid-template-columns:1fr; text-align: center; } }
+        .card h3 { color: var(--dark-bg); margin-bottom:1rem; font-size:1.3rem; font-weight: 800; text-transform: uppercase; }
+        .card p { font-size:1rem; color: var(--text-muted); line-height: 1.7; }
+        footer { background: var(--dark-bg); color: #9ca3af; text-align:center; padding:4rem 0; }
+        @media (max-width:768px) { .hero h1 { font-size:2.5rem; } .about-grid { grid-template-columns:1fr; } }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
-            <div class="logo">Grizzly System Engineering</div>
+            <div class="logo">Grizzly <span>System Engineering</span></div>
         </div>
     </header>
 
     <section id="home" class="hero">
         <div class="container">
-            <h1>Mission-Ready IT Infrastructure</h1>
-            <h2 style="color: #ffffff; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); white-space: nowrap; font-size: 1.5rem; letter-spacing: 1px; margin-bottom: 2rem;">
-                Systems Engineering | RMF Compliance | Community Support
-            </h2>
+            <h1>Practical Tech & Hardware for Montana Businesses</h1>
+            <p class="tagline">
+                We build custom servers, write scheduling software for local trades, and revive old hardware so you don't overspend on technology.
+            </p>
             <div class="btn-group">
-                <a href="#contact" class="btn">Initiate Project Inquiry</a>
-                <a href="lab.html" class="btn btn-secondary">View Engineering Lab</a>
+                <a href="#contact" class="btn">Request a Site Visit</a>
             </div>
         </div>
     </section>
 
     <section id="about">
-        <div class="container">
-            <h2>Upright Engineering. Montana Grit.</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>Operating out of the Helena area, <span class="highlight">Grizzly System Engineering LLC</span> provides the technical backbone for businesses, contractors, and individuals in Montana's capital. We go beyond basic helpdesk support to architect, secure, and manage reliable infrastructure.</p>
-                    <p>Built on extreme ownership, integrity, and operational discipline, we bring military-grade networking and virtualization standards to the civilian sector. Whether you are a business requiring hardened security or a family needing honest, zero-fail tech support, we are your tactical IT bridge.</p>
-                </div>
-                <div class="about-image">
-                    <img src="grizzly-logo.png" alt="Grizzly System Engineering" style="width:100%; max-width:350px;">
-                </div>
+        <div class="container about-grid">
+            <div>
+                <h2>Upright Execution.</h2>
+                <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">Operating in Helena, Montana, we provide the technical backbone for local trades, manufacturing shops, and medical clinics. We do not sell you cloud subscriptions you don't need.</p>
+                <p style="font-size: 1.1rem;">We take extreme ownership of your business operations. Whether it is keeping your network running, managing your inventory systems, or turning a closet of old computers into a reliable private server, we execute with integrity and precision.</p>
+            </div>
+            <div class="ethos-box">
+                <h3>Our Operating Standard</h3>
+                <ul style="list-style-type: none; font-size: 1.1rem; line-height: 2;">
+                    <li>✓ <strong>Absolute Accountability:</strong> We own the problem until it is solved.</li>
+                    <li>✓ <strong>No Waste:</strong> We maximize the hardware you already own.</li>
+                    <li>✓ <strong>Local Reliability:</strong> On-premise solutions that work without internet.</li>
+                    <li>✓ <strong>Secure by Default:</strong> Military-grade data protection.</li>
+                </ul>
             </div>
         </div>
     </section>
 
     <section class="capabilities">
         <div class="container">
-            <h2>Strategic Capabilities</h2>
+            <h2>Business Solutions</h2>
             <div class="grid">
                 <div class="card">
-                    <h3>Strategic IT Leadership</h3>
-                    <p>Move beyond reactive IT. We provide proactive systems management, hardware procurement, and operational oversight to ensure your business technology acts as a reliable force multiplier.</p>
-                </div>
-                <div class="card">
-                    <h3>Government-Grade Compliance</h3>
-                    <p>Essential for state contractors and healthcare. We specialize in implementing the Risk Management Framework (RMF), hardening enterprise Linux networks, and driving systems to full Authority to Operate (ATO) readiness.</p>
-                </div>
-                <div class="card">
-                    <h3>On-Premise Virtualization</h3>
-                    <p>Own your infrastructure. We architect resilient, high-availability clusters from the bare metal up using Proxmox, Hyper-V, and Ubuntu Server, eliminating expensive cloud dependencies and ensuring localized control.</p>
-                </div>
-                <div class="card">
-                    <h3>Sovereign AI & Secure Mesh</h3>
-                    <p>Keep your corporate data private. We deploy secure, private Large Language Models (Ollama) on local silicon and configure Tailscale mesh networks for encrypted remote access across your entire fleet.</p>
-                </div>
-                <div class="card">
-                    <h3>Residential & Home Office</h3>
-                    <p>Enterprise-grade reliability for your personal tech. We provide robust home Wi-Fi setups, secure data backups, hardware repair, and straightforward, honest tech support for individuals and families.</p>
+                    <h3>Custom Shop Software</h3>
+                    <p>Stop running crews on whiteboards. We build custom applications to track equipment, manage vehicle maintenance, and handle employee scheduling all from one tablet.</p>
                 </div>
                 <div class="card">
                     <h3>Hardware Reclamation</h3>
-                    <p>Extract maximum value from your silicon. We specialize in custom PC builds, reviving underutilized or damaged machines, and configuring secure home labs for private media and file hosting without monthly subscriptions.</p>
+                    <p>Do not throw away old office computers. We strip, rebuild, and optimize aging machines, turning them into fast, reliable terminals for the shop floor or office.</p>
+                </div>
+                <div class="card">
+                    <h3>On-Premise Servers</h3>
+                    <p>Stop paying monthly cloud fees. We build and deploy localized servers to host your files, databases, and media securely inside your own building.</p>
+                </div>
+                <div class="card">
+                    <h3>ERP & Inventory Integration</h3>
+                    <p>We deploy robust business management systems (like Odoo) to connect your sales, inventory, and manufacturing processes into a single, unified dashboard.</p>
+                </div>
+                <div class="card">
+                    <h3>Secure Mesh Networks</h3>
+                    <p>Keep your corporate data private. We establish encrypted connections so your field crews can access the main office network safely from anywhere.</p>
+                </div>
+                <div class="card">
+                    <h3>Proactive IT Management</h3>
+                    <p>We handle the troubleshooting, backups, and network security so you can focus entirely on running your business. Zero downtime, zero excuses.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="contact">
-        <div class="container">
-            <div class="contact-content" style="text-align: center;">
-                <h3>Secure a Contract</h3>
-                <p>Available for consulting, systems management, and specialized infrastructure support for businesses and individuals in the Helena area.</p>
-                <script type="text/javascript">function zforms_open_window(url, height, width){var leftPos = 0;var topPos = 0;if(screen){leftPos = (screen.width - width) / 2;topPos = (screen.height - height) / 2;window.open(url, null, 'width='+width+',height='+height+',left='+leftPos+',top='+topPos+', toolbar=0, location=0, status=1, scrollbars=1, resizable=1');}}</script>
-                <div style="margin: 40px 0;">
-                    <a href='https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0' target='_blank' onclick="zforms_open_window(this.href, 648, 700); return false" class="btn">Contact Us</a>
-                </div>
-                <div style="font-weight: 700; color: var(--dark-bg); line-height: 2;">
-                    <p>Location: East Helena, MT</p>
-                    <p>Direct: <a href="mailto:info@grizzlyse.com" style="color: var(--primary); text-decoration: none;">info@grizzlyse.com</a></p>
-                    <p>Phone: <a href="tel:+14064398127" style="color: var(--primary); text-decoration: none;">(406) 439-8127</a></p>
-                </div>
+        <div class="container" style="text-align: center;">
+            <h2>Secure Your Operations</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem;">Available for workflow automation, hardware builds, and systems management in the Helena area.</p>
+            
+            <script type="text/javascript">function zforms_open_window(url, height, width){var leftPos = 0;var topPos = 0;if(screen){leftPos = (screen.width - width) / 2;topPos = (screen.height - height) / 2;window.open(url, null, 'width='+width+',height='+height+',left='+leftPos+',top='+topPos+', toolbar=0, location=0, status=1, scrollbars=1, resizable=1');}}</script>
+            
+            <a href='https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0' target='_blank' onclick="zforms_open_window(this.href, 648, 700); return false" class="btn">Request a Site Visit</a>
+            
+            <div style="margin-top: 3rem; font-weight: 700; color: var(--text-main);">
+                <p>Location: East Helena, MT</p>
+                <p>Email: info@grizzlyse.com</p>
+                <p>Phone: (406) 439-8127</p>
             </div>
         </div>
     </section>
@@ -147,7 +146,7 @@
     <footer>
         <div class="container">
             <p>© 2026 Grizzly System Engineering LLC</p>
-            <p style="margin-top: 20px; font-size: 0.75rem; letter-spacing: 2px; opacity: 0.5;">IT LEADERSHIP • RMF COMPLIANCE • VIRTUALIZATION • COMMUNITY IT SUPPORT</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; letter-spacing: 2px;">HELENA, MT • HARDWARE RECLAMATION • CUSTOM SERVERS • BUSINESS AUTOMATION</p>
         </div>
     </footer>
 </body>
