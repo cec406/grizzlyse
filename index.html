@@ -1,162 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grizzly System Engineering | Helena IT & Custom Servers</title>
-    <style>
-        :root {
-            --primary: #d97706; 
-            --dark-bg: #111827;
-            --card-bg: #ffffff;
-            --text-main: #1f2937;
-            --text-muted: #4b5563;
-        }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family: 'Inter', system-ui, sans-serif; line-height:1.6; color: var(--text-main); background:#f9fafb; }
-        .container { max-width:1100px; margin:0 auto; padding:0 24px; }
-        header {
-            background: rgba(17, 24, 39, 0.98);
-            color:white; padding:1.2rem 0; position:fixed; width:100%; top:0; z-index:1000;
-            border-bottom: 2px solid var(--primary);
-        }
-        .logo { font-size:1.1rem; font-weight:800; letter-spacing: 2px; text-transform: uppercase; text-align: center; color: #fff; }
-        .logo span { color: var(--primary); }
-        .hero {
-            background: linear-gradient(rgba(17, 24, 39, 0.9), rgba(17, 24, 39, 0.95)), 
-                        url('https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
-            color:white; text-align:center; padding:220px 0 140px;
-        }
-        .hero h1 { font-size:3.5rem; margin-bottom:1.5rem; font-weight: 900; letter-spacing: -1px; line-height: 1.2; }
-        .hero .tagline { font-size:1.3rem; margin-bottom:3rem; color: #d1d5db; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.5; }
-        .btn-group { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
-        .btn {
-            display:inline-block; background: var(--primary); color:white; padding:16px 36px;
-            text-decoration:none; border-radius:4px; font-size:1rem; font-weight: 700; 
-            transition: background 0.2s; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .btn:hover { background: #b45309; }
-        .btn-secondary { background: transparent; border: 2px solid var(--primary); }
-        .btn-secondary:hover { background: rgba(217, 119, 6, 0.1); }
-        section { padding:100px 0; }
-        h2 { text-align:center; font-size:2.5rem; margin-bottom:3rem; font-weight: 900; color: var(--dark-bg); text-transform: uppercase; letter-spacing: 1px;}
-        .about-grid { display:grid; grid-template-columns: 1fr 1fr; gap:4rem; align-items:center; }
-        .ethos-box { background: var(--dark-bg); color: white; padding: 3rem; border-radius: 8px; border-left: 6px solid var(--primary); margin-top: 2rem; }
-        .ethos-box h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--primary); }
-        .capabilities { background: #e5e7eb; }
-        .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:2rem; }
-        .card { 
-            background: var(--card-bg); padding:3rem 2.5rem; border-radius:8px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-top: 4px solid var(--primary);
-        }
-        .card h3 { color: var(--dark-bg); margin-bottom:1rem; font-size:1.3rem; font-weight: 800; text-transform: uppercase; }
-        .card p { font-size:1rem; color: var(--text-muted); line-height: 1.7; }
-        footer { background: var(--dark-bg); color: #9ca3af; text-align:center; padding:4rem 0; }
-        @media (max-width:768px) { 
-            .hero h1 { font-size:2.5rem; } 
-            .about-grid { grid-template-columns:1fr; text-align: center; } 
-            .ethos-box { text-align: left; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grizzly System Engineering | Digital Forensics & Cybersecurity, Montana</title>
+<meta name="description" content="Digital forensics, incident response, and security hardening for Montana businesses, attorneys, and individuals. Based in East Helena, MT.">
+<style>
+:root{
+  --amber:#d97706; --amber-dk:#b45309;
+  --ink:#14181f; --ink-2:#1d232d; --line:#2e3744;
+  --paper:#f4f5f7; --text:#1f2937; --muted:#4b5563; --soft:#c5ccd6;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;line-height:1.65;color:var(--text);background:var(--paper)}
+a:focus-visible,.btn:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.container{max-width:1080px;margin:0 auto;padding:0 24px}
+header{position:fixed;top:0;width:100%;z-index:10;background:rgba(20,24,31,.97);border-bottom:2px solid var(--amber)}
+header .container{display:flex;justify-content:space-between;align-items:center;padding-top:.9rem;padding-bottom:.9rem}
+.logo{color:#fff;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;font-size:1rem}
+.logo span{color:var(--amber)}
+nav a{color:var(--soft);text-decoration:none;margin-left:1.5rem;font-size:.95rem}
+nav a:hover{color:#fff}
+.hero{background:var(--ink);color:#fff;padding:190px 0 110px}
+.hero h1{font-size:clamp(2.2rem,5.5vw,3.8rem);line-height:1.1;font-weight:900;letter-spacing:-1px;max-width:15ch}
+.hero p{margin-top:1.5rem;font-size:1.2rem;color:var(--soft);max-width:60ch}
+.btns{display:flex;gap:16px;flex-wrap:wrap;margin-top:2.5rem}
+.btn{display:inline-block;background:var(--amber);color:#fff;padding:15px 30px;border-radius:4px;text-decoration:none;font-weight:700;border:2px solid var(--amber)}
+.btn:hover{background:var(--amber-dk);border-color:var(--amber-dk)}
+.btn.alt{background:transparent;color:#fff}
+.btn.alt:hover{background:rgba(217,119,6,.15)}
+.notice{background:var(--ink-2);border-top:1px solid var(--line);color:var(--soft);padding:1.1rem 0;font-size:.95rem}
+.notice strong{color:#fff}
+section{padding:90px 0}
+h2{font-size:2.1rem;font-weight:900;color:var(--ink);line-height:1.2;margin-bottom:.8rem}
+.lead{max-width:62ch;color:var(--muted);font-size:1.1rem;margin-bottom:2.5rem}
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
+.svc{background:#fff;border-left:5px solid var(--amber);padding:2rem}
+.svc h3{font-size:1.2rem;color:var(--ink);margin-bottom:.6rem}
+.svc p{color:var(--muted);font-size:1rem}
+.dark{background:var(--ink);color:#fff}
+.dark h2{color:#fff}
+.dark .lead{color:var(--soft)}
+.steps{list-style:none;counter-reset:s;display:grid;gap:0;max-width:760px}
+.steps li{counter-increment:s;padding:1.3rem 0 1.3rem 4rem;border-top:1px solid var(--line);position:relative;color:var(--soft)}
+.steps li:last-child{border-bottom:1px solid var(--line)}
+.steps li::before{content:counter(s);position:absolute;left:0;top:1.2rem;width:2.4rem;height:2.4rem;border:2px solid var(--amber);color:var(--amber);border-radius:50%;display:grid;place-items:center;font-weight:800}
+.steps strong{display:block;color:#fff;font-size:1.1rem}
+.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2rem}
+.who h3{color:var(--ink);margin-bottom:.4rem}
+.who p{color:var(--muted)}
+.about{display:grid;grid-template-columns:1.4fr 1fr;gap:3.5rem;align-items:center}
+.about p{margin-bottom:1.1rem;font-size:1.05rem}
+.about img{width:100%;max-width:340px;justify-self:center}
+.also{background:#e5e7eb}
+.also p{max-width:70ch;color:var(--muted)}
+.also a{color:var(--amber-dk);font-weight:700}
+.contact{text-align:center}
+.contact .lead{margin-left:auto;margin-right:auto}
+.contact address{font-style:normal;margin-top:2.5rem;font-weight:600}
+footer{background:var(--ink);color:#9ca3af;text-align:center;padding:3rem 0;font-size:.9rem}
+@media(max-width:768px){nav{display:none}.about{grid-template-columns:1fr}.hero{padding-top:140px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="logo">Grizzly <span>System Engineering</span></div>
-        </div>
-    </header>
+<header>
+  <div class="container">
+    <div class="logo">Grizzly <span>System Engineering</span></div>
+    <nav aria-label="Main">
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#about">About</a>
+      <a href="lab.html">Lab</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
 
-    <section id="home" class="hero">
-        <div class="container">
-            <h1>Technical Solutions for Simple Problems</h1>
-            <p class="tagline">
-                Providing Montana businesses with practical tech. We build shop-floor TV dashboards to track vehicle maintenance, write custom scheduling software, and revive old hardware.
-            </p>
-            <div class="btn-group">
-                <a href="#contact" class="btn">Request a Site Visit</a>
-                <a href="lab.html" class="btn btn-secondary">View The Hardware Lab</a>
-            </div>
-        </div>
-    </section>
+<main>
+<section class="hero">
+  <div class="container">
+    <h1>Find out what happened. Make sure it doesn't happen again.</h1>
+    <p>Digital forensics, incident response, and security hardening for Montana businesses, attorneys, and individuals. Evidence handled carefully, findings explained plainly.</p>
+    <div class="btns">
+      <a href="#contact" class="btn">Request a confidential consult</a>
+      <a href="#services" class="btn alt">See services</a>
+    </div>
+  </div>
+</section>
+<div class="notice">
+  <div class="container"><strong>Think you've been breached?</strong> Stop using the affected device, leave it powered as-is, and call (406) 439-8127 before anything gets wiped or reinstalled.</div>
+</div>
 
-    <section id="about">
-        <div class="container about-grid">
-            <div>
-                <h2>Upright Execution.</h2>
-                <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">Operating in Helena, Montana, we provide the technical backbone for local trades, manufacturing shops, and medical clinics. We do not sell you cloud subscriptions you don't need.</p>
-                <p style="font-size: 1.1rem;">We take extreme ownership of your business operations. Whether it is keeping your network running, setting up secure remote access, or turning a closet of old computers into a reliable private server, we execute with integrity and precision.</p>
-                
-                <div class="ethos-box">
-                    <h3>Our Operating Standard</h3>
-                    <ul style="list-style-type: none; font-size: 1.1rem; line-height: 2;">
-                        <li>✓ <strong>Absolute Accountability:</strong> We own the problem until it is solved.</li>
-                        <li>✓ <strong>No Waste:</strong> We maximize the hardware you already own.</li>
-                        <li>✓ <strong>Local Reliability:</strong> On-premise solutions that work without internet.</li>
-                        <li>✓ <strong>Secure by Default:</strong> Military-grade data protection.</li>
-                    </ul>
-                </div>
-            </div>
-            <div style="text-align: center;">
-                <img src="grizzly-logo.png" alt="Grizzly System Engineering" style="width:100%; max-width:400px; display:inline-block;">
-            </div>
-        </div>
-    </section>
+<section id="services">
+  <div class="container">
+    <h2>Services</h2>
+    <p class="lead">Most work falls into three areas: investigating an incident, preventing the next one, and keeping your data recoverable.</p>
+    <div class="services">
+      <div class="svc"><h3>Digital forensics</h3><p>Acquisition and analysis of computers, drives, and phones with a documented chain of custody. Useful for employee misconduct, data theft, and civil or family matters.</p></div>
+      <div class="svc"><h3>Incident response</h3><p>Containment, root-cause analysis, and recovery after ransomware, a compromised email account, or unauthorized access. You get a written timeline of what happened.</p></div>
+      <div class="svc"><h3>Security assessments</h3><p>A practical review of your network, accounts, backups, and remote access, with findings ranked by real risk and a fix list you can act on.</p></div>
+      <div class="svc"><h3>Hardening and secure remote access</h3><p>VPNs, multi-factor authentication, firewall and network segmentation, and endpoint cleanup for small offices, shops, and clinics.</p></div>
+      <div class="svc"><h3>Backup and recovery planning</h3><p>On-premise and offline backups you have actually tested, so a bad day is an inconvenience rather than the end of the business.</p></div>
+      <div class="svc"><h3>Data recovery and sanitization</h3><p>Recovery from failed or damaged drives where possible, and verified wiping of retired equipment so old data stays gone.</p></div>
+    </div>
+  </div>
+</section>
 
-    <section class="capabilities">
-        <div class="container">
-            <h2>Business Solutions</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Shop Floor Dashboards</h3>
-                    <p>Keep your crew on the same page. We build custom TV dashboards to display real-time vehicle maintenance, drop-offs, and pick-ups right on your shop wall.</p>
-                </div>
-                <div class="card">
-                    <h3>Custom Shop Software</h3>
-                    <p>Stop running crews on whiteboards. We build custom applications to track equipment, manage vehicle maintenance, and handle employee scheduling all from one tablet.</p>
-                </div>
-                <div class="card">
-                    <h3>Hardware Reclamation</h3>
-                    <p>Do not throw away old office computers. We strip, rebuild, and optimize aging machines, turning them into fast, reliable terminals for the shop floor or office.</p>
-                </div>
-                <div class="card">
-                    <h3>On-Premise Servers</h3>
-                    <p>Stop paying monthly cloud fees. We build and deploy localized servers to host your files, databases, and media securely inside your own building.</p>
-                </div>
-                <div class="card">
-                    <h3>Remote Access & VPNs</h3>
-                    <p>Keep your field crews connected. We set up secure, reliable Virtual Private Networks (VPNs) so your team can access shop databases, blueprints, and files securely from any job site.</p>
-                </div>
-                <div class="card">
-                    <h3>Proactive IT Management</h3>
-                    <p>We handle the troubleshooting, backups, and network security so you can focus entirely on running your business. Zero downtime, zero excuses.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<section class="dark" id="process">
+  <div class="container">
+    <h2>How an engagement works</h2>
+    <p class="lead">Forensic work is only useful if it holds up. Every case follows the same discipline.</p>
+    <ol class="steps">
+      <li><strong>Scope and consult</strong>Confidential conversation about what happened, what you need, and who will see the results.</li>
+      <li><strong>Preserve</strong>Forensic copies are made so original evidence is never altered. Everything is logged and hashed.</li>
+      <li><strong>Analyze</strong>Timeline, artifacts, and account activity are examined against the questions you need answered.</li>
+      <li><strong>Report</strong>A clear written report with findings, limits of what the evidence can show, and recommended next steps.</li>
+      <li><strong>Remediate</strong>Optional hands-on cleanup and hardening so the same hole is closed.</li>
+    </ol>
+  </div>
+</section>
 
-    <section id="contact">
-        <div class="container" style="text-align: center;">
-            <h2>Secure Your Operations</h2>
-            <p style="font-size: 1.2rem; margin-bottom: 2rem;">Available for workflow automation, hardware builds, and systems management in the Helena area.</p>
-            
-            <script type="text/javascript">function zforms_open_window(url, height, width){var leftPos = 0;var topPos = 0;if(screen){leftPos = (screen.width - width) / 2;topPos = (screen.height - height) / 2;window.open(url, null, 'width='+width+',height='+height+',left='+leftPos+',top='+topPos+', toolbar=0, location=0, status=1, scrollbars=1, resizable=1');}}</script>
-            
-            <a href='https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0' target='_blank' onclick="zforms_open_window(this.href, 648, 700); return false" class="btn">Request a Site Visit</a>
-            
-            <div style="margin-top: 3rem; font-weight: 700; color: var(--text-main);">
-                <p>Location: East Helena, MT</p>
-                <p>Email: info@grizzlyse.com</p>
-                <p>Phone: (406) 439-8127</p>
-            </div>
-        </div>
-    </section>
+<section>
+  <div class="container">
+    <h2>Who we work with</h2>
+    <p class="lead">Confidentiality comes first, and engagements can be arranged through counsel when appropriate.</p>
+    <div class="who">
+      <div><h3>Small businesses and shops</h3><p>Trades, manufacturing, and clinics that need real security without an enterprise budget.</p></div>
+      <div><h3>Attorneys and firms</h3><p>Evidence collection, analysis, and plain-language reporting for civil and other matters.</p></div>
+      <div><h3>Individuals</h3><p>Hacked accounts, stalkerware concerns, and device checks when something feels wrong.</p></div>
+    </div>
+  </div>
+</section>
 
-    <footer>
-        <div class="container">
-            <p>© 2026 Grizzly System Engineering LLC</p>
-            <p style="margin-top: 10px; font-size: 0.8rem; letter-spacing: 2px;">HELENA, MT • HARDWARE RECLAMATION • CUSTOM SERVERS • BUSINESS AUTOMATION</p>
-        </div>
-    </footer>
+<section id="about" style="background:#fff">
+  <div class="container about">
+    <div>
+      <h2>Upright execution.</h2>
+      <p>Grizzly System Engineering is based in East Helena, Montana. The work is rooted in a hands-on background in cybersecurity and digital forensics, and a habit of owning a problem until it is actually solved.</p>
+      <!-- TODO: Add 2-3 sentences on your real background (roles, years, military/government/industry experience). -->
+      <p>On-premise by preference, secure by default, and honest about what the evidence does and doesn't show.</p>
+      <!-- TODO: Add credentials here once confirmed, e.g. certifications and training. Only list what you hold. -->
+    </div>
+    <img src="grizzly-logo.png" alt="Grizzly System Engineering logo">
+  </div>
+</section>
+
+<section class="also">
+  <div class="container">
+    <h2>Also available</h2>
+    <p>Custom shop-floor dashboards, scheduling software, hardware reclamation, and on-premise servers are still offered for local businesses. See <a href="lab.html">the Hardware Lab</a>.</p>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="container">
+    <h2>Start with a confidential conversation</h2>
+    <p class="lead">Tell us what you're dealing with. Nothing you share is passed on, and there is no obligation.</p>
+    <script>function zforms_open_window(url,height,width){var l=0,t=0;if(screen){l=(screen.width-width)/2;t=(screen.height-height)/2;window.open(url,null,'width='+width+',height='+height+',left='+l+',top='+t+',toolbar=0,location=0,status=1,scrollbars=1,resizable=1');}}</script>
+    <a href="https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0" target="_blank" rel="noopener" onclick="zforms_open_window(this.href,648,700);return false" class="btn">Request a confidential consult</a>
+    <address>
+      East Helena, MT<br>
+      <a href="mailto:info@grizzlyse.com">info@grizzlyse.com</a><br>
+      <a href="tel:+14064398127">(406) 439-8127</a>
+    </address>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container">
+    <p>© 2026 Grizzly System Engineering LLC</p>
+    <p style="margin-top:8px">Digital forensics · Incident response · Security hardening · Helena, MT</p>
+  </div>
+</footer>
 </body>
 </html>
