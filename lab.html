@@ -288,6 +288,10 @@ inp.addEventListener('keydown',e=>{if(e.key==='Tab'){const v=inp.value.toLowerCa
 out.textContent='';
 [['GSE lab console v1.0',''],['[ok] bench power ........ online','ok'],['[ok] virtualization ...... proxmox','ok'],['[ok] private access ...... tailscale','ok'],['[ok] network isolation ... enforced','ok'],['type help for commands','dim']].forEach((l,i)=>R?say(l[0],l[1]):setTimeout(()=>say(l[0],l[1]),350*i));
 
+// tool inputs: Enter runs the tool; the hash identifier updates as you type or paste
+document.querySelectorAll('.panel input').forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter'){const b=i.closest('.panel').querySelector('button');if(b&&!b.disabled){e.preventDefault();b.click()}}}));
+$('#hash-in').addEventListener('input',()=>{const b=$('#hid-btn');if(!b.disabled)b.click()});
+
 // live Montana clock, scroll progress, "/" jumps to the terminal
 const tf=new Intl.DateTimeFormat('en-US',{timeZone:'America/Denver',hourCycle:'h23',hour:'2-digit',minute:'2-digit',second:'2-digit',timeZoneName:'short'});
 const tick=()=>{$('#clk').textContent='East Helena '+tf.format(new Date())};tick();setInterval(tick,1000);
@@ -369,7 +373,7 @@ def calculate():
 
 def identify():
     out = g("hidout")
-    h = g("hash-in").value.strip()
+    h = g("hash-in").value.strip().strip("\"'")
     if not h:
         out.innerText = "Paste a hash first."
         return
