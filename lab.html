@@ -1,21 +1,410 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#14181f"><title>The Hardware Lab | Grizzly System Engineering</title><meta name="description" content="Grizzly System Engineering’s Montana lab: container services, private remote access, local LLMs, digital forensics, Hashcat, Python dashboards, and reclaimed hardware.">
+<html lang="en" data-theme="amber"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#14181f">
+<title>The Hardware Lab | Grizzly System Engineering</title>
+<meta name="description" content="Grizzly System Engineering's Montana lab: container services, private remote access, local LLMs, digital forensics, Hashcat, Python dashboards, and reclaimed hardware.">
+<meta property="og:type" content="website"><meta property="og:title" content="The Hardware Lab | Grizzly System Engineering"><meta property="og:description" content="Containers, private remote access, local LLMs, forensics, and reclaimed hardware, built in Montana.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314181f'/%3E%3Ctext x='4' y='23' font-family='monospace' font-size='20' font-weight='bold' fill='%23fbbf24'%3E%3E_%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+<!-- Hello, fellow hacker. View source is the right instinct. info@grizzlyse.com  |  Puzzle: open the terminal and type ctf -->
 <style>
-:root{--amber:#d97706;--gold:#fbbf24;--ink:#14181f;--panel:#1d232d;--line:#35404e;--paper:#f4f5f7;--muted:#4b5563;--soft:#c5ccd6}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:105px}body{margin:0;background:var(--paper);color:#1f2937;font:16px/1.65 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}a{color:inherit}button{font:inherit}a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:5px}.container{max-width:1120px;margin:auto;padding:0 24px}.skip{position:absolute;left:15px;top:-100px;background:white;padding:12px;z-index:100}.skip:focus{top:12px}header{position:sticky;top:0;z-index:20;background:var(--ink);border-bottom:2px solid var(--amber)}.head{min-height:78px;display:flex;justify-content:space-between;align-items:center;gap:20px}.logo{color:white;text-decoration:none;font-size:.94rem;font-weight:850;letter-spacing:1.2px;text-transform:uppercase}.logo span{color:var(--gold)}nav{display:flex;gap:22px;flex-wrap:wrap}nav a{color:var(--soft);font-size:.9rem;text-decoration:none}nav a:hover{color:white}section{padding:78px 0}.hero{background:var(--ink);color:white;padding:85px 0}.hero-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:50px;align-items:center}.eyebrow{text-transform:uppercase;letter-spacing:1.4px;font-size:.76rem;font-weight:800;color:#9a4509}.hero .eyebrow,.dark .eyebrow{color:var(--gold)}h1{font-size:clamp(2.8rem,6vw,4.5rem);line-height:1.04;letter-spacing:-1.7px;margin:18px 0 24px}h2{font-size:clamp(1.9rem,4vw,2.5rem);line-height:1.15;letter-spacing:-.6px;margin:12px 0 20px}h3{line-height:1.25}p{margin:0 0 18px}.intro{color:var(--soft);font-size:1.15rem;max-width:60ch}.buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.btn{background:#b45309;color:white;border:2px solid #b45309;border-radius:4px;padding:13px 22px;text-decoration:none;font-weight:750;display:inline-flex;align-items:center;justify-content:center}.btn:hover{background:#92400e;border-color:#92400e}.btn.alt{background:transparent;border-color:#76818f}.bench{border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:28px}.bench-title{font:.8rem ui-monospace,monospace;letter-spacing:1px;color:var(--soft);padding-bottom:16px;border-bottom:1px solid var(--line)}.bench-row{display:flex;justify-content:space-between;gap:15px;padding:14px 0;border-bottom:1px solid var(--line);font-size:.9rem;color:var(--soft)}.bench-row span:last-child{color:var(--gold);text-align:right}.bench p{color:var(--soft);font-size:.85rem;margin:20px 0 0}.strip{background:var(--panel);color:var(--soft)}.strip .container{display:flex;flex-wrap:wrap;gap:10px 28px;padding-top:17px;padding-bottom:17px;font-size:.85rem}.strip span:before{content:"/ ";color:var(--gold)}.lead{font-size:1.07rem;color:var(--muted);max-width:74ch}.filters{display:flex;flex-wrap:wrap;gap:9px;margin:28px 0 18px}.filters[hidden]{display:none}.filter{background:white;border:1px solid #c7cdd5;border-radius:4px;padding:9px 14px;font-weight:650;cursor:pointer;color:#1f2937}.filter[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:white}.count{font-size:.9rem;color:var(--muted)}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}.card{background:white;border:1px solid #dce0e5;border-top:4px solid var(--amber);padding:28px;border-radius:5px}.card[hidden]{display:none}.card-top{display:flex;justify-content:space-between;gap:12px}.number{font:.85rem ui-monospace,monospace;color:#6b7280}.card h3{font-size:1.48rem;margin:22px 0 12px}.card p{color:var(--muted);font-size:.96rem}.card .hook{font-weight:750;color:#1f2937}.value{border-top:1px solid #e5e7eb;padding-top:18px;margin:24px 0 20px}.value strong{font-size:.8rem;text-transform:uppercase;letter-spacing:.5px}.value p{margin:8px 0 0}.tags{list-style:none;display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0}.tags li{font-size:.75rem;padding:4px 9px;border:1px solid #e2e5e9;background:#f1f3f5;border-radius:3px;color:var(--muted)}.note{border-left:3px solid var(--amber);background:#e5e7eb;padding:18px 22px;margin-top:28px;font-size:.92rem;color:var(--muted)}.solution{background:#e5e7eb}.four{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:30px}.tile{padding:24px;background:white;border-top:3px solid var(--amber);border-radius:4px}.tile h3{font-size:1.08rem;margin:12px 0}.tile p{font-size:.94rem;color:var(--muted);margin:0}.step{font-size:.78rem;letter-spacing:1px;font-weight:800;color:#9a4509}.dark{background:var(--ink);color:white}.dark .lead{color:var(--soft)}.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:30px}.dark .tile{background:var(--panel);border:1px solid var(--line)}.dark .tile p{color:var(--soft)}.dark .tile .tools{color:var(--gold);font-size:.82rem;margin-top:18px;border-top:1px solid var(--line);padding-top:16px}.hardware ul{padding-left:18px;color:var(--muted);font-size:.9rem}.hardware li{margin-bottom:9px}.about{background:#e5e7eb}.about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:45px}.about p{color:var(--muted)}.principles{border-left:3px solid var(--amber);padding-left:25px}.principles h3{font-size:1rem;margin:0 0 8px}.contact{background:white}.contact-box{background:var(--ink);color:white;padding:36px;border-radius:6px;margin-top:32px;display:flex;justify-content:space-between;align-items:center;gap:24px}.contact-box h3{font-size:1.5rem;margin:0 0 10px}.contact-box p{color:var(--soft);max-width:55ch;margin:0}.contact-box .btn{flex-shrink:0}.contact-details{display:flex;flex-wrap:wrap;gap:12px 24px;margin-top:25px;font-size:.94rem;color:var(--muted)}footer{background:var(--ink);color:var(--soft);font-size:.85rem;padding:32px 0}.footer-inner{display:flex;justify-content:space-between;flex-wrap:wrap;gap:15px}footer p{margin:0}@media(max-width:950px){.four{grid-template-columns:repeat(2,minmax(0,1fr))}.three{grid-template-columns:1fr}.hero-grid{gap:25px}nav{gap:15px}.logo{font-size:.8rem}}@media(max-width:700px){html{scroll-padding-top:135px}.head{flex-direction:column;align-items:flex-start;padding-top:15px;padding-bottom:15px;gap:12px}nav{gap:18px}nav a{font-size:.82rem}.hero-grid,.cards,.about-grid{grid-template-columns:1fr}.hero{padding:52px 0}.hero-grid{gap:32px}section{padding:55px 0}.card{padding:24px}.contact-box{flex-direction:column;align-items:flex-start;padding:26px}.contact-box .btn{width:100%}.container{padding:0 20px}}@media(max-width:420px){.four{grid-template-columns:1fr}.buttons .btn{width:100%}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-</style></head><body><a class="skip" href="#main">Skip to content</a><header><div class="container head"><a href="index.html" class="logo">Grizzly <span>System Engineering</span></a><nav aria-label="Lab navigation"><a href="#projects">Projects</a><a href="#security">Security lab</a><a href="#hardware">Hardware</a><a href="#contact">Contact</a><a href="index.html">← Main site</a></nav></div></header><main id="main">
-<section class="hero"><div class="container hero-grid"><div><div class="eyebrow">The Hardware Lab / East Helena, Montana</div><h1>Built here.<br>Put to work.</h1><p class="intro">Containerized services. Private remote access. Local AI. Digital forensics. Reclaimed hardware. This is the hands-on side of Grizzly System Engineering.</p><p class="intro">A dashboard your crew can use. Local systems within reach when you are away. Automation that handles repetitive work. Security findings explained plainly. Start with the problem—not a product catalog.</p><div class="buttons"><a href="#projects" class="btn">See the work</a><a href="#contact" class="btn alt">Discuss your project</a></div></div><aside class="bench" aria-label="Lab capabilities"><div class="bench-title">GSE / ENGINEERING BENCH</div><div class="bench-row"><span>Build</span><span>Python / Linux / Docker</span></div><div class="bench-row"><span>Host</span><span>Proxmox / Local services</span></div><div class="bench-row"><span>Connect</span><span>Private remote access</span></div><div class="bench-row"><span>Investigate</span><span>Forensics / Credential analysis</span></div><p>Practical engineering for local businesses, shops, and teams that need technology to do a specific job.</p></aside></div></section><div class="strip"><div class="container"><span>Hands-on development</span><span>On-premise by preference</span><span>Authorized security testing</span><span>Plain-language findings</span></div></div>
-<section id="projects"><div class="container"><div class="eyebrow">Projects & capabilities</div><h2>More than a parts list.</h2><p class="lead">Working hardware builds, custom workflows, and hands-on security tooling connect the lab to real business needs. Explore the builds described here and the capabilities available for a scoped engagement.</p><div class="filters" hidden role="group" aria-label="Filter projects"><button class="filter" data-filter="all" aria-pressed="true" type="button">All work</button><button class="filter" data-filter="software" aria-pressed="false" type="button">Shop software</button><button class="filter" data-filter="infrastructure" aria-pressed="false" type="button">Services & infrastructure</button><button class="filter" data-filter="security" aria-pressed="false" type="button">Security & forensics</button><button class="filter" data-filter="hardware" aria-pressed="false" type="button">Hardware</button></div><p id="count" class="count" role="status" aria-live="polite" aria-atomic="true">9 projects, workflows, and capabilities</p><div class="cards"><article class="card" data-category="software"><div class="card-top"><span class="eyebrow">Shop-floor software</span><span class="number">/01</span></div><h3>Maintenance dashboards</h3><p class="hook">Put the day’s work where the whole crew can see it.</p><p>Python-backed scheduling displays designed for a shop-floor TV, covering active bays, incoming drop-offs, completed pickups, and daily maintenance tracking.</p><div class="value"><strong>What this can do for you</strong><p>A shared operational view for mechanics and foremen.</p></div><ul class="tags" aria-label="Technologies"><li>Python</li><li>Scheduling</li><li>TV dashboards</li></ul></article>
-<article class="card" data-category="infrastructure"><div class="card-top"><span class="eyebrow">Container services</span><span class="number">/02</span></div><h3>Local applications. Purpose-built stacks.</h3><p class="hook">Host the tools your business actually needs.</p><p>Docker, Ubuntu Server, and local infrastructure form the lab’s foundation for application hosting and automation. Service configuration, persistent storage, credentials, updates, and recovery requirements can be included in a scoped build.</p><div class="value"><strong>What this can do for you</strong><p>Local dashboards, internal applications, and automation services.</p></div><ul class="tags" aria-label="Technologies"><li>Docker</li><li>Ubuntu Server</li><li>Local hosting</li></ul></article>
-<article class="card" data-category="infrastructure"><div class="card-top"><span class="eyebrow">Private remote access</span><span class="number">/03</span></div><h3>Your systems. Within reach.</h3><p class="hook">Local infrastructure does not have to keep you tied to the office.</p><p>Tailscale-based connectivity supports private access to locally hosted systems. A deployment starts with who needs access, which resources they need, and how that access will be managed.</p><div class="value"><strong>What this can do for you</strong><p>Access to approved shop resources and internal tools when you are away.</p></div><ul class="tags" aria-label="Technologies"><li>Tailscale</li><li>Remote access</li><li>Access planning</li></ul></article>
-<article class="card" data-category="infrastructure"><div class="card-top"><span class="eyebrow">Local LLMs</span><span class="number">/04</span></div><h3>AI on infrastructure you control.</h3><p class="hook">Explore useful AI without defaulting to a public chatbot.</p><p>Containerized local model deployment for automation and coding assistance. The scope can cover hardware fit, an application interface, and private remote access. Privacy depends on the full configuration and any connected external services.</p><div class="value"><strong>What this can do for you</strong><p>Evaluate local AI against a specific workflow before investing in a larger platform.</p></div><ul class="tags" aria-label="Technologies"><li>Local LLMs</li><li>Containers</li><li>Coding assistance</li></ul></article>
-<article class="card" data-category="security"><div class="card-top"><span class="eyebrow">Security automation</span><span class="number">/05</span></div><h3>Connect discovery to assessment.</h3><p class="hook">Less repetitive tool work. More focused investigation.</p><p>Python workflows connecting Nmap discovery, Apache Tomcat identification, request-pattern inspection, and targeted credential testing with Hydra. Testing is restricted to environments with explicit permission and agreed scope.</p><div class="value"><strong>What this can do for you</strong><p>Repeatable service-assessment workflows and custom security automation.</p></div><ul class="tags" aria-label="Technologies"><li>Python</li><li>Nmap</li><li>Tomcat</li><li>Hydra</li></ul></article>
-<article class="card" data-category="security"><div class="card-top"><span class="eyebrow">Digital forensics</span><span class="number">/06</span></div><h3>Follow the artifacts. Explain the findings.</h3><p class="hook">Turn technical observations into understandable answers.</p><p>Hands-on experience with EnCase, FTK, Autopsy, Volatility, Velociraptor, Sysinternals, and Process Monitor supports forensic and endpoint examination capabilities. Work is scoped around a question, not just running a collection of tools.</p><div class="value"><strong>What this can do for you</strong><p>Examine system activity and relevant artifacts; explain observations, interpretations, and limits.</p></div><ul class="tags" aria-label="Technologies"><li>Autopsy</li><li>FTK</li><li>EnCase</li><li>Volatility</li><li>Velociraptor</li></ul></article>
-<article class="card" data-category="security"><div class="card-top"><span class="eyebrow">Password recovery &amp; auditing</span><span class="number">/07</span></div><h3>Hashcat and credential analysis.</h3><p class="hook">Understand password exposure. Attempt authorized recovery.</p><p>Hands-on Hashcat experience alongside credential-analysis and security-testing tools. Recovery attempts and password-strength testing require ownership or explicit authorization, with sensitive credential material kept out of public examples.</p><div class="value"><strong>What this can do for you</strong><p>Evaluate recovery feasibility and password weaknesses within a defined scope. Recovery is not guaranteed.</p></div><ul class="tags" aria-label="Technologies"><li>Hashcat</li><li>Credential analysis</li><li>Authorized testing</li></ul></article>
-<article class="card" data-category="infrastructure"><div class="card-top"><span class="eyebrow">Virtualization</span><span class="number">/08</span></div><h3>The on-premise server lab.</h3><p class="hook">Build and investigate on systems you understand.</p><p>A Dell PowerEdge R630 running Proxmox Virtual Environment, with Ubuntu Server and Docker stacks for locally hosted development and testing.</p><div class="value"><strong>What this can do for you</strong><p>Virtual machines and containerized services for practical application and infrastructure work.</p></div><ul class="tags" aria-label="Technologies"><li>Proxmox</li><li>PowerEdge R630</li><li>Ubuntu Server</li></ul></article>
-<article class="card" data-category="hardware"><div class="card-top"><span class="eyebrow">Hardware reclamation</span><span class="number">/09</span></div><h3>Useful silicon. A second life.</h3><p class="hook">Start with what can still do the job.</p><p>An MSI Raider GE75 board repurposed for headless hosting, alongside a reclaimed Dell OptiPlex build with a Quadro P2200 and Segotep SG-550 power supply. Suitability is evaluated against the intended workload.</p><div class="value"><strong>What this can do for you</strong><p>Explore lower-cost local hosting without treating reclaimed hardware as the answer to every critical workload.</p></div><ul class="tags" aria-label="Technologies"><li>Slabtop</li><li>Dell OptiPlex</li><li>Headless hosting</li></ul></article></div><p class="note">Build descriptions and tool experience are separate from client case histories. Suggested engagement uses are illustrative; they are not claims of completed investigations, guaranteed recoveries, or measured client outcomes.</p></div></section>
-<section class="solution"><div class="container"><div class="eyebrow">One connected system</div><h2>Local does not mean out of reach.</h2><p class="lead">A scoped architecture can connect your local server, useful applications, and approved remote users. This is a proposed engagement pattern—not a claim that every component has already been deployed together for a client.</p><div class="four"><article class="tile"><span class="step">01 / HOST</span><h3>Your infrastructure</h3><p>Choose a suitable Linux server or virtualized environment for the workload.</p></article><article class="tile"><span class="step">02 / RUN</span><h3>Your services</h3><p>Deploy dashboards, internal applications, automation, or a local LLM.</p></article><article class="tile"><span class="step">03 / CONNECT</span><h3>Your remote access</h3><p>Plan who can reach which resources through private connectivity.</p></article><article class="tile"><span class="step">04 / OPERATE</span><h3>Your ongoing needs</h3><p>Define storage, updates, backup and restore, and access removal requirements.</p></article></div><div class="buttons"><a href="#contact" class="btn">Discuss a local services build</a></div></div></section>
-<section class="dark" id="security"><div class="container"><div class="eyebrow">Security & investigative tooling</div><h2>Understand the system.<br>Follow the evidence.</h2><p class="lead">Forensic, endpoint, and security tool experience supports scoped technical work. Each engagement starts with an authorized question and a clear boundary.</p><div class="three"><article class="tile"><h3>Forensic examination</h3><p>Example question: What system or file activity can the available artifacts help reconstruct? Define the evidence available, examine relevant artifacts, and explain the limits of the findings.</p><p class="tools">EnCase · FTK · Autopsy · Volatility · Velociraptor</p></article><article class="tile"><h3>Endpoint & binary inspection</h3><p>Example question: What is running, what is it doing, and which observations support further investigation? Apply endpoint inspection, alternate boot environments, and binary-identification tooling as appropriate.</p><p class="tools">Sysinternals · Process Monitor · Windows PE · Detect It Easy · Kali live boot · Hiren’s BootCD</p></article><article class="tile"><h3>Credential security</h3><p>Example question: What can authorized testing reveal about password exposure? Credential collection, recovery attempts, and password testing are distinct activities, each requiring an agreed scope.</p><p class="tools">Hashcat · Hydra · Nmap · Metasploit · DIRB · Responder · Ettercap</p></article></div><p class="lead" style="font-size:.9rem;margin-top:24px">These questions illustrate possible engagement scopes. They are not descriptions of completed client cases.</p><div class="buttons"><a class="btn" href="index.html#services">Forensics & security services</a><a class="btn alt" href="index.html#process">How an engagement works</a></div></div></section>
-<section id="hardware"><div class="container"><div class="eyebrow">Inside the lab</div><h2>The hardware behind the work.</h2><p class="lead">Lab configurations for development, experimentation, and reclamation—not standardized products or performance guarantees.</p><div class="four hardware"><article class="tile"><h3>Primary compute</h3><ul><li>AMD Ryzen 9 5950X</li><li>AMD Radeon RX 7900 GRE</li><li>Infrastructure testing</li></ul></article><article class="tile"><h3>Virtualization host</h3><ul><li>Dell PowerEdge R630</li><li>Proxmox Virtual Environment</li><li>Ubuntu Server & Docker</li></ul></article><article class="tile"><h3>Reclaimed node</h3><ul><li>Dell OptiPlex base</li><li>NVIDIA Quadro P2200</li><li>Segotep SG-550 power supply</li></ul></article><article class="tile"><h3>Slabtop conversion</h3><ul><li>MSI Raider GE75 board</li><li>Headless operation</li><li>Local media & file hosting</li></ul></article></div></div></section>
-<section class="about"><div class="container about-grid"><div><div class="eyebrow">The engineering approach</div><h2>Build around the problem.<br>Own the details.</h2><p>Grizzly System Engineering is led by Caleb Clark, a 255A Data Operations Warrant Officer with 14 years of Department of Defense IT and cyber experience and a hands-on background in Python, Linux, Docker, and systems engineering.</p><p>The lab brings that systems-building mindset to practical local work: connecting tools, adapting hardware, and developing software around the way a business actually operates.</p><p>Based in East Helena, Montana. Independent business services; no government affiliation or endorsement is implied.</p></div><div class="principles"><h3>Useful before impressive</h3><p>A build should solve a real problem, not just look good on a specification sheet.</p><h3>Reuse where it makes sense</h3><p>Evaluate existing equipment honestly against the intended job.</p><h3>Clear scope. Clear findings.</h3><p>Explain what the work includes, what was observed, and what remains uncertain.</p><h3>Testing is not production</h3><p>A working experiment and an operational business deployment have different requirements.</p></div></div></section>
-<section class="contact" id="contact"><div class="container"><div class="eyebrow">Bring us the problem</div><h2>What do you need to make work?</h2><p class="lead">A clearer shop schedule. A locally hosted application. Remote access. AI assistance. A technical investigation. Start with what you need to accomplish, and we can discuss whether the lab is the right fit.</p><div class="three"><article class="tile"><span class="step">01 / DEFINE</span><h3>Describe the job</h3><p>Talk through the workflow, existing equipment, constraints, and desired result.</p></article><article class="tile"><span class="step">02 / SCOPE</span><h3>Agree on the work</h3><p>Set requirements, authorization, boundaries, and deliverables before work begins.</p></article><article class="tile"><span class="step">03 / BUILD OR EXAMINE</span><h3>Work toward the result</h3><p>Develop the system or examine the evidence, then explain the outcome and its limitations.</p></article></div><div class="contact-box"><div><h3>Start with your actual problem.</h3><p>Bring the messy workflow, aging hardware, repetitive task, or technical question. We will start there.</p></div><a class="btn" href="https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0" target="_blank" rel="noopener noreferrer">Discuss a project ↗</a></div><div class="contact-details"><span>East Helena, Montana</span><a href="mailto:info@grizzlyse.com">info@grizzlyse.com</a><a href="tel:+14064398127">(406) 439-8127</a><a href="index.html#contact">Incident or forensic help</a></div></div></section></main><footer><div class="container footer-inner"><p>© 2026 Grizzly System Engineering LLC</p><p>Engineering lab · Local systems · Practical software</p><a href="index.html">Return to main site</a></div></footer>
-<script>(()=>{const filters=document.querySelector('.filters');const buttons=[...document.querySelectorAll('[data-filter]')];const cards=[...document.querySelectorAll('[data-category]')];const count=document.getElementById('count');filters.hidden=false;buttons.forEach(button=>button.addEventListener('click',()=>{const selected=button.dataset.filter;buttons.forEach(item=>item.setAttribute('aria-pressed',String(item===button)));cards.forEach(card=>{card.hidden=selected!=='all'&&card.dataset.category!==selected;});const total=cards.filter(card=>!card.hidden).length;count.textContent=selected==='all'?`${total} projects, workflows, and capabilities`:`${total} ${total===1?'item':'items'} shown`;}));})();</script></body></html>
+:root{--amber:#d97706;--gold:#fbbf24;--btn:#b45309;--ink:#14181f;--panel:#1d232d;--deep:#0e1117;--line:#35404e;--soft:#c5ccd6;--dim:#9aa5b4;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+[data-theme=green]{--amber:#16a34a;--gold:#4ade80;--btn:#15803d}
+[data-theme=ice]{--amber:#0891b2;--gold:#67e8f9;--btn:#0e7490}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
+body{margin:0;background:var(--ink);color:var(--soft);font:16px/1.65 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
+/* CRT mode: horizontal scanlines + vignette (toggle in header) */
+body.crt::after{content:"";position:fixed;inset:0;z-index:9998;pointer-events:none;background:linear-gradient(rgba(0,0,0,0) 50%,rgba(0,0,0,.14) 50%);background-size:100% 4px;box-shadow:inset 0 0 150px rgba(0,0,0,.5)}
+a{color:var(--gold)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.container{max-width:1100px;margin:auto;padding:0 24px}
+section{padding:76px 0}
+h1,h2,h3{color:#fff;font-weight:800;line-height:1.12;margin:0 0 1rem}
+h1{font:800 clamp(2.6rem,7vw,4.8rem)/1.05 var(--mono);letter-spacing:-2px;text-shadow:0 0 30px color-mix(in srgb,var(--gold) 30%,transparent)}
+h2{font:700 clamp(1.7rem,4vw,2.3rem)/1.2 var(--mono)}
+h2::before{content:"$ ";color:var(--amber)}
+h3{font-size:1.15rem}
+p{margin:0 0 1.2rem}
+.lead{max-width:70ch}
+.sr{position:absolute;left:-9999px}
+.skip{position:absolute;left:12px;top:-80px;background:#fff;color:#000;padding:10px;z-index:10002}.skip:focus{top:10px}
+header{position:sticky;top:0;z-index:50;background:var(--ink);border-bottom:2px solid var(--amber)}
+.head{min-height:72px;display:flex;justify-content:space-between;align-items:center;gap:12px 20px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+.logo{font:800 .95rem var(--mono);color:#fff;text-decoration:none}.logo span{color:var(--gold)}
+nav{display:flex;gap:8px 18px;flex-wrap:wrap;align-items:center}
+nav a{font:.85rem var(--mono);color:var(--soft);text-decoration:none}nav a:hover{color:var(--gold)}
+.tg{font:.75rem var(--mono);background:transparent;color:var(--dim);border:1px solid var(--line);border-radius:3px;padding:4px 9px;cursor:pointer}
+.tg[aria-pressed=true],.tg.on{color:var(--gold);border-color:var(--amber)}
+.hero{position:relative;overflow:hidden;padding:84px 0 76px}
+#rain{position:absolute;inset:0;width:100%;height:100%;opacity:.32;-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent)}
+.hero-grid{position:relative;display:grid;grid-template-columns:1fr 1.05fr;gap:44px;align-items:center}
+.hero .lead{color:#dde2e9}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 22px;border:2px solid var(--btn);background:var(--btn);color:#fff;border-radius:4px;font:700 .95rem Inter,system-ui,sans-serif;text-decoration:none;cursor:pointer}
+.btn:hover{filter:brightness(.85)}.btn.alt{background:transparent;border-color:var(--line);color:var(--gold)}.btn.alt:hover{border-color:var(--gold);filter:none}.btn:disabled{opacity:.55;cursor:wait}
+.term{background:rgba(14,17,23,.94);border:1px solid var(--line);border-radius:6px;font:.85rem/1.65 var(--mono);box-shadow:0 0 40px color-mix(in srgb,var(--gold) 12%,transparent),0 20px 50px rgba(0,0,0,.5)}
+.tbar{padding:9px 14px;border-bottom:1px solid var(--line);color:var(--dim);font-size:.78rem;display:flex;gap:8px;align-items:center}
+.tbar i{width:9px;height:9px;border-radius:50%;background:var(--line)}.tbar i:first-child{background:var(--amber)}
+.tout{height:300px;overflow-y:auto;padding:14px 16px}
+.tout div{white-space:pre-wrap;word-break:break-word}
+.tout .ok,.tout .hl{color:var(--gold)}.tout .cmd{color:#fff}.tout .dim{color:var(--dim)}
+#tform{display:flex;gap:8px;padding:10px 16px;border-top:1px solid var(--line)}
+.ps{color:var(--amber);font-weight:700}
+#tin{flex:1;min-width:0;background:transparent;border:0;color:#fff;font:inherit;caret-color:var(--gold)}#tin:focus{outline:none}#tform:focus-within{box-shadow:inset 0 0 0 2px var(--gold)}
+.strip{background:var(--panel);border-block:1px solid var(--line);font:.8rem var(--mono)}
+.strip .container{display:flex;flex-wrap:wrap;gap:8px 28px;padding-top:14px;padding-bottom:14px}.strip span::before{content:"/ ";color:var(--gold)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 14px}.filters[hidden]{display:none}
+.filter{background:var(--panel);color:var(--soft);border:1px solid var(--line);border-radius:4px;padding:8px 13px;font:.82rem var(--mono);cursor:pointer}
+.filter[aria-pressed=true]{background:var(--amber);border-color:var(--amber);color:#14181f;font-weight:700}
+.count{font:.82rem var(--mono);color:var(--dim)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:20px}
+.card{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:4px;padding:24px;transition:border-color .2s,box-shadow .2s}.card[hidden]{display:none}
+.card:hover{border-color:var(--gold);box-shadow:0 0 22px color-mix(in srgb,var(--gold) 14%,transparent)}
+.tag{font:.75rem var(--mono);color:var(--gold)}.tag::before{content:"["}.tag::after{content:"]"}
+.card h3{margin:10px 0 6px;font-size:1.3rem}
+.hook{color:#fff;font-weight:600;font-size:.95rem}.card p{font-size:.94rem}
+.chips{list-style:none;display:flex;flex-wrap:wrap;gap:6px;padding:0;margin:0}
+.chips li{font:.72rem var(--mono);padding:3px 8px;border:1px solid var(--line);border-radius:3px;color:var(--dim)}
+.note{border-left:3px solid var(--amber);background:var(--panel);padding:16px 20px;margin-top:26px;font-size:.9rem;color:var(--dim)}
+.alt-bg{background:var(--deep);border-block:1px solid var(--line)}
+.tool{display:grid;grid-template-columns:1fr 1.1fr;gap:28px;margin-top:26px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:24px}
+.field{margin-bottom:14px}
+label,legend{display:block;font:700 .82rem var(--mono);color:#fff;margin-bottom:4px;padding:0}
+fieldset{border:0;padding:0;margin:0 0 14px}
+.checks{display:flex;flex-wrap:wrap;gap:6px 16px}.checks label{display:inline-flex;gap:6px;font:.85rem var(--mono);color:var(--soft);align-items:center}
+input[type=number],input[type=text],select{width:100%;padding:9px 11px;background:var(--deep);color:#fff;border:1px solid var(--line);border-radius:4px;font:.9rem var(--mono)}
+input[type=number]:focus,input[type=text]:focus,select:focus{border-color:var(--gold);outline:none}
+input[type=checkbox]{accent-color:var(--amber);width:16px;height:16px}
+.readout{background:var(--deep);border:1px solid var(--line);border-radius:6px;padding:20px;min-height:270px;font:.88rem/1.7 var(--mono);white-space:pre-wrap}
+.big{display:block;color:var(--gold);font-size:1.4rem;font-weight:700;margin:2px 0 8px}
+.status{font:.78rem var(--mono);color:var(--dim);margin:12px 0 0}
+.three{display:grid;gap:20px;margin-top:28px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.tile{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--amber);border-radius:4px;padding:22px}
+.tile p{font-size:.93rem;margin:0}
+.tools{margin-top:14px!important;padding-top:12px;border-top:1px solid var(--line);font:.78rem var(--mono);color:var(--gold)}
+.fetch{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:4px;padding:22px;margin:26px 0 0;font:.85rem/1.9 var(--mono);overflow-x:auto;color:var(--soft)}
+.contact-box{background:var(--panel);border:1px solid var(--amber);border-radius:6px;padding:32px;margin-top:28px;display:flex;justify-content:space-between;align-items:center;gap:22px;flex-wrap:wrap}
+.contact-box h3{font-size:1.4rem}.contact-box p{margin:0;max-width:52ch}
+.details{display:flex;flex-wrap:wrap;gap:10px 24px;margin-top:22px;font:.88rem var(--mono)}
+footer{background:var(--deep);border-top:2px solid var(--amber);padding:28px 0;font:.8rem var(--mono);color:var(--dim)}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}footer p{margin:0}
+#prog{position:absolute;left:0;bottom:-2px;height:2px;width:0;background:var(--gold);z-index:2}
+.steps{list-style:none;counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;padding:0;margin:28px 0 0}
+.steps li{counter-increment:s;background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--amber);border-radius:4px;padding:22px}
+.steps li::before{content:"step " counter(s);font:.75rem var(--mono);color:var(--gold)}
+.steps h3{margin:6px 0 8px}.steps p{margin:0;font-size:.93rem}
+#post{position:fixed;inset:0;z-index:10001;background:var(--deep);color:var(--gold);font:.9rem/1.9 var(--mono);padding:10vh 6vw;white-space:pre-wrap;transition:opacity .35s}
+.banner{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%);z-index:10003;font:800 clamp(1.6rem,7vw,3.6rem) var(--mono);color:var(--gold);background:var(--deep);border:2px solid var(--gold);padding:18px 28px;text-shadow:0 0 18px var(--gold);text-align:center}
+@media(max-width:820px){section{padding:54px 0}.hero-grid,.tool{grid-template-columns:1fr}.hero{padding:48px 0}.contact-box .btn{width:100%}html{scroll-padding-top:150px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card{transition:none}}
+</style></head>
+<body class="crt">
+<a class="skip" href="#main">Skip to content</a>
+<div id="post" aria-hidden="true"></div>
+<header><div id="prog"></div><div class="container head"><a class="logo" href="index.html">grizzly<span>@system-engineering</span></a>
+<nav aria-label="Lab navigation"><a href="#projects">projects</a><a href="#security">security</a><a href="#tool">py-tool</a><a href="#hardware">hardware</a><a href="#process">process</a><a href="#contact">contact</a><a href="index.html">../main-site</a>
+<button class="tg" id="b-crt" aria-pressed="true" type="button" title="Toggle CRT scanlines">crt</button><button class="tg" id="b-rain" aria-pressed="true" type="button" title="Toggle digital rain">rain</button><button class="tg on" id="b-theme" type="button" aria-label="Cycle color theme">theme:amber</button></nav></div></header>
+<main id="main">
+
+<section class="hero"><canvas id="rain" aria-hidden="true"></canvas><div class="container hero-grid">
+<div>
+<h1 aria-label="Built here. Put to work."><span class="scr" data-t="Built here." aria-hidden="true">Built here.</span><br><span class="scr" data-t="Put to work." aria-hidden="true">Put to work.</span></h1>
+<p class="lead">Containerized services, private remote access, local AI, digital forensics, and reclaimed hardware. The hands-on side of Grizzly System Engineering, East Helena, Montana.</p>
+<p class="lead">The terminal is live. Type <b>help</b>, or try <b>neofetch</b>, <b>hack</b>, and <b>theme green</b>. Press <b>/</b> to jump in; Tab completes commands.</p>
+<div class="btns"><a class="btn" href="#projects">See the work</a><a class="btn alt" href="#contact">Discuss your project</a></div>
+</div>
+<div class="term" aria-label="Interactive lab terminal">
+<div class="tbar"><i></i><i></i><i></i><span>caleb@grizzly:~/lab</span></div>
+<div class="tout" id="tout" role="log" aria-live="polite"><div class="dim">Terminal needs JavaScript. Scroll down for the full page.</div></div>
+<form id="tform"><label class="sr" for="tin">Terminal command</label><span class="ps" aria-hidden="true">$</span><input id="tin" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type help"></form>
+</div></div></section>
+
+<div class="strip"><div class="container"><span>Hands-on development</span><span>On-premise by preference</span><span>Authorized security testing only</span><span>Plain-language findings</span><span id="clk">East Helena, MT</span></div></div>
+
+<section id="projects"><div class="container">
+<h2>ls projects/</h2>
+<p class="lead">Working builds, custom workflows, and hands-on tooling that connect the lab to real business needs.</p>
+<div class="filters" hidden role="group" aria-label="Filter projects">
+<button class="filter" data-filter="all" aria-pressed="true" type="button">all</button><button class="filter" data-filter="software" aria-pressed="false" type="button">software</button><button class="filter" data-filter="infrastructure" aria-pressed="false" type="button">infrastructure</button><button class="filter" data-filter="security" aria-pressed="false" type="button">security</button><button class="filter" data-filter="hardware" aria-pressed="false" type="button">hardware</button></div>
+<p id="count" class="count" role="status" aria-live="polite">9 projects, workflows, and capabilities</p>
+<div class="cards">
+<article class="card" data-category="software"><span class="tag">software</span><h3>Maintenance dashboards</h3><p class="hook">Put the day's work where the whole crew can see it.</p><p>Python-backed scheduling displays for a shop-floor TV: active bays, incoming drop-offs, completed pickups, and daily maintenance tracking.</p><ul class="chips"><li>Python</li><li>Scheduling</li><li>TV dashboards</li></ul></article>
+<article class="card" data-category="infrastructure"><span class="tag">infrastructure</span><h3>Container services</h3><p class="hook">Host the tools your business actually needs.</p><p>Docker and Ubuntu Server for application hosting and automation. A scoped build covers configuration, storage, credentials, updates, and recovery.</p><ul class="chips"><li>Docker</li><li>Ubuntu Server</li><li>Local hosting</li></ul></article>
+<article class="card" data-category="infrastructure"><span class="tag">infrastructure</span><h3>Private remote access</h3><p class="hook">Your systems, within reach.</p><p>Tailscale-based connectivity to locally hosted systems. It starts with who needs access, to which resources, and how that access is managed.</p><ul class="chips"><li>Tailscale</li><li>Remote access</li><li>Access planning</li></ul></article>
+<article class="card" data-category="infrastructure"><span class="tag">infrastructure</span><h3>Local LLMs</h3><p class="hook">AI on infrastructure you control.</p><p>Containerized local models for automation and coding assistance. Privacy depends on the full configuration and any connected external services.</p><ul class="chips"><li>Local LLMs</li><li>Containers</li><li>Coding assistance</li></ul></article>
+<article class="card" data-category="security"><span class="tag">security</span><h3>Security automation</h3><p class="hook">Less repetitive tool work, more investigation.</p><p>Python workflows linking Nmap discovery, Tomcat identification, request-pattern inspection, and targeted Hydra testing. Only with explicit permission and agreed scope.</p><ul class="chips"><li>Python</li><li>Nmap</li><li>Tomcat</li><li>Hydra</li></ul></article>
+<article class="card" data-category="security"><span class="tag">security</span><h3>Digital forensics</h3><p class="hook">Follow the artifacts. Explain the findings.</p><p>Hands-on with EnCase, FTK, Autopsy, Volatility, Velociraptor, Sysinternals, and Process Monitor. Findings include their limits.</p><ul class="chips"><li>Autopsy</li><li>FTK</li><li>EnCase</li><li>Volatility</li><li>Velociraptor</li></ul></article>
+<article class="card" data-category="security"><span class="tag">security</span><h3>Password recovery &amp; auditing</h3><p class="hook">Understand exposure. Attempt authorized recovery.</p><p>Hashcat alongside credential-analysis tools. Requires ownership or explicit authorization; recovery is not guaranteed. Try the <a href="#tool">keyspace estimator</a>.</p><ul class="chips"><li>Hashcat</li><li>Credential analysis</li><li>Authorized testing</li></ul></article>
+<article class="card" data-category="infrastructure"><span class="tag">infrastructure</span><h3>Virtualization</h3><p class="hook">Build and investigate on systems you understand.</p><p>A Dell PowerEdge R630 running Proxmox VE, with Ubuntu Server and Docker stacks for local development and testing.</p><ul class="chips"><li>Proxmox</li><li>PowerEdge R630</li><li>Ubuntu Server</li></ul></article>
+<article class="card" data-category="hardware"><span class="tag">hardware</span><h3>Hardware reclamation</h3><p class="hook">Useful silicon, a second life.</p><p>An MSI Raider GE75 board repurposed for headless hosting, plus a reclaimed Dell OptiPlex with a Quadro P2200 and Segotep SG-550 supply.</p><ul class="chips"><li>Slabtop</li><li>Dell OptiPlex</li><li>Headless hosting</li></ul></article>
+</div>
+<p class="note">Descriptions show tool experience and example scopes. They are not client case histories, claims of completed investigations, guaranteed recoveries, or measured outcomes.</p>
+</div></section>
+
+<section id="security" class="alt-bg"><div class="container">
+<h2>cat security.md</h2>
+<p class="lead">Every engagement starts with an authorized question and a clear boundary.</p>
+<div class="three">
+<article class="tile"><h3>Forensic examination</h3><p>What can the available artifacts reconstruct? Examine the evidence and explain the limits.</p><p class="tools">EnCase · FTK · Autopsy · Volatility · Velociraptor</p></article>
+<article class="tile"><h3>Endpoint &amp; binary inspection</h3><p>What is running, and what is it doing? Alternate boot environments and binary identification as needed.</p><p class="tools">Sysinternals · Process Monitor · Windows PE · Detect It Easy · Kali live boot</p></article>
+<article class="tile"><h3>Credential security</h3><p>What can authorized testing reveal about password exposure? Each activity needs an agreed scope.</p><p class="tools">Hashcat · Hydra · Nmap · Metasploit · DIRB · Responder · Ettercap</p></article>
+</div>
+<div class="btns"><a class="btn" href="https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0" target="_blank" rel="noopener noreferrer">Discuss a security scope (new tab)</a></div>
+</div></section>
+
+<section id="tool"><div class="container">
+<h2>python3 keyspace.py</h2>
+<p class="lead">Two small password-audit tools, written in Python and run in your browser by PyScript. Nothing leaves the page. Use sample values, never real credentials.</p>
+<h3>Keyspace estimator</h3>
+<div class="tool">
+<div class="panel">
+<fieldset><legend>Character sets</legend><div class="checks"><label><input type="checkbox" id="c-lower" checked> a-z</label><label><input type="checkbox" id="c-upper" checked> A-Z</label><label><input type="checkbox" id="c-digit" checked> 0-9</label><label><input type="checkbox" id="c-sym"> symbols</label></div></fieldset>
+<div class="field"><label for="length">Password length</label><input type="number" id="length" value="10" min="1" max="64"></div>
+<div class="field"><label for="preset">Hash type (ballpark speed)</label><select id="preset"><option value="80000000000">NTLM, 80 GH/s</option><option value="50000000000">MD5, 50 GH/s</option><option value="8000000000">SHA-256, 8 GH/s</option><option value="40000">bcrypt cost 5, 40 kH/s</option></select></div>
+<div class="field"><label for="rate-ov">Your measured speed in GH/s (optional)</label><input type="number" id="rate-ov" min="0" step="any" placeholder="from hashcat -b"></div>
+<button class="btn" id="calc-btn" py-click="calculate" disabled>Loading Python...</button>
+<p class="status" id="status">Starting the Python runtime. First load takes a few seconds.</p>
+</div>
+<div class="readout" id="pyout" role="status" aria-live="polite">Results will appear here.</div>
+</div>
+<p class="note">Preset speeds are rough placeholders, not benchmarks. Run <code>hashcat -b</code> on your own rig and use the override. This models exhaustive brute force of a random password; wordlists and rules break human-chosen passwords far faster.</p>
+<h3 style="margin-top:44px">Hash identifier</h3>
+<div class="tool">
+<div class="panel"><div class="field"><label for="hash-in">Paste a sample hash</label><input type="text" id="hash-in" spellcheck="false" autocomplete="off" placeholder="5f4dcc3b5aa765d61d8327deb882cf99"></div>
+<button class="btn" id="hid-btn" py-click="identify" disabled>Loading Python...</button>
+<p class="status">Matches on format and length, so treat results as candidates. Where the hash came from decides.</p></div>
+<div class="readout" id="hidout" role="status" aria-live="polite">Candidate hashcat modes will appear here.</div>
+</div>
+<noscript><p>These tools need JavaScript.</p></noscript>
+</div></section>
+
+<section id="hardware" class="alt-bg"><div class="container">
+<h2>cat /proc/lab</h2>
+<p class="lead">Lab configurations for development, experimentation, and reclamation. Not standardized products or performance guarantees.</p>
+<pre class="fetch" aria-label="Lab hardware">primary    AMD Ryzen 9 5950X / AMD Radeon RX 7900 GRE
+virt       Dell PowerEdge R630 / Proxmox VE / Ubuntu Server + Docker
+node       Dell OptiPlex / NVIDIA Quadro P2200 / Segotep SG-550 PSU
+slabtop    MSI Raider GE75 board / headless / media + file hosting</pre>
+</div></section>
+
+<section id="process"><div class="container">
+<h2>./engage --steps</h2>
+<p class="lead">Every project follows the same four steps, whether it is a dashboard build or a forensic question.</p>
+<ol class="steps">
+<li><h3>Define the problem</h3><p>Talk through the workflow, equipment, constraints, and the result you need.</p></li>
+<li><h3>Agree on scope</h3><p>Write down requirements, boundaries, and deliverables before work begins. Security and forensic work needs explicit authorization from the system owner.</p></li>
+<li><h3>Build or examine</h3><p>Develop the system or work the evidence, with notes you can follow.</p></li>
+<li><h3>Explain the result</h3><p>Plain-language findings or documentation: what was observed, and what remains uncertain.</p></li>
+</ol>
+<div class="btns"><a class="btn" href="#contact">Start with step one</a></div>
+</div></section>
+
+<section id="contact" class="alt-bg"><div class="container">
+<h2>./contact --problem</h2>
+<p class="lead">A clearer shop schedule, a locally hosted application, remote access, AI assistance, or a technical investigation. See <a href="#process">how an engagement works</a>.</p>
+<div class="contact-box"><div><h3>Start with your actual problem.</h3><p>Bring the messy workflow, aging hardware, repetitive task, or technical question.</p></div>
+<a class="btn" href="https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0" target="_blank" rel="noopener noreferrer">Discuss a project (new tab)</a></div>
+<div class="details"><span>East Helena, Montana</span><a href="mailto:info@grizzlyse.com">info@grizzlyse.com</a><a href="tel:+14064398127">(406) 439-8127</a><a href="mailto:info@grizzlyse.com?subject=Incident%20or%20forensic%20help">Incident or forensic help</a></div>
+</div></section>
+</main>
+<footer><div class="container foot"><p>&copy; <span id="yr">2026</span> Grizzly System Engineering LLC</p><p>Hand-written HTML, CSS, JS, plus Python in your browser</p><a href="index.html">Return to main site</a></div></footer>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s),R=matchMedia('(prefers-reduced-motion: reduce)').matches,root=document.documentElement;
+const st={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+const G='01ABCDEF<>{}[]/\\=+*ｱｲｳｴｵｶｷｸｹｺ'.split(''),rnd=a=>a[Math.random()*a.length|0];
+document.getElementById('yr').textContent=new Date().getFullYear();
+
+// project filter
+const bt=[...document.querySelectorAll('[data-filter]')],cd=[...document.querySelectorAll('[data-category]')],ct=$('#count');
+$('.filters').hidden=false;
+bt.forEach(b=>b.addEventListener('click',()=>{const s=b.dataset.filter;bt.forEach(i=>i.setAttribute('aria-pressed',String(i===b)));cd.forEach(c=>c.hidden=s!=='all'&&c.dataset.category!==s);const n=cd.filter(c=>!c.hidden).length;ct.textContent=s==='all'?`${n} projects, workflows, and capabilities`:`${n} ${n===1?'item':'items'} shown`}));
+
+// digital rain (hero only, pauses offscreen / in background tabs)
+const cv=$('#rain'),cx=cv.getContext('2d'),fs=16;let rain=false,run=false,vis=true,cols=[],color='#fbbf24';
+function size(){const r=cv.parentElement.getBoundingClientRect();cv.width=r.width;cv.height=r.height;cols=Array.from({length:Math.ceil(r.width/fs)},()=>Math.random()*r.height/fs|0)}
+function frame(){if(!rain||!vis||document.hidden){run=false;return}
+ cx.fillStyle='rgba(20,24,31,.1)';cx.fillRect(0,0,cv.width,cv.height);cx.fillStyle=color;cx.font=fs+'px monospace';
+ cols.forEach((y,i)=>{cx.fillText(rnd(G),i*fs,y*fs);cols[i]=y*fs>cv.height&&Math.random()>.975?0:y+1});
+ setTimeout(()=>requestAnimationFrame(frame),55)}
+function loop(){if(!run){run=true;requestAnimationFrame(frame)}}
+new IntersectionObserver(e=>{vis=e[0].isIntersecting;if(vis&&rain)loop()}).observe(cv.parentElement);
+document.addEventListener('visibilitychange',()=>{if(rain)loop()});
+addEventListener('resize',size);size();
+function setRain(on){rain=on;$('#b-rain').setAttribute('aria-pressed',on);cv.style.display=on?'':'none';st.set('gse-rain',on?'1':'0');if(on)loop()}
+function setCrt(on){document.body.classList.toggle('crt',on);$('#b-crt').setAttribute('aria-pressed',on);st.set('gse-crt',on?'1':'0')}
+const themes=['amber','green','ice'];
+function setTheme(t){if(!themes.includes(t))return false;root.dataset.theme=t;st.set('gse-theme',t);color=getComputedStyle(root).getPropertyValue('--gold').trim();$('#b-theme').textContent='theme:'+t;return true}
+$('#b-rain').onclick=()=>setRain(!rain);
+$('#b-crt').onclick=()=>setCrt(!document.body.classList.contains('crt'));
+$('#b-theme').onclick=()=>setTheme(themes[(themes.indexOf(root.dataset.theme)+1)%3]);
+setTheme(st.get('gse-theme')||'amber');
+setCrt(st.get('gse-crt')!=='0');
+setRain(st.get('gse-rain')==null?!R:st.get('gse-rain')==='1');
+
+// headline decrypt effect
+function scr(el){const t=el.dataset.t;if(R)return;clearInterval(el._i);let n=0;el._i=setInterval(()=>{el.textContent=[...t].map((c,i)=>c===' '||i<n?c:rnd(G)).join('');if(n++>=t.length){el.textContent=t;clearInterval(el._i)}},40)}
+document.querySelectorAll('.scr').forEach(e=>{scr(e);e.addEventListener('mouseenter',()=>scr(e))});
+
+// easter egg banner
+function banner(t){const b=document.createElement('div');b.className='banner';b.textContent=t;document.body.appendChild(b);setTimeout(()=>b.remove(),1900)}
+const K=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];let ki=0;
+addEventListener('keydown',e=>{ki=e.key===K[ki]?ki+1:(e.key===K[0]?1:0);if(ki===K.length){ki=0;setRain(true);setTheme('green');banner('ACCESS GRANTED')}});
+
+// terminal
+const out=$('#tout'),inp=$('#tin');
+const say=(t,c)=>{const d=document.createElement('div');if(c)d.className=c;d.textContent=t;out.appendChild(d);out.scrollTop=out.scrollHeight};
+const go=id=>document.getElementById(id).scrollIntoView({behavior:R?'auto':'smooth'});
+const secs=['projects','security','tool','hardware','process','contact'];
+const fortunes=['There is no cloud. It is just someone else\'s computer.','A backup that was never restored is just a hope.','Segment the network before you need to.','Read the logs. Then read them again.','Scope first. Then scan.'];
+const CTF='VEZSe2ZwYmNyX3N2ZWZnX2d1cmFfZnBuYX0=';const rot=s=>s.replace(/[a-z]/gi,c=>{const b=c<='Z'?65:97;return String.fromCharCode((c.charCodeAt(0)-b+13)%26+b)});
+const cmds={
+ help:()=>['ls              list sections','cd <section>     jump to a section','cat hardware     the lab rig','neofetch         system info','stack            what the lab runs','engage           how an engagement works','contact','theme <amber|green|ice>','matrix · crt     toggle rain / scanlines','xxd · history · hack · fortune · clear','ctf              a small puzzle for hackers'],
+ ls:()=>secs.map(s=>s+'/'),
+ cat:a=>a[0]==='hardware'?['primary  Ryzen 9 5950X / RX 7900 GRE','virt     PowerEdge R630 / Proxmox VE','node     OptiPlex / Quadro P2200 / SG-550','slabtop  MSI Raider GE75 / headless']:['usage: cat hardware'],
+ stack:()=>['languages  Python, JavaScript','platform   Linux, Docker, Proxmox, Tailscale','security   Nmap, Hydra, Hashcat, Volatility, Autopsy','ai         local LLMs in containers'],
+ neofetch:()=>{const a=['  .--.  .--.','(    \\/    )','  \\  o  o  /','   (  ()  )','    `----\''],i=['caleb@grizzly','-------------','lab    East Helena, MT','host   PowerEdge R630','virt   Proxmox VE','cpu    Ryzen 9 5950X','gpu    RX 7900 GRE','langs  Python, JS, Docker'];return i.map((s,n)=>(a[n]||'').padEnd(17)+s)},
+ contact:()=>['info@grizzlyse.com','(406) 439-8127'],
+ cd:a=>{const t=(a[0]||'').replace('/','');if(secs.includes(t)){go(t);return['-> '+t]}return['cd: no such section: '+(a[0]||''),'try: ls']},
+ theme:a=>setTheme(a[0])?['theme set: '+a[0]]:['usage: theme amber|green|ice'],
+ matrix:()=>{setRain(!rain);return['rain '+(rain?'on':'off')]},
+ crt:()=>{const on=!document.body.classList.contains('crt');setCrt(on);return['crt '+(on?'on':'off')]},
+ fortune:()=>[rnd(fortunes)],
+ hack:()=>{['[*] target: localhost (authorized: you are looking at it)','[*] scanning ports ...... 80 open (a static page)','[*] hunting vulns ....... none, it is a GitHub page','[+] result: nothing to see here','Real engagements start with a signed scope. Try: contact'].forEach((l,i)=>setTimeout(()=>say(l,i==3?'hl':''),420*(i+1)));return[]},
+ engage:()=>{go('process');return['1 define the problem','2 agree on scope','3 build or examine','4 explain the result']},
+ xxd:()=>{const b=[...'Grizzly System Engineering'].map(c=>c.charCodeAt(0)),r=[];for(let i=0;i<b.length;i+=16){const c=b.slice(i,i+16);r.push(i.toString(16).padStart(8,'0')+': '+c.map(x=>x.toString(16).padStart(2,'0')).join(' ').padEnd(47)+'  '+c.map(x=>String.fromCharCode(x)).join(''))}return r},
+ history:()=>hist.length?hist.map((h,i)=>' '+(i+1)+'  '+h):['(empty)'],
+ ctf:a=>a[0]==='hint'?['base64 first. then something Julius Caesar would recognize.']:['// capture the flag','decode this into a flag shaped like GSE{...}:',CTF,'hint: ctf hint    submit: flag GSE{...}'],
+ flag:a=>a.join(' ')===rot(atob(CTF))?(banner('FLAG CAPTURED'),['correct. nicely done.','tell us how you solved it: info@grizzlyse.com (subject: flag)']):['not quite. try: ctf hint'],
+ sudo:()=>['caleb is not in the sudoers file. This incident will be reported.'],
+ clear:()=>{out.textContent='';return[]}
+};
+const hist=[];let hi=0;
+$('#tform').addEventListener('submit',e=>{e.preventDefault();const raw=inp.value.trim();inp.value='';if(!raw)return;hist.push(raw);hi=hist.length;say('$ '+raw,'cmd');const [c,...a]=raw.split(/\s+/),f=cmds[c.toLowerCase()];(f?f(a):[c+': command not found. Type help.']).forEach(l=>say(l))});
+inp.addEventListener('keydown',e=>{if(e.key==='Tab'){const v=inp.value.toLowerCase();if(v&&!v.includes(' ')){const m=Object.keys(cmds).filter(c=>c.startsWith(v));if(m.length===1)inp.value=m[0]+' ';else if(m.length>1)say(m.join('  '));if(m.length)e.preventDefault()}}if(e.key==='ArrowUp'&&hist.length){hi=Math.max(0,hi-1);inp.value=hist[hi];e.preventDefault()}if(e.key==='ArrowDown'&&hist.length){hi=Math.min(hist.length,hi+1);inp.value=hist[hi]||'';e.preventDefault()}});
+out.textContent='';
+[['GSE lab console v1.0',''],['[ok] bench power ........ online','ok'],['[ok] virtualization ...... proxmox','ok'],['[ok] private access ...... tailscale','ok'],['[ok] network isolation ... enforced','ok'],['type help for commands','dim']].forEach((l,i)=>R?say(l[0],l[1]):setTimeout(()=>say(l[0],l[1]),350*i));
+
+// live Montana clock, scroll progress, "/" jumps to the terminal
+const tf=new Intl.DateTimeFormat('en-US',{timeZone:'America/Denver',hourCycle:'h23',hour:'2-digit',minute:'2-digit',second:'2-digit',timeZoneName:'short'});
+const tick=()=>{$('#clk').textContent='East Helena '+tf.format(new Date())};tick();setInterval(tick,1000);
+addEventListener('scroll',()=>{const h=root;$('#prog').style.width=(h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight)*100)+'%'},{passive:true});
+addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();scrollTo({top:0,behavior:R?'auto':'smooth'});inp.focus({preventScroll:true})}});
+
+// BIOS-style intro: once per session, any key or click skips
+const post=$('#post');let seen=null;try{seen=sessionStorage.getItem('gse-post')}catch(e){}
+if(seen||R)post.remove();else{
+ try{sessionStorage.setItem('gse-post','1')}catch(e){}
+ const L=['GSE BIOS v1.0   Grizzly System Engineering','CPU ......... Ryzen 9 5950X ........ OK','NET ......... tailscale ............ OK','LAB ......... East Helena, MT ...... OK','','Booting lab.html ...   (any key to skip)'];
+ let n=0;const t=setInterval(()=>{post.textContent+=L[n++]+'\n';if(n>=L.length){clearInterval(t);setTimeout(done,450)}},230);
+ function done(){clearInterval(t);post.style.opacity=0;setTimeout(()=>post.remove(),360)}
+ post.addEventListener('click',done);addEventListener('keydown',done,{once:true});
+}
+console.log('%c grizzly@system-engineering ','background:#d97706;color:#14181f;font-weight:bold','\nFellow hacker, nice. Say hello: info@grizzlyse.com\nHints: the Konami code, and the terminal command ctf.');
+})();
+</script>
+
+<script type="py">
+from pyscript import document
+from math import log2
+import re
+
+g = document.getElementById
+
+def human(s):
+    if s < 1:
+        return "under a second"
+    for n, u in (("years", 31557600), ("days", 86400), ("hours", 3600), ("minutes", 60), ("seconds", 1)):
+        if s >= u:
+            v = s / u
+            return f"{v:.2e} {n}" if v >= 1e6 else f"{v:,.1f} {n}"
+
+def verdict(avg):
+    if avg < 3600: return "TRIVIAL: falls in under an hour"
+    if avg < 31557600: return "WEAK: falls within a year"
+    if avg < 3.2e10: return "DECENT: centuries on this rig"
+    return "STRONG against raw brute force"
+
+def calculate():
+    out = g("pyout")
+    size = sum(n for cid, n in (("c-lower", 26), ("c-upper", 26), ("c-digit", 10), ("c-sym", 33)) if g(cid).checked)
+    if size == 0:
+        out.innerText = "Select at least one character set."
+        return
+    try:
+        length = int(float(g("length").value))
+    except ValueError:
+        out.innerText = "Enter a password length."
+        return
+    if not 1 <= length <= 64:
+        out.innerText = "Length must be between 1 and 64."
+        return
+    ov = g("rate-ov").value
+    try:
+        rate = float(ov) * 1e9 if ov else float(g("preset").value)
+    except ValueError:
+        out.innerText = "Speed override must be a number."
+        return
+    if rate <= 0:
+        out.innerText = "Speed must be greater than zero."
+        return
+
+    keyspace = size ** length
+    worst = keyspace / rate
+    ks = f"{keyspace:.2e}" if keyspace >= 10**15 else f"{keyspace:,}"
+    out.innerHTML = (
+        f"<span class='big'>{human(worst / 2)}</span>"
+        f"average time to find (half the keyspace)\n"
+        f"verdict: {verdict(worst / 2)}\n\n"
+        f"Charset size:   {size}\n"
+        f"Keyspace:       {ks}\n"
+        f"Entropy (max):  {log2(keyspace):.1f} bits\n"
+        f"Speed:          {rate:,.0f} H/s\n"
+        f"Worst case:     {human(worst)}\n\n"
+        f"Assumes a random password and exhaustive search."
+    )
+
+def identify():
+    out = g("hidout")
+    h = g("hash-in").value.strip()
+    if not h:
+        out.innerText = "Paste a hash first."
+        return
+    c = {}
+    if re.fullmatch(r"[0-9a-fA-F]+", h):
+        for n, m in {32: [("MD5", 0), ("NTLM", 1000), ("MD4", 900), ("LM", 3000)],
+                     40: [("SHA-1", 100)], 56: [("SHA-224", 1300)],
+                     64: [("SHA-256", 1400), ("SHA3-256", 17400)],
+                     96: [("SHA-384", 10800)],
+                     128: [("SHA-512", 1700), ("SHA3-512", 17600)]}.get(len(h), []):
+            c[n] = m
+    for pre, n, m in (("$2a$", "bcrypt", 3200), ("$2b$", "bcrypt", 3200), ("$2y$", "bcrypt", 3200),
+                      ("$1$", "md5crypt", 500), ("$5$", "sha256crypt", 7400), ("$6$", "sha512crypt", 1800),
+                      ("$P$", "phpass", 400), ("$H$", "phpass", 400), ("$apr1$", "Apache apr1", 1600),
+                      ("$krb5tgs$23$", "Kerberos TGS-REP (RC4)", 13100), ("$krb5asrep$23$", "Kerberos AS-REP (RC4)", 18200)):
+        if h.startswith(pre):
+            c[n] = m
+    if "::" in h and h.count(":") >= 5:
+        c["NetNTLMv2"] = 5600
+        c["NetNTLMv1"] = 5500
+    if re.fullmatch(r"\*[0-9A-Fa-f]{40}", h):
+        c["MySQL 4.1/5"] = 300
+    if not c:
+        out.innerText = f"No match for this format ({len(h)} chars). It may be salted, truncated, or uncommon."
+        return
+    lines = "\n".join(f"hashcat -m {m:<6} {n}" for n, m in c.items())
+    out.innerText = f"{len(c)} candidate(s) by format:\n\n{lines}\n\nLength: {len(h)} chars"
+
+btn = g("calc-btn")
+btn.disabled = False
+btn.innerText = "Estimate"
+hb = g("hid-btn")
+hb.disabled = False
+hb.innerText = "Identify"
+g("status").innerText = "Python is ready."
+calculate()
+</script>
+</body></html>
