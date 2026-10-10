@@ -1,0 +1,8 @@
+/* TEAM */
+Built by: Grizzly System Engineering LLC
+Location: East Helena, Montana
+Contact: info@grizzlyse.com
+
+/* SITE */
+Hand-written HTML, CSS, and JavaScript, plus Python in your browser (PyScript).
+Big sky. Small attack surface.
