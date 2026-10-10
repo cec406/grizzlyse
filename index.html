@@ -1,262 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#14181f">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10151c">
 <title>Grizzly System Engineering | Digital Forensics & Cybersecurity, Montana</title>
-<meta name="description" content="Digital forensics, incident response, and security hardening for Montana businesses, attorneys, and individuals. Based in East Helena, MT.">
-<meta property="og:type" content="website"><meta property="og:title" content="Grizzly System Engineering | Digital Forensics & Cybersecurity, Montana"><meta property="og:description" content="Digital forensics, incident response, and security hardening for Montana businesses, attorneys, and individuals.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314181f'/%3E%3Ctext x='4' y='23' font-family='monospace' font-size='20' font-weight='bold' fill='%23fbbf24'%3E%3E_%3C/text%3E%3C/svg%3E">
+<meta name="description" content="Digital forensics, incident response, and practical cybersecurity for Montana businesses, attorneys, and individuals. Based in East Helena.">
+<meta property="og:type" content="website"><meta property="og:title" content="Grizzly System Engineering | Find clarity. Build resilience."><meta property="og:description" content="Digital forensics, incident response, and practical security. East Helena, Montana.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2310151c'/%3E%3Ctext x='3' y='23' font-family='monospace' font-size='20' fill='%23fbbf24'%3E%3E_%3C/text%3E%3C/svg%3E">
 <style>
-:root{--amber:#d97706;--gold:#fbbf24;--btn:#b45309;--ink:#14181f;--panel:#1d232d;--deep:#0e1117;--line:#35404e;--paper:#f4f5f7;--soft:#c5ccd6;--dim:#9aa5b4;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:90px}
-body{font:16px/1.65 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--soft);background:var(--ink);overflow-x:hidden}
-body.crt::after{content:"";position:fixed;inset:0;z-index:9998;pointer-events:none;background:linear-gradient(rgba(0,0,0,0) 50%,rgba(0,0,0,.12) 50%);background-size:100% 4px;box-shadow:inset 0 0 150px rgba(0,0,0,.45)}
-a{color:var(--gold)}
-:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-.container{max-width:1100px;margin:auto;padding:0 24px}
-.skip{position:absolute;left:12px;top:-80px;background:#fff;color:#000;padding:10px;z-index:10000}.skip:focus{top:10px}
-header{position:sticky;top:0;z-index:50;background:rgba(20,24,31,.97);border-bottom:2px solid var(--amber)}
-#prog{position:absolute;left:0;bottom:-2px;height:2px;width:0;background:var(--gold)}
-.head{min-height:72px;display:flex;justify-content:space-between;align-items:center;gap:12px 20px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
-.logo{font:800 .95rem var(--mono);color:#fff;text-decoration:none}.logo span{color:var(--gold)}
-nav{display:flex;gap:8px 18px;flex-wrap:wrap;align-items:center}
-nav a{font:.85rem var(--mono);color:var(--soft);text-decoration:none}nav a:hover{color:var(--gold)}
-nav a.lab{color:var(--gold);border:1px solid var(--amber);border-radius:3px;padding:2px 9px}
-.tg{font:.75rem var(--mono);background:transparent;color:var(--dim);border:1px solid var(--line);border-radius:3px;padding:4px 9px;cursor:pointer}.tg[aria-pressed=true]{color:var(--gold);border-color:var(--amber)}
-section{padding:80px 0}
-h1,h2,h3{color:#fff;line-height:1.15}
-h1{font:800 clamp(2.1rem,5vw,3.5rem)/1.1 var(--mono);letter-spacing:-1.5px;text-shadow:0 0 30px rgba(251,191,36,.18)}
-h2{font:700 clamp(1.6rem,3.6vw,2.2rem)/1.2 var(--mono);margin-bottom:.8rem}
-h2::before{content:"$ ";color:var(--amber)}
-h3{font-size:1.15rem;margin-bottom:.5rem}
-p{margin-bottom:1.1rem}
-.lead{max-width:64ch;font-size:1.08rem;margin-bottom:2.2rem}
-.hero{padding:72px 0 80px;background:radial-gradient(800px 380px at 88% 0,rgba(217,119,6,.15),transparent 70%)}
-.hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:44px;align-items:center}
-.hero p.sub{font-size:1.15rem;margin-top:1.4rem;max-width:56ch}
-.btns{display:flex;gap:14px;flex-wrap:wrap;margin-top:2rem}
-.btn{display:inline-block;background:var(--btn);color:#fff;padding:13px 26px;border-radius:4px;text-decoration:none;font-weight:700;border:2px solid var(--btn)}
-.btn:hover{filter:brightness(.85)}.btn.alt{background:transparent;border-color:var(--line);color:var(--gold)}.btn.alt:hover{border-color:var(--gold);filter:none}
-.term{background:rgba(14,17,23,.95);border:1px solid var(--line);border-radius:6px;font:.84rem/1.75 var(--mono);box-shadow:0 0 40px rgba(251,191,36,.1),0 20px 50px rgba(0,0,0,.5)}
-.tbar{padding:9px 14px;border-bottom:1px solid var(--line);color:var(--dim);font-size:.78rem;display:flex;gap:8px;align-items:center}
-.tbar i{width:9px;height:9px;border-radius:50%;background:var(--line)}.tbar i:first-child{background:var(--amber)}
-.term pre{padding:16px 18px;overflow-x:auto;color:var(--soft);font:inherit}
-.term .p{color:var(--amber)}.term .ok{color:var(--gold)}.term .c{color:var(--dim)}
-.notice{background:var(--amber);color:#14181f;padding:1rem 0;font-size:.97rem}
-.notice a{color:#14181f;font-weight:800}
-.alt-bg{background:var(--deep);border-block:1px solid var(--line)}
-.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.4rem}
-.svc{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:4px;padding:1.8rem;transition:border-color .2s,box-shadow .2s}
-.svc:hover{border-color:var(--gold);box-shadow:0 0 22px rgba(251,191,36,.12)}
-.tag{display:block;font:.75rem var(--mono);color:var(--gold);margin-bottom:.4rem}.tag::before{content:"["}.tag::after{content:"]"}
-.svc p{font-size:.97rem;margin:0}
-.steps{list-style:none;counter-reset:s;max-width:780px}
-.steps li{counter-increment:s;padding:1.2rem 0 1.2rem 4.2rem;border-top:1px solid var(--line);position:relative}
-.steps li:last-child{border-bottom:1px solid var(--line)}
-.steps li::before{content:"0" counter(s);position:absolute;left:0;top:1.25rem;font:700 .95rem var(--mono);color:var(--gold);border:1px solid var(--amber);border-radius:3px;padding:2px 9px}
-.steps strong{display:block;color:#fff;font:700 1.05rem var(--mono)}
-.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.4rem}
-.who>div{border-top:3px solid var(--amber);background:var(--panel);padding:1.5rem;border-radius:3px}
-.who p{margin:0;font-size:.97rem}
-.about{display:grid;grid-template-columns:1.4fr 1fr;gap:3.5rem;align-items:center}
-.logo-box{background:var(--paper);border-radius:6px;padding:24px;justify-self:center;max-width:340px;border:2px solid var(--amber)}
-.logo-box img{width:100%;display:block}
-.also p{max-width:70ch}
-.contact{text-align:center}
-.contact .lead{margin-left:auto;margin-right:auto}
-.contact address{font:600 .98rem/1.9 var(--mono);font-style:normal;margin-top:2.2rem}
-footer{background:var(--deep);border-top:2px solid var(--amber);color:var(--dim);text-align:center;padding:2.5rem 0;font:.82rem var(--mono)}
-.sr{position:absolute;left:-9999px}
-.choices{border:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:22px}
-.choices label{position:relative;cursor:pointer}.choices input{position:absolute;opacity:0}
-.choices span{display:block;height:100%;padding:14px 16px;background:var(--panel);border:1px solid var(--line);border-radius:4px;font:.9rem/1.4 var(--mono);color:var(--soft)}
-.choices label:hover span{border-color:var(--gold)}
-.choices input:checked+span{border-color:var(--gold);background:#2a2415;color:#fff;box-shadow:inset 3px 0 0 var(--amber)}
-.choices input:focus-visible+span{outline:3px solid var(--gold);outline-offset:3px}
-.result{background:var(--deep);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:4px;padding:1.6rem;min-height:110px}
-.result h3{font:700 1.2rem var(--mono)}.result ul{margin:0 0 1rem 1.2rem}.result li{margin-bottom:.4rem}
-.result .fit{font-size:.95rem;color:var(--dim)}.result .btns{margin-top:1rem}
-.svc .pe{margin-top:1rem;padding-top:.8rem;border-top:1px dashed var(--line);font-size:.92rem}
-.pe strong{color:var(--gold);font:700 .8rem var(--mono)}
-@media(max-width:820px){section{padding:56px 0}.hero-grid,.about{grid-template-columns:1fr}.hero{padding:44px 0 56px}html{scroll-padding-top:150px}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.svc{transition:none}}
+:root{color-scheme:dark;--bg:#10151c;--deep:#0b1016;--panel:#19212b;--line:#354150;--gold:#fbbf24;--soft:#c6cfda;--muted:#a2afbf;--white:#f4f7fb;--green:#90dfba;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:105px}body{margin:0;background:var(--bg);color:var(--soft);font:16px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}[hidden]{display:none!important}a{color:var(--gold);text-underline-offset:4px}button,input{font:inherit}button{cursor:pointer}:focus-visible{outline:3px solid var(--gold);outline-offset:4px}::selection{background:var(--gold);color:var(--deep)}.wrap{width:min(1160px,calc(100% - 48px));margin:auto}.skip{position:fixed;top:-100px;left:20px;padding:12px;background:var(--gold);color:var(--deep);z-index:200}.skip:focus{top:10px}h1,h2,h3{color:var(--white);line-height:1.12;margin:0}h1{font-size:clamp(2.7rem,6.7vw,5.2rem);letter-spacing:-.06em;font-weight:850}h2{font-size:clamp(1.85rem,4vw,2.8rem);letter-spacing:-.035em}h3{font-size:1.22rem;line-height:1.3}p{margin:0 0 1.2rem}.eyebrow{font:12px/1.5 var(--mono);color:var(--gold);text-transform:uppercase;letter-spacing:.12em;margin-bottom:20px}.lede{max-width:65ch;font-size:1.08rem;margin-top:20px}.muted,.micro{color:var(--muted)}.micro{font-size:.82rem;margin-top:16px}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}section{padding:86px 0}.shade{background:var(--deep);border-block:1px solid var(--line)}.section-head{margin-bottom:34px}.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 21px;border:1px solid var(--gold);background:var(--gold);color:var(--deep);font-weight:750;text-decoration:none;border-radius:8px;line-height:1.5;transition:transform .2s,background .2s}.btn:hover{background:#ffd267;transform:translateY(-2px)}.btn.alt{background:transparent;color:var(--white);border-color:var(--line)}.btn.alt:hover{border-color:var(--gold)}
+header{position:sticky;top:0;z-index:80;background:rgba(16,21,28,.98);border-bottom:1px solid var(--line)}.head{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:82px}.brand{display:flex;align-items:center;gap:12px;color:var(--white);text-decoration:none;line-height:1.25}.mark{display:grid;place-items:center;width:39px;height:42px;border:1px solid var(--gold);border-radius:9px;color:var(--gold);font:700 18px var(--mono)}.brand-name{font-weight:800;font-size:.95rem}.brand-name small{display:block;color:var(--muted);font:10px/1.6 var(--mono);text-transform:uppercase;letter-spacing:.1em}nav{display:flex;align-items:center;gap:18px}nav a{color:var(--soft);text-decoration:none;font-size:.85rem}nav a:hover{color:var(--gold)}nav .lab-link{color:var(--gold);border:1px solid var(--line);border-radius:7px;padding:6px 10px}.mode,.menu-toggle{background:transparent;border:1px solid var(--line);color:var(--soft);border-radius:7px;padding:7px 10px;font:11px var(--mono)}.mode[aria-pressed=true]{color:var(--gold);border-color:var(--gold)}.menu-toggle{display:none}.progress{position:absolute;bottom:-1px;left:0;height:2px;width:0;background:var(--gold)}
+.hero{position:relative;overflow:hidden;padding:82px 0 72px;background:radial-gradient(ellipse at 90% 20%,#60461933,transparent 60%)}.hero::before{content:"";position:absolute;inset:0;opacity:.15;background-image:linear-gradient(#7f8b9820 1px,transparent 1px),linear-gradient(90deg,#7f8b9820 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(#000,transparent)}.hero-grid{position:relative;display:grid;grid-template-columns:1.12fr 1fr;gap:56px;align-items:center}.hero h1 span{color:var(--gold)}.hero .lede{font-size:1.12rem;max-width:50ch;margin-top:25px}.terminal{background:#0a0f15;border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 24px 70px #0005}.termbar{padding:13px 17px;display:flex;align-items:center;gap:7px;background:#141b24;border-bottom:1px solid var(--line);font:11px var(--mono);color:var(--muted)}.dot{width:8px;height:8px;border-radius:50%;background:#586575}.dot:first-child{background:var(--gold)}.termbar .title{margin-left:7px}.case-log{padding:23px;font:12px/1.9 var(--mono)}.case-log p{margin-bottom:20px}.command{color:var(--white)}.prompt{color:var(--gold)}.ok{color:var(--green)}.case-footer{padding:14px 23px;border-top:1px solid var(--line);font:11px/1.6 var(--mono);color:var(--muted)}.timeline{width:100%;height:56px;display:block;margin-bottom:17px}.incident{background:#252116;border-block:1px solid #766031}.incident .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:20px}.incident p{margin:0;font-size:.92rem;max-width:75ch}.incident strong{color:var(--white)}.incident a{white-space:nowrap;font-weight:700}.trust{padding:24px 0;border-bottom:1px solid var(--line)}.trust ul{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;font:12px var(--mono)}.trust li::before{content:"+ ";color:var(--gold)}
+.routes,.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.route{display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:23px;background:var(--panel);border:1px solid var(--line);border-radius:10px;color:var(--soft)}.route:hover,.route[aria-pressed=true]{border-color:var(--gold)}.route[aria-pressed=true]{background:#292619}.route .num{font:12px var(--mono);color:var(--gold);margin-bottom:20px}.route strong{color:var(--white);font-size:1.05rem;margin-bottom:8px}.route span:last-child{font-size:.9rem}.routing-result{border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:9px;padding:26px;margin-top:20px;background:var(--deep)}.routing-result h3{margin-bottom:12px}.card{border:1px solid var(--line);border-radius:11px;padding:27px;background:var(--panel)}.card .tag{display:block;font:11px var(--mono);color:var(--gold);margin-bottom:20px}.card h3{margin-bottom:13px}.card p{font-size:.93rem}.card .plain{margin:20px 0 0;padding-top:16px;border-top:1px solid var(--line);font-size:.86rem;color:var(--muted)}.plain span{color:var(--gold)}.process-grid,.about-grid,.contact-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:65px}.steps{list-style:none;margin:0;padding:0;counter-reset:step}.steps li{counter-increment:step;position:relative;padding:0 0 25px 48px;border-left:1px solid var(--line);margin-left:13px}.steps li:last-child{border:0;padding-bottom:0}.steps li::before{content:counter(step,decimal-leading-zero);position:absolute;top:0;left:-14px;background:var(--deep);color:var(--gold);font:12px var(--mono);padding:5px 0}.steps h3{font-size:1.03rem;margin-bottom:8px}.steps p{font-size:.93rem;margin:0}.deliverable,.principles,.contact-card{margin-top:28px;padding:26px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}.deliverable ul{padding-left:20px;margin-bottom:0}.deliverable li{margin-top:7px}.audience .card{border-top:2px solid var(--gold)}.about-grid{align-items:center}.principles{margin:0}.principles p{padding:16px 0;margin:0;border-bottom:1px solid var(--line)}.principles p:last-child{border:0}.principles span{color:var(--gold);font:12px var(--mono);margin-right:13px}.brand-art{display:block;max-width:160px;max-height:130px;object-fit:contain;margin-bottom:18px;background:#f4f5f7;border-radius:8px;padding:12px}.lab-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:45px}.output{height:255px;overflow:auto;padding:18px;font:12px/1.8 var(--mono);overflow-wrap:anywhere;white-space:pre-wrap}.output p{margin:0 0 12px}.terminal-form{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line);padding:12px 18px}.terminal-form input{width:100%;min-width:0;background:transparent;border:0;color:var(--white);font:13px var(--mono);padding:6px}.terminal-form button{border:1px solid var(--line);background:var(--panel);color:var(--gold);border-radius:5px;padding:5px 10px;font:12px var(--mono)}.command-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}.command-chips button{font:11px var(--mono);color:var(--soft);background:transparent;border:1px solid var(--line);border-radius:6px;padding:7px 11px}.hash-demo{margin-top:28px;border:1px solid var(--line);border-radius:10px;padding:23px;background:var(--panel)}.hash-demo p{font-size:.9rem;margin-top:12px}.hash-demo label{display:block;margin-bottom:7px;font-size:.85rem}.hash-demo input{width:100%;background:var(--deep);border:1px solid var(--line);color:var(--white);border-radius:6px;padding:12px;font:13px var(--mono)}.hash-row{margin-top:15px}.hash-row span{font:11px var(--mono);color:var(--muted);display:block;margin-bottom:5px}.hash-row code{font:12px/1.7 var(--mono);overflow-wrap:anywhere}.hash-row mark{background:var(--gold);color:var(--deep)}#hash-status{color:var(--gold);font:12px/1.6 var(--mono);min-height:2em}.faq{max-width:850px}details{border-bottom:1px solid var(--line);padding:20px 0}summary{cursor:pointer;color:var(--white);font-weight:650}details p{margin:15px 0 0;font-size:.95rem}.contact-card{margin:0}.contact-card address{font-style:normal}.contact-card a{display:block;margin:10px 0;font-size:1.08rem}.footer{padding:34px 0;border-top:1px solid var(--line);background:var(--deep)}.footer-grid{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;font:11px/1.8 var(--mono);color:var(--muted)}.footer p{margin:0}.mobile-call,.nerd-only{display:none}body.nerd .nerd-only{display:block}.nerd-tools{margin-top:22px}.mountains{font:10px/1.1 var(--mono);color:var(--gold);white-space:pre;overflow:hidden;margin-top:25px}body.crt::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;background:repeating-linear-gradient(transparent 0 3px,#0001 3px 4px)}
+@media(max-width:1050px){nav{gap:11px}.hero-grid{gap:28px}.brand-name small{font-size:9px}.routes,.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:850px){html{scroll-padding-top:90px}.wrap{width:calc(100% - 36px)}section{padding:58px 0}.head{min-height:72px;flex-wrap:wrap;gap:0;padding-block:13px}.menu-toggle{display:block}nav{width:100%;padding-top:18px;padding-bottom:5px;flex-wrap:wrap;gap:17px 22px}html.js nav:not(.open){display:none}.hero{padding:48px 0}.hero-grid,.process-grid,.about-grid,.lab-grid,.contact-grid{grid-template-columns:1fr;gap:32px}h1{font-size:clamp(2.65rem,10vw,4.2rem)}.hero .lede{font-size:1.05rem}.grid{grid-template-columns:1fr}.route{padding:18px}.incident .wrap{align-items:flex-start;flex-direction:column;gap:10px}.trust ul{display:grid;grid-template-columns:1fr 1fr;font-size:10px}.mobile-call{display:block;position:fixed;bottom:0;left:0;right:0;text-align:center;z-index:90;background:var(--gold);color:var(--deep);text-decoration:none;font-weight:750;padding:12px 16px calc(12px + env(safe-area-inset-bottom))}.footer{padding-bottom:95px}}@media(max-width:390px){.routes{grid-template-columns:1fr}.trust ul{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
-<body class="crt">
+<body>
 <a class="skip" href="#main">Skip to content</a>
-<header>
-  <div id="prog"></div>
-  <div class="container head">
-    <a class="logo" href="#top">grizzly<span>@system-engineering</span></a>
-    <nav aria-label="Main">
-      <a href="#services">services</a>
-      <a href="#process">process</a>
-      <a href="#about">about</a>
-      <a href="#contact">contact</a>
-      <a class="lab" href="https://grizzlyse.com/lab.html">the lab</a>
-      <button class="tg" id="b-crt" type="button" aria-pressed="true" title="Toggle CRT scanlines">crt</button>
-    </nav>
-  </div>
-</header>
-
+<header><div class="wrap head"><a class="brand" href="#top" aria-label="Grizzly System Engineering home"><span class="mark" aria-hidden="true">&gt;_</span><span class="brand-name">GRIZZLY<small>System Engineering / Montana</small></span></a><button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav" hidden>Menu</button>
+<nav id="nav" aria-label="Main navigation"><a href="#start">Start here</a><a href="#services">Services</a><a href="#process">Process</a><a href="#about">About</a><a href="#contact">Contact</a><a class="lab-link" href="lab.html">The Lab ↗</a><button class="mode" id="nerd-toggle" type="button" aria-pressed="false" hidden>Nerd mode: off</button></nav></div><div class="progress" id="progress" aria-hidden="true"></div></header>
 <main id="main">
-<section class="hero" id="top">
-  <div class="container hero-grid">
-    <div>
-      <h1>Find out what happened. Make sure it doesn't happen again.</h1>
-      <p class="sub">Digital forensics, incident response, and security hardening for Montana businesses, attorneys, and individuals. Evidence handled carefully, findings explained plainly.</p>
-      <div class="btns">
-        <a href="#contact" class="btn">Request a confidential consult</a>
-        <a href="#services" class="btn alt">See services</a>
-      </div>
-    </div>
-    <div class="term" aria-label="Example case log">
-      <div class="tbar"><i></i><i></i><i></i><span>case.log (illustrative example)</span></div>
-<pre><span class="ln c"># evidence is hashed when collected...</span>
-<span class="ln"><span class="p">$</span> sha256sum evidence.img</span>
-<span class="ln">9f2c...e41a  evidence.img</span>
-<span class="ln c"># ...and again before analysis</span>
-<span class="ln"><span class="p">$</span> sha256sum evidence.img</span>
-<span class="ln">9f2c...e41a  evidence.img</span>
-<span class="ln ok">[ok] hashes match: original evidence unaltered</span>
-<span class="ln"><span class="p">$</span> report --findings --limits --next-steps</span>
-<span class="ln ok">[ok] written report ready</span></pre>
-    </div>
-  </div>
-</section>
-<div class="notice">
-  <div class="container"><strong>Think you've been breached?</strong> Stop using the affected device, leave it powered as-is, and call <a href="tel:+14064398127">(406) 439-8127</a> before anything gets wiped or reinstalled.</div>
-</div>
-
-<section id="start" class="alt-bg" hidden>
-  <div class="container">
-    <h2>Where do I start?</h2>
-    <p class="lead">Pick what sounds closest. You'll get safe first steps for right now and the service that fits. Nothing you click here is sent anywhere.</p>
-    <fieldset class="choices"><legend class="sr">What is going on?</legend>
-      <label><input type="radio" name="sit" value="hacked"><span>I think I've been hacked</span></label>
-      <label><input type="radio" name="sit" value="legal"><span>I need evidence for a legal matter</span></label>
-      <label><input type="radio" name="sit" value="spy"><span>Someone may be watching my devices</span></label>
-      <label><input type="radio" name="sit" value="drive"><span>A drive or device stopped working</span></label>
-      <label><input type="radio" name="sit" value="prevent"><span>I want to prevent problems</span></label>
-      <label><input type="radio" name="sit" value="unsure"><span>I'm not sure</span></label>
-    </fieldset>
-    <div class="result" id="result" role="status" aria-live="polite">Choose an option above.</div>
-  </div>
-</section>
-
-<section id="services">
-  <div class="container">
-    <h2>Services</h2>
-    <p class="lead">Most work falls into three areas: investigating an incident, preventing the next one, and keeping your data recoverable.</p>
-    <div class="services">
-      <div class="svc"><span class="tag">forensics</span><h3>Digital forensics</h3><p>Acquisition and analysis of computers, drives, and phones with a documented chain of custody. Useful for employee misconduct, data theft, and civil or family matters.</p><p class="pe"><strong>In plain English:</strong> We find out what is on a device and what happened to it, and document that we did not change anything.</p></div>
-      <div class="svc"><span class="tag">response</span><h3>Incident response</h3><p>Containment, root-cause analysis, and recovery after ransomware, a compromised email account, or unauthorized access. You get a written timeline of what happened.</p><p class="pe"><strong>In plain English:</strong> Something went wrong. We stop the damage, find out how it happened, and help you get running again.</p></div>
-      <div class="svc"><span class="tag">assessment</span><h3>Security assessments</h3><p>A practical review of your network, accounts, backups, and remote access, with findings ranked by real risk and a fix list you can act on.</p><p class="pe"><strong>In plain English:</strong> A checkup for your network and accounts, ranked so you fix the scary stuff first.</p></div>
-      <div class="svc"><span class="tag">hardening</span><h3>Hardening and secure remote access</h3><p>VPNs, multi-factor authentication, firewall and network segmentation, and endpoint cleanup for small offices, shops, and clinics.</p><p class="pe"><strong>In plain English:</strong> Better locks on the doors you forgot you had, including a safe way to work from home.</p></div>
-      <div class="svc"><span class="tag">backup</span><h3>Backup and recovery planning</h3><p>On-premise and offline backups you have actually tested, so a bad day is an inconvenience rather than the end of the business.</p><p class="pe"><strong>In plain English:</strong> Copies of your data that are proven to work before you need them.</p></div>
-      <div class="svc"><span class="tag">recovery</span><h3>Data recovery and sanitization</h3><p>Recovery from failed or damaged drives where possible, and verified wiping of retired equipment so old data stays gone.</p><p class="pe"><strong>In plain English:</strong> Getting files off failing drives, and making sure retired ones are truly blank.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="alt-bg" id="process">
-  <div class="container">
-    <h2>How an engagement works</h2>
-    <p class="lead">Forensic work is only useful if it holds up. Every case follows the same discipline.</p>
-    <ol class="steps">
-      <li><strong>Scope and consult</strong>Confidential conversation about what happened, what you need, and who will see the results.</li>
-      <li><strong>Preserve</strong>Forensic copies are made so original evidence is never altered. Everything is logged and hashed.</li>
-      <li><strong>Analyze</strong>Timeline, artifacts, and account activity are examined against the questions you need answered.</li>
-      <li><strong>Report</strong>A clear written report with findings, limits of what the evidence can show, and recommended next steps.</li>
-      <li><strong>Remediate</strong>Optional hands-on cleanup and hardening so the same hole is closed.</li>
-    </ol>
-  </div>
-</section>
-
-<section>
-  <div class="container">
-    <h2>Who we work with</h2>
-    <p class="lead">Confidentiality comes first, and engagements can be arranged through counsel when appropriate.</p>
-    <div class="who">
-      <div><h3>Small businesses and shops</h3><p>Trades, manufacturing, and clinics that need real security without an enterprise budget.</p></div>
-      <div><h3>Attorneys and firms</h3><p>Evidence collection, analysis, and plain-language reporting for civil and other matters.</p></div>
-      <div><h3>Individuals</h3><p>Hacked accounts, stalkerware concerns, and device checks when something feels wrong.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="about" class="alt-bg">
-  <div class="container about">
-    <div>
-      <h2>Upright execution.</h2>
-      <p>Grizzly System Engineering is based in East Helena, Montana. The work is rooted in a hands-on background in cybersecurity and digital forensics, and a habit of owning a problem until it is actually solved.</p>
-      <!-- TODO: Add 2-3 sentences on your real background (roles, years, military/government/industry experience). -->
-      <p>On-premise by preference, secure by default, and honest about what the evidence does and doesn't show.</p>
-      <!-- TODO: Add credentials here once confirmed, e.g. certifications and training. Only list what you hold. -->
-    </div>
-    <div class="logo-box"><img src="grizzly-logo.png" alt="Grizzly System Engineering logo"></div>
-  </div>
-</section>
-
-<section class="also">
-  <div class="container">
-    <h2>Also available</h2>
-    <p>Custom shop-floor dashboards, scheduling software, hardware reclamation, and on-premise servers are still offered for local businesses. See <a href="https://grizzlyse.com/lab.html">the Hardware Lab</a>, which has a working terminal and a few puzzles for the curious.</p>
-  </div>
-</section>
-
-<section class="contact alt-bg" id="contact">
-  <div class="container">
-    <h2>Start with a confidential conversation</h2>
-    <p class="lead">Tell us what you're dealing with. Nothing you share is passed on, and there is no obligation.</p>
-    <script>function zforms_open_window(url,height,width){var l=0,t=0;if(screen){l=(screen.width-width)/2;t=(screen.height-height)/2;window.open(url,null,'width='+width+',height='+height+',left='+l+',top='+t+',toolbar=0,location=0,status=1,scrollbars=1,resizable=1');}}</script>
-    <a href="https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0" target="_blank" rel="noopener" onclick="zforms_open_window(this.href,648,700);return false" class="btn">Request a confidential consult</a>
-    <address>
-      East Helena, MT<br>
-      <a href="mailto:info@grizzlyse.com">info@grizzlyse.com</a><br>
-      <a href="tel:+14064398127">(406) 439-8127</a>
-    </address>
-  </div>
-</section>
-</main>
-
-<footer>
-  <div class="container">
-    <p>&copy; 2026 Grizzly System Engineering LLC</p>
-    <p style="margin-top:8px">Digital forensics · Incident response · Security hardening · Helena, MT</p>
-  </div>
-</footer>
-
+<section class="hero" id="top"><div class="wrap hero-grid"><div><p class="eyebrow">East Helena, Montana · Digital forensics & cybersecurity</p><h1>Find clarity.<br>Stop the damage.<br><span>Build resilience.</span></h1><p class="lede">When something goes wrong, you need answers—not a wall of jargon. We investigate digital incidents, explain what the evidence shows, and help you secure what comes next.</p><div class="btns"><a class="btn" href="#contact">Let's talk about your situation ↗</a><a class="btn alt" href="#start">Find the right service</a></div><p class="micro">For businesses, attorneys, and individuals. No obligation to proceed.</p></div>
+<div class="terminal" aria-label="Illustrative forensic workflow, not a real case"><div class="termbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">grizzly / case-notes / illustrative example</span></div><div class="case-log"><p class="muted">// A clear process. A defensible record.</p><p><span class="command"><span class="prompt">01 /</span> PRESERVE</span><br>Document collection and handling.<br><span class="ok">→ Create and verify an evidence copy.</span></p><p><span class="command"><span class="prompt">02 /</span> INVESTIGATE</span><br>Reconstruct activity. Test explanations.<br><span class="ok">→ Separate findings from assumptions.</span></p><svg class="timeline" viewBox="0 0 400 56" aria-hidden="true"><path d="M0 40H400" stroke="#354150"/><path d="M0 40H75V24H125V40H205V12H255V40H325V29H360V40H400" fill="none" stroke="#fbbf24" stroke-width="2"/><circle cx="205" cy="12" r="4" fill="#fbbf24"/></svg><p><span class="command"><span class="prompt">03 /</span> EXPLAIN & IMPROVE</span><br>Findings. Limitations. Next steps.<br><span class="ok">→ A report you can actually use.</span></p></div><div class="case-footer">Evidence first. Plain language always.</div></div></div></section>
+<div class="incident"><div class="wrap"><p><strong>Dealing with a possible incident?</strong> Before wiping or reinstalling anything, call to discuss preservation and containment. The right next step depends on the situation.</p><a href="tel:+14064398127">Call (406) 439-8127 ↗</a></div></div>
+<div class="trust"><div class="wrap"><ul><li>Documented evidence handling</li><li>Hash verification</li><li>Plain-language findings</li><li>Practical next steps</li></ul></div></div>
+<section id="start"><div class="wrap"><div class="section-head"><p class="eyebrow">01 / Get oriented</p><h2>What brought you here?</h2><p class="lede">You don't need to know the technical name for the problem. Start with what you're experiencing.</p></div><div id="routing" hidden><div class="routes" role="group" aria-label="Choose your situation">
+<button class="route" data-route="incident" type="button" aria-pressed="false" aria-controls="routing-result"><span class="num">01 / INCIDENT</span><strong>Something's been compromised.</strong><span>Suspicious access, ransomware, or an account that isn't acting right.</span></button>
+<button class="route" data-route="legal" type="button" aria-pressed="false" aria-controls="routing-result"><span class="num">02 / EVIDENCE</span><strong>I need answers for a legal matter.</strong><span>Device evidence, activity timelines, or findings for counsel.</span></button>
+<button class="route" data-route="privacy" type="button" aria-pressed="false" aria-controls="routing-result"><span class="num">03 / PRIVACY</span><strong>I'm worried about my devices.</strong><span>Unwanted access or concerns about someone monitoring activity.</span></button>
+<button class="route" data-route="recovery" type="button" aria-pressed="false" aria-controls="routing-result"><span class="num">04 / RECOVERY</span><strong>I can't get to my files.</strong><span>A failing drive, damaged device, or missing business data.</span></button>
+<button class="route" data-route="prevent" type="button" aria-pressed="false" aria-controls="routing-result"><span class="num">05 / PREVENTION</span><strong>I'd rather avoid a bad day.</strong><span>Security reviews, better backups, and safer remote access.</span></button>
+<button class="route" data-route="unsure" type="button" aria-pressed="false" aria-controls="routing-result"><span class="num">06 / LET'S TALK</span><strong>I'm not sure where to start.</strong><span>Describe what you're seeing. We'll work out the next step.</span></button></div>
+<div class="routing-result" id="routing-result"><p id="route-message" role="status" aria-live="polite">Select a situation to see the relevant service and what to discuss.</p><div id="route-detail" hidden><h3 id="route-title"></h3><p id="route-description"></p><p class="micro" id="route-fit"></p><div class="btns"><a class="btn" href="#contact">Discuss this situation</a><a class="btn alt" href="tel:+14064398127">Call directly</a></div></div></div><p class="micro">This selector runs in your browser. Your selection isn't submitted.</p></div><noscript><p>Explore the services below or <a href="#contact">contact us directly</a>. The optional selector requires JavaScript.</p></noscript></div></section>
+<section class="shade" id="services"><div class="wrap"><div class="section-head"><p class="eyebrow">02 / Capabilities</p><h2>Technical depth.<br>Useful outcomes.</h2><p class="lede">Investigate what happened, reduce the chance of a repeat, and plan for recovery.</p></div><div class="grid">
+<article class="card"><span class="tag">[ FORENSICS ]</span><h3>Digital forensics</h3><p>Acquisition and analysis of computers, drives, and phones, with documented evidence handling. For matters involving employee misconduct, data theft, or civil and family disputes.</p><p class="plain"><span>The goal:</span> Understand relevant device activity and document what the evidence can—and cannot—establish.</p></article>
+<article class="card"><span class="tag">[ RESPONSE ]</span><h3>Incident response</h3><p>Containment, investigation, and recovery support after ransomware, compromised email, or unauthorized access.</p><p class="plain"><span>The goal:</span> Limit the damage, investigate the cause, and get back to work with a clearer plan.</p></article>
+<article class="card"><span class="tag">[ ASSESSMENT ]</span><h3>Security assessments</h3><p>A practical review of networks, accounts, backups, and remote access, with prioritized findings and an actionable fix list.</p><p class="plain"><span>The goal:</span> Know which risks deserve your attention first.</p></article>
+<article class="card"><span class="tag">[ HARDENING ]</span><h3>Hardening & secure access</h3><p>Multi-factor authentication, VPNs, firewalls, network segmentation, and endpoint cleanup for small offices, shops, and clinics.</p><p class="plain"><span>The goal:</span> Stronger controls without making everyday work unnecessarily difficult.</p></article>
+<article class="card"><span class="tag">[ RESILIENCE ]</span><h3>Backup & recovery planning</h3><p>On-premises and offline backup planning, with restore testing to check that your recovery process actually works.</p><p class="plain"><span>The goal:</span> A recovery plan you have tested before you need it.</p></article>
+<article class="card"><span class="tag">[ DATA LIFECYCLE ]</span><h3>Data recovery & sanitization</h3><p>Recovery from failed or damaged drives where possible, and verified sanitization of retired equipment.</p><p class="plain"><span>The goal:</span> Recover what's recoverable and handle retired data deliberately. Recovery isn't guaranteed.</p></article></div></div></section>
+<section class="shade" id="process"><div class="wrap process-grid"><div><p class="eyebrow">03 / The engagement</p><h2>No mystery.<br>No magic claims.</h2><p class="lede">Good technical work should leave you with more clarity—not more questions about what you paid for.</p><div class="deliverable"><h3>What we aim to deliver</h3><ul><li>A scope agreed before work begins.</li><li>Documented methods and evidence handling.</li><li>Findings separated from uncertainty.</li><li>Practical recommendations tied to your situation.</li></ul><p class="micro">Exact deliverables depend on the engagement.</p></div></div><ol class="steps"><li><h3>Talk & scope</h3><p>Discuss the situation, authorization, priorities, and who needs the results. Agree on the work before proceeding.</p></li><li><h3>Preserve & document</h3><p>Choose an appropriate collection method, document handling, and verify copies where applicable. Record collection limitations.</p></li><li><h3>Investigate</h3><p>Examine relevant artifacts, timelines, and account activity against the questions that matter.</p></li><li><h3>Explain</h3><p>Report findings in plain language, including what is supported, what is uncertain, and recommended next steps.</p></li><li><h3>Improve</h3><p>Where agreed, help with recovery, cleanup, and hardening to address the issues identified.</p></li></ol></div></section>
+<section class="audience"><div class="wrap"><div class="section-head"><p class="eyebrow">04 / Built for real people</p><h2>Security isn't just an enterprise problem.</h2></div><div class="grid"><article class="card"><h3>Businesses & shops</h3><p class="lede">Practical security for trades, manufacturing, offices, and clinics—focused on the systems your business depends on.</p></article><article class="card"><h3>Attorneys & firms</h3><p class="lede">Evidence collection, analysis, and reporting around the questions your matter requires. Engagements can be discussed through counsel.</p></article><article class="card"><h3>Individuals</h3><p class="lede">Help making sense of account compromises, device concerns, and missing data, without expecting you to speak fluent cybersecurity.</p></article></div></div></section>
+<section class="shade" id="about"><div class="wrap about-grid"><div><p class="eyebrow">05 / Local roots. Hands-on work.</p><h2>Upright execution.</h2><p class="lede">Grizzly System Engineering is based in East Helena, Montana. Our work centers on cybersecurity, digital forensics, and hands-on problem solving.</p><p>On-premises by preference. Practical by design. Honest about what the evidence does and doesn't show.</p><p>Custom shop-floor dashboards, container services, private remote access, local AI workflows, and hardware reclamation are also available for local businesses.</p><!-- Add verified biography and credentials here. --><a href="lab.html">Explore the lab: hardware, Python & puzzles →</a></div><div class="principles"><img class="brand-art" id="business-logo" src="grizzly-logo.png" alt="Grizzly System Engineering logo" loading="lazy" width="160" height="130"><h3>How we approach the work</h3><p><span>01</span> Ask better questions.</p><p><span>02</span> Document the method.</p><p><span>03</span> Explain the limitations.</p><p><span>04</span> Make the next step useful.</p></div></div></section>
+<section id="mini-lab"><div class="wrap lab-grid"><div><p class="eyebrow">06 / For the curious</p><h2>A little signal.<br>A little silicon.</h2><p class="lede">Serious work doesn't mean we can't enjoy the tools. This tiny terminal is a local demo—not a shell, scanner, or connection to your systems.</p><p>Try <code>help</code>, inspect the process, or hash a string. No commands are executed on a server.</p><a href="lab.html">Head into the full Hardware Lab →</a><p class="micro">More terminals, Python tools, hardware builds, and a puzzle or two.</p><div class="nerd-only"><div class="nerd-tools"><button class="mode" id="crt-toggle" type="button" aria-pressed="false">CRT: off</button></div><pre class="mountains" aria-hidden="true">         /\           /\
+    /\  /  \    /\   /  \      /\
+___/  \/    \__/  \_/    \____/  \___
+       BIG SKY. SMALL ATTACK SURFACE.</pre></div></div><div><div class="terminal"><div class="termbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="title">visitor@grizzly:~ / browser sandbox</span></div><div class="output" id="terminal-output" role="log" aria-live="polite" aria-relevant="additions" tabindex="0"><p class="ok">Grizzly mini-lab. Type help to begin.</p></div><form class="terminal-form" id="terminal-form"><label class="prompt" for="terminal-input"><span aria-hidden="true">&gt;</span><span class="sr">Terminal command</span></label><input id="terminal-input" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="300" placeholder="help" disabled><button id="terminal-submit" type="submit" disabled>Run</button></form></div><div class="command-chips" id="command-chips" hidden><button type="button" data-command="help">help</button><button type="button" data-command="services">services</button><button type="button" data-command="hash grizzly">hash grizzly</button><button type="button" data-command="bear">bear</button></div><noscript><p class="micro">The terminal requires JavaScript. All services and contact links remain available.</p></noscript>
+<div class="hash-demo" id="hash-demo" hidden><h3>Change a character. Change the fingerprint.</h3><p>Compare SHA-256 hashes of two text values. Matching hashes support byte-for-byte consistency; they don't establish who created the data or whether its contents are true.</p><label for="hash-input">Text to hash</label><input id="hash-input" value="Invoice 4471 - paid in full" autocomplete="off" spellcheck="false" maxlength="10000"><div class="hash-row"><span>BASELINE / SHA-256</span><code id="hash-baseline"></code></div><div class="hash-row"><span>CURRENT / SHA-256</span><code id="hash-current"></code></div><p id="hash-status" role="status" aria-live="polite"></p><p class="micro">Computed locally; this demo doesn't submit your text. Don't enter sensitive information into a public website.</p></div></div></div></section>
+<section class="shade"><div class="wrap faq"><div class="section-head"><p class="eyebrow">07 / Before you reach out</p><h2>A few reasonable questions.</h2></div><details><summary>Do I need to know exactly what's wrong?</summary><p>No. Start with what you noticed, when it began, and what you need help understanding. We'll discuss whether the issue fits our services.</p></details><details><summary>Can you work with my attorney?</summary><p>Yes, engagements can be discussed through counsel. Scope, authorization, reporting, and access to findings should be agreed before collection or analysis.</p></details><details><summary>Can you guarantee a recovery or a particular finding?</summary><p>No. Device condition, available records, encryption, and other limitations can affect what can be recovered or established. We aim to be clear about limitations rather than promise an outcome.</p></details><details><summary>What should I send in my first message?</summary><p>A brief description, a safe way to contact you, and whether the issue is time-sensitive. Please don't send passwords, evidence files, or sensitive case details through the general inquiry form. We can discuss an appropriate transfer method.</p></details><details><summary>Does the terminal do anything to my device?</summary><p>The mini-terminal only responds to predefined commands in this page. It does not execute operating-system commands or scan your device. Hashing uses your browser's Web Crypto API when available.</p></details></div></section>
+<section id="contact"><div class="wrap contact-grid"><div><p class="eyebrow">08 / The next step</p><h2>Let's make the situation clearer.</h2><p class="lede">Tell us what you're dealing with. We'll discuss the fit, the scope, and what makes sense next—without an obligation to proceed.</p><a class="btn" href="https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0" target="_blank" rel="noopener noreferrer">Request a consultation ↗</a><p class="micro">Opens a Zoho-hosted inquiry form in a new tab. Share only a brief overview; don't upload evidence or include passwords. Ask about a suitable channel for sensitive details.</p></div><div class="contact-card"><p class="eyebrow">Direct contact</p><address>Grizzly System Engineering<br>East Helena, Montana<a href="tel:+14064398127">(406) 439-8127</a><a href="mailto:info@grizzlyse.com">info@grizzlyse.com</a></address><p class="micro">If calling about a privacy concern, tell us what contact method is safe for you.</p></div></div></section>
+</main><footer class="footer"><div class="wrap footer-grid"><div><p>© <span id="year">2026</span> Grizzly System Engineering LLC</p><p>Digital forensics · Incident response · Security hardening</p></div><div><a href="#top">Back to top ↑</a> / <a href="lab.html">Hardware Lab</a></div></div></footer><a class="mobile-call" href="tel:+14064398127">Talk to Grizzly · (406) 439-8127</a>
 <script>
-(()=>{
-const $=s=>document.querySelector(s),R=matchMedia('(prefers-reduced-motion: reduce)').matches;
-// CRT toggle (remembered; shared with the lab page)
-const b=$('#b-crt');let v=null;try{v=localStorage.getItem('gse-crt')}catch(e){}
-function setCrt(on){document.body.classList.toggle('crt',on);b.setAttribute('aria-pressed',on);try{localStorage.setItem('gse-crt',on?'1':'0')}catch(e){}}
-setCrt(v!=='0');b.onclick=()=>setCrt(!document.body.classList.contains('crt'));
-// scroll progress
-const r=document.documentElement;
-addEventListener('scroll',()=>{$('#prog').style.width=(r.scrollTop/Math.max(1,r.scrollHeight-r.clientHeight)*100)+'%'},{passive:true});
-// case log plays line by line (all lines visible without JS or with reduced motion)
-if(!R){const L=[...document.querySelectorAll('.ln')];L.forEach(l=>l.style.visibility='hidden');L.forEach((l,i)=>setTimeout(()=>l.style.visibility='visible',500+i*450))}
-// "where do I start?" helper (general first steps; static content)
-const T={
-hacked:{t:'If you think you have been hacked',d:['Stop using the affected device, but leave it powered as it is.','Do not wipe, reset, or reinstall anything yet. That can destroy the evidence.','From a different, trusted device, change your email and bank passwords first.','Write down what you noticed and when.'],f:'Incident response',u:1},
-legal:{t:'If you need evidence for a legal matter',d:['Do not open, move, or delete files on the device. Even opening files can change them.','Keep the device somewhere safe and note who has handled it.','Talk with your attorney. We can work through counsel.'],f:'Digital forensics'},
-spy:{t:'If you think someone is watching your devices',d:['If you are in immediate danger, call 911.','Avoid confronting anyone or removing apps right away. It can alert them and erase clues.','Ask for help from a different device you trust, not the one you are worried about.'],f:'Device checks for individuals'},
-drive:{t:'If a drive or device stopped working',d:['Power it off and stop trying to turn it on.','Do not run repair tools, and do not open the drive.','Keep it dry and safe until it can be looked at.'],f:'Data recovery (not always possible, and we will tell you honestly what is realistic)'},
-prevent:{t:'If you want to prevent problems',d:['Turn on multi-factor authentication for email, banking, and anything with customer data.','Test your backups: pick a file and actually restore it.','List who has remote access to your systems and remove anyone who should not.'],f:'Security assessments, hardening, and backup planning'},
-unsure:{t:'If you are not sure',d:['That is fine. Note what you are seeing and when it started.','We will tell you honestly whether you need help, and what kind.','If anything looks urgent, call first.'],f:'A confidential consult'}};
-$('#start').hidden=false;
-const nl=document.createElement('a');nl.href='#start';nl.textContent='start-here';$('nav').prepend(nl);
-document.querySelectorAll('input[name=sit]').forEach(i=>i.addEventListener('change',()=>{
- const x=T[i.value],u=!!x.u,call='<a class="btn'+(u?'':' alt')+'" href="tel:+14064398127">Call (406) 439-8127</a>',ask='<a class="btn'+(u?' alt':'')+'" href="#contact">Request a confidential consult</a>';
- $('#result').innerHTML='<h3>'+x.t+'</h3><p>Safe first steps:</p><ul>'+x.d.map(d=>'<li>'+d+'</li>').join('')+'</ul><p class="fit">Best fit: <strong>'+x.f+'</strong>. Details are in Services below.</p><div class="btns">'+(u?call+ask:ask+call)+'</div>';
-}));
-console.log('%c grizzly@system-engineering ','background:#d97706;color:#14181f;font-weight:bold','\nHello, fellow hacker. The terminal and the puzzles live at grizzlyse.com/lab.html');
+(()=>{'use strict';
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];document.documentElement.classList.add('js');$('#year').textContent=new Date().getFullYear();
+const store={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v)}catch{}}};
+const menu=$('#menu-toggle'),nav=$('#nav');menu.hidden=false;function closeMenu(){nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='Menu'}menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.textContent=open?'Close':'Menu'});nav.addEventListener('click',e=>{if(e.target.closest('a'))closeMenu()});nav.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMenu();menu.focus()}});
+const nerd=$('#nerd-toggle'),crt=$('#crt-toggle');nerd.hidden=false;function setCrt(on,save=true){document.body.classList.toggle('crt',on);crt.setAttribute('aria-pressed',String(on));crt.textContent='CRT: '+(on?'on':'off');if(save)store.set('gse-crt',on?'1':'0')}function setNerd(on){document.body.classList.toggle('nerd',on);nerd.setAttribute('aria-pressed',String(on));nerd.textContent='Nerd mode: '+(on?'on':'off');store.set('gse-nerd',on?'1':'0')}setNerd(store.get('gse-nerd')==='1');setCrt(store.get('gse-crt')==='1',false);nerd.addEventListener('click',()=>setNerd(!document.body.classList.contains('nerd')));crt.addEventListener('click',()=>setCrt(!document.body.classList.contains('crt')));addEventListener('storage',e=>{if(e.key==='gse-crt')setCrt(e.newValue==='1',false)});
+let pending=false;function progress(){pending=false;const r=document.documentElement;$('#progress').style.width=(100*r.scrollTop/Math.max(1,r.scrollHeight-r.clientHeight))+'%'}addEventListener('scroll',()=>{if(!pending){pending=true;requestAnimationFrame(progress)}},{passive:true});addEventListener('resize',progress);progress();
+const routes={incident:['Investigate the incident. Plan the response.','Tell us what changed, which systems are affected, and whether the problem is ongoing. We can discuss containment and preservation together rather than assume one instruction fits every incident.','Incident response and digital forensics'],legal:['Start with the questions the matter needs answered.','Discuss the relevant devices, your authority to provide them, and whether counsel should coordinate the engagement. Agree on collection and reporting before work begins.','Digital forensics'],privacy:['Start with a conversation that feels safe.','Use a contact method you consider safe and tell us about any restrictions on replies. We can discuss device concerns and an appropriate assessment without assuming the cause.','Device assessment and digital forensics'],recovery:['First, discuss the device and the symptoms.','Tell us what device failed, what happened before the failure, and what data matters most. Recovery feasibility depends on the condition of the media and available copies.','Data recovery'],prevent:['Turn uncertainty into a prioritized plan.','Discuss your critical systems, remote access, accounts, and current backups. We can scope a review around your business rather than an enterprise-sized checklist.','Security assessments, hardening, and backup planning'],unsure:['You can start with an ordinary description.','Tell us what you noticed and what you want to understand. You do not need to diagnose the issue before asking whether we can help.','Initial consultation']};$('#routing').hidden=false;$$('[data-route]').forEach(button=>button.addEventListener('click',()=>{const [title,description,fit]=routes[button.dataset.route];$$('[data-route]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));$('#route-title').textContent=title;$('#route-description').textContent=description;$('#route-fit').textContent='Relevant service: '+fit;$('#route-detail').hidden=false;$('#route-message').textContent='Selected: '+fit+'. '+title}));
+const logo=$('#business-logo');logo.addEventListener('error',()=>logo.hidden=true);if(logo.complete&&logo.naturalWidth===0)logo.hidden=true;
+const canHash=Boolean(window.crypto&&window.crypto.subtle&&window.TextEncoder);const sha=async text=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
+if(canHash){const input=$('#hash-input');let base='',version=0,timer;async function update(){const id=++version;try{const digest=await sha(input.value);if(id!==version)return;let count=0;const frag=document.createDocumentFragment();for(let i=0;i<digest.length;i++){if(digest[i]!==base[i]){count++;const mark=document.createElement('mark');mark.textContent=digest[i];frag.append(mark)}else frag.append(document.createTextNode(digest[i]))}$('#hash-current').replaceChildren(frag);$('#hash-status').textContent=count?count+' of 64 hexadecimal characters differ from the baseline.':'Hashes match. These two text inputs produce the same fingerprint.'}catch{$('#hash-status').textContent='Hashing is unavailable in this browser.'}}sha(input.value).then(digest=>{base=digest;$('#hash-baseline').textContent=digest;$('#hash-demo').hidden=false;update()}).catch(()=>{});input.addEventListener('input',()=>{++version;clearTimeout(timer);timer=setTimeout(update,180)})}
+const output=$('#terminal-output'),field=$('#terminal-input');field.disabled=false;$('#terminal-submit').disabled=false;$('#command-chips').hidden=false;const history=[];let cursor=0,busy=false;function write(text,cls=''){const p=document.createElement('p');p.textContent=text;if(cls)p.className=cls;output.append(p);while(output.childElementCount>70)output.firstElementChild.remove();output.scrollTop=output.scrollHeight}async function run(raw){const value=raw.trim();if(!value||busy)return;busy=true;field.value='';history.push(value);if(history.length>100)history.shift();cursor=history.length;write('visitor@grizzly:~ > '+value,'prompt');const [command]=value.toLowerCase().split(/\s+/);const arg=value.slice(command.length).trim();try{switch(command){case 'help':write('Available commands:\n  services     Show the service list\n  process      Show the workflow\n  hash <text>  Compute a local SHA-256 hash\n  whoami       Identify this demo session\n  bear         Meet the resident bear\n  nerd         Toggle nerd mode\n  lab          Open the Hardware Lab\n  clear        Clear this terminal\n  sudo         Nice try.');break;case 'services':write('FORENSICS / RESPONSE / ASSESSMENT / HARDENING / BACKUP / RECOVERY\nFull descriptions are in the Services section above.');break;case 'process':write('SCOPE → PRESERVE → INVESTIGATE → EXPLAIN → IMPROVE\nDocument the method. Explain the limits. Make the next step useful.');break;case 'hash':if(!arg)write('Usage: hash <text>');else if(!canHash)write('Web Crypto is unavailable. Try this page over HTTPS in a supported browser.');else write('SHA-256\n'+await sha(arg),'ok');break;case 'whoami':write('visitor@grizzly\nCurious human. No account required. No superpowers granted.');break;case 'bear':write('  ʕ•ᴥ•ʔ\nThe bear has reviewed your request.\nRecommendation: fewer mystery cables. More documentation.','ok');break;case 'nerd':setNerd(!document.body.classList.contains('nerd'));write('Nerd mode '+(document.body.classList.contains('nerd')?'enabled. CRT toggle unlocked.':'disabled.'));break;case 'lab':location.assign('lab.html');break;case 'clear':output.replaceChildren();break;case 'sudo':write('Permission denied: the bear holds the root password.');break;default:write('Unknown command. Try help. This demo is not an operating-system shell.')}}catch{write('That operation could not be completed.')}finally{busy=false}}$('#terminal-form').addEventListener('submit',e=>{e.preventDefault();run(field.value)});$$('[data-command]').forEach(b=>b.addEventListener('click',()=>run(b.dataset.command)));field.addEventListener('keydown',e=>{if(e.key==='ArrowUp'){e.preventDefault();cursor=Math.max(0,cursor-1);field.value=history[cursor]||''}else if(e.key==='ArrowDown'){e.preventDefault();cursor=Math.min(history.length,cursor+1);field.value=history[cursor]||''}});console.log('Grizzly System Engineering / Hello, fellow tinkerer. Try bear in the mini-lab.');
 })();
 </script>
 </body>
