@@ -1,0 +1,12 @@
+{
+  "name": "spanish-learning-app",
+  "version": "1.0.0",
+  "description": "Zero-to-fluency Spanish learning app for English speakers (no frameworks, no build step)",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/run-all.js",
+    "serve": "python3 -m http.server 8000",
+    "audit": "node tools/audit-content.js"
+  }
+}
