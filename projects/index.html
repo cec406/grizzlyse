@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Grizzly System Engineering LLC</title>
+    <meta name="description" content="Interactive games, language courses, and lab tools built by Grizzly System Engineering LLC.">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter for UI, JetBrains Mono for Technical feel -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#d97706',
+                        dark: '#0f172a',
+                        surface: '#1e293b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); }
+        .grid-glow {
+            background-image:
+                radial-gradient(circle at 1px 1px, rgba(217, 119, 6, 0.18) 1px, transparent 0);
+            background-size: 32px 32px;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass border-b border-slate-700">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="../" class="text-xl font-black tracking-tighter uppercase">
+                GRIZZLY <span class="text-primary font-mono">_SYSTEM_ENGINEERING_LLC</span>
+            </a>
+            <div class="hidden md:flex space-x-8 text-sm font-medium uppercase tracking-widest">
+                <a href="#games" class="hover:text-primary transition">Games</a>
+                <a href="#languages" class="hover:text-primary transition">Languages</a>
+                <a href="#tools" class="hover:text-primary transition">Tools</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="grid-glow pt-40 pb-20 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="inline-block px-3 py-1 mb-6 border border-primary/30 rounded-full bg-primary/10 text-primary text-xs font-mono uppercase tracking-widest">
+                Lab Notebook
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-6">
+                Projects &amp; <span class="text-primary">Experiments</span>
+            </h1>
+            <p class="text-lg text-slate-400 max-w-2xl leading-relaxed">
+                Browser-based games, full language courses, and operational tooling. No installs, no accounts,
+                no tracking &mdash; everything runs client-side and is safe to poke at.
+            </p>
+        </div>
+    </section>
+
+    <!-- Games -->
+    <section id="games" class="py-20 bg-dark">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-12">
+                <h2 class="text-3xl md:text-4xl font-black uppercase tracking-tighter">Games</h2>
+                <div class="h-1 w-20 bg-primary mt-4"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- ZeroDay Academy -->
+                <a href="games/compsci/" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
+                    <div class="text-primary mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <h3 class="text-xl font-bold uppercase tracking-tight group-hover:text-primary transition">ZeroDay Academy</h3>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        A complete computer science academy in your browser. Linux and Windows command lines,
+                        real programming practice, networking, and authorised security &mdash; from your first
+                        <span class="font-mono text-slate-300">ls</span> to a full incident response.
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
+                        <span class="px-2 py-1 border border-slate-700 rounded">9 chapters</span>
+                        <span class="px-2 py-1 border border-slate-700 rounded">35 missions</span>
+                        <span class="px-2 py-1 border border-slate-700 rounded">Code Lab</span>
+                    </div>
+                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
+                        Launch Academy &rarr;
+                    </div>
+                </a>
+
+                <!-- Cyber Range -->
+                <a href="games/gsehack/" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
+                    <div class="text-primary mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-primary transition">GRIZZLY_SE // Cyber Range</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        A dependency-free terminal game that teaches beginner hacking skills with a
+                        defence-first framing: password cracking, network recon, log forensics,
+                        steganography, SQL injection, and anti-forensics.
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
+                        <span class="px-2 py-1 border border-slate-700 rounded">6 missions</span>
+                        <span class="px-2 py-1 border border-slate-700 rounded">Single file</span>
+                        <span class="px-2 py-1 border border-slate-700 rounded">CRT terminal</span>
+                    </div>
+                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
+                        Enter the Range &rarr;
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Language Applications -->
+    <section id="languages" class="py-20 bg-slate-900 border-y border-slate-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-12">
+                <h2 class="text-3xl md:text-4xl font-black uppercase tracking-tighter">Language Applications</h2>
+                <div class="h-1 w-20 bg-primary mt-4"></div>
+                <p class="text-slate-400 mt-6 max-w-2xl">
+                    Written-first, no-framework courses for English speakers. Graded units, grammar references,
+                    spaced repetition, and a dozen games each &mdash; all with offline-friendly audio via the
+                    browser's speech synthesis.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- SpanishPod -->
+                <a href="spanish/" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                            </svg>
+                        </div>
+                        <span class="text-[11px] font-mono uppercase tracking-widest text-slate-500">EN &rarr; ES</span>
+                    </div>
+                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-primary transition">SpanishPod</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        Learn Spanish from zero to fluency across 48 graded units (A1&ndash;C1) with 20 reading
+                        texts and regional slang. Built for a family heading to Puerto Rico and anyone training
+                        toward a proficiency exam &mdash; Latin-American Spanish by default.
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
+                        <span class="px-2 py-1 border border-slate-700 rounded">48 units</span>
+                        <span class="px-2 py-1 border border-slate-700 rounded">12 games</span>
+                        <span class="px-2 py-1 border border-slate-700 rounded">6 dialects</span>
+                    </div>
+                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
+                        Start Spanish &rarr;
+                    </div>
+                </a>
+
+                <!-- RussianPod -->
+                <a href="russian/" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                            </svg>
+                        </div>
+                        <span class="text-[11px] font-mono uppercase tracking-widest text-slate-500">EN &rarr; RU</span>
+                    </div>
+                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-primary transition">RussianPod</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        Learn Russian from zero to B2. Master the 33-letter Cyrillic alphabet, work through
+                        44 graded units, drill with 12 games, review with spaced repetition, and read graded
+                        texts with tap-to-translate glossaries.
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
+                        <span class="px-2 py-1 border border-slate-700 rounded">44 units</span>
+                        <span class="px-2 py-1 border border-slate-700 rounded">12 games</span>
+                        <span class="px-2 py-1 border border-slate-700 rounded">773 words</span>
+                    </div>
+                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
+                        Start Russian &rarr;
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools & Dashboards -->
+    <section id="tools" class="py-20 bg-dark">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-12">
+                <h2 class="text-3xl md:text-4xl font-black uppercase tracking-tighter">Tools &amp; Dashboards</h2>
+                <div class="h-1 w-20 bg-primary mt-4"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <a href="dashboard/" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
+                    <div class="text-primary mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10-3a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1v-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-primary transition">Dashboard</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        Operational dashboards and custom tooling &mdash; recon automation, system monitoring,
+                        and the internal consoles used to run the lab.
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
+                        <span class="px-2 py-1 border border-slate-700 rounded">Automation</span>
+                        <span class="px-2 py-1 border border-slate-700 rounded">Monitoring</span>
+                    </div>
+                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
+                        Open Dashboard &rarr;
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+            <div class="font-mono uppercase tracking-widest">GRIZZLY <span class="text-primary">_SYSTEM_ENGINEERING_LLC</span></div>
+            <div class="flex items-center gap-6">
+                <a href="../" class="hover:text-primary transition">Home</a>
+                <a href="https://github.com/cec406" target="_blank" rel="noopener" class="hover:text-primary transition">GitHub</a>
+                <span>&copy; <span id="year"></span> Grizzly System Engineering LLC</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
