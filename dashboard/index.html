@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Grizzly System Engineering LLC</title>
+    <meta name="description" content="Operational dashboards and lab tooling from Grizzly System Engineering LLC. Under construction.">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#d97706',
+                        dark: '#0f172a',
+                        surface: '#1e293b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); }
+        .grid-glow {
+            background-image:
+                radial-gradient(circle at 1px 1px, rgba(217, 119, 6, 0.18) 1px, transparent 0);
+            background-size: 32px 32px;
+        }
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.55; }
+        }
+        .flicker { animation: flicker 2.4s ease-in-out infinite; }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass border-b border-slate-700">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="../" class="text-xl font-black tracking-tighter uppercase">
+                GRIZZLY <span class="text-primary font-mono">_SYSTEM_ENGINEERING_LLC</span>
+            </a>
+            <div class="hidden md:flex space-x-8 text-sm font-medium uppercase tracking-widest">
+                <a href="../" class="hover:text-primary transition">Projects</a>
+                <a href="https://github.com/cec406" target="_blank" rel="noopener" class="hover:text-primary transition">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Placeholder -->
+    <main class="grid-glow min-h-screen flex items-center justify-center pt-16">
+        <div class="max-w-2xl mx-auto px-6 text-center">
+            <div class="inline-block px-3 py-1 mb-6 border border-primary/30 rounded-full bg-primary/10 text-primary text-xs font-mono uppercase tracking-widest">
+                Status: <span class="flicker">In Development</span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-6">
+                Dashboard <span class="text-primary">/ Tooling</span>
+            </h1>
+
+            <p class="text-lg text-slate-400 leading-relaxed mb-10">
+                Operational dashboards and lab tooling &mdash; recon automation, system monitoring, and the
+                internal consoles used to run the lab. This module is currently being built.
+            </p>
+
+            <div class="bg-surface border border-slate-700 rounded-lg p-6 text-left font-mono text-sm mb-10">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="h-3 w-3 rounded-full bg-red-500/70"></span>
+                    <span class="h-3 w-3 rounded-full bg-amber-500/70"></span>
+                    <span class="h-3 w-3 rounded-full bg-green-500/70"></span>
+                    <span class="ml-2 text-xs uppercase tracking-widest text-slate-500">console</span>
+                </div>
+                <p class="text-slate-400"><span class="text-primary">$</span> deploy dashboard</p>
+                <p class="text-slate-500">Building components <span class="flicker">&#9608;</span></p>
+                <p class="text-slate-500">Estimated ready: coming soon</p>
+                <p class="text-slate-400"><span class="text-primary">$</span> <span class="flicker">_</span></p>
+            </div>
+
+            <a href="../" class="inline-block border border-slate-600 hover:border-primary hover:text-primary px-8 py-4 rounded font-bold transition uppercase tracking-wider text-sm">
+                &larr; Back to Projects
+            </a>
+        </div>
+    </main>
+
+</body>
+</html>

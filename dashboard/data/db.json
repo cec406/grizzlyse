@@ -1,0 +1,756 @@
+{
+  "meta": {
+    "version": 1,
+    "seededAt": "2026-10-11T20:59:18.678Z",
+    "updatedAt": "2026-10-11T21:00:07.474Z"
+  },
+  "settings": {
+    "shopName": "Ironworks Machine Shop",
+    "shopSubtitle": "Maintenance Operations",
+    "shiftPattern": "Day 6a-2p · Swing 2p-10p · Night 10p-6a",
+    "lowStockAlerts": true,
+    "staleDays": 7,
+    "rotateSeconds": 12,
+    "kioskViews": "overview,workorders,schedule,parts,assets"
+  },
+  "people": [
+    {
+      "id": "per-dana",
+      "name": "Dana Whitfield",
+      "role": "Lead Mechanic",
+      "shift": "Day",
+      "status": "Available",
+      "phone": "ext. 204",
+      "email": "dana@shop.local"
+    },
+    {
+      "id": "per-miguel",
+      "name": "Miguel Ortega",
+      "role": "Millwright",
+      "shift": "Day",
+      "status": "On Job",
+      "phone": "ext. 211",
+      "email": "miguel@shop.local"
+    },
+    {
+      "id": "per-sam",
+      "name": "Sam Chen",
+      "role": "Electrical Tech",
+      "shift": "Swing",
+      "status": "Available",
+      "phone": "ext. 218",
+      "email": "sam@shop.local"
+    },
+    {
+      "id": "per-riley",
+      "name": "Riley Novak",
+      "role": "Apprentice",
+      "shift": "Swing",
+      "status": "Available",
+      "phone": "ext. 220",
+      "email": "riley@shop.local"
+    },
+    {
+      "id": "per-jo",
+      "name": "Jo Ramirez",
+      "role": "Maintenance Planner",
+      "shift": "Day",
+      "status": "Available",
+      "phone": "ext. 200",
+      "email": "jo@shop.local"
+    },
+    {
+      "id": "per-kim",
+      "name": "Kim Patel",
+      "role": "Night Watch",
+      "shift": "Night",
+      "status": "Off",
+      "phone": "ext. 226",
+      "email": "kim@shop.local"
+    }
+  ],
+  "vendors": [
+    {
+      "id": "ven-motion",
+      "name": "Motion Industrial Supply",
+      "category": "Bearings, belts, seals",
+      "contact": "R. Alvarez",
+      "phone": "555-0142",
+      "email": "orders@motion.example",
+      "leadTimeDays": 2,
+      "notes": "Net-30 account #MI-4471"
+    },
+    {
+      "id": "ven-grainger",
+      "name": "Grainger",
+      "category": "General MRO",
+      "contact": "Web order",
+      "phone": "555-0188",
+      "email": "support@grainger.example",
+      "leadTimeDays": 1,
+      "notes": "Will-call counter open 7a-5p"
+    },
+    {
+      "id": "ven-lube",
+      "name": "PetroLube Co.",
+      "category": "Lubricants & coolant",
+      "contact": "T. Brooks",
+      "phone": "555-0110",
+      "email": "sales@petrolube.example",
+      "leadTimeDays": 5,
+      "notes": "Bulk coolant delivery monthly"
+    },
+    {
+      "id": "ven-tools",
+      "name": "CutRight Tooling",
+      "category": "Carbide & inserts",
+      "contact": "L. Nguyen",
+      "phone": "555-0173",
+      "email": "lnguyen@cutright.example",
+      "leadTimeDays": 7,
+      "notes": "Regrind service available"
+    },
+    {
+      "id": "ven-elec",
+      "name": "Valley Electric Supply",
+      "category": "Motors, contactors",
+      "contact": "Front desk",
+      "phone": "555-0199",
+      "email": "counter@valleyelec.example",
+      "leadTimeDays": 3,
+      "notes": ""
+    }
+  ],
+  "assets": [
+    {
+      "id": "ast-lathe1",
+      "name": "CNC Lathe #1",
+      "status": "Running",
+      "category": "CNC",
+      "criticality": "High",
+      "location": "Bay 1",
+      "manufacturer": "Okuma",
+      "model": "LB3000",
+      "serial": "OK-LB-88231",
+      "installedOn": "2022-10-12",
+      "notes": "Primary production lathe. Dedicated to bearing housings."
+    },
+    {
+      "id": "ast-lathe2",
+      "name": "CNC Lathe #2",
+      "status": "Maintenance",
+      "category": "CNC",
+      "criticality": "High",
+      "location": "Bay 2",
+      "manufacturer": "Haas",
+      "model": "ST-20",
+      "serial": "HA-ST-55210",
+      "installedOn": "2024-04-24",
+      "notes": "Spindle vibration flagged last week."
+    },
+    {
+      "id": "ast-mill1",
+      "name": "Vertical Mill",
+      "status": "Running",
+      "category": "CNC",
+      "criticality": "High",
+      "location": "Bay 3",
+      "manufacturer": "Haas",
+      "model": "VF-4",
+      "serial": "HA-VF-11930",
+      "installedOn": "2023-10-07",
+      "notes": ""
+    },
+    {
+      "id": "ast-forklift",
+      "name": "Forklift #1",
+      "status": "Running",
+      "category": "Vehicle",
+      "criticality": "Medium",
+      "location": "Receiving dock",
+      "manufacturer": "Toyota",
+      "model": "8FGCU25",
+      "serial": "TOY-25001",
+      "installedOn": "2024-10-21",
+      "notes": "LPG. Annual OSHA inspection due."
+    },
+    {
+      "id": "ast-compressor",
+      "name": "Air Compressor",
+      "status": "Running",
+      "category": "Facility",
+      "criticality": "High",
+      "location": "Utility room",
+      "manufacturer": "Atlas Copco",
+      "model": "GA-30",
+      "serial": "AC-GA-7740",
+      "installedOn": "2021-04-20",
+      "notes": "Feeds the whole shop. 3000 hr service interval."
+    },
+    {
+      "id": "ast-boiler",
+      "name": "Process Boiler",
+      "status": "Running",
+      "category": "HVAC",
+      "criticality": "High",
+      "location": "Boiler room",
+      "manufacturer": "Cleaver-Brooks",
+      "model": "CB-50",
+      "serial": "CB-50-0091",
+      "installedOn": "2018-01-06",
+      "notes": "State inspection certificate on wall."
+    },
+    {
+      "id": "ast-conveyor",
+      "name": "Packaging Conveyor",
+      "status": "Down",
+      "category": "Facility",
+      "criticality": "Medium",
+      "location": "Shipping",
+      "manufacturer": "Dorner",
+      "model": "3200",
+      "serial": "DN-3200-114",
+      "installedOn": "2025-04-19",
+      "notes": "Drive motor tripped breaker. Awaiting replacement."
+    },
+    {
+      "id": "ast-welder",
+      "name": "MIG Welder",
+      "status": "Running",
+      "category": "Tooling",
+      "criticality": "Low",
+      "location": "Fab area",
+      "manufacturer": "Miller",
+      "model": "Millermatic 252",
+      "serial": "MM-252-445",
+      "installedOn": "2025-09-06",
+      "notes": ""
+    },
+    {
+      "id": "ast-panel",
+      "name": "Main Electrical Panel",
+      "status": "Running",
+      "category": "Electrical",
+      "criticality": "High",
+      "location": "Utility room",
+      "manufacturer": "Square D",
+      "model": "NQ",
+      "serial": "SQ-NQ-4100",
+      "installedOn": "2015-10-29",
+      "notes": "Thermal scan annually."
+    },
+    {
+      "id": "ast-forklift2",
+      "name": "Scissor Lift",
+      "status": "Running",
+      "category": "Vehicle",
+      "criticality": "Low",
+      "location": "Fab area",
+      "manufacturer": "Genie",
+      "model": "GS-1930",
+      "serial": "GN-1930-77",
+      "installedOn": "2025-02-18",
+      "notes": ""
+    }
+  ],
+  "workorders": [
+    {
+      "id": "wo-o9sxsg",
+      "title": "Replace spindle bearings on Lathe #2",
+      "status": "In Progress",
+      "priority": "Urgent",
+      "assetId": "ast-lathe2",
+      "assigneeId": "per-dana",
+      "type": "Corrective",
+      "due": "2026-10-10",
+      "estHours": 8,
+      "description": "Vibration analysis confirms inner race defect. Bearings on order (SKU BR-6208)."
+    },
+    {
+      "id": "wo-ylqa0i",
+      "title": "Conveyor drive motor replacement",
+      "status": "Waiting Parts",
+      "priority": "High",
+      "assetId": "ast-conveyor",
+      "assigneeId": "per-sam",
+      "type": "Corrective",
+      "due": "2026-10-12",
+      "estHours": 4,
+      "description": "Motor shipped, ETA tomorrow. New VFD also needed."
+    },
+    {
+      "id": "wo-a8yqjg",
+      "title": "Quarterly air compressor service",
+      "status": "Scheduled",
+      "priority": "Normal",
+      "assetId": "ast-compressor",
+      "assigneeId": "per-miguel",
+      "type": "Preventive",
+      "due": "2026-10-13",
+      "estHours": 3,
+      "description": "Oil, separator, filters, check discharge temp."
+    },
+    {
+      "id": "wo-ou1ov5",
+      "title": "Annual boiler inspection prep",
+      "status": "Scheduled",
+      "priority": "High",
+      "assetId": "ast-boiler",
+      "assigneeId": "per-jo",
+      "type": "Inspection",
+      "due": "2026-10-16",
+      "estHours": 2,
+      "description": "Gather logs, verify relief valve tags before state inspector visit."
+    },
+    {
+      "id": "wo-7iof7v",
+      "title": "Forklift annual load test",
+      "status": "Backlog",
+      "priority": "Normal",
+      "assetId": "ast-forklift",
+      "assigneeId": "per-kim",
+      "type": "Inspection",
+      "due": "2026-10-23",
+      "estHours": 1.5,
+      "description": "Schedule with third-party inspector."
+    },
+    {
+      "id": "wo-ng0yyr",
+      "title": "Lubricate ways and ball screws",
+      "status": "Backlog",
+      "priority": "Low",
+      "assetId": "ast-mill1",
+      "assigneeId": "per-riley",
+      "type": "Preventive",
+      "due": "2026-10-18",
+      "estHours": 1,
+      "description": "Way lube reservoir also low."
+    },
+    {
+      "id": "wo-aufcvd",
+      "title": "Replace shop lighting fixtures (bay 1-3)",
+      "status": "Backlog",
+      "priority": "Normal",
+      "assetId": "ast-panel",
+      "assigneeId": "per-sam",
+      "type": "Project",
+      "due": "2026-10-31",
+      "estHours": 10,
+      "description": "Convert to LED high-bays. Bulk order pending."
+    },
+    {
+      "id": "wo-2pf6lj",
+      "title": "Panel thermal scan",
+      "status": "Done",
+      "priority": "Normal",
+      "assetId": "ast-panel",
+      "assigneeId": "per-sam",
+      "type": "Inspection",
+      "due": "2026-10-05",
+      "estHours": 1,
+      "description": "No hotspots found. Photo report filed."
+    },
+    {
+      "id": "wo-93heik",
+      "title": "Welder liner and tip replacement",
+      "status": "Done",
+      "priority": "Low",
+      "assetId": "ast-welder",
+      "assigneeId": "per-riley",
+      "type": "Corrective",
+      "due": "2026-10-02",
+      "estHours": 0.5,
+      "description": ""
+    },
+    {
+      "id": "wo-1n0oc6",
+      "title": "Guard rail repair near dock",
+      "status": "In Progress",
+      "priority": "High",
+      "assetId": null,
+      "assigneeId": "per-miguel",
+      "type": "Safety",
+      "due": "2026-10-11",
+      "estHours": 3,
+      "description": "Forklift clipped the guard rail. Fabricate new bracket."
+    },
+    {
+      "id": "wo-2g13qw",
+      "title": "Coolant change - Lathe #1",
+      "status": "Backlog",
+      "priority": "Normal",
+      "assetId": "ast-lathe1",
+      "assigneeId": "per-dana",
+      "type": "Preventive",
+      "due": "2026-10-08",
+      "estHours": 2,
+      "description": "Sump cleaning overdue."
+    },
+    {
+      "id": "wo-xjzljj",
+      "title": "Calibrate torque wrenches",
+      "status": "Scheduled",
+      "priority": "Normal",
+      "assetId": null,
+      "assigneeId": "per-jo",
+      "type": "Inspection",
+      "due": "2026-10-20",
+      "estHours": 1,
+      "description": "Send out for ISO calibration."
+    }
+  ],
+  "schedule": [
+    {
+      "id": "pm-ei9nc0",
+      "task": "Change way lube & check lube lines",
+      "assetId": "ast-mill1",
+      "frequencyDays": 30,
+      "lastDone": "2026-09-05",
+      "assigneeId": "per-riley",
+      "priority": "Normal",
+      "notes": ""
+    },
+    {
+      "id": "pm-otflsv",
+      "task": "Compressor oil & separator service",
+      "assetId": "ast-compressor",
+      "frequencyDays": 90,
+      "lastDone": "2026-07-15",
+      "assigneeId": "per-miguel",
+      "priority": "High",
+      "notes": "Also check drain valve."
+    },
+    {
+      "id": "pm-dfsyhw",
+      "task": "Boiler water chemistry test",
+      "assetId": "ast-boiler",
+      "frequencyDays": 7,
+      "lastDone": "2026-10-09",
+      "assigneeId": "per-kim",
+      "priority": "High",
+      "notes": "Log results in boiler binder."
+    },
+    {
+      "id": "pm-wgtkwn",
+      "task": "Forklift LPG hose & leak check",
+      "assetId": "ast-forklift",
+      "frequencyDays": 60,
+      "lastDone": "2026-09-21",
+      "assigneeId": "per-kim",
+      "priority": "Normal",
+      "notes": ""
+    },
+    {
+      "id": "pm-cn8sf2",
+      "task": "Grease conveyor bearings",
+      "assetId": "ast-conveyor",
+      "frequencyDays": 30,
+      "lastDone": "2026-08-27",
+      "assigneeId": "per-miguel",
+      "priority": "Normal",
+      "notes": "Do once motor replaced."
+    },
+    {
+      "id": "pm-9h24bz",
+      "task": "Clean CNC chip conveyors",
+      "assetId": "ast-lathe1",
+      "frequencyDays": 14,
+      "lastDone": "2026-09-29",
+      "assigneeId": "per-dana",
+      "priority": "Normal",
+      "notes": ""
+    },
+    {
+      "id": "pm-a9u1nv",
+      "task": "HVAC filter replacement",
+      "assetId": "ast-boiler",
+      "frequencyDays": 90,
+      "lastDone": "2026-08-02",
+      "assigneeId": "per-jo",
+      "priority": "Normal",
+      "notes": "MERV 8, 4 filters."
+    },
+    {
+      "id": "pm-mn4ru3",
+      "task": "Thermal scan main panel",
+      "assetId": "ast-panel",
+      "frequencyDays": 365,
+      "lastDone": "2026-05-24",
+      "assigneeId": "per-sam",
+      "priority": "High",
+      "notes": "Hire licensed contractor."
+    },
+    {
+      "id": "pm-2drxz4",
+      "task": "Scissor lift annual inspection",
+      "assetId": "ast-forklift2",
+      "frequencyDays": 365,
+      "lastDone": "2025-12-15",
+      "assigneeId": "per-jo",
+      "priority": "Normal",
+      "notes": ""
+    },
+    {
+      "id": "pm-0kk4zs",
+      "task": "Check fire extinguisher charges",
+      "assetId": null,
+      "frequencyDays": 30,
+      "lastDone": "2026-09-16",
+      "assigneeId": "per-jo",
+      "priority": "High",
+      "notes": "All 14 stations."
+    }
+  ],
+  "parts": [
+    {
+      "id": "part-8n0r26",
+      "name": "Bearing 6208-2RS",
+      "sku": "BR-6208",
+      "qty": 2,
+      "minQty": 6,
+      "unit": "ea",
+      "location": "B12",
+      "vendorId": "ven-motion",
+      "cost": 18.4,
+      "category": "Bearings",
+      "notes": "For Lathe #2 spindle job."
+    },
+    {
+      "id": "part-1yjjk0",
+      "name": "V-Belt A-Section 4L440",
+      "sku": "BLT-4L440",
+      "qty": 11,
+      "minQty": 4,
+      "unit": "ea",
+      "location": "B14",
+      "vendorId": "ven-motion",
+      "cost": 7.25,
+      "category": "Belts",
+      "notes": ""
+    },
+    {
+      "id": "part-rxcqcg",
+      "name": "TECO 2HP Conveyor Motor",
+      "sku": "MTR-2HP-CV",
+      "qty": 0,
+      "minQty": 1,
+      "unit": "ea",
+      "location": "Floor",
+      "vendorId": "ven-elec",
+      "cost": 320,
+      "category": "Motors",
+      "notes": "On order, ETA 1 day."
+    },
+    {
+      "id": "part-0bifdu",
+      "name": "Way Lube ISO 68 (5 gal)",
+      "sku": "LUB-ISO68",
+      "qty": 3,
+      "minQty": 2,
+      "unit": "ea",
+      "location": "Lub locker",
+      "vendorId": "ven-lube",
+      "cost": 62,
+      "category": "Lubricants",
+      "notes": ""
+    },
+    {
+      "id": "part-0o1gho",
+      "name": "Carbide Insert CNMG 432",
+      "sku": "INS-CNMG432",
+      "qty": 40,
+      "minQty": 25,
+      "unit": "ea",
+      "location": "Drawer 3",
+      "vendorId": "ven-tools",
+      "cost": 9.1,
+      "category": "Tooling",
+      "notes": ""
+    },
+    {
+      "id": "part-ivontc",
+      "name": "Compressor Air Filter",
+      "sku": "FLT-AC-30",
+      "qty": 1,
+      "minQty": 3,
+      "unit": "ea",
+      "location": "B04",
+      "vendorId": "ven-grainger",
+      "cost": 44.5,
+      "category": "Filters",
+      "notes": ""
+    },
+    {
+      "id": "part-qecde0",
+      "name": "Contactor 40A 3P",
+      "sku": "CNT-40A",
+      "qty": 4,
+      "minQty": 2,
+      "unit": "ea",
+      "location": "B21",
+      "vendorId": "ven-elec",
+      "cost": 78,
+      "category": "Electrical",
+      "notes": ""
+    },
+    {
+      "id": "part-59xdfv",
+      "name": "Boiler Test Kit Reagent",
+      "sku": "CHM-BLR-KIT",
+      "qty": 1,
+      "minQty": 2,
+      "unit": "box",
+      "location": "Lab shelf",
+      "vendorId": "ven-grainger",
+      "cost": 130,
+      "category": "Chemical",
+      "notes": ""
+    },
+    {
+      "id": "part-vv0apm",
+      "name": "MERV 8 Filter 20x25",
+      "sku": "FLT-M8-2025",
+      "qty": 8,
+      "minQty": 6,
+      "unit": "ea",
+      "location": "Mezz",
+      "vendorId": "ven-grainger",
+      "cost": 12,
+      "category": "Filters",
+      "notes": ""
+    },
+    {
+      "id": "part-tn9whe",
+      "name": "MIG Contact Tips 0.035",
+      "sku": "TIPS-035",
+      "qty": 25,
+      "minQty": 10,
+      "unit": "ea",
+      "location": "Drawer 7",
+      "vendorId": "ven-grainger",
+      "cost": 1.6,
+      "category": "Welding",
+      "notes": ""
+    },
+    {
+      "id": "part-50ls0e",
+      "name": "LPG Hose 1/4in",
+      "sku": "HOSE-LPG-14",
+      "qty": 2,
+      "minQty": 1,
+      "unit": "ft",
+      "location": "B09",
+      "vendorId": "ven-grainger",
+      "cost": 4.2,
+      "category": "Hose",
+      "notes": ""
+    },
+    {
+      "id": "part-7q7tmt",
+      "name": "Flood Coolant 5gal",
+      "sku": "COOL-FLOOD5",
+      "qty": 4,
+      "minQty": 2,
+      "unit": "ea",
+      "location": "Lub locker",
+      "vendorId": "ven-lube",
+      "cost": 88,
+      "category": "Coolant",
+      "notes": ""
+    }
+  ],
+  "resources": [
+    {
+      "id": "res-jxvi22",
+      "title": "Lathe #2 Service Manual",
+      "type": "Manual",
+      "url": "\\\\FILESRV\\shop\\manuals\\okuma-lb3000.pdf",
+      "category": "CNC",
+      "owner": "Maintenance",
+      "notes": "Rev C, includes spindle torque specs."
+    },
+    {
+      "id": "res-h5gtbk",
+      "title": "Compressor Maintenance Log",
+      "type": "Document",
+      "url": "\\\\FILESRV\\shop\\logs\\compressor-2026.xlsx",
+      "category": "Facility",
+      "owner": "Miguel",
+      "notes": "Update after every service."
+    },
+    {
+      "id": "res-r9zouh",
+      "title": "Lockout / Tagout Procedure",
+      "type": "SOP",
+      "url": "\\\\FILESRV\\shop\\sops\\LOTO-001.pdf",
+      "category": "Safety",
+      "owner": "Safety Committee",
+      "notes": "Required reading for all new hires."
+    },
+    {
+      "id": "res-9mze6x",
+      "title": "Boiler Inspection Certificate",
+      "type": "Document",
+      "url": "\\\\FILESRV\\shop\\compliance\\boiler-cert.pdf",
+      "category": "Compliance",
+      "owner": "Jo Ramirez",
+      "notes": "Renews each year. Posted in boiler room."
+    },
+    {
+      "id": "res-h0f2zk",
+      "title": "Preventive Maintenance Calendar",
+      "type": "Folder",
+      "url": "\\\\FILESRV\\shop\\pm",
+      "category": "Planning",
+      "owner": "Planner",
+      "notes": "Master PM schedule and checklists."
+    },
+    {
+      "id": "res-69rbm0",
+      "title": "Spare Parts Suppliers",
+      "type": "Link",
+      "url": "https://motion.example/account",
+      "category": "Procurement",
+      "owner": "Purchasing",
+      "notes": "Net-30 login required."
+    },
+    {
+      "id": "res-g6jxys",
+      "title": "Electrical Panel Thermal Reports",
+      "type": "Folder",
+      "url": "\\\\FILESRV\\shop\\electrical\\scans",
+      "category": "Electrical",
+      "owner": "Sam Chen",
+      "notes": "Annual IR scan images by year."
+    },
+    {
+      "id": "res-0i12mk",
+      "title": "Forklift Safe Operation Video",
+      "type": "Video",
+      "url": "\\\\FILESRV\\shop\\training\\forklift-safety.mp4",
+      "category": "Training",
+      "owner": "Safety Committee",
+      "notes": "Show to new operators."
+    }
+  ],
+  "activity": [
+    {
+      "id": "act-mv4b4dpy46l3",
+      "at": "2026-10-11T21:00:07.414Z",
+      "actor": "cleanup",
+      "text": "Deleted work order \"SSE Live Sync Check\""
+    },
+    {
+      "id": "act-mv4b498cm8su",
+      "at": "2026-10-11T21:00:01.596Z",
+      "actor": "Network Test",
+      "text": "Added work order \"SSE Live Sync Check\""
+    },
+    {
+      "id": "act-ry3qsj",
+      "at": "2026-10-11T20:59:18.678Z",
+      "actor": "system",
+      "text": "Database seeded with sample shop data"
+    }
+  ]
+}
