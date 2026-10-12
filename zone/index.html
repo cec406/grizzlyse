@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ZONE PDA // Говори, Сталкер</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Russo+One&display=swap" rel="stylesheet">
+<style>
+:root{--a:#ffb000;--g:#7dff6a;--r:#ff3b30;--bg:#070706;--dmg:0;--fog:0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;cursor:crosshair}
+html,body{height:100%;margin:0}
+body{background:radial-gradient(ellipse at 50% 120%,#2e1c00 0,#070706 62%);color:var(--a);font-family:'Share Tech Mono','Courier New',monospace;overflow:hidden;font-size:1rem}
+#bg{position:fixed;inset:0;z-index:0}
+#pda{position:relative;z-index:1;max-width:900px;height:100%;margin:0 auto;padding:10px;display:flex;flex-direction:column;gap:8px}
+#pda.shake{animation:shake .4s}
+.frame{border:2px solid var(--a);box-shadow:0 0 18px rgba(255,176,0,.35),inset 0 0 40px rgba(255,176,0,.08);background:rgba(10,8,4,.84);padding:12px}
+#top{display:flex;justify-content:space-between;gap:8px;font-family:'Russo One',sans-serif;letter-spacing:2px;font-size:.85rem}
+#top .t{animation:glitch 6s infinite}
+#hud{display:grid;grid-template-columns:1fr 1fr auto auto;gap:14px;align-items:center;font-size:.8rem;text-transform:uppercase}
+.bar{height:10px;border:1px solid var(--a);margin-top:3px;background:#120c00}
+.bar i{display:block;height:100%;transition:width .3s}
+#hp{background:var(--r);box-shadow:0 0 8px var(--r)}
+#fl{background:var(--g);box-shadow:0 0 8px var(--g)}
+.warn{animation:pulse .6s infinite}
+#main{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+#story{font-size:1.1rem;line-height:1.55;min-height:5.4em}
+.lbl{font-size:.75rem;letter-spacing:2px;text-transform:uppercase;opacity:.7;margin-bottom:6px}
+#vocab{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+#vocab .lbl{grid-column:1/-1;margin:0}
+button{background:transparent;border:1px solid var(--a);color:var(--a);font-family:inherit;font-size:1rem;padding:10px;transition:.15s;text-align:left}
+button:hover:not(:disabled){background:var(--a);color:#000;box-shadow:0 0 14px var(--a)}
+button:disabled{opacity:.25}
+.card{display:flex;flex-direction:column;gap:2px}
+.card b{font-size:1.25rem;font-weight:400}
+.card i{font-style:normal;color:var(--g);font-size:.85rem}
+.card span{opacity:.75;font-size:.85rem}
+.card:hover i{color:#000}
+.norom .rm{display:none}
+.go{font-family:'Russo One',sans-serif;letter-spacing:2px;text-align:center;border-width:2px;padding:12px 18px}
+.big{font-size:1.4rem;padding:18px;width:100%;text-align:center;font-family:'Russo One',sans-serif;border-style:dashed}
+.opts{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px}
+.opt.bad{border-color:var(--r);color:var(--r);animation:shake .4s}
+.opt.good{background:var(--g);color:#000;border-color:var(--g)}
+.slots{min-height:54px;border:1px dashed var(--a);padding:8px;display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.tile{font-size:1.15rem}
+.tile.on{background:rgba(255,176,0,.18)}
+.ph{opacity:.4;font-size:.85rem;align-self:center}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.prompt{font-size:1.05rem;border-left:3px solid var(--g);padding-left:10px;color:var(--g)}
+.good{color:var(--g)}
+.bad{color:var(--r)}
+#fb .tip{margin-top:8px;opacity:.85;font-size:.95rem;border-top:1px dashed var(--a);padding-top:8px}
+#fb .rev{margin-top:6px;font-size:1.2rem}
+#foot{display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;padding:8px 12px}
+#foot button{padding:6px 10px;font-size:.8rem}
+#ov{position:fixed;inset:0;z-index:9;background:rgba(5,4,2,.96);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+#ov.hide{display:none}
+#ovb{max-width:640px;width:100%;text-align:center}
+#ovb h1{font-family:'Russo One',sans-serif;font-size:clamp(2rem,9vw,3.6rem);margin:0 0 6px;letter-spacing:4px;text-shadow:0 0 18px var(--a),3px 0 var(--r),-3px 0 #00e5ff;animation:glitch 4s infinite}
+#ovb p{line-height:1.6;opacity:.9}
+.cx{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;text-align:left;margin:14px 0}
+.lock{opacity:.3;border-style:dotted}
+#vig{position:fixed;inset:0;z-index:4;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(255,0,0,calc(var(--dmg)*.7)) 100%),radial-gradient(ellipse at center,transparent 35%,rgba(190,230,210,var(--fog)) 100%)}
+#scan{position:fixed;inset:0;z-index:5;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.3) 0 1px,transparent 1px 3px);animation:fl .12s infinite}
+#scan::after{content:"";position:absolute;left:0;right:0;height:90px;background:linear-gradient(transparent,rgba(255,176,0,.07),transparent);animation:roll 7s linear infinite}
+@keyframes fl{0%{opacity:.85}50%{opacity:1}100%{opacity:.88}}
+@keyframes roll{from{top:-90px}to{top:100%}}
+@keyframes pulse{50%{opacity:.35}}
+@keyframes shake{20%{transform:translate(-6px,2px)}40%{transform:translate(6px,-3px)}60%{transform:translate(-4px,0)}80%{transform:translate(3px,2px)}}
+@keyframes glitch{0%,92%,100%{transform:none}93%{transform:translate(-3px,1px);filter:hue-rotate(60deg)}95%{transform:translate(4px,-1px)}97%{transform:translate(-2px,0)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+@media(max-width:560px){#hud{grid-template-columns:1fr 1fr}}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--a)}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div id="pda">
+  <div id="top" class="frame"><span class="t">ZONE PDA // ГОВОРИ</span><span id="loc">—</span><span id="prog"></span></div>
+  <div id="hud" class="frame">
+    <div>Integrity<div class="bar"><i id="hp" style="width:100%"></i></div></div>
+    <div id="flw">Filter<div class="bar"><i id="fl" style="width:100%"></i></div></div>
+    <div>Rounds <b id="rd">0</b></div>
+    <div>Streak <b id="sk">0</b></div>
+  </div>
+  <div id="main" class="frame">
+    <div id="story"></div>
+    <div id="vocab"></div>
+    <div id="task"></div>
+    <div id="fb"></div>
+    <div id="act" class="row"></div>
+  </div>
+  <div id="foot" class="frame">
+    <button id="bmap">Map</button>
+    <button id="bcx">Codex <span id="cc">0</span></button>
+    <button id="brom">Romanize: on</button>
+    <button id="bslow">Slow voice: off</button>
+    <button id="bsnd">Sound: on</button>
+  </div>
+</div>
+<div id="vig"></div><div id="scan"></div>
+<div id="ov"><div id="ovb"></div></div>
+
+<script>
+/* SCENE DATA
+   v: briefing vocab [ru, roman, en]   t: L=listen, S=say, B=build
+   r: target phrase [ru, roman, en]    o: options    c: correct index   x: extra decoy tiles */
+const S=[
+{l:"КПП // CHECKPOINT",s:"Rain hisses on a rusted gate. A guard in a cracked gas mask levels a machine gun at your chest and barks at you.",
+ v:[["Стой!","Stoy!","Stop!"],["Кто ты?","Kto ty?","Who are you?"],["Привет","Privet","Hello"]],
+ t:"L",r:["Стой! Кто ты?","Stoy! Kto ty?","Stop! Who are you?"],o:["Stop! Who are you?","Hello! Where are you going?","Help! Who is there?"],c:0,
+ tip:"Listen for the hard «Стой» (stoy) first — it's the word that keeps you alive."},
+{l:"КПП // CHECKPOINT",s:"The guard lowers the gun a few centimetres. «Кто ты?» he repeats. Your answer decides whether you walk in or get shot.",
+ v:[["Я здесь, чтобы помочь.","Ya zdesʼ, chtoby pomochʼ","I am here to help."],["Деньги","Denʼgi","Money"]],
+ t:"S",q:"Tell the guard: “I am here to help.”",r:["Я здесь, чтобы помочь.","Ya zdesʼ, chtoby pomochʼ","I am here to help."],
+ o:[["Я здесь, чтобы помочь.","Ya zdesʼ, chtoby pomochʼ"],["Где деньги?","Gde denʼgi? (Where's the money?)"],["Я хочу уйти.","Ya khochu uyti. (I want to leave.)"]],c:0,
+ tip:"Russian drops “am/is/are” in the present tense: «Я здесь» = “I (am) here”."},
+{l:"СЕРАЯ ЗОНА // GREY ZONE",s:"Past the gate, ash drifts like snow. A wounded stalker slumps against a burnt-out van, clutching his side. He wheezes something at you.",
+ v:[["Помощь!","Pomoshchʼ!","Help!"],["Вода","Voda","Water"],["Мне нужна вода","Mne nuzhna voda","I need water"]],
+ t:"L",r:["Мне нужна вода","Mne nuzhna voda","I need water"],o:["I need water","I need a doctor","I need money"],c:0,
+ tip:"«Нужна» changes with gender: нужен (m), нужна (f), нужно (n). «Вода» is feminine, so → нужна."},
+{l:"СЕРАЯ ЗОНА // GREY ZONE",s:"You unscrew your canteen. Time to hand it over the way a real stalker would.",
+ v:[["Вот","Vot","Here is"],["Друг","Drug","Friend"],["Враг","Vrag","Enemy"]],
+ t:"B",q:"Build: “Here is water, friend.”",r:["Вот вода, друг","Vot voda, drug","Here is water, friend"],x:["враг"],
+ tip:"Word order is simple here: «Вот» (here is) + thing + «друг» (friend). «Враг» means enemy — don't say that."},
+{l:"СЕРАЯ ЗОНА // GREY ZONE",s:"He drinks, coughs, and presses a crumpled map into your palm. «Спасибо, друг,» he whispers. Then he grabs your sleeve and points the other way.",
+ v:[["Спасибо","Spasibo","Thank you"],["Опасно","Opasno","Dangerous"],["Не иди туда","Ne idi tuda","Don't go there"]],
+ t:"L",r:["Опасно! Не иди туда!","Opasno! Ne idi tuda!","Dangerous! Don't go there!"],o:["Dangerous! Don't go there!","Quiet! Go home!","Careful! Come here!"],c:0,
+ tip:"«Не» before a verb = “don't”. «Не иди» = “don't go”. Useful everywhere in the Zone."},
+{l:"МЕТРО // STATION",s:"The map leads you to a collapsed metro entrance. Lanterns flicker below. A sentry waves his arm in the gloom, shouting directions.",
+ v:[["Налево","Nalevo","Left"],["Направо","Napravo","Right"],["Прямо","Pryamo","Straight"]],
+ t:"L",r:["Направо!","Napravo!","Right!"],o:["Right!","Left!","Straight!"],c:0,
+ tip:"«Право» (pravo) is the root of “right”. «Лево» (levo) is left. Add «на-» to make “to the right/left”."},
+{l:"МЕТРО // MARKET",s:"Deep underground, a trader sits behind a crate of tins and tools. Military-grade rounds are the only currency. You want to know the price of a gas filter.",
+ v:[["Сколько стоит?","Skolʼko stoit?","How much is it?"],["Фильтр","Filʼtr","Filter"],["Патроны","Patrony","Rounds (ammo)"]],
+ t:"S",q:"Ask the trader: “How much does it cost?”",r:["Сколько стоит?","Skolʼko stoit?","How much does it cost?"],
+ o:[["Кто ты?","Kto ty? (Who are you?)"],["Сколько стоит?","Skolʼko stoit?"],["Стой!","Stoy! (Stop!)"]],c:1,
+ tip:"«Сколько» = how much/many. «Стоит» = costs. You will use this every time you trade."},
+{l:"МЕТРО // MARKET",s:"He squints, taps the crate, and holds up some fingers: «Три патрона.»",
+ v:[["Один","Odin","One"],["Два","Dva","Two"],["Три","Tri","Three"]],
+ t:"L",r:["Три патрона","Tri patrona","Three rounds"],o:["Three rounds","Two rounds","One round"],c:0,
+ tip:"Numbers 2–4 make the noun sound different: два/три + «патрона». Five or more: «пять патронов»."},
+{l:"МЕТРО // MARKET",s:"Deal. You slide the rounds across the crate. Now ask for what you actually came for.",
+ v:[["Мне нужен","Mne nuzhen","I need (masc.)"],["Фильтр","Filʼtr","Filter"]],
+ t:"B",q:"Build: “I need a filter.”",r:["Мне нужен фильтр","Mne nuzhen filʼtr","I need a filter"],x:["нужна"],
+ tip:"«Фильтр» is masculine, so it takes «нужен». Earlier «вода» was feminine and took «нужна»."},
+{l:"ТОННЕЛЬ // TUNNEL",s:"Your lantern dies. The tunnel swallows the light. Somewhere ahead, claws scrape concrete.",
+ v:[["Свет","Svet","Light"],["Темно","Temno","It is dark"],["Тихо!","Tikho!","Quiet!"]],
+ t:"L",r:["Тихо! Темно!","Tikho! Temno!","Quiet! It's dark!"],o:["Quiet! It's dark!","Run! It's cold!","Stop! It's dangerous!"],c:0,
+ tip:"The «х» in «тихо» is a rough throat sound, like “loch” in Scottish English."},
+{l:"ТОННЕЛЬ // TUNNEL",s:"A mutant lunges from the dark. Your partner freezes, rifle shaking. You have one second to shout.",
+ v:[["Бежим!","Bezhim!","Let's run!"],["Не стреляй!","Ne strelyay!","Don't shoot!"],["Назад","Nazad","Back"]],
+ t:"S",q:"Shout to your partner: “Let's run!”",r:["Бежим!","Bezhim!","Let's run!"],
+ o:[["Спасибо.","Spasibo. (Thank you.)"],["Бежим!","Bezhim!"],["Привет.","Privet. (Hello.)"]],c:1,
+ tip:"«Бежим» is the “let's” form of “to run”. Short commands save lives."},
+{l:"ВЫХОД // EXIT",s:"You outrun the beast and stumble into a corridor with a faint green sign. Your partner is limping, but alive.",
+ v:[["Где","Gde","Where"],["Выход","Vykhod","Exit"],["Домой","Domoy","Home"]],
+ t:"B",q:"Build: “Where is the exit, friend?”",r:["Где выход, друг?","Gde vykhod, drug?","Where is the exit, friend?"],x:["домой"],
+ tip:"Again no “is”: «Где выход?» = “Where (is the) exit?”"},
+{l:"УБЕЖИЩЕ // SAFE HOUSE",s:"Surface air. Dawn bleeds over the ruins. You made it out, but the radio crackles with fresh coordinates: the dead city, and someone there who wants to talk.",
+ v:[["Победа!","Pobeda!","Victory!"],["Мы идём домой","My idyom domoy","We are going home"]],
+ t:"L",r:["Мы идём домой!","My idyom domoy!","We are going home!"],o:["We are going home!","We are going to the market!","We are lost!"],c:0,
+ tip:"«Идём» = “we go”. «Домой» = “(to) home”. You made it out."},
+{l:"ПРИПЯТЬ // DEAD CITY",s:"A rusted Ferris wheel creaks over an empty square. A woman in a patched coat steps from a doorway, rifle slung low, and studies you.",
+ v:[["Как тебя зовут?","Kak tebya zovut?","What's your name?"],["Меня зовут…","Menya zovut…","My name is…"],["Очень приятно","Ochenʼ priyatno","Nice to meet you"]],
+ t:"L",r:["Как тебя зовут?","Kak tebya zovut?","What's your name?"],o:["What's your name?","Where are you from?","How much is it?"],c:0,
+ tip:"Literally «Как тебя зовут?» is “How do they call you?”. That is how Russians ask for a name."},
+{l:"ПРИПЯТЬ // DEAD CITY",s:"She waits. «Очень приятно» only comes after you give a name.",
+ v:[["Меня зовут Саша","Menya zovut Sasha","My name is Sasha"],["Я не знаю","Ya ne znayu","I don't know"]],
+ t:"S",q:"Introduce yourself: “My name is Sasha.”",r:["Меня зовут Саша.","Menya zovut Sasha.","My name is Sasha."],
+ o:[["Меня зовут Саша.","Menya zovut Sasha."],["Как тебя зовут?","Kak tebya zovut? (What's your name?)"],["Я не знаю.","Ya ne znayu. (I don't know.)"]],c:0,
+ tip:"Once you know «меня зовут», you can drop any name after it."},
+{l:"ПРИПЯТЬ // DEAD CITY",s:"Her reply is a blur of syllables. Time to slow her down.",
+ v:[["Говори медленно","Govori medlenno","Speak slowly"],["Повтори","Povtori","Repeat"],["Пожалуйста","Pozhaluysta","Please"]],
+ t:"B",q:"Build: “Speak slowly, please.”",r:["Говори медленно, пожалуйста","Govori medlenno, pozhaluysta","Speak slowly, please"],x:["быстро"],
+ tip:"«Быстро» means fast. «Пожалуйста» means please, and also “you're welcome”."},
+{l:"ПРИПЯТЬ // CELLAR",s:"She leads you into a cellar of crates and a kerosene stove. «У меня есть хлеб и консервы,» she says, and starts cooking.",
+ v:[["У меня есть","U menya yestʼ","I have"],["Хлеб","Khleb","Bread"],["Консервы","Konservy","Canned food"]],
+ t:"L",r:["У меня есть хлеб и консервы","U menya yestʼ khleb i konservy","I have bread and canned food"],o:["I have bread and canned food","I need bread and water","Where is the bread and food?"],c:0,
+ tip:"«У меня есть» is literally “by me there is”. That is how Russian says “I have”."},
+{l:"ПРИПЯТЬ // CELLAR",s:"Her partner lies on a cot, burning with fever. You need a medic, fast.",
+ v:[["Врач","Vrachʼ","Doctor"],["Где врач?","Gde vrachʼ?","Where is the doctor?"],["Больно","Bolʼno","It hurts"]],
+ t:"S",q:"Ask: “Where is the doctor?”",r:["Где врач?","Gde vrachʼ?","Where is the doctor?"],
+ o:[["Где врач?","Gde vrachʼ?"],["Где вода?","Gde voda? (Where is the water?)"],["Где выход?","Gde vykhod? (Where is the exit?)"]],c:0,
+ tip:"«Где» + a noun is the pattern for every “where is…?” question."},
+{l:"РЕАКТОР // THE REACTOR",s:"The sarcophagus looms. A blast door seals the entrance. A voice crackles from a speaker grille: «Дверь закрыта.»",
+ v:[["Дверь","Dverʼ","Door"],["Закрыта","Zakryta","Closed"],["Открой","Otkroy","Open!"]],
+ t:"L",r:["Дверь закрыта","Dverʼ zakryta","The door is closed"],o:["The door is closed","The door is open","The door is broken"],c:0,
+ tip:"«Закрыта» is feminine to match «дверь». Adjectives follow the noun's gender."},
+{l:"РЕАКТОР // THE REACTOR",s:"You bang on the steel. The speaker waits for you to ask politely.",
+ v:[["Открой дверь","Otkroy dverʼ","Open the door"]],
+ t:"B",q:"Build: “Open the door, please.”",r:["Открой дверь, пожалуйста","Otkroy dverʼ, pozhaluysta","Open the door, please"],x:["закрыта"],
+ tip:"«Открой» is a command. Add «пожалуйста» and the warden might actually listen."},
+{l:"РЕАКТОР // CORE",s:"The door grinds open. A warden in a hazmat suit demands: «Ты один?»",
+ v:[["Ты один?","Ty odin?","Are you alone?"],["Нас двое","Nas dvoe","There are two of us"]],
+ t:"S",q:"Tell him: “There are two of us.”",r:["Нас двое.","Nas dvoe.","There are two of us."],
+ o:[["Нас двое.","Nas dvoe."],["Я один.","Ya odin. (I am alone.)"],["Три патрона.","Tri patrona. (Three rounds.)"]],c:0,
+ tip:"«Нас двое» is literally “of-us two”. «Нас трое» would mean three of us."},
+{l:"РЕАКТОР // CORE",s:"The warden sighs, steps aside and lifts the last barrier. Beyond it lies the way out of the Zone. «До свидания, сталкер.»",
+ v:[["До свидания","Do svidaniya","Goodbye"],["Сталкер","Stalker","Stalker"]],
+ t:"L",r:["До свидания, сталкер!","Do svidaniya, stalker!","Goodbye, stalker!"],o:["Goodbye, stalker!","Hello, stalker!","Thank you, stalker!"],c:0,
+ tip:"«До свидания» literally means “until we meet again”. Fitting for the Zone."}
+];
+
+const $=id=>document.getElementById(id);
+const sh=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const VOC=[];S.forEach(s=>s.v.forEach(w=>{if(!VOC.find(x=>x[0]==w[0]))VOC.push(w)}));
+let st={i:0,hp:100,fl:100,rd:0,streak:0,ok:0,tot:0,phase:'brief',mute:false,slow:false};
+const CH=[["I · THE GATE",0,4],["II · THE METRO",5,8],["III · THE TUNNEL",9,12],["IV · THE DEAD CITY",13,17],["V · THE REACTOR",18,21]];
+let unlocked=0;try{unlocked=+localStorage.getItem('zpda_ch')||0}catch(e){}
+const chOf=i=>CH.findIndex(c=>i>=c[1]&&i<=c[2]);
+let codex=new Set(),tw,tick;
+try{JSON.parse(localStorage.getItem('zpda')||'[]').forEach(x=>codex.add(x))}catch(e){}
+const save=()=>{try{localStorage.setItem('zpda',JSON.stringify([...codex]))}catch(e){}$('cc').textContent=codex.size+'/'+VOC.length};
+
+/* AUDIO: ambient drone, geiger counter, sfx */
+let AC,amb;
+function initAudio(){
+  if(AC)return;
+  try{
+    AC=new(window.AudioContext||window.webkitAudioContext)();
+    const n=AC.sampleRate*2,b=AC.createBuffer(1,n,AC.sampleRate),d=b.getChannelData(0);let l=0;
+    for(let i=0;i<n;i++){l=(l+.02*(Math.random()*2-1))/1.02;d[i]=l*3.5}
+    const src=AC.createBufferSource();src.buffer=b;src.loop=true;
+    const f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=180;
+    amb=AC.createGain();amb.gain.value=.5;
+    src.connect(f);f.connect(amb);amb.connect(AC.destination);src.start();
+  }catch(e){AC=null}
+}
+function tone(fq,du,ty,v,delay){
+  if(!AC||st.mute)return;
+  const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+(delay||0);
+  o.type=ty;o.frequency.value=fq;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+du);
+  o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+du);
+}
+setInterval(()=>{
+  if(!AC||st.mute)return;
+  const rad=Math.max(0,100-st.hp)*.6+(st.fl<25?30:0);
+  if(Math.random()<.03+rad/200)tone(1500+Math.random()*900,.012,'square',.05);
+},80);
+const sfxOk=()=>{tone(660,.12,'square',.07);tone(990,.18,'square',.07,.1)};
+const sfxBad=()=>{tone(110,.35,'sawtooth',.12)};
+
+/* SPEECH */
+let voices=[];
+if('speechSynthesis' in window){const lv=()=>voices=speechSynthesis.getVoices();lv();speechSynthesis.onvoiceschanged=lv}
+function say(t){
+  if(!('speechSynthesis' in window)||st.mute)return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);u.lang='ru-RU';u.rate=st.slow?.55:.88;
+  const v=voices.find(v=>v.lang.toLowerCase().startsWith('ru'));if(v)u.voice=v;
+  speechSynthesis.speak(u);
+}
+
+/* HUD + FX */
+function hud(){
+  const R=document.documentElement.style;
+  $('hp').style.width=Math.max(0,st.hp)+'%';$('fl').style.width=st.fl+'%';
+  $('rd').textContent=st.rd;$('sk').textContent=st.streak;
+  R.setProperty('--dmg',(100-Math.max(0,st.hp))/100);
+  R.setProperty('--fog',st.fl<40?(40-st.fl)/40*.55:0);
+  $('flw').classList.toggle('warn',st.fl<25);
+}
+function shake(){const p=$('pda');p.classList.remove('shake');void p.offsetWidth;p.classList.add('shake')}
+function typeOut(el,txt){clearInterval(tw);el.textContent='';let i=0;tw=setInterval(()=>{el.textContent=txt.slice(0,++i);if(i>=txt.length)clearInterval(tw)},14)}
+function overlay(html){$('ovb').innerHTML=html;$('ov').classList.remove('hide')}
+const closeOv=()=>$('ov').classList.add('hide');
+
+/* GAME FLOW */
+function showScene(){
+  const s=S[st.i];st.phase='brief';
+  $('loc').textContent=s.l;$('prog').textContent='CH'+(chOf(st.i)+1)+' · '+(st.i+1)+'/'+S.length;
+  typeOut($('story'),s.s);
+  $('fb').innerHTML='';$('task').innerHTML='';
+  $('vocab').style.display='';
+  $('vocab').innerHTML='<div class="lbl">// Intel briefing — tap a card to hear it</div>'+s.v.map((w,k)=>`<button class="card" data-k="${k}"><b>${w[0]}</b><i class="rm">${w[1]}</i><span>${w[2]}</span></button>`).join('');
+  $('vocab').querySelectorAll('.card').forEach(b=>b.onclick=()=>{const w=s.v[b.dataset.k];say(w[0]);codex.add(w[0]);save()});
+  $('act').innerHTML='<button class="go" id="go">▶ ENGAGE</button>';
+  $('go').onclick=startChal;
+  hud();
+}
+function startChal(){
+  const s=S[st.i];st.phase='chal';
+  s.v.forEach(w=>codex.add(w[0]));save();
+  $('vocab').style.display='none';$('fb').innerHTML='';
+  const task=$('task');
+  $('act').innerHTML='<button id="hint">💡 Hint (−5 filter)</button>';
+  $('hint').onclick=()=>{st.fl=Math.max(0,st.fl-5);hud();$('vocab').style.display='';$('hint').disabled=true};
+  if(s.t=='L'){
+    task.innerHTML='<div class="lbl">// Intercepted transmission — what was said?</div><button class="big" id="play">🔊 Play signal</button><div class="opts" id="opts"></div>';
+    $('play').onclick=()=>say(s.r[0]);
+    mkOpts(sh(s.o.map((x,i)=>({a:x,ok:i==s.c}))),false);
+    setTimeout(()=>say(s.r[0]),500);
+  }else if(s.t=='S'){
+    task.innerHTML=`<div class="prompt">${s.q}</div><div class="opts" id="opts"></div>`;
+    mkOpts(sh(s.o.map((x,i)=>({a:x[0],rm:x[1],ok:i==s.c}))),true);
+  }else mkBuild(s,task);
+  clearInterval(tick);
+  tick=setInterval(()=>{
+    st.fl=Math.max(0,st.fl-.2);
+    if(st.fl<=0)st.hp-=.5;
+    hud();if(st.hp<=0)die();
+  },250);
+}
+function mkOpts(list,ru){
+  $('opts').innerHTML=list.map((o,i)=>`<button class="opt" data-i="${i}">${ru?`<b>${o.a}</b><br><i class="rm" style="font-style:normal;color:var(--g);font-size:.85rem">${o.rm}</i>`:o.a}</button>`).join('');
+  $('opts').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    const o=list[b.dataset.i];
+    if(ru)say(o.a);
+    b.classList.add(o.ok?'good':'bad');
+    if(!o.ok)b.disabled=true;
+    answer(o.ok);
+  });
+}
+function mkBuild(s,task){
+  const words=s.r[0].replace(/[.,!?]/g,'').split(' ');
+  const tiles=sh([...words,...s.x]);let sel=[];
+  task.innerHTML=`<div class="prompt">${s.q}</div><div class="slots" id="slots"></div><div class="tiles" id="tiles"></div><div class="row"><button id="clr">Clear</button><button class="go" id="sub">Submit</button></div>`;
+  const draw=()=>{
+    $('slots').innerHTML=sel.length?sel.map((j,k)=>`<button class="tile on" data-k="${k}">${tiles[j]}</button>`).join(''):'<span class="ph">Tap the words in order…</span>';
+    $('tiles').innerHTML=tiles.map((w,j)=>`<button class="tile" data-j="${j}" ${sel.includes(j)?'disabled':''}>${w}</button>`).join('');
+    $('slots').querySelectorAll('.tile').forEach(b=>b.onclick=()=>{sel.splice(b.dataset.k,1);draw()});
+    $('tiles').querySelectorAll('.tile').forEach(b=>b.onclick=()=>{sel.push(+b.dataset.j);say(tiles[b.dataset.j]);draw()});
+  };
+  draw();
+  $('clr').onclick=()=>{sel=[];draw()};
+  $('sub').onclick=()=>{if(st.phase!=='chal'||!sel.length)return;answer(sel.map(j=>tiles[j]).join(' ')==words.join(' '))};
+}
+function answer(ok){
+  if(st.phase!=='chal')return;
+  clearInterval(tick);st.phase='res';st.tot++;
+  const s=S[st.i];let g=0;
+  if(ok){
+    st.ok++;st.streak++;g=10+Math.min(st.streak-1,5)*2;
+    st.rd+=g;st.fl=Math.min(100,st.fl+15);sfxOk();
+    $('fb').innerHTML=`<div class="good">✔ SIGNAL CONFIRMED +${g} RDS</div><div class="rev"><b>${s.r[0]}</b> <i class="rm" style="font-style:normal;color:var(--g)">(${s.r[1]})</i><br>${s.r[2]}</div><div class="tip">${s.tip}</div>`;
+    setTimeout(()=>say(s.r[0]),350);
+    const last=st.i==CH[chOf(st.i)][2];
+    $('act').innerHTML=`<button class="go" id="nx">${last?'▶ BLOWOUT INCOMING':'▶ ADVANCE'}</button>`;
+    $('nx').onclick=()=>{if(last)blowout();else{st.i++;showScene()}};
+  }else{
+    st.streak=0;st.hp-=20;st.fl=Math.max(0,st.fl-10);sfxBad();shake();
+    $('fb').innerHTML=`<div class="bad">✖ HIT TAKEN — INTEGRITY −20</div><div class="tip">${s.tip}</div>`;
+    $('act').innerHTML='<button class="go" id="rt">↻ RETRY</button>';
+    $('rt').onclick=startChal;
+    if(st.hp<=0){die();return}
+  }
+  hud();
+}
+function blowout(){
+  st.phase='blow';const ch=chOf(st.i);
+  const pool=sh(VOC.filter(w=>codex.has(w[0])&&S.findIndex(s=>s.v.includes(w))<=CH[ch][2])).slice(0,4);
+  let k=0,got=0;
+  const fin=()=>{
+    unlocked=Math.max(unlocked,ch+1);try{localStorage.setItem('zpda_ch',unlocked)}catch(e){}
+    if(ch>=CH.length-1)return win();
+    overlay(`<h1 class="good">${CH[ch][0]}<br>CLEARED</h1><p>Blowout survived: ${got}/${pool.length} · Rounds ${st.rd}</p><div class="row" style="justify-content:center"><button class="go" id="nc">▶ NEXT: ${CH[ch+1][0]}</button><button class="go" id="mp">MAP</button></div>`);
+    $('nc').onclick=()=>{st.i=CH[ch+1][1];st.hp=Math.min(100,st.hp+30);st.fl=100;closeOv();showScene()};
+    $('mp').onclick=levelSelect;
+  };
+  const next=()=>{
+    if(k>=pool.length)return fin();
+    const w=pool[k++],ans=sh([w[2],...sh(VOC.filter(x=>x!==w&&x[2]!==w[2])).slice(0,2).map(x=>x[2])]);
+    let t=7,done=false;
+    overlay(`<h1 class="bad">BLOWOUT</h1><div class="lbl">Emission wave incoming ${k}/${pool.length}. Name the word before it hits.</div><button class="big" id="pl">🔊 Play</button><div class="bar"><i id="tb" style="width:100%;background:var(--r)"></i></div><div class="opts">${ans.map(a=>`<button class="opt">${a}</button>`).join('')}</div>`);
+    const res=ok=>{if(done)return;done=true;clearInterval(iv);$('pl').textContent=w[0]+' = '+w[2];if(ok){got++;st.rd+=25;st.fl=Math.min(100,st.fl+10);sfxOk()}else{st.hp-=10;sfxBad();shake()}hud();if(st.hp<=0)return die();setTimeout(next,900)};
+    const iv=setInterval(()=>{t-=.1;$('tb').style.width=(t/7*100)+'%';if(t<=0)res(false)},100);
+    $('pl').onclick=()=>say(w[0]);
+    $('ovb').querySelectorAll('.opt').forEach(b=>b.onclick=()=>res(b.textContent==w[2]));
+    say(w[0]);tone(90,.6,'sawtooth',.1);
+  };
+  next();
+}
+function levelSelect(){
+  overlay(`<h1 style="font-size:2rem">SELECT SECTOR</h1><div class="opts">${CH.map((c,i)=>`<button class="go" style="text-align:left" data-i="${i}" ${i>unlocked?'disabled':''}>${i>unlocked?'🔒 ':''}${c[0]}</button>`).join('')}<button id="bk">Back</button></div>`);
+  $('ovb').querySelectorAll('.go').forEach(b=>b.onclick=()=>{st.i=CH[b.dataset.i][1];Object.assign(st,{hp:100,fl:100,streak:0});closeOv();showScene()});
+  $('bk').onclick=()=>{closeOv();showScene()};
+}
+function die(){
+  clearInterval(tick);st.phase='dead';
+  overlay(`<h1 class="bad">SIGNAL LOST</h1><p>${st.fl<=0?'Your filter ran dry and the air finished the job.':'Too many mistakes. The Zone does not forgive bad grammar.'}</p><p>Your codex is saved. Words you learned stay learned.</p><button class="go" id="rb">▶ REBOOT AT LAST CHECKPOINT</button>`);
+  $('rb').onclick=()=>{st.hp=100;st.fl=100;st.streak=0;closeOv();showScene()};
+}
+function win(){
+  const acc=Math.round(st.ok/st.tot*100);
+  const rank=acc>=90?'Master of the Zone':acc>=70?'Veteran Stalker':acc>=50?'Stalker':'Rookie';
+  say('Победа!');
+  overlay(`<h1 class="good">ПОБЕДА!</h1><p>You walked out of the Zone speaking Russian.</p><p>Accuracy <b>${acc}%</b> · Rounds <b>${st.rd}</b> · Words in codex <b>${codex.size}/${VOC.length}</b><br>Rank: <b>${rank}</b></p><button class="go" id="again">▶ ENTER THE ZONE AGAIN</button>`);
+  $('again').onclick=()=>{Object.assign(st,{i:0,hp:100,fl:100,rd:0,streak:0,ok:0,tot:0});closeOv();showScene()};
+}
+function openCodex(){
+  const paused=st.phase;
+  overlay(`<h1 style="font-size:2rem">CODEX</h1><p>Every word you meet is logged here. Tap to hear it.</p><div class="cx">${VOC.map((w,k)=>codex.has(w[0])?`<button class="card" data-k="${k}"><b>${w[0]}</b><i class="rm">${w[1]}</i><span>${w[2]}</span></button>`:`<button class="card lock" disabled><b>▒▒▒▒</b><span>undiscovered</span></button>`).join('')}</div><button class="go" id="cl">CLOSE</button>`);
+  $('ovb').querySelectorAll('.card:not(.lock)').forEach(b=>b.onclick=()=>say(VOC[b.dataset.k][0]));
+  $('cl').onclick=closeOv;
+}
+
+/* CONTROLS */
+$('bcx').onclick=openCodex;
+$('bmap').onclick=()=>{clearInterval(tick);levelSelect()};
+$('brom').onclick=e=>{const off=document.body.classList.toggle('norom');e.target.textContent='Romanize: '+(off?'off':'on')};
+$('bslow').onclick=e=>{st.slow=!st.slow;e.target.textContent='Slow voice: '+(st.slow?'on':'off')};
+$('bsnd').onclick=e=>{st.mute=!st.mute;if(amb)amb.gain.value=st.mute?0:.5;if(st.mute&&window.speechSynthesis)speechSynthesis.cancel();e.target.textContent='Sound: '+(st.mute?'off':'on')};
+
+/* DUST + EMBERS BACKGROUND */
+const cv=$('bg'),cx=cv.getContext('2d');let P=[];
+const rs=()=>{cv.width=innerWidth;cv.height=innerHeight};rs();addEventListener('resize',rs);
+for(let i=0;i<80;i++)P.push({x:Math.random(),y:Math.random(),r:Math.random()*1.8+.4,v:Math.random()*.0004+.0001,d:Math.random()*.0004-.0002,a:Math.random()});
+(function loop(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  for(const p of P){
+    p.y-=p.v;p.x+=p.d;if(p.y<0){p.y=1;p.x=Math.random()}
+    cx.fillStyle=`rgba(255,${160+p.a*60|0},0,${.15+p.a*.35})`;
+    cx.beginPath();cx.arc(p.x*cv.width,p.y*cv.height,p.r,0,7);cx.fill();
+  }
+  requestAnimationFrame(loop);
+})();
+
+/* BOOT */
+save();hud();
+overlay(`<h1>ЗОНА</h1><div class="lbl">Zone PDA // Russian field course</div><p>Gate guards, wounded stalkers and metro traders only speak Russian. Learn each phrase, then use it under pressure.</p><p>Wrong answers cost <b class="bad">integrity</b>. Your gas mask <b class="good">filter</b> drains while you think. Right answers pay in rounds. Turn your sound on.</p><button class="go" id="pw">[ POWER ON ]</button><p id="vn" style="font-size:.8rem;opacity:.6"></p>`);
+$('pw').onclick=()=>{
+  initAudio();closeOv();unlocked>0?levelSelect():showScene();
+  setTimeout(()=>{if('speechSynthesis' in window&&!voices.some(v=>v.lang.toLowerCase().startsWith('ru')))$('story').textContent+='\n\n[NOTE] No Russian voice found. Install a Russian text-to-speech voice in your device settings for the best audio.'},1200);
+};
+</script>
+</body>
+</html>
