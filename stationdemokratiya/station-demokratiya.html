@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>STATION DEMOKRATIYA</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Russo+One&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#14110f;--lamp:#ffb000;--red:#d62a1c;--bone:#e8dcc0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;margin:0}
+body{background:#0b0908;color:var(--bone);font-family:"IBM Plex Mono",monospace;display:flex;align-items:center;justify-content:center}
+#wrap{position:relative;width:min(100vw,800px)}
+canvas{width:100%;display:block;background:var(--ink);border:2px solid #3a2f26}
+#ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px;background:rgba(11,9,8,.9);overflow:auto}
+h1,h2{font-family:"Russo One",sans-serif;font-weight:400;margin:0 0 8px;color:var(--lamp);letter-spacing:.04em}
+h1{font-size:clamp(28px,6vw,48px)}h2{font-size:clamp(20px,4vw,30px)}
+p{margin:6px 0;max-width:560px;line-height:1.45;font-size:14px}
+.red{color:var(--red)}
+button,select{font:inherit;color:var(--bone);background:#241d18;border:2px solid var(--lamp);padding:9px 14px;margin:6px;cursor:pointer}
+button:hover,button:focus-visible{background:var(--lamp);color:var(--ink);outline:none}
+.opt{display:block;width:min(520px,90%);text-align:left}
+.opt b{display:block;font-family:"Russo One",sans-serif;font-weight:400}
+.opt span{font-size:12px}
+</style>
+</head>
+<body>
+<div id="wrap"><canvas id="c" width="800" height="480"></canvas><div id="ov"></div></div>
+<script>
+const $=id=>document.getElementById(id),cv=$('c'),g=cv.getContext('2d'),ov=$('ov'),W=800,H=480,GX=78;
+const norm=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const ALPHA=[['А','a'],['Б','b'],['В','v'],['Г','g'],['Д','d'],['Е','ye/e'],['Ё','yo/e'],['Ж','zh'],['З','z'],['И','i'],['Й','y/j/i'],['К','k'],['Л','l'],['М','m'],['Н','n'],['О','o'],['П','p'],['Р','r'],['С','s'],['Т','t'],['У','u'],['Ф','f'],['Х','kh/h'],['Ц','ts/c'],['Ч','ch'],['Ш','sh'],['Щ','shch/sch'],['Ы','y/i'],['Э','e'],['Ю','yu'],['Я','ya']];
+const VOC=[['Хлеб','bread','pan'],['Вода','water','agua'],['Мир','peace','paz'],['Друг','friend','amigo'],['Солнце','sun','sol'],['Звезда','star','estrella'],['Свобода','freedom','libertad'],['Жук','bug','bicho'],['Огонь','fire','fuego'],['Оружие','weapon','arma'],['Помощь','help','ayuda'],['Враг','enemy','enemigo'],['Дом','home','casa'],['Ночь','night','noche'],['Свет','light','luz'],['Воздух','air','aire'],['Победа','victory','victoria'],['Солдат','soldier','soldado'],['Бежать','run','correr'],['Смерть','death','muerte'],['Гражданин','citizen','ciudadano'],['Щит','shield','escudo'],['Туннель','tunnel','túnel'],['Фильтр','filter','filtro'],['Патроны','ammo','munición'],['Выбор','choice','elección'],['Закон','law','ley'],['Страх','fear','miedo'],['Спасибо','thanks','gracias'],['Привет','hello','hola']];
+const MODES={alpha:'Cyrillic letters → Latin sounds','ru-en':'Russian → English','ru-es':'Russian → Spanish','es-en':'Spanish → English','en-es':'English → Spanish'};
+const IDX={ru:0,en:1,es:2};
+const SLOGANS=['Would you like to know more?','Service guarantees citizenship.','Bugs cannot vote. Democracy can.','The Ministry hears every voice. Loudly.','Your filters are a gift from the people.'];
+const PROPS=[
+ {n:'Liberty Tax',d:'+2 stratagem charges, gate -20 integrity.',f:()=>{charges+=2;gate=Math.max(1,gate-20)}},
+ {n:'Mandatory Optimism',d:'Bugs 12% slower, score x0.85.',f:()=>{mods.sp*=.88;mods.sc*=.85}},
+ {n:'Volunteer Draft',d:'Gate +35 integrity, 15% more bugs.',f:()=>{gate=Math.min(100,gate+35);mods.n*=1.15}},
+ {n:'Ministry of Truth',d:'Bugs show the first letter of the answer. Score x0.9.',f:()=>{mods.hint=1;mods.sc*=.9}},
+ {n:'Super Lottery',d:'Coin flip: gate +50 or gate -30.',f:()=>{gate=Math.max(1,Math.min(100,gate+(Math.random()<.5?50:-30)))}},
+ {n:'Double Rations of Freedom',d:'Score x1.5, bugs 15% faster.',f:()=>{mods.sc*=1.5;mods.sp*=1.15}}];
+let mode='ru-en',pool=[],weak=[],st='menu',best=0,au;
+try{best=+localStorage.getItem('sd_best')||0}catch(e){}
+let wave=0,score=0,combo=0,gate=100,bugs=[],parts=[],log=[],buf='',charges=0,kills=0,toSpawn=0,spT=0,mods={sp:1,sc:1,n:1,hint:0},code='',codeT=0,shake=0,flash=0,missed=[],banner=null;
+
+function beep(f,d,t='square',v=.05){try{au=au||new AudioContext();const o=au.createOscillator(),a=au.createGain();o.type=t;o.frequency.value=f;a.gain.setValueAtTime(v,au.currentTime);a.gain.exponentialRampToValueAtTime(.0001,au.currentTime+d);o.connect(a);a.connect(au.destination);o.start();o.stop(au.currentTime+d)}catch(e){}}
+function buildPool(){
+ if(mode==='alpha')pool=ALPHA.map(([c,l])=>({p:c,show:l.split('/')[0].toUpperCase(),a:l.split('/')}));
+ else{const[f,t]=mode.split('-');pool=VOC.map(w=>({p:w[IDX[f]],show:w[IDX[t]],a:[norm(w[IDX[t]])]}))}}
+function say(s){log.push(s);if(log.length>3)log.shift()}
+function menu(){st='menu';ov.style.display='flex';
+ ov.innerHTML=`<h1>STATION DEMOKRATIYA</h1><p>The last metro station under the ash. The Ministry says you are free. The bugs say otherwise.</p><p>Each bug carries a word. <b>Type what it means</b> to kill it. Let one reach the gate and you lose integrity, and the Ministry will make you learn its name.</p><p>Arrow codes call stratagems: <b>↑→↓→</b> strike, <b>←↓↑→</b> repair (you earn a charge every 8 kills). Backspace edits, Esc clears. Keyboard needed.</p><label>Practice: <select id="md">${Object.entries(MODES).map(([k,v])=>`<option value="${k}"${k===mode?' selected':''}>${v}</option>`).join('')}</select></label><button id="go">ENLIST (best: ${best})</button>`;
+ $('md').onchange=e=>{mode=e.target.value;e.target.blur()};$('go').onclick=e=>{e.target.blur();start()}}
+function start(){buildPool();weak=[];wave=0;score=0;combo=0;gate=100;bugs=[];parts=[];log=[];buf='';charges=1;kills=0;code='';codeT=0;shake=0;flash=0;missed=[];
+ mods={sp:1,sc:1,n:1,hint:0};say('FOR DEMOCRACY!');nextWave()}
+function nextWave(){wave++;toSpawn=Math.round((5+wave*2.5)*mods.n);spT=1;st='play';ov.style.display='none';banner={t:2.2,s:`WAVE ${wave}`};say(rnd(SLOGANS))}
+function vote(){st='vote';ov.style.display='flex';const o=[...PROPS].sort(()=>Math.random()-.5).slice(0,3);
+ ov.innerHTML=`<h2>REFERENDUM</h2><p>The people may choose one of three policies. The people always choose.</p>`+o.map((x,i)=>`<button class="opt" data-i="${i}"><b>${x.n}</b><span>${x.d}</span></button>`).join('');
+ ov.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{o[b.dataset.i].f();const pc=(97+Math.random()*2.9).toFixed(1);ov.innerHTML=`<h2>THE PEOPLE HAVE SPOKEN</h2><p>${pc}% IN FAVOUR OF <b>${o[b.dataset.i].n.toUpperCase()}</b>.</p><p>Turnout was mandatory.</p>`;setTimeout(nextWave,1800)})}
+function over(){st='over';ov.style.display='flex';let nb='';if(score>best){best=score;nb=' NEW BEST!';try{localStorage.setItem('sd_best',best)}catch(e){}}
+ const seen=new Set(),rev=missed.filter(m=>!seen.has(m.p)&&seen.add(m.p)).slice(-6).map(m=>`${m.p} = ${m.show}`).join('<br>');
+ ov.innerHTML=`<h1 class="red">THE GATE HAS FALLEN</h1><p>Wave ${wave}. Score ${score}.${nb}</p><p>The Ministry regrets your service. Words that got through:</p><p><b>${rev||'None. Suspicious.'}</b></p><button id="go">RE-ENLIST</button>`;
+ $('go').onclick=e=>{e.target.blur();menu()}}
+function spawn(){const lane=Math.floor(Math.random()*5),it=weak.length&&Math.random()<.35?rnd(weak):rnd(pool);
+ bugs.push({x:W+30,y:95+lane*72,v:(30+wave*3.5+Math.random()*10)*mods.sp,it})}
+function boom(x,y,c,n=14){for(let i=0;i<n;i++)parts.push({x,y,vx:(Math.random()-.5)*240,vy:(Math.random()-.5)*240,l:.6,c})}
+function kill(b,pts=1){bugs.splice(bugs.indexOf(b),1);boom(b.x,b.y,'#ffb000');kills++;combo+=pts?1:0;
+ if(pts){score+=Math.round(10*(1+Math.floor(combo/5))*mods.sc);beep(520+Math.min(combo,20)*20,.12,'triangle',.08);if(kills%8===0){charges++;say('STRATAGEM CHARGE EARNED')}}
+ const wi=weak.indexOf(b.it);if(pts&&wi>-1&&Math.random()<.5)weak.splice(wi,1)}
+function submit(){const m=bugs.filter(b=>b.it.a.includes(buf)).sort((a,b)=>a.x-b.x)[0];
+ if(m)kill(m);else if(buf){combo=0;beep(120,.2,'sawtooth');shake=.2}buf=''}
+function typed(){if(!buf)return;const pre=bugs.some(b=>b.it.a.some(a=>a.startsWith(buf)));
+ if(!pre){combo=0;beep(120,.2,'sawtooth');shake=.2;buf='';return}
+ const full=bugs.some(b=>b.it.a.includes(buf)),longer=bugs.some(b=>b.it.a.some(a=>a.length>buf.length&&a.startsWith(buf)));
+ if(full&&!longer)submit()}
+function strat(c){const s=c.join('');codeT=1.3;
+ if(s==='↑→↓→'&&charges>0&&c.length===4){charges--;bugs.slice().forEach(b=>kill(b,0));flash=1;beep(80,.6,'sawtooth',.15);say('ORBITAL LIBERTY STRIKE. NO SURVIVORS TO VOTE.');code=''}
+ else if(s==='←↓↑→'&&charges>0&&c.length===4){charges--;gate=Math.min(100,gate+30);beep(300,.4,'sine',.1);say('GATE REPAIRED. THANK THE MINISTRY.');code=''}
+ else if(c.length>=4)code=''}
+addEventListener('keydown',e=>{if(st!=='play')return;if(e.ctrlKey||e.metaKey||e.altKey)return;
+ const A={ArrowUp:'↑',ArrowDown:'↓',ArrowLeft:'←',ArrowRight:'→'};
+ if(A[e.key]){e.preventDefault();code=(code+A[e.key]).slice(-4);strat([...code]);return}
+ if(e.key==='Backspace'){buf=buf.slice(0,-1);e.preventDefault()}
+ else if(e.key==='Escape')buf='';
+ else if(e.key==='Enter'){submit();e.preventDefault()}
+ else if(/^[a-zA-Z]$/.test(e.key)){buf+=e.key.toLowerCase();typed()}
+ if(e.key===' ')e.preventDefault()});
+
+function update(dt){
+ if(st!=='play')return;
+ if(toSpawn>0&&(spT-=dt)<=0){spawn();toSpawn--;spT=Math.max(.9,2.8-wave*.18)/mods.n}
+ for(const b of bugs.slice()){b.x-=b.v*dt;if(b.x<GX+22){bugs.splice(bugs.indexOf(b),1);gate-=12;combo=0;shake=.4;flash=.3;boom(GX+10,b.y,'#d62a1c',18);beep(90,.35,'sawtooth',.12);
+  missed.push(b.it);if(!weak.includes(b.it))weak.push(b.it);say(`BREACH: ${b.it.p} = ${b.it.show}`)}}
+ if(gate<=0){gate=0;over();return}
+ if(toSpawn<=0&&!bugs.length){score+=wave*50;vote()}
+ parts.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.l-=dt});parts=parts.filter(p=>p.l>0);
+ if(codeT>0&&(codeT-=dt)<=0)code='';if(shake>0)shake-=dt;if(flash>0)flash-=dt*1.5;if(banner&&(banner.t-=dt)<=0)banner=null}
+
+function draw(t){
+ g.save();if(shake>0)g.translate((Math.random()-.5)*8,(Math.random()-.5)*8);
+ g.fillStyle='#14110f';g.fillRect(0,0,W,H);
+ for(let i=0;i<5;i++){g.fillStyle='#1d1814';g.fillRect(GX,78+i*72+22,W,3)}
+ g.globalCompositeOperation='lighter';
+ [160,420,680].forEach((x,i)=>{const f=.16+.05*Math.sin(t/130+i*2)+(Math.sin(t/37+i)>.96?-.1:0),r=g.createRadialGradient(x,0,0,x,0,300);r.addColorStop(0,`rgba(255,176,0,${f})`);r.addColorStop(1,'rgba(255,176,0,0)');g.fillStyle=r;g.fillRect(0,0,W,H)});
+ g.globalCompositeOperation='source-over';
+ // gate
+ g.fillStyle='#2a2420';g.fillRect(0,50,GX,380);g.fillStyle=gate>35?'#6b5a44':'#d62a1c';
+ for(let i=0;i<5;i++)g.fillRect(8,60+i*74,GX-18,64*gate/100);
+ // bugs
+ const big=mode==='alpha';g.textAlign='center';
+ for(const b of bugs){const hit=buf&&b.it.a.some(a=>a.startsWith(buf)),w=t/110+b.x*.05;
+  g.strokeStyle='#7a1a10';g.lineWidth=3;
+  for(let i=-1;i<=1;i++){const k=Math.sin(w+i*2)*6;g.beginPath();g.moveTo(i*9+b.x,b.y);g.lineTo(i*14-8+b.x,b.y+16+k);g.moveTo(i*9+b.x,b.y);g.lineTo(i*14-8+b.x,b.y-16-k);g.stroke()}
+  g.fillStyle=hit?'#ff6a2a':'#b3261a';g.beginPath();g.ellipse(b.x,b.y,24,13,0,0,7);g.fill();
+  g.fillStyle='#ffb000';g.fillRect(b.x-22,b.y-5,5,4);g.fillRect(b.x-22,b.y+2,5,4);
+  g.font=`700 ${big?34:22}px "IBM Plex Mono",monospace`;const tw=g.measureText(b.it.p).width;
+  g.fillStyle='rgba(20,17,15,.9)';g.fillRect(b.x-tw/2-7,b.y-(big?62:52),tw+14,big?40:30);
+  g.strokeStyle=hit?'#ffb000':'#5a4a38';g.lineWidth=2;g.strokeRect(b.x-tw/2-7,b.y-(big?62:52),tw+14,big?40:30);
+  g.fillStyle=hit?'#ffb000':'#e8dcc0';g.fillText(b.it.p,b.x,b.y-(big?30:30));
+  if(mods.hint){g.font='12px "IBM Plex Mono",monospace';g.fillStyle='#8a7a60';g.fillText(b.it.a[0][0]+'…',b.x,b.y+34)}}
+ parts.forEach(p=>{g.fillStyle=p.c;g.globalAlpha=Math.max(0,p.l*1.6);g.fillRect(p.x,p.y,3,3)});g.globalAlpha=1;
+ // HUD
+ g.textAlign='left';g.font='700 14px "IBM Plex Mono",monospace';g.fillStyle='#e8dcc0';
+ g.fillText(`WAVE ${wave||0}   SCORE ${score||0}   COMBO x${1+Math.floor((combo||0)/5)}`,10,22);
+ g.fillStyle='#2a2420';g.fillRect(10,30,200,8);g.fillStyle=gate>35?'#ffb000':'#d62a1c';g.fillRect(10,30,2*(gate||0),8);
+ g.fillStyle='#8a7a60';g.font='12px "IBM Plex Mono",monospace';g.fillText('GATE',216,38);
+ g.textAlign='right';g.fillStyle='#ffb000';g.fillText(`STRATAGEMS ${charges||0}  ↑→↓→ STRIKE  ←↓↑→ REPAIR`,W-10,22);
+ g.fillStyle='#ffb000';g.fillText(code?`[${code}]`:'',W-10,38);
+ g.textAlign='left';g.fillStyle='#8a7a60';(log||[]).forEach((l,i)=>g.fillText('> '+l,10,H-70+i*15));
+ g.fillStyle='#ffb000';g.font='700 26px "IBM Plex Mono",monospace';g.textAlign='center';
+ g.fillText('> '+(buf||'')+(Math.floor(t/400)%2?'_':' '),W/2+60,H-14);
+ if(banner){g.globalAlpha=Math.min(1,banner.t);g.fillStyle='#d62a1c';g.font='48px "Russo One",sans-serif';g.fillText(banner.s,W/2,H/2);g.globalAlpha=1}
+ if(flash>0){g.fillStyle=`rgba(255,230,180,${Math.min(.7,flash)})`;g.fillRect(0,0,W,H)}
+ g.restore()}
+let last=0;function loop(t){update(Math.min((t-last)/1000,.05));last=t;draw(t);requestAnimationFrame(loop)}
+menu();requestAnimationFrame(loop);
+</script>
+</body>
+</html>
