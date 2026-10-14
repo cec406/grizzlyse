@@ -49,7 +49,11 @@ test('router handles every advertised route', async () => {
 
 const SAMPLE_HASH = {
   home: '#/home',
+  path: '#/path',
   alphabet: '#/alphabet',
+  keyboard: '#/keyboard',
+  vocab: '#/vocab',
+  cyber: '#/cyber',
   lessons: '#/lessons',
   lesson: '#/lesson/u01',
   practice: '#/practice',

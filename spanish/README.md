@@ -2,8 +2,9 @@
 
 A written-first, no-framework Spanish course for English speakers. Learn the 27-letter
 alphabet, work through 48 graded units (A1 → C1), drill with 12 games, review with spaced
-repetition, read graded texts with tap-to-translate glossaries, and explore regional slang
-from Puerto Rico, Mexico, Spain and beyond.
+repetition, read graded texts with tap-to-translate glossaries, explore regional slang
+from Puerto Rico, Mexico, Spain and beyond — and search a full English ⇄ Spanish
+dictionary, train accented typing, and climb the zero → hero roadmap to professional Spanish.
 
 Built for a family heading to Puerto Rico and for anyone training toward a Spanish
 proficiency exam (Army DLPT / OPI). Uses **Latin-American Spanish** by default: `ustedes`,
@@ -66,12 +67,29 @@ The harness runs, in order:
 
 1. **Syntax check** — `node --check` on every `.js` file.
 2. **Import checker** — every `import`, `<script src>` and `<link href>` resolves.
-3. **Unit tests** (`node --test`) — data validators, engine logic, DOM-stub smoke tests.
-4. **Browser E2E** — drives a real headless Chrome through every route, lesson quiz and
-   all 12 games, failing on any console error, page error, HTTP ≥ 400, empty route, or
-   unplayable round. If no Chrome is found the step is skipped (non-fatal).
+3. **Unit tests** (`node --test`) — data validators, engine logic, DOM-stub smoke tests,
+   and the added-content tests (word packs, keyboard/accent map, pro track, roadmap, lexicon).
+4. **Browser E2E** — starts a local static server and drives your installed **Chrome/Edge**
+   through the DevTools protocol (Node's built-in WebSocket — **no Playwright, no npm
+   install**). It loads every route, checks for console/page/HTTP errors, exercises the
+   dictionary search + pack filters, the roadmap word previews and the accent drill, and
+   plays a full lesson quiz and a practice game through to the results screen. If no
+   Chrome/Edge is found the step is skipped (non-fatal).
 
-Set `CHROME_PATH=/path/to/chrome` to point the E2E runner at a specific browser.
+Set `CHROME_PATH=/path/to/chrome` to point the E2E runner at a specific browser binary.
+
+---
+
+## Deploying to GitHub Pages
+
+The app is a static site with no build step and uses **relative paths + hash routing**, so it
+works from a project subpath (`https://<user>.github.io/<repo>/`) with no configuration.
+
+1. Push this folder to your repository.
+2. On GitHub: **Settings → Pages → Build and deployment → Source: Deploy from a branch**,
+   branch **`main`**, folder **`/ (root)`** (adjust the folder if this lives in a subfolder).
+3. Open `https://<user>.github.io/<repo>/` in Chrome. Audio needs a Spanish voice installed —
+   see the in-app **Audio setup** page.
 
 ---
 
@@ -87,22 +105,41 @@ data/
   grammar-reference.js   grammar topics A1 → C1 (tables + examples)
   grammar-drills.js      verb / por-para / gender-article drills used by the games
   dialects.js            regional slang, accent notes and culture (Puerto Rico first)
+  word-packs.js          themed vocabulary packs (425 words) that feed the dictionary
+  keyboard-layout.js     accent/special-character map, dead keys, typing lessons
+  cyber.js               professional & technology Spanish modules (language only)
+  learning-path.js       zero → hero roadmap stages
   data-units/unit-NN.js  one file per curriculum unit (48 of them)
   reading/texts-*.js     graded reading texts with glossaries
 js/
   app.js                 boot + chrome
-  router.js              hash router
+  router.js              hash router (supports ?query params)
   state.js               XP, streak, mastery, settings (localStorage, guarded)
   srs.js                 spaced repetition (Leitner boxes)
   keyboard.js            accent bar + input normalization (accents/ñ/case/punctuation)
   audio.js               speechSynthesis es-ES with graceful fallback
   fun.js                 WebAudio sound effects, confetti, level titles, auto-speak
   ui.js                  DOM helpers
-  views/                 one module per route
+  views/                 one module per route (home, path, alphabet, keyboard, vocab,
+                         cyber, lessons, lesson, practice, review, reading, dialects,
+                         grammar, progress, audio-setup, help, placement)
   games/                 game registry, builders, pure logic, per-game renderers
 tests/                   harness, unit tests, DOM stub, E2E driver
 tools/                   import checker, content audit
 ```
+
+### New sections
+
+- **Dictionary (`#/vocab`)** — search the whole lexicon (units + packs + pro track, 1,300+
+  unique words). Type English to get the Spanish word(s), type Spanish to get the meaning, or
+  type the pronunciation respelling. Every entry has an audio button and a “learned” toggle.
+- **Keyboard & accents (`#/keyboard`)** — how to type á é í ó ú ü ñ ¿ ¡ four different ways
+  (Spanish dead keys, Windows Alt codes, macOS Option, in-app accent bar) plus graded
+  accent/ñ/¿¡ typing drills. Dead keys are translated for you, so no setup is required.
+- **Zero → hero path (`#/path`)** — the roadmap from kindergarten letters to C1 fluency,
+  linking straight into the right content at each stage.
+- **Pro & tech track (`#/cyber`)** — advanced workplace/technology Spanish: vocabulary,
+  phrases and dialogues. Language study only.
 
 ### Adding a unit
 
@@ -135,7 +172,12 @@ and passes the full test harness.
 | Verb/por-para/gender drills | — | 3 sets | span A1–C1 |
 | Games | 12 | 12 | complete |
 | Dialect regions | ≥4 | 6 | Puerto Rico first |
+| Themed word packs | ≥8 | 9 | 425 words, kindergarten → professional |
+| Keyboard typing lessons | ≥6 | 8 | accents/ñ/dieresis/¿¡/words/sentences/pro/speed |
+| Pro & tech modules | ≥5 | 6 | terms & phrases (language only) |
+| Roadmap stages | ≥5 | 6 | kindergarten → C1 fluency |
 
+After de-duplication the searchable dictionary (`#/vocab`) holds **1,300+** unique entries.
 Run `node tools/audit-content.js` for the live version of this table.
 
 ---

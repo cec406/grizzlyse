@@ -1,5 +1,5 @@
 // Central data registry. Add new unit imports here (in order).
-import { LETTERS, VOWELS, HARDVOWELS, SOFTVOWELS, GROUP_NAMES, LETTER_GROUPS } from './letters.js';
+import { LETTERS, VOWELS, GROUP_NAMES, LETTER_GROUPS } from './letters.js';
 import { PRONUNCIATION_GUIDES } from './pronunciation-guides.js';
 import { unit as u01 } from './data-units/unit-01.js';
 import { unit as u02 } from './data-units/unit-02.js';
@@ -53,7 +53,7 @@ import { READING_A } from './reading/texts-a1a2.js';
 import { READING_B } from './reading/texts-b1b2.js';
 import { DIALECTS } from './dialects.js';
 
-export { LETTERS, VOWELS, HARDVOWELS, SOFTVOWELS, GROUP_NAMES, LETTER_GROUPS };
+export { LETTERS, VOWELS, GROUP_NAMES, LETTER_GROUPS };
 export { PRONUNCIATION_GUIDES };
 export { DIALECTS };
 
@@ -107,4 +107,4 @@ export function wordById(id, map) {
   return (map || allVocab()).get(id);
 }
 
-export default { LETTERS, VOWELS, HARDVOWELS, SOFTVOWELS, GROUP_NAMES, LETTER_GROUPS, PRONUNCIATION_GUIDES, DIALECTS, UNITS, READING };
+export default { LETTERS, VOWELS, GROUP_NAMES, LETTER_GROUPS, PRONUNCIATION_GUIDES, DIALECTS, UNITS, READING };

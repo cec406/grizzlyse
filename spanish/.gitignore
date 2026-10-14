@@ -1,0 +1,10 @@
+# Dependencies / build artifacts (this project needs none to run)
+node_modules/
+
+# Editor / OS clutter
+.DS_Store
+Thumbs.db
+*.log
+
+# Local tooling state
+.opencode/

@@ -1,6 +1,8 @@
 // Daily Review — SRS-driven flashcard queue (all mistakes land here).
 import { esc } from '../ui.js';
 import { allVocab } from '../../data/index.js';
+import { allPackWords } from '../../data/word-packs.js';
+import { allCyberTerms } from '../../data/cyber.js';
 import { grade } from '../srs.js';
 import { getCard, setCard, recordActivity, addXp, addBadge, recordAccuracy } from '../state.js';
 import { reviewQueue } from '../srs-store.js';
@@ -45,6 +47,9 @@ function startReview(slot, refresh) {
   }
   const cards = queue;
   const vocab = allVocab();
+  // Resolve dictionary and professional-track words too, not just unit vocabulary.
+  for (const w of allPackWords()) if (!vocab.has(w.id)) vocab.set(w.id, { word: w });
+  for (const t of allCyberTerms()) if (t.id && !vocab.has(t.id)) vocab.set(t.id, { word: t });
   let i = 0;
   let shown = false;
   let answered = 0;

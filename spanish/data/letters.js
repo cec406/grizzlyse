@@ -31,8 +31,6 @@ export const LETTERS = [
 ];
 
 export const VOWELS = new Set('aeiouáéíóúü'.split(''));
-export const HARDVOWELS = new Set();
-export const SOFTVOWELS = new Set();
 export const GROUP_NAMES = [
   'Pure vowels',
   'Easy consonants',

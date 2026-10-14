@@ -45,12 +45,17 @@ export function render() {
       <p class="hint">${esc(done)} of ${esc(total)} units completed (${esc(pct)}%)</p>` : ''}
     </div>
     <div class="card-grid">
+      <a class="tile" href="#/path"><span class="tile-ic">🗺</span><b>Zero → hero path</b><span>the full roadmap from kindergarten to pro</span></a>
       <a class="tile" href="#/alphabet"><span class="tile-ic">🔤</span><b>Alphabet</b><span>27 letters, sounds and spelling</span></a>
+      <a class="tile" href="#/keyboard"><span class="tile-ic">⌨️</span><b>Keyboard &amp; accents</b><span>type á é í ó ú ü ñ ¿ ¡ like a native</span></a>
       <a class="tile" href="#/lessons"><span class="tile-ic">📚</span><b>Course</b><span>${esc(total)} units from greetings to C1 fluency</span></a>
+      <a class="tile" href="#/vocab"><span class="tile-ic">📖</span><b>Dictionary</b><span>search every word — English → Spanish, with audio</span></a>
       <a class="tile" href="#/practice"><span class="tile-ic">🎮</span><b>Games</b><span>12 games for every word you learn</span></a>
       <a class="tile" href="#/review"><span class="tile-ic">🔁</span><b>Daily review</b><span>spaced repetition with a smart queue</span></a>
       <a class="tile" href="#/reading"><span class="tile-ic">📖</span><b>Reading</b><span>graded texts with tap-to-translate</span></a>
+      <a class="tile" href="#/dialects"><span class="tile-ic">🌎</span><b>Dialects</b><span>Puerto Rico, Mexico, Spain and more</span></a>
       <a class="tile" href="#/grammar"><span class="tile-ic">📐</span><b>Grammar</b><span>from noun gender to C1 constructions</span></a>
+      <a class="tile" href="#/cyber"><span class="tile-ic">🛡</span><b>Pro &amp; tech Spanish</b><span>the advanced professional register</span></a>
       <a class="tile" href="#/progress"><span class="tile-ic">📈</span><b>Progress</b><span>stats, accuracy, fun PR badges</span></a>
       <a class="tile" href="#/audio-setup"><span class="tile-ic">🔊</span><b>Audio setup</b><span>get a Spanish voice working on your machine</span></a>
     </div>

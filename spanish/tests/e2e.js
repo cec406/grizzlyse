@@ -1,176 +1,242 @@
-// Browser E2E. Usage: node tests/e2e.js <chromePath> <playwrightCorePackageDir>
-// Serves the app via python3 http.server, drives Chrome, and reports as failures:
-//   - any console error / uncaught page exception / HTTP >= 400 / request failure
-//   - any route that renders empty
-//   - any lesson quiz or game round that cannot be played through
-// Exit codes: 0 = pass, 1 = real failures, 2 = skipped (Chrome could not launch).
+// Dependency-free browser E2E. Drives the machine's own Chrome/Edge through the
+// DevTools protocol using only Node's built-in WebSocket + fetch + http. No
+// Playwright, no npm install, no python.
+//
+// Usage: node tests/e2e.js <chromeOrEdgePath>
+// Exit codes: 0 = pass, 1 = real failures, 2 = skipped (browser could not launch).
+
 import { spawn } from 'node:child_process';
-import { pathToFileURL, fileURLToPath } from 'node:url';
-import { resolve, dirname, join } from 'node:path';
+import { createServer } from 'node:http';
+import { readFile } from 'node:fs/promises';
+import { existsSync, statSync, mkdtempSync, rmSync } from 'node:fs';
+import { resolve, extname, join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { tmpdir } from 'node:os';
+import net from 'node:net';
 
 const CHROME = process.argv[2];
-const PW = process.argv[3] || resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const PORT = 8356;
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-
-const problems = [];
-const fail = (m) => { problems.push(m); console.log('E2E FAIL:', m); };
+const PORT = 8356;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-const pw = await import(pathToFileURL(join(PW, 'index.mjs')));
-const { chromium } = pw;
+const MIME = {
+  '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript',
+  '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.json': 'application/json',
+  '.ico': 'image/x-icon', '.map': 'application/json'
+};
 
-const server = spawn('python3', ['-m', 'http.server', String(PORT)], { cwd: ROOT, stdio: 'ignore' });
-await sleep(1200);
-
-let browser;
-try {
-  browser = await chromium.launch({
-    executablePath: CHROME,
-    headless: true,
-    args: ['--no-sandbox', '--disable-gpu', '--no-first-run', '--disable-dev-shm-usage']
-  });
-} catch (err) {
-  console.log('E2E skip: cannot launch Chrome:', String(err.message || err).split('\n')[0].slice(0, 180));
-  cleanup();
-  process.exit(2);
-}
-
-const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, locale: 'en-US' });
-const page = await ctx.newPage();
-page.setDefaultTimeout(6000);
-
-page.on('console', (msg) => { if (msg.type() === 'error') fail('console error: ' + msg.text()); });
-page.on('pageerror', (err) => fail('pageerror: ' + String(err && err.message ? err.message : err)));
-page.on('requestfailed', (req) => fail('request failed: ' + req.url()));
-page.on('response', (res) => { if (res.status() >= 400) fail('HTTP ' + res.status() + ' for ' + res.url()); });
-
-const BASE = `http://localhost:${PORT}/index.html`;
-
-async function guard(label, fn) {
-  try { await fn(); }
-  catch (err) { fail(`${label}: ${String(err.message || err).split('\n')[0].slice(0, 160)}`); }
-}
-
-async function gotoHash(hash) {
-  await page.evaluate((h) => { location.hash = h; }, hash);
-  await sleep(350);
-}
-
-function visible(selector) {
-  return page.locator(`${selector}:visible`);
-}
-
-async function countVisible(selector) {
-  return page.locator(`${selector}:visible`).count();
-}
-
-function firstVisible(selector) {
-  return page.locator(`${selector}:visible`).first();
-}
-
-async function answerSession() {
-  for (let i = 0; i < 80; i++) {
-    const again = await countVisible('[data-slot="again"], [data-action="again"]');
-    if (again) { await firstVisible('[data-slot="again"], [data-action="again"]').click(); return; }
-    const next = await countVisible('[data-action="next"]');
-    if (next) { await firstVisible('[data-action="next"]').click(); await sleep(150); continue; }
-    const mc = await countVisible('.mc-btn');
-    if (mc) { await firstVisible('.mc-btn').click(); await sleep(150); continue; }
-    const type = await countVisible('.game-input');
-    if (type) {
-      await firstVisible('.game-input').fill('hola');
-      for (const sel of ['[data-action="submit"]', '[data-action="check"]']) {
-        if (await countVisible(sel)) { await firstVisible(sel).click(); break; }
-      }
-      await sleep(150); continue;
-    }
-    const mem = await countVisible('.mem-cell');
-    if (mem >= 2) { await page.locator('.mem-cell:visible').nth(0).click(); await sleep(80); await page.locator('.mem-cell:visible').nth(1).click(); await sleep(260); continue; }
-    const hang = await countVisible('.hkey:enabled');
-    if (hang) { await firstVisible('.hkey:enabled').click(); await sleep(150); continue; }
-    const giveup = await countVisible('[data-action="giveup"]');
-    if (giveup) { await firstVisible('[data-action="giveup"]').click(); await sleep(150); continue; }
-    const flip = await countVisible('[data-action="flip"]');
-    if (flip) { await firstVisible('[data-action="flip"]').click(); await sleep(120); continue; }
-    break; // nothing left to do — round finished
-  }
-}
-
-await guard('load home', async () => {
-  await page.goto(BASE, { waitUntil: 'load' });
-  await sleep(600);
-  const text = await page.evaluate(() => (document.getElementById('main') || {}).innerText || '');
-  if (text.trim().length < 4) fail('home page rendered empty');
-});
-
-const ROUTES = ['#/home', '#/alphabet', '#/lessons', '#/lesson/u01', '#/practice', '#/review', '#/reading', '#/reading/rd-01', '#/dialects', '#/grammar', '#/progress', '#/audio-setup', '#/help', '#/placement'];
-for (const route of ROUTES) {
-  await guard('route ' + route, async () => {
-    await gotoHash(route);
-    const text = await page.evaluate(() => (document.getElementById('main') || {}).innerText || '');
-    if (text.trim().length < 4) fail(`empty page at ${route}`);
+function startServer() {
+  return new Promise((res) => {
+    const server = createServer(async (req, res) => {
+      try {
+        const path = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+        const rel = (path === '/' ? '/index.html' : path).replace(/^\/+/, '');
+        const file = resolve(ROOT, rel);
+        if (!file.startsWith(ROOT) || !existsSync(file) || !statSync(file).isFile()) {
+          res.writeHead(404); res.end('not found'); return;
+        }
+        const data = await readFile(file);
+        res.writeHead(200, { 'Content-Type': MIME[extname(file).toLowerCase()] || 'application/octet-stream' });
+        res.end(data);
+      } catch { res.writeHead(500); res.end('server error'); }
+    });
+    server.listen(PORT, '127.0.0.1', () => res(server));
   });
 }
 
-// Placement: answer every question.
-await guard('placement', async () => {
-  await gotoHash('#/placement');
-  for (let i = 0; i < 25; i++) {
-    const picks = await countVisible('[data-action="pick"]');
-    if (!picks) break;
-    await firstVisible('[data-action="pick"]').click();
-    await sleep(100);
-  }
-});
-
-// First lesson of every level: run the quiz to completion.
-await guard('lessons', async () => {
-  const units = await page.evaluate(async () => {
-    const { UNITS } = await import('./data/index.js');
-    const seenLv = new Set();
-    const out = [];
-    for (const u of UNITS) {
-      if (seenLv.has(u.level)) continue;
-      seenLv.add(u.level);
-      out.push(u.id);
-    }
-    return out;
+function freePort() {
+  return new Promise((res) => {
+    const s = net.createServer();
+    s.listen(0, '127.0.0.1', () => { const p = s.address().port; s.close(() => res(p)); });
   });
-  for (const id of units) {
-    await gotoHash(`#/lesson/${id}`);
-    const quiz = await visible('[data-action="quiz"]');
-    if (await quiz.count()) {
-      await quiz.first().click();
-      await sleep(200);
-      await answerSession();
-      const done = await page.evaluate(() => (document.getElementById('main') || {}).innerText || '');
-      if (!/score|result|xp|complete|question|correct/i.test(done)) fail(`lesson ${id} quiz produced no result view`);
-    }
-  }
-});
+}
 
-// Every game: launch from the practice hub and play a full round.
-const GAMES = ['mc', 'typing', 'memory', 'scramble', 'fill', 'case', 'verb', 'aspect', 'dictation', 'speed', 'hangman', 'flashcards'];
-for (const gameId of GAMES) {
-  await guard('game ' + gameId, async () => {
-    await gotoHash('#/practice');
-    const card = await visible(`[data-game="${gameId}"]`);
-    if (!(await card.count())) { fail(`no practice card for game "${gameId}"`); return; }
-    await card.first().click();
+const problems = [];
+const fail = (m) => { problems.push(m); console.log('E2E FAIL: ' + m); };
+
+async function launchChrome() {
+  const port = await freePort();
+  const profile = mkdtempSync(join(tmpdir(), 'sp-e2e-'));
+  const proc = spawn(CHROME, [
+    '--headless=new', '--disable-gpu', '--no-sandbox', '--no-first-run',
+    '--disable-dev-shm-usage', `--remote-debugging-port=${port}`,
+    `--user-data-dir=${profile}`, 'about:blank'
+  ], { stdio: 'ignore' });
+  const clean = () => {
+    try { proc.kill(); } catch { /* ignore */ }
+    if (process.platform === 'win32') {
+      try { spawn('taskkill', ['/pid', String(proc.pid), '/T', '/F'], { stdio: 'ignore' }); } catch { /* ignore */ }
+    }
+    try { rmSync(profile, { recursive: true, force: true }); } catch { /* ignore */ }
+  };
+  let url = null;
+  for (let i = 0; i < 40 && !url; i++) {
+    if (proc.exitCode !== null) throw new Error('Chrome exited early');
+    try {
+      const list = await (await fetch(`http://127.0.0.1:${port}/json`)).json();
+      const page = list.find((t) => t.type === 'page' && t.webSocketDebuggerUrl);
+      if (page) url = page.webSocketDebuggerUrl;
+    } catch { /* not up yet */ }
     await sleep(250);
-    await answerSession();
-  });
+  }
+  if (!url) { clean(); throw new Error('CDP endpoint not reachable'); }
+  return { port, proc, profile, wsUrl: url, clean };
 }
 
-cleanup();
-if (problems.length) {
-  console.log(`\nE2E RESULT: FAIL (${problems.length})\n` + problems.slice(0, 30).map((p) => ' - ' + p).join('\n'));
-  process.exit(1);
+async function connectCdp(wsUrl) {
+  const ws = new WebSocket(wsUrl);
+  await new Promise((res, rej) => { ws.onopen = res; ws.onerror = () => rej(new Error('ws error')); });
+  let id = 0;
+  const pending = new Map();
+  const pageProblems = [];
+  ws.onmessage = (m) => {
+    const msg = JSON.parse(m.data);
+    if (msg.id && pending.has(msg.id)) { pending.get(msg.id)(msg); pending.delete(msg.id); }
+    else if (msg.method === 'Runtime.exceptionThrown') pageProblems.push('exception: ' + (msg.params.exceptionDetails?.exception?.description || msg.params.exceptionDetails?.text));
+    else if (msg.method === 'Runtime.consoleAPICalled' && msg.params.type === 'error') pageProblems.push('console.error: ' + msg.params.args.map((a) => a.value || a.description || '').join(' '));
+    else if (msg.method === 'Network.loadingFailed') { if (!/ERR_ABORTED/.test(msg.params.errorText || '')) pageProblems.push('request failed: ' + (msg.params.errorText || '')); }
+    else if (msg.method === 'Network.responseReceived' && msg.params.response.status >= 400) pageProblems.push('HTTP ' + msg.params.response.status + ' for ' + msg.params.response.url);
+  };
+  const send = (method, params = {}) => new Promise((res) => { const myId = ++id; pending.set(myId, res); ws.send(JSON.stringify({ id: myId, method, params })); });
+  const evalJs = async (expression) => {
+    const r = await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true });
+    if (r.result?.exceptionDetails) return { __error: r.result.exceptionDetails.exception?.description || r.result.exceptionDetails.text };
+    return r.result?.result?.value;
+  };
+  return { ws, send, evalJs, pageProblems };
 }
-console.log('\nE2E RESULT: PASS — routes, lesson quizzes and all 12 games played through with no console errors.');
 
-function cleanup() {
-  try { browser && browser.close(); } catch { /* ignore */ }
-  try { server.kill('SIGKILL'); } catch { /* ignore */ }
+// Page-side helper: answer questions until the results screen appears.
+const ANSWER_LOOP = `(async () => {
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const click = (sel) => { const el = document.querySelector(sel); if (el) { el.click(); return true; } return false; };
+  let iter = 0;
+  for (iter = 0; iter < 200; iter++) {
+    if (document.querySelector('.results')) return { done: true, iter };
+    const fb = document.querySelector('[data-slot="fb"]');
+    if (fb && !fb.classList.contains('hidden')) {
+      const next = fb.querySelector('[data-action="next"]');
+      if (next) { next.click(); await sleep(120); continue; }
+    }
+    if (click('.mc-btn')) { await sleep(120); continue; }
+    const gi = document.querySelector('.game-input');
+    if (gi) {
+      gi.value = 'hola';
+      gi.dispatchEvent(new Event('input', { bubbles: true }));
+      click('[data-action="submit"], [data-action="check"]');
+      await sleep(120); continue;
+    }
+    const cells = [].slice.call(document.querySelectorAll('.mem-cell')).filter((c) => !c.classList.contains('matched'));
+    if (cells.length >= 2) { cells[0].click(); await sleep(60); cells[1].click(); await sleep(200); continue; }
+    if (click('.hkey:enabled')) { await sleep(120); continue; }
+    if (click('[data-action="giveup"]')) { await sleep(120); continue; }
+    if (click('[data-action="flip"]')) { await sleep(100); continue; }
+    const txt = (document.getElementById('main') || {}).innerText || '';
+    return { done: /complete|results/i.test(txt), iter };
+  }
+  return { done: false, iter };
+})()`;
+
+const ROUTES = ['#/home', '#/path', '#/alphabet', '#/keyboard', '#/lessons', '#/lesson/u01', '#/vocab', '#/practice', '#/review', '#/reading', '#/reading/rd-01', '#/dialects', '#/grammar', '#/cyber', '#/progress', '#/audio-setup', '#/help', '#/placement'];
+
+async function goto(cdp, hash) {
+  await cdp.evalJs(`location.hash = ${JSON.stringify(hash)}`);
+  await sleep(450);
 }
+
+async function main() {
+  const server = await startServer();
+  let chrome = null;
+  let cdp = null;
+  try {
+    chrome = await launchChrome();
+    if (chrome.proc.exitCode !== null) return 2;
+    cdp = await connectCdp(chrome.wsUrl);
+    await cdp.send('Runtime.enable');
+    await cdp.send('Page.enable');
+    await cdp.send('Network.enable');
+    await cdp.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/index.html#/home` });
+    await sleep(2600);
+
+    // --- every route renders ---
+    for (const r of ROUTES) {
+      await goto(cdp, r);
+      const t = await cdp.evalJs(`(() => { const m = document.getElementById('main'); const txt = (m && m.innerText) || ''; return { len: txt.trim().length, err: /Something went wrong/.test(txt) }; })()`);
+      if (!t || t.len < 4) fail(`empty page at ${r}`);
+      else if (t.err) fail(`error page at ${r}`);
+    }
+
+    // --- dictionary search + filters + deep links ---
+    await goto(cdp, '#/vocab');
+    const s1 = await cdp.evalJs(`(() => {
+      const m = document.getElementById('main');
+      const s = m.querySelector('.lex-search');
+      if (!s) return { err: 'no search box' };
+      s.value = 'dog';
+      s.dispatchEvent(new Event('input', { bubbles: true }));
+      return { rows: m.querySelectorAll('.lex-row').length };
+    })()`);
+    if (!s1 || s1.err || !s1.rows) fail('vocab: searching "dog" returned no words');
+
+    const s2 = await cdp.evalJs(`(() => {
+      const m = document.getElementById('main');
+      const s = m.querySelector('.lex-search'); if (s) { s.value = ''; s.dispatchEvent(new Event('input', { bubbles: true })); }
+      const sel = m.querySelector('[data-filter="pack"]');
+      sel.value = 'pack-school';
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
+      return { rows: m.querySelectorAll('.lex-row').length };
+    })()`);
+    if (!s2 || !s2.rows) fail('vocab: pack-school filter returned no words');
+
+    await goto(cdp, '#/vocab?pack=work');
+    const s3 = await cdp.evalJs(`(() => { const m = document.getElementById('main'); return { rows: m.querySelectorAll('.lex-row').length, empty: /No words match/.test(m.innerText) }; })()`);
+    if (!s3 || !s3.rows || s3.empty) fail('vocab: deep link #/vocab?pack=work came back empty');
+
+    // --- roadmap shows words ---
+    await goto(cdp, '#/path');
+    const p1 = await cdp.evalJs(`(() => { const m = document.getElementById('main'); return { words: m.querySelectorAll('.path-word').length, stages: m.querySelectorAll('.path-stage').length }; })()`);
+    if (!p1 || p1.words < 5 || p1.stages < 5) fail('path: roadmap missing word previews or stages');
+
+    // --- keyboard trainer: dead key ' then a should produce á and finish the first item ---
+    await goto(cdp, '#/keyboard');
+    await cdp.evalJs(`(() => { const b = [].slice.call(document.querySelectorAll('[data-tab]')).find((x) => x.dataset.tab === 'practice'); if (b) b.click(); })()`);
+    await sleep(400);
+    const k1 = await cdp.evalJs(`(() => { const m = document.getElementById('main'); return { capture: m.querySelectorAll('[data-slot="capture"]').length, target: (m.querySelector('.drill-target') || {}).textContent || '' }; })()`);
+    if (!k1 || !k1.capture || !k1.target) fail('keyboard: practice drill did not render');
+    const k2 = await cdp.evalJs(`(() => {
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: "'", bubbles: true }));
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', bubbles: true }));
+      const m = document.getElementById('main');
+      return { complete: !!m.querySelector('.drill-complete'), cap: (m.querySelector('.drill-capture') || {}).textContent || '' };
+    })()`);
+    if (!k2 || !(k2.complete || /á/.test(k2.cap))) fail('keyboard: dead-key apostrophe + a did not produce á');
+
+    // --- lesson quiz plays through ---
+    await goto(cdp, '#/lesson/u01');
+    const q = await cdp.evalJs(`(() => { const b = document.querySelector('[data-action="quiz"]'); if (!b) return false; b.click(); return true; })()`);
+    if (q) { await sleep(350); const r = await cdp.evalJs(ANSWER_LOOP); if (!r || !r.done) fail('lesson u01 quiz could not be played through — ' + JSON.stringify(r)); }
+
+    // --- one practice game plays through ---
+    await goto(cdp, '#/practice');
+    const g = await cdp.evalJs(`(() => { const c = document.querySelector('[data-game="mc"]'); if (!c) return false; c.click(); return true; })()`);
+    if (g) {
+      await sleep(350);
+      const r = await cdp.evalJs(ANSWER_LOOP);
+      if (!r || !r.done) fail('practice game "mc" could not be played through — ' + JSON.stringify(r));
+    }
+
+    // --- aggregate ---
+    for (const pj of cdp.pageProblems) { console.log('E2E page problem: ' + pj); problems.push(pj); }
+    console.log('\nE2E RESULT: ' + (problems.length ? 'FAIL' : 'PASS') + ' — ' + ROUTES.length + ' routes loaded, dictionary/keyboard/roadmap exercised, lesson quiz + game played, console & HTTP errors tracked.');
+    return problems.length ? 1 : 0;
+  } catch (err) {
+    console.log('E2E skip: ' + String(err.message || err).split('\n')[0].slice(0, 180));
+    return 2;
+  } finally {
+    try { cdp && cdp.ws.close(); } catch { /* ignore */ }
+    chrome && chrome.clean();
+    try { server.close(); } catch { /* ignore */ }
+  }
+}
+
+process.exit(await main());

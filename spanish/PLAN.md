@@ -58,3 +58,17 @@ Puerto Rico travel track and dialect tabs for regional slang.
 - [x] `tools/audit-content.js` counts vs targets; gaps filled or documented
 - [x] Spanish accuracy pass across levels
 - [x] README complete
+
+## Phase 10 — Zero → hero expansion [x]
+- [x] `data/word-packs.js`: 9 themed packs (425 words) with pronunciation respellings, kindergarten → professional
+- [x] `#/vocab` Searchable English ⇄ Spanish dictionary with pronunciation, audio, filters, learned tracking
+- [x] `data/keyboard-layout.js`: special-character map, Spanish dead keys, Alt/Option codes, 8 accent typing lessons
+- [x] `#/keyboard` Keyboard & accent trainer: layout, per-char detail, typing drill (dead keys + accent bar), reference table
+- [x] `data/cyber.js`: 6 professional/technology modules with terms, phrases and dialogues (language only)
+- [x] `#/cyber` Pro & tech track browser
+- [x] `data/learning-path.js` + `#/path` zero → hero roadmap (kindergarten → C1)
+- [x] Router supports `?query` params; new views wired into nav, home and view manifest
+- [x] **Bug fix:** games auto-restarted at the final question (`runner.js` `bind()` fallback)
+- [x] **Bug fix:** stale view listeners on `#main` collided across tabs — fixed with a clean clone per route
+- [x] `tests/extra.test.js` validates all new content; dependency-free browser E2E (Chrome/Edge, no Playwright)
+- [x] Full harness passes incl. real browser E2E

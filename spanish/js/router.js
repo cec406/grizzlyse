@@ -3,7 +3,11 @@
 
 export const ROUTES = [
   { name: 'home', re: /^#\/home$/ },
+  { name: 'path', re: /^#\/path$/ },
   { name: 'alphabet', re: /^#\/alphabet$/ },
+  { name: 'keyboard', re: /^#\/keyboard$/ },
+  { name: 'vocab', re: /^#\/vocab$/ },
+  { name: 'cyber', re: /^#\/cyber$/ },
   { name: 'lessons', re: /^#\/lessons$/ },
   { name: 'lesson', re: /^#\/lesson\/([\w-]+)$/ },
   { name: 'practice', re: /^#\/practice$/ },
@@ -26,8 +30,12 @@ export const PARAMS_FOR = {
 };
 
 export function parseHash(hash) {
-  const h = String(hash || '#/home');
+  let h = String(hash || '#/home');
   if (!h.startsWith('#')) return null;
+  // Split off an optional ?query=string and expose it as params.
+  let query = '';
+  const qi = h.indexOf('?');
+  if (qi >= 0) { query = h.slice(qi + 1); h = h.slice(0, qi); }
   for (const route of ROUTES) {
     const m = h.match(route.re);
     if (m) {
@@ -35,6 +43,15 @@ export function parseHash(hash) {
       (PARAMS_FOR[route.name] || []).forEach((key, i) => {
         params[key] = m[i + 1] ? decodeURIComponent(m[i + 1]) : undefined;
       });
+      if (query) {
+        for (const pair of query.split('&')) {
+          if (!pair) continue;
+          const eq = pair.indexOf('=');
+          const k = eq >= 0 ? pair.slice(0, eq) : pair;
+          const v = eq >= 0 ? pair.slice(eq + 1) : '';
+          if (k) params[decodeURIComponent(k)] = decodeURIComponent(v);
+        }
+      }
       return { name: route.name, params };
     }
   }
@@ -45,6 +62,10 @@ export function href(name, params) {
   const p = params || {};
   switch (name) {
     case 'home': return '#/home';
+    case 'path': return '#/path';
+    case 'keyboard': return '#/keyboard';
+    case 'vocab': return '#/vocab';
+    case 'cyber': return '#/cyber';
     case 'lesson': return `#/lesson/${p.unitId}`;
     case 'game': return `#/game/${p.gameId}`;
     case 'reading-text': return `#/reading/${p.textId}`;

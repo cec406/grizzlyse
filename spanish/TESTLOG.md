@@ -129,3 +129,29 @@ Each test run and each fix is recorded here. Format: date/time + what was run + 
     12 games).
 
 
+
+## Phase 10 — Zero ? hero expansion + real-browser testing
+- 2026-10-14: Added a searchable dictionary, a Spanish accent/keyboard trainer, a zero ? hero
+  roadmap and a professional/technology track — mirroring the Russian app.
+  - `data/word-packs.js`: 9 themed packs, 425 words (kindergarten ? professional), each with
+    Spanish + English pronunciation respelling + part of speech (gender for nouns).
+  - `js/views/vocab.js` + route `#/vocab`: searchable English ? Spanish ? respelling dictionary
+    (1,322 unique entries after de-dup), level/pack/POS/learned filters, audio and a learned toggle.
+  - `data/keyboard-layout.js` + `js/views/keyboard.js` + route `#/keyboard`: special-character
+    map (16 chars), Spanish dead keys (apostrophe+vowel ? á, quote+u ? ü, tilde+n ? ñ), Windows
+    Alt / macOS Option codes, and 8 accent typing lessons with a live drill + accent bar.
+  - `data/cyber.js` + `js/views/cyber.js` + route `#/cyber`: 6 professional/tech modules, 122
+    terms & phrases and dialogues — language study only.
+  - `data/learning-path.js` + `js/views/path.js` + route `#/path`: kindergarten ? C1 roadmap.
+  - Router now supports `?query` params; all new views wired into nav, home tiles and manifest.
+- 2026-10-14: Ported the two bugs found via the Russian app's browser test:
+  1. **Games restarted at the final question.** `js/games/runner.js` `bind()` fallback fired the
+     first matching element on a stale bubbling event; fixed with an `isConnected` guard.
+  2. **Stale view listeners on `#main`.** `js/app.js` now replaces `#main` with a clean clone on
+     every navigation (and the shell marker moved to the parent container).
+- 2026-10-14: Replaced the Playwright/python E2E with a dependency-free `tests/e2e.js` that drives
+  the machine's Chrome/Edge via the DevTools protocol (Node built-ins only); `tests/run-all.js`
+  auto-detects Chrome/Edge on Windows and Linux. Added `tests/extra.test.js` (8 tests).
+- 2026-10-14: `node tests/run-all.js` ? syntax (107 files) PASS, import checker PASS, unit tests
+  37/37 PASS, browser E2E PASS (18 routes, dictionary/accent-drill/roadmap exercised, lesson quiz
+  + game played, zero console/HTTP errors). `node tools/audit-content.js` ? all targets met.
