@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10151c">
+<title>Solutions | Grizzly System Engineering LLC</title>
+<meta name="description" content="Practical cybersecurity, digital forensics and operational tooling for Montana businesses, attorneys and organizations — assessments, incident response, staff training and custom dashboards.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2310151c'/%3E%3Ctext x='3' y='23' font-family='monospace' font-size='20' fill='%23fbbf24'%3E%3E_%3C/text%3E%3C/svg%3E">
+<link rel="canonical" href="https://grizzlyse.com/solutions.html">
+<meta property="og:type" content="website"><meta property="og:title" content="Solutions | Grizzly System Engineering LLC"><meta property="og:description" content="Cybersecurity, digital forensics, staff training and custom tooling for Montana businesses and organizations."><meta property="og:url" content="https://grizzlyse.com/solutions.html">
+<style>
+:root{color-scheme:dark;--bg:#10151c;--deep:#0b1016;--panel:#19212b;--line:#354150;--gold:#fbbf24;--soft:#c6cfda;--muted:#a2afbf;--white:#f4f7fb;--green:#90dfba;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:96px}
+body{margin:0;background:var(--bg);color:var(--soft);font:16px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--gold);text-underline-offset:4px}
+h1,h2,h3{color:var(--white);line-height:1.14;margin:0}
+h1{font-size:clamp(2.3rem,5.4vw,3.9rem);letter-spacing:-.05em;font-weight:850}
+h2{font-size:clamp(1.7rem,3.4vw,2.4rem);letter-spacing:-.03em}
+h3{font-size:1.15rem}
+p{margin:0 0 1.1rem}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
+::selection{background:var(--gold);color:var(--deep)}
+.wrap{width:min(1120px,calc(100% - 44px));margin:auto;max-width:1120px}
+.skip{position:absolute;left:12px;top:-70px;padding:10px 14px;background:var(--gold);color:var(--deep);border-radius:8px;z-index:100}.skip:focus{top:12px}
+.eyebrow{font:12px/1.5 var(--mono);color:var(--gold);text-transform:uppercase;letter-spacing:.12em;margin-bottom:18px}
+.lede{max-width:64ch;font-size:1.08rem;margin-top:16px}
+.muted{color:var(--muted)}
+.micro{color:var(--muted);font-size:.83rem;margin-top:14px}
+header{position:sticky;top:0;z-index:60;background:rgba(16,21,28,.98);border-bottom:1px solid var(--line)}
+.head{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;min-height:80px;padding:8px 0}
+.brand{display:flex;align-items:center;gap:12px;color:var(--white);text-decoration:none;line-height:1.2}
+.mark{display:grid;place-items:center;width:39px;height:42px;border:1px solid var(--gold);border-radius:9px;color:var(--gold);font:700 18px var(--mono)}
+.brand-name{font-weight:800;font-size:.95rem}
+.brand-name small{display:block;color:var(--muted);font:10px/1.6 var(--mono);text-transform:uppercase;letter-spacing:.1em}
+nav{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+nav a{color:var(--soft);text-decoration:none;font-size:.85rem}
+nav a:hover{color:var(--gold)}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 20px;border:1px solid var(--gold);background:var(--gold);color:var(--deep);font-weight:750;text-decoration:none;border-radius:8px;transition:transform .18s,background .18s}
+.btn:hover{background:#ffd267;transform:translateY(-2px)}
+.btn.alt{background:transparent;color:var(--white);border-color:var(--line)}
+.btn.alt:hover{border-color:var(--gold)}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+nav .solutions-link{color:var(--gold);border:1px solid var(--gold);border-radius:6px;padding:5px 10px;font-weight:700}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+section{padding:74px 0}
+.shade{background:var(--deep);border-block:1px solid var(--line)}
+.hero{padding:70px 0 62px;background:radial-gradient(ellipse at 88% 12%,#60461933,transparent 58%)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;margin-top:8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:24px}
+.card .tag{display:block;font:11px var(--mono);color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}
+.card h3{margin-bottom:10px}
+.card p{font-size:.94rem;margin:0}
+.card .link{margin-top:14px;font-size:.85rem;font-weight:700;display:inline-block}
+.program{border-top:2px solid var(--gold)}
+.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.steps{list-style:none;counter-reset:s;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
+.steps li{counter-increment:s;border-top:2px solid var(--line);padding-top:14px}
+.steps li::before{content:"0" counter(s);display:block;font:800 1.7rem var(--mono);color:var(--gold);margin-bottom:6px}
+.steps h3{font-size:1.02rem;margin-bottom:6px}
+.steps p{font-size:.92rem;margin:0}
+.contact{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start}
+.contact-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px}
+.contact-card address{font-style:normal;display:grid;gap:6px}
+.contact-card a{color:var(--gold)}
+.checks{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:10px}
+.checks li{padding-left:28px;position:relative}
+.checks li::before{content:"";position:absolute;left:0;top:8px;width:14px;height:8px;border-left:3px solid var(--gold);border-bottom:3px solid var(--gold);transform:rotate(-45deg)}
+footer{padding:34px 0;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:center}
+.foot a{color:var(--muted)}
+.foot a:hover{color:var(--gold)}
+@media(max-width:860px){.contact{grid-template-columns:1fr;gap:26px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="wrap head">
+  <a class="brand" href="index.html" aria-label="Grizzly System Engineering home"><span class="mark" aria-hidden="true">&gt;_</span><span class="brand-name">GRIZZLY<small>System Engineering / Montana</small></span></a>
+  <nav aria-label="Main"><a href="#services">Services</a><a href="#programs">Programs</a><a href="#who">Who it's for</a><a href="#process">Process</a><a href="#contact">Contact</a><a class="solutions-link" href="https://grizzlyse.com/projects/">Projects ↗</a><a href="lab.html">The Lab ↗</a></nav>
+</div></header>
+
+<main id="main">
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">East Helena, Montana · Services &amp; programs</p>
+    <h1>Solutions for your organization.</h1>
+    <p class="lede">Practical cybersecurity, digital forensics and operational tooling for Montana businesses, attorneys, clinics and public organizations. We investigate what happened, reduce the chance of a repeat, and put useful tools in your hands.</p>
+    <div class="btns">
+      <a class="btn" href="#contact">Request a consultation ↗</a>
+      <a class="btn alt" href="tel:+14064398127">Call (406) 439-8127</a>
+    </div>
+    <p class="micro">For businesses, attorneys and individuals. No obligation to proceed.</p>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <p class="eyebrow">01 / Core services</p>
+    <h2>Technical depth. Useful outcomes.</h2>
+    <p class="lede">Investigate what happened, reduce the chance of a repeat, and plan for recovery.</p>
+    <div class="grid">
+      <article class="card"><span class="tag">[ Forensics ]</span><h3>Digital forensics</h3><p>Acquisition and analysis of computers, drives and phones with documented evidence handling — for employee misconduct, data theft, civil and family disputes.</p></article>
+      <article class="card"><span class="tag">[ Response ]</span><h3>Incident response</h3><p>Containment, investigation and recovery after ransomware, compromised email or unauthorized access.</p></article>
+      <article class="card"><span class="tag">[ Assessment ]</span><h3>Security assessments</h3><p>A practical review of networks, accounts, backups and remote access, with prioritized findings and an actionable fix list.</p></article>
+      <article class="card"><span class="tag">[ Hardening ]</span><h3>Hardening &amp; secure access</h3><p>Multi-factor authentication, VPNs, firewalls, network segmentation and endpoint cleanup for small offices, shops and clinics.</p></article>
+      <article class="card"><span class="tag">[ Resilience ]</span><h3>Backup &amp; recovery planning</h3><p>On-premises and offline backup planning, with restore testing to confirm your recovery process actually works.</p></article>
+      <article class="card"><span class="tag">[ Data lifecycle ]</span><h3>Data recovery &amp; sanitization</h3><p>Recovery from failed or damaged drives where possible, and verified sanitization of retired equipment.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="programs" class="shade">
+  <div class="wrap">
+    <p class="eyebrow">02 / Programs &amp; products</p>
+    <h2>Ongoing programs, not just one-off jobs.</h2>
+    <p class="lede">Packaged offerings built on our own tools — delivered for your team, or hosted and supported by us.</p>
+    <div class="grid">
+      <article class="card program">
+        <span class="tag">[ Training ]</span>
+        <h3>Staff cybersecurity awareness training</h3>
+        <p>Self-paced employee training covering phishing, passwords, MFA, safe browsing, data protection and incident reporting — the kind of annual training your cyber-insurance questionnaire asks about. Learners finish with a printable completion record for HR. Delivered company-wide with an optional technical track for IT staff.</p>
+        <a class="link" href="https://grizzlyse.com/csia">See the training →</a>
+      </article>
+      <article class="card program">
+        <span class="tag">[ Dashboards ]</span>
+        <h3>Shop &amp; operations dashboards</h3>
+        <p>Custom, editable boards for the shop floor and the office: work orders, assets, preventive maintenance, parts, and a live wall-TV display. We can host it for you on your network, or install and support it on-site — no cloud account required.</p>
+        <a class="link" href="https://grizzlyse.com/dashboard">See a live demo →</a>
+      </article>
+      <article class="card program">
+        <span class="tag">[ Upskilling ]</span>
+        <h3>Staff upskilling &amp; cyber range</h3>
+        <p>Hands-on, browser-based courses we can run for your team: a defensive cyber range, a computer-science academy, math foundations and a Git/CI-CD curriculum. Useful for onboarding, apprenticeships and IT staff development — with no software to install.</p>
+        <a class="link" href="https://grizzlyse.com/projects/">Browse the training projects →</a>
+      </article>
+      <article class="card program">
+        <span class="tag">[ Retainer ]</span>
+        <h3>Ongoing support &amp; maintenance</h3>
+        <p>A relationship instead of a one-time ticket: periodic reviews of accounts, patching and backups, help with small issues before they become incidents, and a direct line when something feels wrong.</p>
+        <a class="link" href="#contact">Ask about ongoing support →</a>
+      </article>
+    </div>
+    <p class="micro">Engagements are scoped and agreed before work begins — see the process below.</p>
+  </div>
+</section>
+
+<section id="who">
+  <div class="wrap">
+    <p class="eyebrow">03 / Built for real people</p>
+    <h2>Security isn't just an enterprise problem.</h2>
+    <div class="who">
+      <article class="card"><h3>Businesses &amp; shops</h3><p>Practical security for trades, manufacturing, offices and clinics — focused on the systems your business depends on, and the training your staff actually need.</p></article>
+      <article class="card"><h3>Attorneys &amp; firms</h3><p>Evidence collection, analysis and reporting around the questions your matter requires. Engagements can be discussed through counsel.</p></article>
+      <article class="card"><h3>Organizations &amp; individuals</h3><p>Help making sense of account compromises, device concerns and missing data — and getting your people trained — without expecting you to speak fluent cybersecurity.</p></article>
+    </div>
+    <h3 style="margin-top:34px">Compliance drivers we can help with</h3>
+    <ul class="checks">
+      <li>Cyber-insurance and security-questionnaire readiness</li>
+      <li>Annual employee security-awareness training requirements</li>
+      <li>Backup and recovery expectations (and tested restores)</li>
+      <li>Device retirement and verified data sanitization records</li>
+    </ul>
+  </div>
+</section>
+
+<section id="process" class="shade">
+  <div class="wrap">
+    <p class="eyebrow">04 / The engagement</p>
+    <h2>No mystery. No magic claims.</h2>
+    <ol class="steps">
+      <li><h3>Talk &amp; scope</h3><p>Discuss the situation, priorities and who needs the results. Agree on the work before proceeding.</p></li>
+      <li><h3>Preserve &amp; document</h3><p>Choose an appropriate method, document handling, and verify copies where applicable.</p></li>
+      <li><h3>Investigate &amp; improve</h3><p>Examine the relevant artifacts against the questions that matter, then act on what we find.</p></li>
+      <li><h3>Explain</h3><p>Report findings in plain language — what is supported, what is uncertain, and the next step.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap contact">
+    <div>
+      <p class="eyebrow">05 / The next step</p>
+      <h2>Let's make the situation clearer.</h2>
+      <p class="lede">Tell us what you're dealing with — a concern, a compliance deadline, or a project in mind. We'll discuss the fit and what makes sense next, without an obligation to proceed.</p>
+      <a class="btn" href="https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0" target="_blank" rel="noopener noreferrer">Request a consultation ↗</a>
+      <p class="micro">Opens a Zoho-hosted inquiry form in a new tab. Share only a brief overview; don't upload evidence or include passwords. Ask about a suitable channel for sensitive details.</p>
+    </div>
+    <div class="contact-card">
+      <p class="eyebrow" style="margin-bottom:12px">Direct contact</p>
+      <address>
+        <span>Grizzly System Engineering LLC</span>
+        <span>East Helena, Montana</span>
+        <a href="tel:+14064398127">(406) 439-8127</a>
+        <a href="mailto:info@grizzlyse.com">info@grizzlyse.com</a>
+      </address>
+      <p class="micro">If calling about a privacy concern, tell us what contact method is safe for you.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap foot">
+  <div><p>© <span id="yr">2026</span> Grizzly System Engineering LLC</p><p>Cybersecurity · Digital forensics · Training · Custom tooling</p></div>
+  <div><a href="index.html">Home</a> · <a href="projects/">Projects</a> · <a href="lab.html">Hardware Lab</a> · <a href="incident.html">First-hour guide</a></div>
+</div></footer>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
+</body>
+</html>
