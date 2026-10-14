@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSMath Hero &mdash; Zero to Hero for Computer Science</title>
+<meta name="description" content="A gamified math trainer that takes you from arithmetic to calculus, discrete math, linear algebra, probability, and algorithms.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%88%9E%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+  <div id="app" class="app"></div>
+
+  <!-- core -->
+  <script src="js/util.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/problems.js"></script>
+  <script src="js/curriculum.js"></script>
+  <script src="js/viz.js"></script>
+  <script src="js/lessons.js"></script>
+
+  <!-- problem generators, one file per realm -->
+  <script src="js/gen.foundations.js"></script>
+  <script src="js/gen.prealgebra.js"></script>
+  <script src="js/gen.algebra.js"></script>
+  <script src="js/gen.functions.js"></script>
+  <script src="js/gen.trig.js"></script>
+  <script src="js/gen.calculus.js"></script>
+  <script src="js/gen.discrete.js"></script>
+  <script src="js/gen.linalg.js"></script>
+  <script src="js/gen.probability.js"></script>
+  <script src="js/gen.algorithms.js"></script>
+  <script src="js/gen.cs.js"></script>
+
+  <!-- lessons: teaching content, one file per realm group -->
+  <script src="js/lesson.foundations.js"></script>
+  <script src="js/lesson.algebra.js"></script>
+  <script src="js/lesson.calculus.js"></script>
+  <script src="js/lesson.linalg.js"></script>
+  <script src="js/lesson.cs.js"></script>
+
+  <!-- super-teacher layer: paths, exams, drills, export -->
+  <script src="js/features.js"></script>
+
+  <!-- ui + boot -->
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

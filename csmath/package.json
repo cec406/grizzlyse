@@ -1,0 +1,13 @@
+{
+  "name": "csmath-hero",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A gamified math trainer that takes you from zero to hero for a computer science masters: arithmetic -> calculus, discrete math, linear algebra, probability, and algorithms.",
+  "scripts": {
+    "test": "node tools/selftest.js",
+    "test:ui": "node tools/uitest.js"
+  },
+  "devDependencies": {
+    "jsdom": "^24.0.0"
+  }
+}
