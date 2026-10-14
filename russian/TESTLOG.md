@@ -68,3 +68,52 @@ Each test run and each fix is recorded here. Format: date/time + what was run + 
     PASS, unit tests 28/28 PASS, browser E2E PASS.
 
 
+
+## Phase 9 — Zero ? hero expansion
+- 2026-10-14: Added a large searchable dictionary, a Russian keyboard trainer, a zero ? hero
+  roadmap and a professional/technology Russian track.
+  - `data/word-packs.js`: 9 themed packs, 440 words (kindergarten ? professional), each with
+    Cyrillic + Latin transliteration + English + part of speech (gender for nouns).
+  - `js/views/vocab.js` + route `#/vocab`: searchable English ? Russian ? transliteration
+    dictionary (1,080+ unique entries after de-dup), level/pack/POS/learned filters, audio and
+    a learned toggle feeding review.
+  - `data/keyboard-layout.js` + `js/views/keyboard.js` + route `#/keyboard`: ?????? key map,
+    finger colouring, per-key detail, Latin?Cyrillic keydown translation, a full reference
+    table, and 8 graded touch-typing lessons with a live drill (per-character highlighting,
+    next-key hint, accuracy/WPM).
+  - `data/cyber.js` + `js/views/cyber.js` + route `#/cyber`: 6 professional/tech modules,
+    126 terms & phrases and dialogues — language study only, no tradecraft.
+  - `data/learning-path.js` + `js/views/path.js` + route `#/path`: kindergarten ? digital
+    professional roadmap linking into the right content at each stage.
+  - Router now supports `?query` params; all new views wired into the nav, home tiles and the
+    view manifest.
+- Fixes/improvements: `tests/run-all.js` now reports a missing Chrome as a non-fatal SKIP
+  (matching the README) so `npm test` passes on a machine without the CI browser.
+- Added `tests/extra.test.js` (6 tests) validating packs, pro track, keyboard map/lessons,
+  roadmap and the lexicon builder; updated smoke + E2E route lists; audit reports new counts.
+- 2026-10-14: `node tests/run-all.js` ? syntax check (100 files) PASS, import checker PASS,
+  unit tests 34/34 PASS, browser E2E SKIPPED (no system Chrome). `node tools/audit-content.js`
+  ? all targets met (9 packs/440 words, 6 modules/126 terms, 8 lessons, 6 roadmap stages).
+
+## Phase 10 — Real-browser E2E on the dev machine (no installs)
+- 2026-10-14: Replaced the Playwright/python E2E with a dependency-free browser smoke test
+  (`tests/e2e.js`) that drives the machine's own Chrome/Edge via the DevTools protocol using
+  Node's built-in WebSocket + fetch + http. `tests/run-all.js` now auto-detects Chrome/Edge on
+  Windows and Linux.
+- 2026-10-14: The new browser test immediately caught two real bugs that unit tests missed:
+  1. **Games restarted at the final question.** `js/games/runner.js` `bind()` had a fallback
+     that fired the *first* matching element when a click hit no match. When the last
+     question's "See results" button was clicked, `finish()` rendered the results and, during
+     the same event's bubbling, added a root "Play again" listener whose fallback immediately
+     re-launched the game. Fixed by ignoring clicks on elements removed mid-event
+     (`e.target.isConnected === false`) in `bind()`.
+  2. **Stale view listeners on `#main`.** Alphabet and Keyboard both use `[data-tab]`; a
+     handler from a previously visited view stayed attached and threw
+     `TAB_RENDER[t] is not a function` when a different view's tab was clicked. Fixed in
+     `js/app.js` by replacing `#main` with a clean clone on every navigation, dropping old
+     listeners (and moving the shell marker to the parent container).
+- 2026-10-14: `node tests/run-all.js` ? syntax (100 files) PASS, import checker PASS, unit
+  tests 36/36 PASS, browser E2E PASS (17 routes, dictionary/keyboard/roadmap exercised, lesson
+  quiz + game played, zero console/HTTP errors).
+- Verified the app is GitHub-Pages-safe: no absolute paths; relative assets + hash routing work
+  from a project subpath. README gained a Pages deployment section.

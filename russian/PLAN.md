@@ -49,3 +49,25 @@ Checklist. Tick only after the phase's checks pass in `node tests/run-all.js`.
 - [x] Code review pass (dead links, errors, handlers, localStorage, mobile)
 - [x] Russian accuracy pass on A1/A2
 - [x] README complete
+
+## Phase 9 — Zero → hero expansion [x]
+- [x] `data/word-packs.js`: 9 themed packs (440 words) with translit + audio ids, kindergarten → professional
+- [x] `#/vocab` Searchable English ⇄ Russian dictionary with romanisation, audio, filters, learned tracking
+- [x] `data/keyboard-layout.js`: ЙЦУКЕН map, finger assignments, Latin→Cyrillic translation, 8 typing lessons
+- [x] `#/keyboard` Keyboard trainer: layout, per-key detail, touch-typing drill (live highlighting, stats), reference table
+- [x] `data/cyber.js`: 6 professional/technology modules, 126 terms & phrases, dialogues (language only)
+- [x] `#/cyber` Pro & tech track browser
+- [x] `data/learning-path.js` + `#/path` zero → hero roadmap (kindergarten → digital professional)
+- [x] Router supports `?query` params; new views wired into nav, home and view manifest
+- [x] `tests/extra.test.js` validates all new content; smoke/E2E route lists updated
+- [x] Full harness passes (`node tests/run-all.js`); audit reports all targets met
+
+## Phase 10 — Real-browser testing & deployment [x]
+- [x] `tests/e2e.js` rewritten to drive the machine's own Chrome/Edge via the DevTools protocol (Node built-ins only — no Playwright, no python, no npm install)
+- [x] `tests/run-all.js` auto-detects Chrome/Edge on Windows and Linux; missing browser = non-fatal skip
+- [x] Browser test covers: all routes render without console/page/HTTP errors, dictionary search + pack filters + deep links, roadmap word previews, keyboard drill translation, a full lesson quiz and a practice game
+- [x] **Bug fix:** games auto-restarted at the final question (`runner.js` `bind()` fallback fired a just-added listener during event bubbling) — fixed with an `isConnected` guard
+- [x] **Bug fix:** stale view listeners on `#main` collided across Alphabet/Keyboard tabs — fixed by giving every route a clean `#main` clone
+- [x] Verified GitHub-Pages-safe (relative paths + hash routing); README deployment section added
+- [x] Full harness passes incl. real browser E2E
+

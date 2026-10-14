@@ -8,12 +8,16 @@ window.speak = speak;
 
 const NAV = [
   ['#/home', 'Дом', 'Home'],
+  ['#/path', 'Путь', 'Path'],
   ['#/alphabet', 'Азбука', 'Alphabet'],
+  ['#/keyboard', 'Клавиши', 'Keyboard'],
   ['#/lessons', 'Курс', 'Course'],
+  ['#/vocab', 'Словарь', 'Words'],
   ['#/practice', 'Практика', 'Practice'],
   ['#/review', 'Повторение', 'Review'],
   ['#/reading', 'Чтение', 'Reading'],
   ['#/grammar', 'Грамматика', 'Grammar'],
+  ['#/cyber', 'Про', 'Pro'],
   ['#/progress', 'Прогресс', 'Progress'],
   ['#/audio-setup', 'Звук', 'Audio'],
   ['#/help', 'Помощь', 'Help']
@@ -23,8 +27,14 @@ function route() {
   const r = parseHash(location.hash);
   const view = viewFor(r ? r.name : 'home');
   const params = r ? r.params : {};
-  const main = document.getElementById('main');
-  if (!main) return;
+  let main = document.getElementById('main');
+  const container = main && main.parentNode;
+  if (!main || !container) return;
+  // Replace #main with a clean clone on every navigation so event listeners
+  // attached by the previous view are dropped (views bind to #main).
+  const clean = main.cloneNode(false);
+  container.replaceChild(clean, main);
+  main = clean;
   try {
     main.innerHTML = view.render(params);
     if (view.attach) view.attach(main, params);
@@ -47,8 +57,9 @@ function highlightNav(name) {
 
 function buildShell() {
   const app = document.getElementById('main');
-  if (!app || app.dataset.shell) return;
-  app.dataset.shell = '1';
+  const container = app && app.parentNode;
+  if (!app || !container || container.dataset.shell) return;
+  container.dataset.shell = '1';
   const navHtml = NAV.map(([h, ru, en]) => `<a href="${h}" class="${h === '#/home' ? 'active' : ''}"><i>${ru}</i><span>${en}</span></a>`).join('');
   const header = document.createElement('header');
   header.id = 'nav';
@@ -56,7 +67,7 @@ function buildShell() {
     <div class="brand"><a href="#/home"><b>РП</b> RussianPod</a></div>
     <nav>${navHtml}</nav>
     <div class="xp-chip" id="xp-chip"></div>`;
-  app.parentNode.insertBefore(header, app);
+  container.insertBefore(header, app);
 }
 
 function paintXp() {

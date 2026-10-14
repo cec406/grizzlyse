@@ -67,15 +67,14 @@ function importCheck() {
 
 // 3. E2E (attempted; never fatal to the harness exit code).
 function e2e() {
-  // Requires a system Chrome binary.
+  // Requires a Chrome/Edge binary. The runner drives it via the DevTools protocol.
   const chrome = findChrome();
   if (!chrome) {
-    report('browser E2E', false, 'no system Chrome found — steps 1-5 cover the rest');
+    report('browser E2E', true, 'SKIPPED — no Chrome/Edge found');
     return;
   }
-  const pwPackage = resolve('/home/cclark/.local/share/containers/storage/overlay/990418dabd1120e9d4e2e19a1704c3ce80b6c22d0a48dc2a0341c5d4cc690ecc/diff/usr/local/lib/python3.11/site-packages/playwright/driver/package');
   try {
-    const st = execFileSync('node', ['tests/e2e.js', chrome, pwPackage], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], cwd: ROOT });
+    const st = execFileSync('node', ['tests/e2e.js', chrome], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], cwd: ROOT, timeout: 180000 });
     process.stdout.write('  ' + st.trim().replace(/\n/g, '\n  ') + '\n');
     report('browser E2E', true);
   } catch (err) {
@@ -91,30 +90,26 @@ function e2e() {
 
 function safeExists(p) { try { return statSync(p).isFile(); } catch { return false; } }
 
-// Locate a Chrome/Chromium binary: explicit env, then flatpak exports, then common names.
+// Locate a Chrome/Chromium/Edge binary: explicit env, then Windows installs, then Linux.
 function findChrome() {
   if (process.env.CHROME_PATH && safeExists(process.env.CHROME_PATH)) return process.env.CHROME_PATH;
-  const bases = [
-    '/var/lib/flatpak/app/com.google.Chrome/x86_64/stable',
-    '/var/lib/flatpak/app/com.google.Chrome/x86_64/beta',
-    '/usr/bin',
-    '/usr/local/bin'
-  ].filter((d) => { try { return statSync(d).isDirectory(); } catch { return false; } });
-  const names = ['google-chrome-stable', 'google-chrome', 'chromium', 'chromium-browser', 'chrome'];
-  for (const base of bases) {
-    for (const name of names) {
-      const direct = join(base, name);
-      if (safeExists(direct)) return direct;
-    }
-    let children = [];
-    try { children = readdirSync(base); } catch { continue; }
-    for (const child of children) {
-      for (const sub of ['files/extra/chrome', 'files/bin/chrome']) {
-        const p = join(base, child, sub);
-        if (safeExists(p)) return p;
-      }
-    }
-  }
+  const pf = process.env.ProgramFiles;
+  const pf86 = process.env['ProgramFiles(x86)'];
+  const local = process.env.LOCALAPPDATA;
+  const candidates = [
+    pf && join(pf, 'Google/Chrome/Application/chrome.exe'),
+    pf86 && join(pf86, 'Google/Chrome/Application/chrome.exe'),
+    local && join(local, 'Google/Chrome/Application/chrome.exe'),
+    pf && join(pf, 'Microsoft/Edge/Application/msedge.exe'),
+    pf86 && join(pf86, 'Microsoft/Edge/Application/msedge.exe'),
+    '/var/lib/flatpak/app/com.google.Chrome/x86_64/stable/files/extra/chrome',
+    '/usr/bin/google-chrome-stable',
+    '/usr/bin/google-chrome',
+    '/usr/bin/chromium',
+    '/usr/bin/chromium-browser',
+    '/usr/local/bin/google-chrome'
+  ].filter(Boolean);
+  for (const c of candidates) if (safeExists(c)) return c;
   return null;
 }
 

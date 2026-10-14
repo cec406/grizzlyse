@@ -1,8 +1,10 @@
-# RussianPod — Learn Russian from zero to B2
+# RussianPod — Learn Russian from zero to hero
 
 A written-first, no-framework Russian course for English speakers. Learn the 33-letter
 alphabet, work through graded units, drill with 12 games, review with spaced repetition,
-and read graded texts with tap-to-translate glossaries.
+read graded texts with tap-to-translate glossaries, and — new — search a full
+English ⇄ Russian dictionary, train touch typing on the Russian keyboard, and climb the
+zero → hero roadmap all the way to professional/technical Russian.
 
 No build step, no dependencies. Just modern browser ES modules.
 
@@ -57,12 +59,30 @@ The harness runs, in order:
 
 1. **Syntax check** — `node --check` on every `.js` file.
 2. **Import checker** — every `import`, `<script src>` and `<link href>` resolves.
-3. **Unit tests** (`node --test`) — data validators, engine logic, DOM-stub smoke tests.
-4. **Browser E2E** — drives a real headless Chrome through every route, lesson quiz and
-   all 12 games, failing on any console error, page error, HTTP ≥ 400, empty route, or
-   unplayable round. If no Chrome is found the step is skipped (non-fatal).
+3. **Unit tests** (`node --test`) — data validators, engine logic, DOM-stub smoke tests,
+   and the added-content tests (word packs, keyboard map, pro track, roadmap, lexicon).
+4. **Browser E2E** — starts a local static server and drives your installed **Chrome/Edge**
+   through the DevTools protocol (Node's built-in WebSocket — **no Playwright, no npm
+   install**). It loads every route, checks for console/page/HTTP errors, exercises the
+   dictionary search + pack filters, the roadmap word previews and the keyboard drill, and
+   plays a full lesson quiz and a practice game through to the results screen. If no
+   Chrome/Edge is found the step is skipped (non-fatal).
 
-Set `CHROME_PATH=/path/to/chrome` to point the E2E runner at a specific browser.
+Set `CHROME_PATH=/path/to/chrome` to point the E2E runner at a specific browser binary.
+
+---
+
+## Deploying to GitHub Pages
+
+The app is a static site with no build step and uses **relative paths + hash routing**, so it
+works from a project subpath (`https://<user>.github.io/<repo>/`) with no configuration.
+
+1. Push this folder to your repository.
+2. On GitHub: **Settings → Pages → Build and deployment → Source: Deploy from a branch**,
+   branch **`main`**, folder **`/ (root)`** (adjust the folder if this lives in a subfolder and
+   set the Pages path accordingly).
+3. Open `https://<user>.github.io/<repo>/` in Chrome. Audio needs a Russian voice installed —
+   see the in-app **Audio setup** page.
 
 ---
 
@@ -77,21 +97,40 @@ data/
   pronunciation-guides.js  stress, vowel reduction, voicing, hard/soft, cursive…
   grammar-reference.js   grammar topics A1 → B2 (tables + examples)
   grammar-drills.js      verb / aspect / case drills used by the games
+  word-packs.js          themed vocabulary packs (440 words) that feed the dictionary
+  keyboard-layout.js     ЙЦУКЕН key map, finger assignments, typing lessons
+  cyber.js               professional & technology Russian modules (language only)
+  learning-path.js       zero → hero roadmap stages
   data-units/unit-NN.js  one file per curriculum unit
   reading/texts-*.js     graded reading texts with glossaries
 js/
   app.js                 boot + chrome
-  router.js              hash router
+  router.js              hash router (supports ?query params)
   state.js               XP, streak, mastery, settings (localStorage, guarded)
   srs.js                 spaced repetition (Leitner boxes)
   keyboard.js            input normalization (ё=е, stress/case/trim) + on-screen keyboard
   audio.js               speechSynthesis ru-RU with graceful fallback
   ui.js                  DOM helpers
-  views/                 one module per route
+  views/                 one module per route (home, path, alphabet, keyboard, vocab,
+                         cyber, lessons, lesson, practice, review, reading, grammar,
+                         progress, audio-setup, help, placement)
   games/                 game registry, builders, pure logic, per-game renderers
 tests/                   harness, unit tests, DOM stub, E2E driver
 tools/                   import checker, content audit
 ```
+
+### New sections
+
+- **Dictionary (`#/vocab`)** — search the whole lexicon (units + packs + pro track, 1,080+
+  unique words). Type English to get the Russian word(s), type Russian to get the meaning, or
+  type the romanisation. Every entry has an audio button and a “learned” toggle that feeds review.
+- **Keyboard trainer (`#/keyboard`)** — a visual ЙЦУКЕН layout, per-key finger colours, a
+  full Latin↔Cyrillic reference table, and graded touch-typing drills. Latin key presses are
+  translated to Russian for you, so it works whether or not the OS Russian layout is on.
+- **Zero → hero path (`#/path`)** — the roadmap from kindergarten letters to professional
+  reading, linking straight into the right content at each stage.
+- **Pro & tech track (`#/cyber`)** — advanced workplace/technology Russian: vocabulary,
+  phrases and dialogues. Language study only, no offensive tradecraft.
 
 ### Adding a unit
 
@@ -121,9 +160,15 @@ The interface advertises the full zero→B2 goal (44 units). The current build s
 | Grammar reference | ≥10 | 18 | spans A1–B2 |
 | Verb/aspect/case drills | — | 24/10/16 | span A1–B2 |
 | Games | 12 | 12 | complete |
+| Themed word packs | ≥8 | 9 | 440 words, kindergarten → professional |
+| Keyboard typing lessons | ≥6 | 8 | home/top/bottom/alphabet/words/phrases/pro/speed |
+| Pro & tech modules | ≥5 | 6 | 126 terms & phrases (language only) |
+| Roadmap stages | ≥5 | 6 | kindergarten → digital professional |
 
-Total vocabulary: **773 words across 44 units**. Run `node tools/audit-content.js` for the
-live version of this table.
+Total curriculum vocabulary: **773 words across 44 units**, plus **440** pack words and
+**126** professional-track entries — after de-duplication the searchable dictionary
+(`#/vocab`) holds **1,080+** unique entries. Run `node tools/audit-content.js` for the live
+version of this table.
 
 ---
 

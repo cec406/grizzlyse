@@ -6,6 +6,10 @@ import { LETTERS, PRONUNCIATION_GUIDES, UNITS, READING } from '../data/index.js'
 import { GRAMMAR_TOPICS } from '../data/grammar-reference.js';
 import { GAMES } from '../js/games/registry.js';
 import { VERB_DRILLS, ASPECT_DRILLS, CASE_DRILLS } from '../data/grammar-drills.js';
+import { WORD_PACKS, allPackWords } from '../data/word-packs.js';
+import { CYBER_MODULES, allCyberTerms } from '../data/cyber.js';
+import { KEYBOARD_LESSONS } from '../data/keyboard-layout.js';
+import { PATH_STAGES } from '../data/learning-path.js';
 
 const strict = process.argv.includes('--strict');
 const RED = '\x1b[31m';
@@ -86,6 +90,21 @@ console.log(`      by level: A1=${rByLevel.A1} A2=${rByLevel.A2} B1=${rByLevel.B
 console.log('\nPractice games');
 line(GAMES.length === 12 ? 'ok' : 'bad', 'registered games', GAMES.length, 12);
 if (GAMES.length !== 12) hardGaps.push('games');
+
+// --- Vocabulary packs & lexicon additions ---
+console.log('\nVocabulary packs');
+line(WORD_PACKS.length >= 8 ? 'ok' : 'warn', 'themed packs', WORD_PACKS.length, '>=8');
+line(allPackWords().length >= 200 ? 'ok' : 'warn', 'pack words', allPackWords().length, '>=200');
+
+// --- Professional / tech track ---
+console.log('\nProfessional & tech track');
+line(CYBER_MODULES.length >= 5 ? 'ok' : 'warn', 'modules', CYBER_MODULES.length, '>=5');
+line(allCyberTerms().length >= 60 ? 'ok' : 'warn', 'terms & phrases', allCyberTerms().length, '>=60');
+
+// --- Keyboard & roadmap ---
+console.log('\nKeyboard & roadmap');
+line(KEYBOARD_LESSONS.length >= 6 ? 'ok' : 'warn', 'typing lessons', KEYBOARD_LESSONS.length, '>=6');
+line(PATH_STAGES.length >= 5 ? 'ok' : 'warn', 'roadmap stages', PATH_STAGES.length, '>=5');
 
 // --- Vocab total ---
 const vocabTotal = UNITS.reduce((n, u) => n + (u.vocabulary || []).length, 0);

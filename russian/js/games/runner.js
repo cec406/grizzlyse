@@ -176,6 +176,10 @@ function acc(pct) {
 function bind(scope, sel, fn, once) {
   if (!scope || !scope.addEventListener || typeof fn !== 'function') return;
   const handler = (e) => {
+    // Ignore clicks on elements that were removed during this same event
+    // (e.g. a button replaced when the view re-rendered) — otherwise a stale
+    // bubbling event could fire a just-added listener and restart the session.
+    if (e.target && e.target.isConnected === false) return;
     let el = e.target && e.target.closest ? e.target.closest(sel) : null;
     if (!el && scope.matches && scope.matches(sel)) el = scope;
     if (!el) { const found = scope.querySelectorAll ? scope.querySelectorAll(sel)[0] : null; el = found; }

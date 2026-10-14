@@ -44,12 +44,16 @@ export function render() {
       <p class="hint">${esc(done)} of ${esc(total)} units completed (${esc(pct)}%)</p>` : ''}
     </div>
     <div class="card-grid">
+      <a class="tile" href="#/path"><span class="tile-ic">🗺</span><b>Zero → hero path</b><span>the full roadmap from kindergarten to pro</span></a>
       <a class="tile" href="#/alphabet"><span class="tile-ic">🔤</span><b>Alphabet</b><span>33 letters, sounds, reading groups</span></a>
+      <a class="tile" href="#/keyboard"><span class="tile-ic">⌨️</span><b>Keyboard trainer</b><span>learn ЙЦУКЕН touch typing on your new keyboard</span></a>
       <a class="tile" href="#/lessons"><span class="tile-ic">📚</span><b>Course</b><span>${esc(total)} units from greetings to B2 topics</span></a>
+      <a class="tile" href="#/vocab"><span class="tile-ic">📖</span><b>Dictionary</b><span>search every word — English → Russian, with audio</span></a>
       <a class="tile" href="#/practice"><span class="tile-ic">🎮</span><b>Games</b><span>12 games for every word you learn</span></a>
       <a class="tile" href="#/review"><span class="tile-ic">🔁</span><b>Daily review</b><span>spaced repetition with a smart queue</span></a>
-      <a class="tile" href="#/reading"><span class="tile-ic">📖</span><b>Reading</b><span>graded texts with tap-to-translate</span></a>
+      <a class="tile" href="#/reading"><span class="tile-ic">📰</span><b>Reading</b><span>graded texts with tap-to-translate</span></a>
       <a class="tile" href="#/grammar"><span class="tile-ic">📐</span><b>Grammar</b><span>from noun gender to B2 constructions</span></a>
+      <a class="tile" href="#/cyber"><span class="tile-ic">🛡</span><b>Pro &amp; tech Russian</b><span>the advanced professional register</span></a>
       <a class="tile" href="#/progress"><span class="tile-ic">📈</span><b>Progress</b><span>stats, accuracy, 20 badges</span></a>
       <a class="tile" href="#/audio-setup"><span class="tile-ic">🔊</span><b>Audio setup</b><span>get a Russian voice working on your machine</span></a>
     </div>
