@@ -1,0 +1,38 @@
+# Deploy this static site to GitHub Pages.
+#
+# Works out of the box when THIS folder is the repository root.
+# If instead this site lives in a subfolder of a bigger repo, change
+# the artifact path below from "." to that folder, e.g. path: csia
+#
+# Then in the repo: Settings -> Pages -> Build and deployment -> Source: GitHub Actions.
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4

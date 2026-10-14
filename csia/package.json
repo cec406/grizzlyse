@@ -1,0 +1,13 @@
+{
+  "name": "cyber-aware",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cyber Aware — free, friendly cybersecurity & information assurance awareness training for employees, with interactive tools, an assessment, and a certificate.",
+  "scripts": {
+    "test": "node tools/selftest.js",
+    "test:ui": "node tools/uitest.js"
+  },
+  "devDependencies": {
+    "jsdom": "^24.0.0"
+  }
+}
