@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="amber"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#14181f">
-<title>The Hardware Lab | Grizzly System Engineering</title>
-<meta name="description" content="Grizzly System Engineering's Montana lab: container services, private remote access, local LLMs, digital forensics, Hashcat, Python dashboards, and reclaimed hardware.">
-<meta property="og:type" content="website"><meta property="og:title" content="The Hardware Lab | Grizzly System Engineering"><meta property="og:description" content="Containers, private remote access, local LLMs, forensics, and reclaimed hardware, built in Montana.">
+<title>The Engineering Lab | Grizzly System Engineering</title>
+<meta name="description" content="Explore Grizzly System Engineering's working lab: custom software, containerized services, deployment workflows, private infrastructure, and specialist security tools in Montana.">
+<meta property="og:type" content="website"><meta property="og:title" content="The Engineering Lab | Grizzly System Engineering"><meta property="og:description" content="Software, containers, delivery workflows, infrastructure, and security experiments built in East Helena, Montana.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314181f'/%3E%3Ctext x='4' y='23' font-family='monospace' font-size='20' font-weight='bold' fill='%23fbbf24'%3E%3E_%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
 <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
@@ -105,16 +105,16 @@ footer{background:var(--deep);border-top:2px solid var(--amber);padding:28px 0;f
 <a class="skip" href="#main">Skip to content</a>
 <div id="post" aria-hidden="true"></div>
 <header><div id="prog"></div><div class="container head"><a class="logo" href="index.html">grizzly<span>@system-engineering</span></a>
-<nav aria-label="Lab navigation"><a href="#projects">projects</a><a href="#security">security</a><a href="#tool">py-tool</a><a href="#evidence">inspect</a><a href="#hardware">hardware</a><a href="#process">process</a><a href="#contact">contact</a><a class="projects-link" href="https://grizzlyse.com/projects/">../all-projects<span class="caret">▊</span></a><a href="index.html">../main-site</a>
+<nav aria-label="Lab navigation"><a href="#projects">systems</a><a href="#delivery">delivery</a><a href="#security">security</a><a href="#tool">python tools</a><a href="#hardware">infrastructure</a><a href="#process">process</a><a href="#contact">contact</a><a class="projects-link" href="https://grizzlyse.com/projects/">../all-projects<span class="caret">▊</span></a><a href="index.html">../main-site</a>
 <button class="tg" id="b-crt" aria-pressed="true" type="button" title="Toggle CRT scanlines">crt</button><button class="tg" id="b-rain" aria-pressed="true" type="button" title="Toggle digital rain">rain</button><button class="tg on" id="b-theme" type="button" aria-label="Cycle color theme">theme:amber</button></nav></div></header>
 <main id="main">
 
 <section class="hero"><canvas id="rain" aria-hidden="true"></canvas><div class="container hero-grid">
 <div>
-<h1 aria-label="Built here. Put to work."><span class="scr" data-t="Built here." aria-hidden="true">Built here.</span><br><span class="scr" data-t="Put to work." aria-hidden="true">Put to work.</span></h1>
-<p class="lead">Containerized services, private remote access, local AI, digital forensics, and reclaimed hardware. The hands-on side of Grizzly System Engineering, East Helena, Montana.</p>
-<p class="lead">The terminal is live. Type <b>help</b>, or try <b>neofetch</b>, <b>hack</b>, and <b>theme green</b>. Press <b>/</b> to jump in; Tab completes commands.</p>
-<div class="btns"><a class="btn" href="#projects">See the work</a><a class="btn alt" href="#contact">Discuss your project</a></div>
+<h1 aria-label="Build here. Run it with confidence."><span class="scr" data-t="Build here." aria-hidden="true">Build here.</span><br><span class="scr" data-t="Run it with confidence." aria-hidden="true">Run it with confidence.</span></h1>
+<p class="lead">A working view into how Grizzly System Engineering approaches software, containerized services, deployment workflows, and practical security. Built and tested hands-on in East Helena, Montana.</p>
+<p class="lead">Explore example systems and experiments—not a list of client claims. The terminal is live: type <b>help</b>, or try <b>neofetch</b>, <b>hack</b>, and <b>theme green</b>. Press <b>/</b> to jump in; Tab completes commands.</p>
+<div class="btns"><a class="btn" href="#projects">Explore the systems</a><a class="btn alt" href="#contact">Discuss an engineering project</a></div>
 </div>
 <div class="term" aria-label="Interactive lab terminal">
 <div class="tbar"><i></i><i></i><i></i><span>caleb@grizzly:~/lab</span></div>
@@ -122,17 +122,18 @@ footer{background:var(--deep);border-top:2px solid var(--amber);padding:28px 0;f
 <form id="tform"><label class="sr" for="tin">Terminal command</label><span class="ps" aria-hidden="true">$</span><input id="tin" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type help"></form>
 </div></div></section>
 
-<div class="strip"><div class="container"><span>Hands-on development</span><span>On-premise by preference</span><span>Authorized security testing only</span><span>Plain-language findings</span><span id="clk">East Helena, MT</span></div></div>
+<div class="strip"><div class="container"><span>Software & systems engineering</span><span>Secure delivery workflows</span><span>Containers & infrastructure</span><span>Specialist security, clearly scoped</span><span id="clk">East Helena, MT</span></div></div>
 
 <section id="projects"><div class="container">
-<h2>ls projects/</h2>
-<p class="lead">Working builds, custom workflows, and hands-on tooling that connect the lab to real business needs.</p>
-<div class="filters" hidden role="group" aria-label="Filter projects">
-<button class="filter" data-filter="all" aria-pressed="true" type="button">all</button><button class="filter" data-filter="software" aria-pressed="false" type="button">software</button><button class="filter" data-filter="infrastructure" aria-pressed="false" type="button">infrastructure</button><button class="filter" data-filter="security" aria-pressed="false" type="button">security</button><button class="filter" data-filter="hardware" aria-pressed="false" type="button">hardware</button></div>
-<p id="count" class="count" role="status" aria-live="polite">9 projects, workflows, and capabilities</p>
+<h2>ls engineering/</h2>
+<p class="lead">A field notebook of software, infrastructure, automation, and security experiments. These examples show the kinds of problems and systems we work with; they are not presented as client case studies.</p>
+<div class="filters" hidden role="group" aria-label="Filter engineering examples">
+<button class="filter" data-filter="all" aria-pressed="true" type="button">all</button><button class="filter" data-filter="software" aria-pressed="false" type="button">software</button><button class="filter" data-filter="infrastructure" aria-pressed="false" type="button">infrastructure</button><button class="filter" data-filter="delivery" aria-pressed="false" type="button">devsecops</button><button class="filter" data-filter="security" aria-pressed="false" type="button">specialist security</button><button class="filter" data-filter="hardware" aria-pressed="false" type="button">hardware</button></div>
+<p id="count" class="count" role="status" aria-live="polite">10 systems, workflows, and capabilities</p>
 <div class="cards">
 <article class="card" data-category="software"><span class="tag">software</span><h3>Maintenance dashboards</h3><p class="hook">Put the day's work where the whole crew can see it.</p><p>Python-backed scheduling displays for a shop-floor TV: active bays, incoming drop-offs, completed pickups, and daily maintenance tracking.</p><ul class="chips"><li>Python</li><li>Scheduling</li><li>TV dashboards</li></ul></article>
-<article class="card" data-category="infrastructure"><span class="tag">infrastructure</span><h3>Container services</h3><p class="hook">Host the tools your business actually needs.</p><p>Docker and Ubuntu Server for application hosting and automation. A scoped build covers configuration, storage, credentials, updates, and recovery.</p><ul class="chips"><li>Docker</li><li>Ubuntu Server</li><li>Local hosting</li></ul></article>
+<article class="card" data-category="infrastructure"><span class="tag">infrastructure</span><h3>Container services</h3><p class="hook">Make applications easier to deploy and maintain.</p><p>Docker and Ubuntu Server for application hosting and automation. A scoped deployment should account for configuration, storage, credentials, updates, and recovery.</p><ul class="chips"><li>Docker</li><li>Ubuntu Server</li><li>Local hosting</li></ul></article>
+<article class="card" data-category="delivery"><span class="tag">devsecops</span><h3>Secure delivery workflow</h3><p class="hook">Treat the path to production as part of the system.</p><p>Plan repeatable builds and releases around version control, automated checks, secret handling, access boundaries, and documented rollback. The right pipeline depends on the codebase and operating environment.</p><ul class="chips"><li>Git</li><li>CI/CD</li><li>Security checks</li><li>Release process</li></ul></article>
 <article class="card" data-category="infrastructure"><span class="tag">infrastructure</span><h3>Private remote access</h3><p class="hook">Your systems, within reach.</p><p>Tailscale-based connectivity to locally hosted systems. It starts with who needs access, to which resources, and how that access is managed.</p><ul class="chips"><li>Tailscale</li><li>Remote access</li><li>Access planning</li></ul></article>
 <article class="card" data-category="infrastructure"><span class="tag">infrastructure</span><h3>Local LLMs</h3><p class="hook">AI on infrastructure you control.</p><p>Containerized local models for automation and coding assistance. Privacy depends on the full configuration and any connected external services.</p><ul class="chips"><li>Local LLMs</li><li>Containers</li><li>Coding assistance</li></ul></article>
 <article class="card" data-category="security"><span class="tag">security</span><h3>Security automation</h3><p class="hook">Less repetitive tool work, more investigation.</p><p>Python workflows linking Nmap discovery, Tomcat identification, request-pattern inspection, and targeted Hydra testing. Only with explicit permission and agreed scope.</p><ul class="chips"><li>Python</li><li>Nmap</li><li>Tomcat</li><li>Hydra</li></ul></article>
@@ -141,17 +142,28 @@ footer{background:var(--deep);border-top:2px solid var(--amber);padding:28px 0;f
 <article class="card" data-category="infrastructure"><span class="tag">infrastructure</span><h3>Virtualization</h3><p class="hook">Build and investigate on systems you understand.</p><p>A Dell PowerEdge R630 running Proxmox VE, with Ubuntu Server and Docker stacks for local development and testing.</p><ul class="chips"><li>Proxmox</li><li>PowerEdge R630</li><li>Ubuntu Server</li></ul></article>
 <article class="card" data-category="hardware"><span class="tag">hardware</span><h3>Hardware reclamation</h3><p class="hook">Useful silicon, a second life.</p><p>An MSI Raider GE75 board repurposed for headless hosting, plus a reclaimed Dell OptiPlex with a Quadro P2200 and Segotep SG-550 supply.</p><ul class="chips"><li>Slabtop</li><li>Dell OptiPlex</li><li>Headless hosting</li></ul></article>
 </div>
-<p class="note">Descriptions show tool experience and example scopes. They are not client case histories, claims of completed investigations, guaranteed recoveries, or measured outcomes.</p>
+<p class="note">These are lab builds, tool experience, and examples of possible scope—not client case histories or claims of measured outcomes. Production work is scoped around your environment, requirements, and support needs.</p>
 <div class="btns"><a class="btn alt" href="https://grizzlyse.com/projects/">Browse all projects</a></div>
 </div></section>
 
+<section id="delivery" class="alt-bg"><div class="container">
+<h2>./delivery --secure-by-design</h2>
+<p class="lead">DevSecOps is the engineering around how software is built, released, and operated—not a scanner bolted on at the end. The right practices depend on the team, codebase, and environment.</p>
+<div class="three">
+<article class="tile"><h3>Repeatable builds</h3><p>Use source control, automated tests, and appropriate checks to make changes easier to review and releases less dependent on manual steps.</p><p class="tools">Git · CI/CD · Testing · Release notes</p></article>
+<article class="tile"><h3>Safer configuration</h3><p>Plan access boundaries, secrets handling, dependency updates, and environment-specific configuration as part of the delivery design.</p><p class="tools">Identity · Secrets · Dependencies · Configuration</p></article>
+<article class="tile"><h3>Operational readiness</h3><p>Consider logging, updates, backups, restore procedures, and rollback before a service is handed over or exposed to users.</p><p class="tools">Observability · Recovery · Documentation · Handoff</p></article>
+</div>
+<p class="note">These are engineering practices to scope and implement with a project—not a claim that any single tool or checklist makes a system secure.</p>
+</div></section>
+
 <section id="security" class="alt-bg"><div class="container">
-<h2>cat security.md</h2>
-<p class="lead">Every engagement starts with an authorized question and a clear boundary.</p>
+<h2>cat specialist-security.md</h2>
+<p class="lead">Forensics, incident response, and authorized testing remain available as focused engagements. Each starts with a defined question, written authorization where needed, and clear boundaries.</p>
 <div class="three">
 <article class="tile"><h3>Forensic examination</h3><p>What can the available artifacts reconstruct? Examine the evidence and explain the limits.</p><p class="tools">Autopsy · Volatility · Velociraptor · EnCase &amp; FTK (lab coursework)</p></article>
 <article class="tile"><h3>Endpoint &amp; binary inspection</h3><p>What is running, and what is it doing? Alternate boot environments and binary identification as needed.</p><p class="tools">Sysinternals · Process Monitor · Windows PE · Detect It Easy · Kali live boot</p></article>
-<article class="tile"><h3>Credential security</h3><p>What can authorized testing reveal about password exposure? Each activity needs an agreed scope.</p><p class="tools">Hashcat · Hydra · Nmap · Metasploit · DIRB · Responder · Ettercap</p></article>
+<article class="tile"><h3>Authorized security testing</h3><p>What can a defined, authorized test reveal about exposure? Testing is planned around agreed systems, boundaries, and handling of findings.</p><p class="tools">Hashcat · Hydra · Nmap · Metasploit · DIRB · Responder · Ettercap</p></article>
 </div>
 <div class="btns"><a class="btn" href="https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0" target="_blank" rel="noopener noreferrer">Discuss a security scope (new tab)</a></div>
 </div></section>
@@ -200,25 +212,25 @@ footer{background:var(--deep);border-top:2px solid var(--amber);padding:28px 0;f
 
 <section id="process"><div class="container">
 <h2>./engage --steps</h2>
-<p class="lead">Every project follows the same four steps, whether it is a dashboard build or a forensic question.</p>
+<p class="lead">A collaborative engineering engagement, from the first workflow conversation through a usable system and a clear handoff.</p>
 <ol class="steps">
-<li><h3>Define the problem</h3><p>Talk through the workflow, equipment, constraints, and the result you need.</p></li>
-<li><h3>Agree on scope</h3><p>Write down requirements, boundaries, and deliverables before work begins. Security and forensic work needs explicit authorization from the system owner.</p></li>
-<li><h3>Build or examine</h3><p>Develop the system or work the evidence, with notes you can follow.</p></li>
-<li><h3>Explain the result</h3><p>Plain-language findings or documentation: what was observed, and what remains uncertain.</p></li>
+<li><h3>Understand the need</h3><p>Talk through the users, workflow, current setup, constraints, and desired outcome.</p></li>
+<li><h3>Agree on scope</h3><p>Set priorities, access, responsibilities, and deliverables before implementation begins.</p></li>
+<li><h3>Build & validate</h3><p>Develop or integrate in clear steps, test the important paths, and account for security and operations.</p></li>
+<li><h3>Deploy & hand off</h3><p>Document how the system is configured, operated, updated, and supported; agree on follow-on work if needed.</p></li>
 </ol>
 <div class="btns"><a class="btn" href="#contact">Start with step one</a></div>
 </div></section>
 
 <section id="contact" class="alt-bg"><div class="container">
-<h2>./contact --problem</h2>
-<p class="lead">A clearer shop schedule, a locally hosted application, remote access, AI assistance, or a technical investigation. See <a href="#process">how an engagement works</a>.</p>
-<div class="contact-box"><div><h3>Start with your actual problem.</h3><p>Bring the messy workflow, aging hardware, repetitive task, or technical question.</p></div>
-<a class="btn" href="https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0" target="_blank" rel="noopener noreferrer">Discuss a project (new tab)</a></div>
+<h2>./contact --engineering-project</h2>
+<p class="lead">A custom application, container deployment, delivery workflow, shop-floor dashboard, or a focused security engagement. See <a href="#process">how an engagement works</a>.</p>
+<div class="contact-box"><div><h3>Bring the real-world constraint.</h3><p>Tell us what needs to work, who depends on it, and what makes the current setup difficult.</p></div>
+<a class="btn" href="https://forms.zohopublic.com/cclarkgriz1/form/ContactUs/formperma/FO09aQsBlydNnB_EeCnluACZyEFJRKzc1G3b-yeRGd0" target="_blank" rel="noopener noreferrer">Discuss an engineering project (new tab)</a></div>
 <div class="details"><span>East Helena, Montana</span><a href="mailto:info@grizzlyse.com">info@grizzlyse.com</a><a href="tel:+14064398127">(406) 439-8127</a><a href="mailto:info@grizzlyse.com?subject=Incident%20or%20forensic%20help">Incident or forensic help</a></div>
 </div></section>
 </main>
-<footer><div class="container foot"><p>&copy; <span id="yr">2026</span> Grizzly System Engineering LLC</p><p>Hand-written HTML, CSS, JS, plus Python in your browser</p><a href="index.html">Return to main site</a></div></footer>
+<footer><div class="container foot"><p>&copy; <span id="yr">2026</span> Grizzly System Engineering LLC</p><p>Software · Systems · Secure delivery · Montana</p><a href="index.html">Return to main site</a></div></footer>
 
 <script>
 (()=>{
