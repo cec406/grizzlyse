@@ -32,7 +32,9 @@ npm install
 npm run build
 ```
 
-**GitHub Pages (auto-deploys on every push):** create a new repo on GitHub, push this project to the `main` branch, then open **Settings → Pages** and set **Source** to **GitHub Actions**. The included workflow (`.github/workflows/deploy.yml`) builds and publishes `dist` automatically; the URL is `https://<your-user>.github.io/<repo>/`. The relative build base already handles that subfolder.
+**GitHub Pages (auto-deploys on every push):** keep this project in the site repo under `aft-forge/`, then open **Settings → Pages** and set **Source** to **GitHub Actions**. The workflow at `.github/workflows/deploy.yml` (repo root) runs the build and publishes the compiled app at `https://<your-domain>/aft-forge/`. It publishes the rest of the repo unchanged, so the main site keeps working. Pushing to `main` deploys automatically.
+
+> Important: publish the **build**, not the source. Serving `aft-forge/index.html` directly leaves the page blank because it points at `/src/main.tsx`, which only the Vite dev server can serve. The manifest, service worker, and icons are copied from `public/` into `dist/` at build time, so they are only available after `npm run build`.
 
 **Netlify / Cloudflare Pages (drag and drop):** drag the `dist` folder into [Netlify Drop](https://app.netlify.com/drop), or point Cloudflare Pages at the repo. No workflow needed.
 

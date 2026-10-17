@@ -1,0 +1,80 @@
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: aft-forge/package-lock.json
+
+      - name: Install and build AFT Forge
+        working-directory: aft-forge
+        run: |
+          npm ci
+          npm run build
+
+      - name: Assemble the published site
+        run: |
+          mkdir -p _site
+          git archive --format=tar --output=site.tar HEAD
+          tar -xf site.tar -C _site
+          rm -f site.tar
+
+          # The repo keeps the app source at /aft-forge/; publish the compiled
+          # build there instead. Everything else in the repo is served as-is.
+          rm -rf _site/.github _site/aft-forge
+          cp -R aft-forge/dist _site/aft-forge
+
+      - name: Verify the app build is self-contained
+        run: |
+          set -e
+          test -f _site/aft-forge/index.html
+          test -f _site/aft-forge/manifest.webmanifest
+          test -f _site/aft-forge/sw.js
+          test -f _site/aft-forge/icons/icon-192.png
+          test -f _site/aft-forge/icons/icon-512.png
+          if grep -q 'src="/src/' _site/aft-forge/index.html; then
+            echo "::error::Published index.html still points at the dev server (/src/...)."
+            exit 1
+          fi
+          echo "AFT Forge build is self-contained."
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
