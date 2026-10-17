@@ -207,8 +207,8 @@ export function Onboarding({ onCreate, onCancel }: { onCreate: (profile: Profile
               <label><span>HEIGHT (IN)</span><input type="number" step="0.5" min={36} max={90} inputMode="decimal" value={draft.heightIn} onChange={(e) => update('heightIn', e.target.value)} /></label>
               <label><span>CURRENT WEIGHT (LB)</span><input type="number" step="0.5" min={80} max={500} inputMode="decimal" value={draft.weightLb} onChange={(e) => update('weightLb', e.target.value)} /></label>
               <label><span>WAIST AT NAVEL (IN)</span><input type="number" step="0.25" min={20} max={80} inputMode="decimal" value={draft.waistIn} onChange={(e) => update('waistIn', e.target.value)} /></label>
-              <label><span>GOAL WEIGHT (LB)</span><input type="number" step="0.5" min={80} max={500} inputMode="decimal" value={draft.goalWeightLb} placeholder="optional" onChange={(e) => update('goalWeightLb', e.target.value)} /></label>
-              <label><span>GOAL WAIST (IN)</span><input type="number" step="0.25" min={20} max={80} inputMode="decimal" value={draft.goalWaistIn} placeholder="optional" onChange={(e) => update('goalWaistIn', e.target.value)} /></label>
+              <label><span>GOAL WEIGHT (LB)</span><input type="number" step="0.5" min={80} max={500} inputMode="decimal" value={draft.goalWeightLb} onChange={(e) => update('goalWeightLb', e.target.value)} /></label>
+              <label><span>GOAL WAIST (IN)</span><input type="number" step="0.25" min={20} max={80} inputMode="decimal" value={draft.goalWaistIn} onChange={(e) => update('goalWaistIn', e.target.value)} /></label>
               <label><span>OBSERVED MAX HR</span><input type="number" min={100} max={230} inputMode="numeric" value={draft.maxHr} onChange={(e) => update('maxHr', e.target.value)} /></label>
             </div>
             <div className="profile-note">
