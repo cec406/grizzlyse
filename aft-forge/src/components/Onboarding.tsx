@@ -6,6 +6,29 @@ import { Panel, Pill, RestDayPicker, SectionHeader } from './ui'
 
 const STEPS = ['IDENTITY', 'BASELINE', 'BODY', 'SETUP'] as const
 
+/**
+ * Numeric fields are held as strings while the wizard is open so the user can
+ * clear a field or type a decimal naturally. They are parsed into real numbers
+ * only when the profile is created.
+ */
+type Draft = Omit<
+  Profile,
+  'age' | 'heightIn' | 'weightLb' | 'waistIn' | 'goalWeightLb' | 'goalWaistIn' | 'maxHr'
+> & {
+  age: string
+  heightIn: string
+  weightLb: string
+  waistIn: string
+  goalWeightLb: string
+  goalWaistIn: string
+  maxHr: string
+}
+
+function numberOr(value: string, fallback: number): number {
+  const parsed = Number(value)
+  return value.trim() !== '' && Number.isFinite(parsed) && parsed > 0 ? parsed : fallback
+}
+
 function TimeField({
   seconds,
   onChange,
@@ -27,7 +50,6 @@ function TimeField({
           max={59}
           inputMode="numeric"
           value={minutes || ''}
-          placeholder="00"
           onChange={(event) => {
             const m = Math.max(0, Math.min(59, Number(event.target.value) || 0))
             onChange(m * 60 + secs)
@@ -40,7 +62,6 @@ function TimeField({
           max={59}
           inputMode="numeric"
           value={secs || ''}
-          placeholder="00"
           onChange={(event) => {
             const s = Math.max(0, Math.min(59, Number(event.target.value) || 0))
             onChange(minutes * 60 + s)
@@ -53,30 +74,30 @@ function TimeField({
 
 export function Onboarding({ onCreate, onCancel }: { onCreate: (profile: Profile) => void; onCancel?: () => void }) {
   const [step, setStep] = useState(0)
-  const [draft, setDraft] = useState<Profile>(() => ({
+  const [draft, setDraft] = useState<Draft>(() => ({
     name: '',
-    age: 30,
+    age: '',
     sex: 'male',
-    heightIn: 68,
-    weightLb: 180,
-    waistIn: 34,
-    goalWeightLb: 180,
-    goalWaistIn: 32,
+    heightIn: '',
+    weightLb: '',
+    waistIn: '',
+    goalWeightLb: '',
+    goalWaistIn: '',
     mos: '',
     standard: 'general',
-    startDate: nextMonday(),
+    startDate: '',
     testDate: '',
     restDays: [0, 6],
     trainingDays: 5,
     sessionMinutes: 75,
-    maxHr: 185,
+    maxHr: '',
     restingHr: 60,
     garminOverlay: false,
     sledAccess: false,
     scores: { mdl: 0, hrp: 0, sdc: 0, plk: 0, run: 0 },
   }))
 
-  function update<K extends keyof Profile>(key: K, value: Profile[K]) {
+  function update<K extends keyof Draft>(key: K, value: Draft[K]) {
     setDraft((current) => ({ ...current, [key]: value }))
   }
 
@@ -85,9 +106,18 @@ export function Onboarding({ onCreate, onCancel }: { onCreate: (profile: Profile
   }
 
   function create() {
+    const weightLb = numberOr(draft.weightLb, 180)
+    const waistIn = numberOr(draft.waistIn, 34)
     const safe: Profile = {
       ...draft,
       name: draft.name.trim() || 'Operator',
+      age: numberOr(draft.age, 30),
+      heightIn: numberOr(draft.heightIn, 68),
+      weightLb,
+      waistIn,
+      goalWeightLb: numberOr(draft.goalWeightLb, weightLb),
+      goalWaistIn: numberOr(draft.goalWaistIn, waistIn),
+      maxHr: numberOr(draft.maxHr, 185),
       startDate: draft.startDate || nextMonday(),
       testDate: draft.testDate,
       restDays: draft.restDays.length ? draft.restDays : [0, 6],
@@ -133,15 +163,15 @@ export function Onboarding({ onCreate, onCancel }: { onCreate: (profile: Profile
 
         {step === 0 && (
           <div className="form-grid onboarding-grid">
-            <label><span>NAME / RANK</span><input autoFocus value={draft.name} placeholder="SGT Alvarez" onChange={(e) => update('name', e.target.value)} /></label>
-            <label><span>AGE</span><input type="number" value={draft.age} onChange={(e) => update('age', Number(e.target.value) || 18)} /></label>
+            <label><span>NAME / RANK</span><input autoFocus value={draft.name} placeholder="Name or rank" onChange={(e) => update('name', e.target.value)} /></label>
+            <label><span>AGE</span><input type="number" min={17} max={80} inputMode="numeric" value={draft.age} onChange={(e) => update('age', e.target.value)} /></label>
             <label><span>SEX</span>
               <select value={draft.sex} onChange={(e) => update('sex', e.target.value as Profile['sex'])}>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
               </select>
             </label>
-            <label><span>MOS / TRACK (OPTIONAL)</span><input value={draft.mos} placeholder="11B / 68W / 25U…" onChange={(e) => update('mos', e.target.value)} /></label>
+            <label><span>MOS / TRACK (OPTIONAL)</span><input value={draft.mos} onChange={(e) => update('mos', e.target.value)} /></label>
             <label><span>AFT STANDARD</span>
               <select value={draft.standard} onChange={(e) => update('standard', e.target.value as Profile['standard'])}>
                 <option value="general">General — 300 points</option>
@@ -158,8 +188,8 @@ export function Onboarding({ onCreate, onCancel }: { onCreate: (profile: Profile
         {step === 1 && (
           <div className="onboarding-section">
             <div className="form-grid onboarding-grid">
-              <label><span>3RM DEADLIFT (LB)</span><input type="number" value={draft.scores.mdl || ''} placeholder="0" onChange={(e) => updateScore('mdl', Number(e.target.value) || 0)} /></label>
-              <label><span>HRP (REPS)</span><input type="number" value={draft.scores.hrp || ''} placeholder="0" onChange={(e) => updateScore('hrp', Number(e.target.value) || 0)} /></label>
+              <label><span>3RM DEADLIFT (LB)</span><input type="number" value={draft.scores.mdl || ''} onChange={(e) => updateScore('mdl', Number(e.target.value) || 0)} /></label>
+              <label><span>HRP (REPS)</span><input type="number" value={draft.scores.hrp || ''} onChange={(e) => updateScore('hrp', Number(e.target.value) || 0)} /></label>
               <TimeField label="SDC (M:SS)" seconds={draft.scores.sdc} onChange={(s) => updateScore('sdc', s)} />
               <TimeField label="PLANK (M:SS)" seconds={draft.scores.plk} onChange={(s) => updateScore('plk', s)} />
               <TimeField label="2-MILE (M:SS)" seconds={draft.scores.run} onChange={(s) => updateScore('run', s)} />
@@ -172,20 +202,26 @@ export function Onboarding({ onCreate, onCancel }: { onCreate: (profile: Profile
         )}
 
         {step === 2 && (
-          <div className="form-grid onboarding-grid">
-            <label><span>HEIGHT (IN)</span><input type="number" step="0.5" value={draft.heightIn} onChange={(e) => update('heightIn', Number(e.target.value) || 60)} /></label>
-            <label><span>CURRENT WEIGHT (LB)</span><input type="number" step="0.5" value={draft.weightLb} onChange={(e) => update('weightLb', Number(e.target.value) || 100)} /></label>
-            <label><span>WAIST AT NAVEL (IN)</span><input type="number" step="0.25" value={draft.waistIn} onChange={(e) => update('waistIn', Number(e.target.value) || 25)} /></label>
-            <label><span>GOAL WEIGHT (LB)</span><input type="number" step="1" value={draft.goalWeightLb} onChange={(e) => update('goalWeightLb', Number(e.target.value) || 100)} /></label>
-            <label><span>GOAL WAIST (IN)</span><input type="number" step="0.25" value={draft.goalWaistIn} onChange={(e) => update('goalWaistIn', Number(e.target.value) || 25)} /></label>
-            <label><span>OBSERVED MAX HR</span><input type="number" value={draft.maxHr} onChange={(e) => update('maxHr', Number(e.target.value) || 180)} /></label>
+          <div className="onboarding-section">
+            <div className="form-grid onboarding-grid">
+              <label><span>HEIGHT (IN)</span><input type="number" step="0.5" min={36} max={90} inputMode="decimal" value={draft.heightIn} onChange={(e) => update('heightIn', e.target.value)} /></label>
+              <label><span>CURRENT WEIGHT (LB)</span><input type="number" step="0.5" min={80} max={500} inputMode="decimal" value={draft.weightLb} onChange={(e) => update('weightLb', e.target.value)} /></label>
+              <label><span>WAIST AT NAVEL (IN)</span><input type="number" step="0.25" min={20} max={80} inputMode="decimal" value={draft.waistIn} onChange={(e) => update('waistIn', e.target.value)} /></label>
+              <label><span>GOAL WEIGHT (LB)</span><input type="number" step="0.5" min={80} max={500} inputMode="decimal" value={draft.goalWeightLb} placeholder="optional" onChange={(e) => update('goalWeightLb', e.target.value)} /></label>
+              <label><span>GOAL WAIST (IN)</span><input type="number" step="0.25" min={20} max={80} inputMode="decimal" value={draft.goalWaistIn} placeholder="optional" onChange={(e) => update('goalWaistIn', e.target.value)} /></label>
+              <label><span>OBSERVED MAX HR</span><input type="number" min={100} max={230} inputMode="numeric" value={draft.maxHr} onChange={(e) => update('maxHr', e.target.value)} /></label>
+            </div>
+            <div className="profile-note">
+              <Info size={15} />
+              <p>Leave a field blank if you do not have the number yet. Blank fields use neutral defaults, and you can change them later in Profile.</p>
+            </div>
           </div>
         )}
 
         {step === 3 && (
           <div className="onboarding-section">
             <div className="form-grid onboarding-grid">
-              <label><span>BLOCK START</span><input type="date" value={draft.startDate} onChange={(e) => update('startDate', e.target.value || draft.startDate)} /></label>
+              <label><span>BLOCK START</span><input type="date" value={draft.startDate} onChange={(e) => update('startDate', e.target.value)} /></label>
               <label><span>TEST DATE (OPTIONAL)</span><input type="date" value={draft.testDate} onChange={(e) => update('testDate', e.target.value)} /></label>
             </div>
             <div className="onboarding-rest">
