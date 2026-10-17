@@ -258,7 +258,7 @@ export function Calculators({
 
         <aside className="calc-side">
           <Panel className="target-panel">
-            <SectionHeader eyebrow="TARGET 450" title="The clean path." />
+            <SectionHeader eyebrow="TARGET 450" title="90-point targets." />
             <div className="target-list">
               {EVENT_KEYS.map((event) => {
                 const target = thresholdForPoints(event, 90, profile, profile.standard)
@@ -279,7 +279,7 @@ export function Calculators({
             </div>
             <div className="target-sum">
               <Target size={16} />
-              <span>90 × 5 = 450. No single event has to be world-class.</span>
+              <span>90 × 5 = 450. No single event needs a max score.</span>
             </div>
           </Panel>
 
@@ -302,10 +302,10 @@ export function Calculators({
           <Panel className="calc-note-panel">
             <Ruler size={18} />
             <div>
-              <strong>Measurements are your data, not your identity.</strong>
+              <strong>Measure the same way every week.</strong>
               <p>
-                Save the numbers you want to track. If the tape or scale is off by an inch, the plan
-                still works. Keep measuring the same way every week.
+                Small measurement errors do not break the plan. Keep the tape placement and scale
+                conditions consistent so the trend is readable.
               </p>
             </div>
           </Panel>

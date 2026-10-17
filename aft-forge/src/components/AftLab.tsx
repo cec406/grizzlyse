@@ -308,7 +308,7 @@ export function AftLab({
               <Info size={15} />
               <p>
                 The 90-point row is the app’s working target. It produces a 450 total without
-                requiring a single heroic event. For your profile, that means a {targetRun ?? '15:50'} 2-mile.
+                requiring a max effort on any single event. For your profile, that means a {targetRun ?? '15:50'} 2-mile.
               </p>
             </div>
           </Panel>
@@ -316,7 +316,7 @@ export function AftLab({
           <Panel className="testday-panel">
             <SectionHeader
               eyebrow="TEST-DAY EXECUTION"
-              title="Turn 405 into 450 on the next record day."
+              title="Execute the test cleanly."
               description="You do not need a new engine to add points. You need clean reps, even pacing, and controlled transitions."
             />
             <div className="testday-grid">
@@ -326,7 +326,7 @@ export function AftLab({
               </div>
               <div>
                 <span className="testday-label">MDL STRATEGY</span>
-                <p>Open at a weight you know is good. You already max this event. Do not donate points to ego.</p>
+                <p>Open at a weight you have already lifted in training. Take the safe weight first; a failed attempt costs an attempt.</p>
               </div>
               <div>
                 <span className="testday-label">HRP STRATEGY</span>
@@ -334,7 +334,7 @@ export function AftLab({
               </div>
               <div>
                 <span className="testday-label">SDC STRATEGY</span>
-                <p>Race the transitions, not the first 10 m. Turn the sled with your legs. Keep the kettlebells quiet.</p>
+                <p>Transitions cost the most time. Turn the sled with your legs and keep the kettlebells under control.</p>
               </div>
               <div>
                 <span className="testday-label">PLANK STRATEGY</span>
@@ -342,7 +342,7 @@ export function AftLab({
               </div>
               <div>
                 <span className="testday-label">2-MILE STRATEGY</span>
-                <p>First mile controlled. Do not redline in the first 800 m. Lock rhythm, then spend the last 400 m.</p>
+                <p>First mile controlled, no sprinting in the first 800 m. Hold rhythm, then push the last 400 m.</p>
               </div>
             </div>
             <div className="testday-warning">
@@ -427,7 +427,7 @@ export function AftLab({
             </div>
             <div className="target-sum">
               <Target size={16} />
-              <span>90 × 5 = 450. No single event has to be world-class.</span>
+              <span>90 × 5 = 450. No single event needs a max score.</span>
             </div>
           </Panel>
 
@@ -456,7 +456,7 @@ export function AftLab({
             </div>
             <div className="cft-note">
               <ShieldAlert size={15} />
-              <span>Your current engine would make this a grind. Build the AFT first; the CFT is a later block.</span>
+              <span>Train the AFT first; add CFT work in a later block if your MOS requires it.</span>
             </div>
             <a className="source-link" href="https://www.army.mil/article/291880/army_announces_combat_field_test_to_enhance_soldier_readiness" target="_blank" rel="noreferrer">
               CFT announcement <ExternalLink size={13} />

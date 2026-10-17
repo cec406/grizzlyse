@@ -111,7 +111,7 @@ export function readinessBand(score: number): {
 } {
   if (score >= 78) {
     return {
-      label: 'GREEN / FULL SEND',
+      label: 'GREEN / FULL SESSION',
       tone: 'good',
       order: 'Run the session as written. Add load only if technique is clean.',
     }
@@ -120,7 +120,7 @@ export function readinessBand(score: number): {
     return {
       label: 'AMBER / CONTROL',
       tone: 'warn',
-      order: 'Keep the main set, cut 1 round or 10 minutes. No hero reps.',
+      order: 'Keep the main set; cut 1 round or 10 minutes.',
     }
   }
   return {

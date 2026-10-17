@@ -100,11 +100,11 @@ export function BodyComp({
         <Panel className="body-hero">
           <div className="body-hero-copy">
             <Eyebrow>BODY COMPOSITION / WAIST-TO-HEIGHT RATIO</Eyebrow>
-            <h2>The waist is the gate. The weight is the byproduct.</h2>
+            <h2>Waist-to-height sets the standard.</h2>
             <p>
               The Army no longer uses height/weight tables or the old tape test. It measures the waist at
-              the navel and divides by height. Under 0.55 is compliant. Your goal is not to become skinny;
-              it is to become light enough to run faster while keeping the muscle.
+              the navel and divides by height; under 0.55 is compliant. The target is a compliant waist
+              while keeping strength and run performance.
             </p>
             <div className="body-hero-actions">
               <button type="button" className="button button-primary" onClick={logBody}>
@@ -173,8 +173,8 @@ export function BodyComp({
           <div className="body-input-note">
             <Info size={15} />
             <p>
-              Same scale, same morning, same waist placement, end of a normal exhale. Weekly weight is
-              smoother and more useful than daily drama.
+              Same scale, same morning, same waist placement, end of a normal exhale. Weekly measurements
+              smooth out daily fluctuations.
             </p>
           </div>
           <div className="body-progress-row">
@@ -217,7 +217,7 @@ export function BodyComp({
           <Panel className="waist-chart-panel">
             <SectionHeader
               eyebrow="WAIST TREND"
-              title="The gate you actually need."
+              title="Waist-to-height trend."
               description="Waist can move faster than the scale when sleep and stress improve. Keep the tape method consistent."
               action={<Pill tone={ratio < 0.55 ? 'lime' : 'red'}>{waistGap > 0 ? `${waistGap.toFixed(1)} IN TO PASS` : 'PASS'}</Pill>}
             />
@@ -230,7 +230,7 @@ export function BodyComp({
             <SectionHeader
               eyebrow="FUEL PLAN"
               title={`${plan.calories.toLocaleString()} kcal / day`}
-              description="This is a performance cut, not a starvation protocol."
+              description="A moderate deficit that protects training quality."
               action={<Pill tone="lime">MUSCLE PRESERVATION</Pill>}
             />
             <div className="macro-grid">
@@ -248,7 +248,7 @@ export function BodyComp({
               <div><span>01</span><p>Protein anchor at every meal: 45–55 g.</p></div>
               <div><span>02</span><p>Carbs before and after hard sessions. Not zero-carb on run days.</p></div>
               <div><span>03</span><p>Vegetables at lunch and dinner. Protein first, starch second, alcohol rarely.</p></div>
-              <div><span>04</span><p>7–9 h sleep. Bad sleep makes a 550 kcal deficit feel like 900.</p></div>
+              <div><span>04</span><p>7–9 h sleep. Poor sleep stalls fat loss and recovery.</p></div>
             </div>
           </Panel>
 

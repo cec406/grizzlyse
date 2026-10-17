@@ -123,12 +123,12 @@ export function Dashboard({
           <h2>
             Pass at any point.
             <br />
-            <em>Look the part.</em>
+            <em>Not just on test week.</em>
           </h2>
           <p>
             {hasTest
-              ? `A ${program.length}-week operating plan built around your baseline and the ${formatShort(profile.testDate)} test window. Keep the muscle, build the engine, and make the test boring.`
-              : 'A rolling readiness plan: 4-week cycles — build, build, peak, deload — and every cycle starts a little harder than the last. Show up, log the work, stay ready for anything.'}
+              ? `A ${program.length}-week plan built around your baseline and the ${formatShort(profile.testDate)} test window. Keep the muscle, build the run, and treat the test as a routine hard day.`
+              : 'A rolling readiness plan: 4-week cycles — build, build, peak, deload — and every cycle starts a little heavier than the last. No test date required.'}
           </p>
           <div className="hero-actions">
             {mission && (
@@ -268,7 +268,7 @@ export function Dashboard({
           <Panel className="scoreboard-panel">
             <SectionHeader
               eyebrow="SCOREBOARD"
-              title="Five events. One decision."
+              title="Five events, scored against your standard."
               description="Bars show your current points. The notch is the 90-point target."
               action={
                 <button type="button" className="text-button" onClick={() => onNavigate('aft')}>
@@ -395,11 +395,11 @@ export function Dashboard({
                 {overall ? 'MISSION READY' : 'GATE FAIL'}
               </Pill>
             </div>
-            <h2>{overall ? 'You are a go.' : 'Fit enough. Not yet legal.'}</h2>
+            <h2>{overall ? 'You are a go.' : 'AFT passes. Waist does not.'}</h2>
             <p>
               {overall
-                ? 'AFT and body composition are both inside standard. Keep the engine building.'
-                : 'Your AFT score passes. Your waist-to-height ratio does not. The next block is a body-composition operation with a running problem attached.'}
+                ? 'AFT and body composition are both inside standard. Keep the plan as written.'
+                : 'Your AFT score is inside standard. Your waist-to-height ratio is not. The next block should prioritize body composition while maintaining run fitness.'}
             </p>
             <div className="status-grid">
               <div className={go ? 'status-ok' : 'status-bad'}>
@@ -435,7 +435,7 @@ export function Dashboard({
               />
               <div className="readiness-copy">
                 <strong>{latestCheckin ? band.label : 'CHECK IN FIRST'}</strong>
-                <p>{latestCheckin ? band.order : 'Sleep, soreness, and stress decide whether today is full send, controlled, or recovery.'}</p>
+                <p>{latestCheckin ? band.order : 'Sleep, soreness, and stress decide whether today is a full session, a reduced one, or recovery.'}</p>
                 <button type="button" className="text-button" onClick={onOpenLog}>
                   {latestCheckin ? 'Update check-in' : '2-minute check-in'} <ChevronRight size={14} />
                 </button>
@@ -562,7 +562,7 @@ export function Dashboard({
           <SectionHeader
             eyebrow="FUEL / MUSCLE RETENTION"
             title={`${calories.calories.toLocaleString()} kcal · ${calories.protein} g protein`}
-            description="A moderate deficit, high protein, and two strength days are how you lose the belly without losing the engine."
+            description="A moderate deficit, high protein, and two strength days reduce waist while preserving run performance."
             action={<button type="button" className="text-button" onClick={() => onNavigate('body')}>Open Fuel <ChevronRight size={15} /></button>}
           />
           <div className="fuel-stats">
@@ -582,7 +582,7 @@ export function Dashboard({
         <Panel className="paces-panel">
           <SectionHeader
             eyebrow="RUN ENGINE"
-            title="Slow down to get faster."
+            title="Pace zones from your current 2-mile."
             action={<button type="button" className="text-button" onClick={() => onNavigate('run')}>Run Lab <ChevronRight size={15} /></button>}
           />
           <div className="pace-list">
@@ -601,7 +601,7 @@ export function Dashboard({
             <Footprints size={16} />
             <span>
               Easy runs are <strong>{formatPaceRange(paces[1].fast, paces[1].slow)}</strong>. If you are
-              breathing hard, you are not building the engine — you are borrowing from Friday.
+              breathing hard, the pace is too fast for the day.
             </span>
           </div>
         </Panel>

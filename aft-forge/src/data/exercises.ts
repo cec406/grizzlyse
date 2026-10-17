@@ -170,7 +170,7 @@ export const exercises: Exercise[] = [
     equipment: 'Sled, kettlebells, 25 m lane',
     prescription: '2–3 rounds, 3–4 min rest',
     why: 'Rehearses transitions, pacing, and grip fatigue under test conditions.',
-    cue: 'Race the transitions. Do not sprint the first 10 m and die.',
+    cue: 'Race the transitions. Do not sprint the first 10 m.',
   },
   {
     id: 'plank',

@@ -59,11 +59,11 @@ export function PlanView({
       <Panel className="plan-hero">
         <div className="plan-hero-copy">
           <Eyebrow>CAMPAIGN ORDER / {program.length} WEEKS</Eyebrow>
-          <h2>One decision at a time.</h2>
+          <h2>Week-by-week plan.</h2>
           <p>
-            Your week is a closed system built around your rest days: strength, quality runs, the long
-            engine, and AFT rehearsals fill your training days; rest days fill the rest.
-            Every session has a 30-minute minimum version for the days when the Army wins. In rolling
+            Your week is built around your rest days: strength, quality runs, the long run, and AFT
+            rehearsals fill the training days; the rest are rest days.
+            Every session has a 30-minute minimum version for days that get cut short. In rolling
             mode each 4-week cycle starts a little heavier than the last.
           </p>
           <div className="plan-hero-stats">
@@ -123,7 +123,7 @@ export function PlanView({
             )
           })}
           <div className="rail-principles">
-            <div className="rail-label">NON-NEGOTIABLES</div>
+            <div className="rail-label">DAILY STANDARDS</div>
             <div><Shield size={14} /> 7–9 h sleep</div>
             <div><Flame size={14} /> 190 g protein</div>
             <div><Footprints size={14} /> Easy runs easy</div>
@@ -221,7 +221,7 @@ export function PlanView({
       <Panel className="plan-principles">
         <SectionHeader
           eyebrow="WHY THIS PLAN"
-          title="Strength maintained. Engine built. Waist removed."
+          title="Hold strength, build the run, take the waist down."
           description="The program is deliberately conservative on heavy lifting because your deadlift is already maxed. It is aggressive on aerobic volume because that is your lowest-scoring event and the biggest driver of body composition."
         />
         <div className="principle-grid">
@@ -233,16 +233,16 @@ export function PlanView({
           <div>
             <span className="principle-num">02</span>
             <strong>Easy means easy.</strong>
-            <p>Your observed max HR says you know how to go hard. The missing skill is running easy enough to build the engine without turning every run into a race.</p>
+            <p>Most running should stay conversational. That is what adds aerobic volume without piling on fatigue.</p>
           </div>
           <div>
             <span className="principle-num">03</span>
-            <strong>Frequency beats hero sets.</strong>
+            <strong>High frequency, submaximal effort.</strong>
             <p>HRP and plank are trained 3–5 times per week at submaximal volume. One max set per week is enough.</p>
           </div>
           <div>
             <span className="principle-num">04</span>
-            <strong>The waist is the gate.</strong>
+            <strong>Waist-to-height is the standard.</strong>
             <p>A 500–600 kcal deficit, 1.8 g/kg protein, and two strength days preserve muscle while the waist comes down.</p>
           </div>
         </div>

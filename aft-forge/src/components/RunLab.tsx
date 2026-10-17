@@ -101,12 +101,11 @@ export function RunLab({
         <Panel className="run-hero">
           <div className="run-hero-copy">
             <Eyebrow>RUN LAB / 2-MILE ENGINE</Eyebrow>
-            <h2>You don’t need more grit. You need more aerobic horsepower.</h2>
+            <h2>Aerobic base is what moves the 2-mile.</h2>
             <p>
               Your current 2-mile is {secondsToTime(profile.scores.run)} ({formatPace(currentPace)} /mi) at
-              your observed max HR — that pace is a ceiling, not a strategy. The fix is boring: more easy
-              volume, one threshold session, one AFT-specific session, and less body weight to carry. Your
-              watch is a sensor, not the coach.
+              your observed max HR. Improvement comes from more easy volume, one threshold session, one
+              AFT-specific session, and less body weight to carry. Use the watch for data, not as the coach.
             </p>
             <div className="run-hero-stats">
               <div><span>VDOT EST.</span><strong>{vdot.toFixed(1)}</strong></div>
@@ -149,7 +148,7 @@ export function RunLab({
           </div>
           <div className="hr-hero">
             <div>
-              <strong>195</strong>
+              <strong>{profile.maxHr}</strong>
               <span>bpm observed</span>
             </div>
             <div>
@@ -158,8 +157,8 @@ export function RunLab({
             </div>
           </div>
           <p>
-            Your observed max is higher than the age formula predicts. That is normal for some athletes.
-            Use the observed number for zones, not a generic 220-age estimate.
+            The age formula is only an estimate. If you have an observed max HR, use it for zones
+            instead of 220-age.
           </p>
           <div className="hr-zone-list">
             {zones.map((zone) => (
@@ -204,7 +203,7 @@ export function RunLab({
               <SectionHeader
                 eyebrow="RACE PLAN"
                 title={`${secondsToTime(targetDraft)} execution`}
-                description="Even or slightly negative. The first mile should feel too easy. The last 800 m is where you spend the pain."
+                description="Even or slightly negative splits. The first mile should feel too easy; the last 800 m is where the effort goes up."
               />
               <div className="race-splits">
                 {splits.map((split) => (
@@ -223,18 +222,18 @@ export function RunLab({
               <div className="race-cues">
                 <div><span>0–800 m</span><strong>Control the breath. Do not chase the fast starter.</strong></div>
                 <div><span>800–1600 m</span><strong>Lock the rhythm. Relax the shoulders. Hold the pace.</strong></div>
-                <div><span>1600–3218 m</span><strong>Increase effort, not stride length. Empty the tank at 2800 m.</strong></div>
+                <div><span>1600–3218 m</span><strong>Increase effort, not stride length. Push the final 400 m.</strong></div>
               </div>
               <div className="race-hr">
                 <HeartPulse size={16} />
-                <span>First mile: 165–175 bpm. Second mile: 175–188 bpm. Final 400 m: whatever is left.</span>
+                <span>First mile: {zones[3].low}–{zones[3].high} bpm. Second mile: {zones[4].low}–{zones[4].high} bpm. Final 400 m: all-out.</span>
               </div>
             </Panel>
 
             <Panel className="weight-engine-panel">
               <SectionHeader
                 eyebrow="WEIGHT → SPEED"
-                title="The legal performance enhancer."
+                title="Less weight, faster pace."
                 description="At the same absolute aerobic capacity, less body weight means more oxygen per kilogram. This is a model, not a promise."
               />
               <div className="weight-engine">
@@ -253,8 +252,8 @@ export function RunLab({
               <div className="weight-gain">
                 <Zap size={16} />
                 <span>
-                  Modeled gain: <strong>{secondsToTime(runDraft - projected)}</strong> off your 2-mile
-                  before adding a single run. Combine that with the plan and sub-16 is realistic.
+                  Modeled change: <strong>{secondsToTime(runDraft - projected)}</strong> on your 2-mile
+                  at goal weight, before any change in training.
                 </span>
               </div>
               <div className="weight-engine-bars">
@@ -334,7 +333,7 @@ export function RunLab({
               <Info size={15} />
               <span>
                 Whichever you choose: easy runs at {formatPaceRange(paces[1].fast, paces[1].slow)}, not
-                at test pace. Your watch will tempt you to race. Don’t.
+                at test pace. Save the hard efforts for scheduled quality days.
               </span>
             </div>
           </Panel>
@@ -360,7 +359,7 @@ export function RunLab({
               <div><span>01</span><p>Easy runs are conversational. If you cannot speak a full sentence, walk.</p></div>
               <div><span>02</span><p>One threshold day, one AFT-pace day. Do not stack hard runs back-to-back.</p></div>
               <div><span>03</span><p>Increase weekly run time by no more than 10–15%. Your calves and feet need time.</p></div>
-              <div><span>04</span><p>If pain changes your gait, stop. Run tomorrow. Ego is not a training variable.</p></div>
+              <div><span>04</span><p>If pain changes your gait, stop and take a rest day.</p></div>
             </div>
           </Panel>
 

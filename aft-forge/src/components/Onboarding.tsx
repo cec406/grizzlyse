@@ -192,7 +192,7 @@ export function Onboarding({ onCreate, onCancel }: { onCreate: (profile: Profile
               <SectionHeader
                 eyebrow="WEEKLY RHYTHM"
                 title="Which days are rest?"
-                description="Most Soldiers keep the weekend off — especially winter weekends in cold country. The plan fills your training days in order."
+                description="Most Soldiers keep the weekend off. The plan fills your training days in order."
               />
               <RestDayPicker value={draft.restDays} onChange={(days) => update('restDays', days)} />
             </div>

@@ -5,11 +5,11 @@ import { daysBetween, formatLong, todayISO } from '../lib/date'
 
 const TITLES: Record<Tab, { title: string; sub: string }> = {
   command: { title: 'Command Center', sub: 'Your current readiness, mission, and next decision.' },
-  plan: { title: 'Mission Plan', sub: 'Every day, every set, every run — built around 60–90 minutes.' },
+  plan: { title: 'Mission Plan', sub: 'Daily sessions built around 60–90 minutes.' },
   log: { title: 'Training Log', sub: 'Every load you moved, session by session.' },
   aft: { title: 'AFT Lab', sub: 'Score the test, find the leverage, and model the next block.' },
   run: { title: 'Run Lab', sub: 'Paces, heart-rate zones, and the 2-mile race plan.' },
-  body: { title: 'Body Comp', sub: 'The waist is the gate. The weight is the byproduct.' },
+  body: { title: 'Body Comp', sub: 'Waist-to-height standard, fuel targets, and trends.' },
   armory: { title: 'Armory', sub: 'The drills, lifts, and cues that move the score.' },
   intel: { title: 'Intel', sub: 'Official standards, the CFT, and the research base.' },
   calc: { title: 'Calculators', sub: 'AFT score and waist-to-height in one place.' },

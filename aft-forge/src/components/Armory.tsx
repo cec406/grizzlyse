@@ -32,10 +32,11 @@ export function Armory({ profile }: { profile: Profile }) {
       <Panel className="armory-hero">
         <div className="armory-hero-copy">
           <Eyebrow>ARMORY / TECHNIQUE + DRILLS</Eyebrow>
-          <h2>Train the pattern, not just the pain.</h2>
+          <h2>Drills and cues for the five events.</h2>
           <p>
-            Your deadlift is maxed. Your running is the limit. So the armory is built for the events that
-            actually move your score: aerobic base, HRP density, SDC mechanics, and trunk endurance.
+            These drills target what moves the score: aerobic base, HRP density, SDC mechanics, and
+            trunk endurance. Each card lists the prescription, the reason it is in the plan, and the
+            execution cue.
           </p>
         </div>
         <div className="event-cards">
@@ -114,7 +115,7 @@ export function Armory({ profile }: { profile: Profile }) {
           title={profile.sledAccess ? 'Sled plan on — keep the fallbacks handy.' : 'No sled? Train the same qualities.'}
           description={
             profile.sledAccess
-              ? 'Your plan is built around the real sled. These swaps cover you when the sled bay is locked or the lane is taken.'
+              ? 'Your plan is built around the real sled. Use these swaps when the sled is unavailable.'
               : 'Your profile is set to no-sled mode. Every SDC block in the plan is built from these drills instead — same sprint, drag, lateral, and carry qualities.'
           }
           action={<Pill tone={profile.sledAccess ? 'lime' : 'amber'}>{profile.sledAccess ? 'SLED ACCESS ON' : 'NO-SLED MODE'}</Pill>}
@@ -135,8 +136,8 @@ export function Armory({ profile }: { profile: Profile }) {
           <Info size={16} />
           <p>
             The graded SDC always uses the sled — rehearse it whenever you can borrow one, and flip
-            <strong> SLED ACCESS</strong> in your profile before a test week. Drag substitutes train the pattern; the test
-            rehearses the event.
+            <strong> SLED ACCESS</strong> in your profile before a test week. Substitutes train the movement;
+            only the real sled rehearses the event.
           </p>
         </div>
       </Panel>
@@ -144,7 +145,7 @@ export function Armory({ profile }: { profile: Profile }) {
       <Panel className="technique-panel">
         <SectionHeader
           eyebrow="EXECUTION STANDARDS"
-          title="Don’t donate reps to sloppy form."
+          title="How the events are graded."
           description="Graders care about control, contact points, and full range. Here is the short version."
         />
         <div className="technique-grid">

@@ -12,11 +12,11 @@ import { formatPace, paceZones, twoMilePace } from './metrics'
 import { secondsToTime, thresholdForPoints, timeToSeconds } from './scoring'
 
 const PHASE_THEME: Record<Phase, string> = {
-  FOUNDATION: 'Build the chassis',
-  BUILD: 'Raise the ceiling',
-  PEAK: 'Make hard feel normal',
+  FOUNDATION: 'Base building',
+  BUILD: 'Progressive overload',
+  PEAK: 'Test-specific work',
   SHARPEN: 'Volume down, quality up',
-  TEST: 'Execute the operation',
+  TEST: 'Test week',
 }
 
 const PHASE_FOCUS: Record<Phase, string> = {
@@ -24,7 +24,7 @@ const PHASE_FOCUS: Record<Phase, string> = {
   BUILD: 'Threshold power, work capacity, body composition, repeat efforts',
   PEAK: 'Goal-pace running, full test rehearsals, score conversion',
   SHARPEN: 'Deload week: less volume, crisper quality, sleep and fuel up',
-  TEST: 'One job: execute clean reps and controlled splits',
+  TEST: 'Test execution: clean reps and controlled splits',
 }
 
 /** Weeks per progression cycle. Every cycle starts ~2.5% harder than the last. */
@@ -199,8 +199,8 @@ function buildLower(profile: Profile, week: number, dayIndex: number, date: stri
         { name: 'Zone 2 bike or incline walk', prescription: '10 min easy', cue: 'This is recovery, not a second workout.' },
       ]),
     ],
-    minimum: `3 x 3 deadlift, ${hrpSets(phase, week)} HRP, 3 x ${plankSeconds(week)} sec plank. Leave.`,
-    coachNote: 'Strength is the part of the score you never have to re-earn. Hold it with quality work and spend recovery on the engine.',
+    minimum: `3 x 3 deadlift, ${hrpSets(phase, week)} HRP, 3 x ${plankSeconds(week)} sec plank.`,
+    coachNote: 'Deadlift and HRP hold with consistent submaximal work. Keep quality high and spend most recovery on the run.',
   }
 }
 
@@ -245,7 +245,7 @@ function buildThreshold(profile: Profile, week: number, dayIndex: number, date: 
     minimum: profile.sledAccess
       ? `3 min of threshold + 3 sled drags + 2 carries. Skip the rest.`
       : `3 min of threshold + 3 drags + 2 carries. Skip the rest.`,
-    coachNote: `Your current 2-mile pace is ${paces.current}. Threshold work should feel slower than that. If HR hits 180+, walk until it drops under 165.`,
+    coachNote: `Your current 2-mile pace is ${paces.current}. Threshold repeats should feel slower than that: comfortably hard, not a race. If HR spikes well above the threshold zone, walk until it settles.`,
   }
 }
 
@@ -295,11 +295,11 @@ function buildEngine(profile: Profile, week: number, dayIndex: number, date: str
       block(`Main / ${minutes.low}–${minutes.high} min`, profile.garminOverlay
         ? [
             garminRunItem(),
-            { name: 'Fallback — easy run', prescription: `${minutes.low}–${minutes.high} min ${paces.easy}`, cue: 'HR 130–150. If it climbs above 150, walk 60 sec. No ego.' },
+            { name: 'Fallback — easy run', prescription: `${minutes.low}–${minutes.high} min ${paces.easy}`, cue: 'HR 130–150. If it climbs above 150, walk 60 sec. Slow down rather than strain.' },
             { name: 'Strides', prescription: '4 x 20 sec relaxed fast, full recovery', cue: 'Quick turnover, not a sprint.' },
           ]
         : [
-            { name: 'Easy run', prescription: `${minutes.low}–${minutes.high} min ${paces.easy}`, cue: 'HR 130–150. If it climbs above 150, walk 60 sec. No ego.' },
+            { name: 'Easy run', prescription: `${minutes.low}–${minutes.high} min ${paces.easy}`, cue: 'HR 130–150. If it climbs above 150, walk 60 sec. Slow down rather than strain.' },
             { name: 'Strides', prescription: '4 x 20 sec relaxed fast, full recovery', cue: 'Quick turnover, not a sprint.' },
           ]),
       block('Mobility / 10 min', [
@@ -307,8 +307,8 @@ function buildEngine(profile: Profile, week: number, dayIndex: number, date: str
         { name: 'Core', prescription: '3 x 60 sec plank + 10 dead bugs', cue: 'Stop the set when the low back arches.' },
       ]),
     ],
-    minimum: `25 min easy walk/run + 5 min mobility. That still counts.`,
-    coachNote: 'This is where the 2-mile time drops. Most Soldiers run this too hard. You should be able to talk in full sentences the entire time.',
+    minimum: `25 min easy walk/run + 5 min mobility.`,
+    coachNote: 'This is where the 2-mile time drops. Most people run this too hard; you should be able to talk in full sentences throughout.',
   }
 }
 
@@ -321,7 +321,7 @@ function buildRehearsal(profile: Profile, week: number, dayIndex: number, date: 
     title: 'AFT Rehearsal',
     type: 'aft',
     durationMin: 65,
-    intent: 'Rehearse the test order, transitions, and pacing. Practice does not make perfect; perfect practice makes perfect.',
+    intent: 'Rehearse the test order, transitions, and pacing under the same conditions as test day.',
     focus: ['AFT', 'HRP', 'SDC', 'RUN'],
     blocks: [
       block('Warm-up / 12 min', [
@@ -344,7 +344,7 @@ function buildRehearsal(profile: Profile, week: number, dayIndex: number, date: 
       ]),
     ],
     minimum: '2 min HRP + 2 SDC rounds + 2 x 400 m. Skip the deadlift.',
-    coachNote: 'The AFT is not five separate events; it is one 70-minute performance problem. Rehearse the order every week — this day is the app\'s job, not the coach\'s.',
+    coachNote: 'The AFT is one continuous session: five events plus transitions. Rehearse the full order weekly so pacing and transitions are automatic.',
   }
 }
 
@@ -375,10 +375,10 @@ function buildLong(profile: Profile, week: number, dayIndex: number, date: strin
         { name: 'Core circuit', prescription: '3 rounds: 30 sec dead bug, 30 sec side plank/side, 30 sec bird dog', cue: 'Slow, deliberate, breathe.' },
       ]),
     ],
-    minimum: '40 min easy walk/run + 5 min core. Keep the habit.',
+    minimum: '40 min easy walk/run + 5 min core.',
     coachNote: profile.garminOverlay
-      ? 'Garmin Coach builds the engine; this app keeps the AFT-specific days honest. Do not race the long run.'
-      : 'This is not a race. If you are chasing pace on the long run, you are stealing from the quality days.',
+      ? 'Garmin Coach handles run volume; keep AFT rehearsal, SDC, and strength days as prescribed here. Run the long run easy.'
+      : 'Run easy. Chasing pace on the long run adds fatigue that takes away from the quality days.',
   }
 }
 
@@ -398,11 +398,11 @@ function buildRecovery(week: number, dayIndex: number, date: string): DayPlan {
       ]),
       block('Admin', [
         { name: 'Weekly log', prescription: 'Morning weight, waist at navel, progress photo, sleep average', cue: 'Same conditions every week.' },
-        { name: 'Meal prep', prescription: 'Cook 2–3 protein anchors for the week', cue: 'Make the good choice the easy choice.' },
+        { name: 'Meal prep', prescription: 'Cook 2–3 protein anchors for the week', cue: 'Decide meals once, not daily.' },
       ]),
     ],
-    minimum: '10 min walk + 5 min mobility. Still a win.',
-    coachNote: 'Recovery is a training session. Sleep is the legal performance enhancer. You cannot out-train a 5-hour night.',
+    minimum: '10 min walk + 5 min mobility.',
+    coachNote: 'Recovery is part of the program. Sleep drives adaptation; chronic short sleep stalls progress.',
   }
 }
 
@@ -412,7 +412,7 @@ function buildHousework(week: number, dayIndex: number, date: string): DayPlan {
     title: 'Rest',
     type: 'recovery',
     durationMin: 30,
-    intent: 'No training. Chores, mobility, and sleep debt repayment. Winter counts as training.',
+    intent: 'No training. Chores, mobility, and sleep.',
     focus: ['REST'],
     blocks: [
       block('Rest day', [
@@ -425,7 +425,7 @@ function buildHousework(week: number, dayIndex: number, date: string): DayPlan {
       ]),
     ],
     minimum: 'Chores + 10 min mobility. That is the session.',
-    coachNote: 'Rest is training. Shoveling snow is farmer carries with a view. Sleep is the force multiplier.',
+    coachNote: 'Rest days let training adaptations accumulate. Light chores are fine; protect sleep.',
   }
 }
 
@@ -456,26 +456,26 @@ function buildTest(profile: Profile, week: number, dayIndex: number, date: strin
     title: 'AFT TEST DAY',
     type: 'test',
     durationMin: 90,
-    intent: 'Execute the test. No hero attempts. Bank clean reps and controlled splits.',
+    intent: 'Execute the test: clean reps, controlled pacing, no risky attempts.',
     focus: ['TEST', 'EXECUTE'],
     blocks: [
       block('Pre-test / 45 min out', [
         { name: 'Light movement', prescription: '10 min easy walk/jog + dynamic hips, ankles, shoulders', cue: 'Stay warm, not tired.' },
-        { name: 'Primer', prescription: '3 x 20 sec strides, 2 x 10 HRP, 2 x 20 sec plank', cue: 'Wake up the pattern, do not burn matches.' },
+        { name: 'Primer', prescription: '3 x 20 sec strides, 2 x 10 HRP, 2 x 20 sec plank', cue: 'Prime the movements without adding fatigue.' },
         { name: 'Fuel', prescription: '300–500 ml fluid + 30–60 g carbs if tolerated', cue: 'Nothing new on test day.' },
       ]),
       block('Test order', [
-        { name: '3RM deadlift', prescription: 'Open at a weight you know is good. One clean attempt, then decide.', cue: 'Do not donate points to ego.' },
+        { name: '3RM deadlift', prescription: 'Open at a weight you know is good. One clean attempt, then decide.', cue: 'Take the safe opener.' },
         { name: 'Hand-release push-up', prescription: '2 min. Sets of 5–8, short pauses in the front leaning rest.', cue: 'Chest and thighs touch together. Full T on every rep.' },
-        { name: 'Sprint-drag-carry', prescription: 'Controlled sprint, strong drag, quick lateral, secure carry, empty the tank.', cue: 'Turn the sled with your legs, not your lower back.' },
+        { name: 'Sprint-drag-carry', prescription: 'Controlled sprint, strong drag, quick lateral, secure carry, finish hard.', cue: 'Turn the sled with your legs, not your lower back.' },
         { name: 'Plank', prescription: 'Hold 5–10 sec past your target, then stop.', cue: 'Squeeze glutes, tuck ribs, breathe.' },
-        { name: 'Two-mile run', prescription: `Target ${secondsToTime(paces.goalSeconds)} (${paces.goal}). First mile controlled, second mile honest.`, cue: 'Do not redline in the first 800 m.' },
+        { name: 'Two-mile run', prescription: `Target ${secondsToTime(paces.goalSeconds)} (${paces.goal}). First mile controlled, second mile at effort.`, cue: 'No sprinting in the first 800 m.' },
       ]),
       block('After-action', [
         { name: 'Cooldown', prescription: '10–15 min walk + fluids + 30–40 g protein', cue: 'Log the score while it is fresh.' },
       ]),
     ],
-    minimum: 'Show up, warm up, execute. Everything else is noise.',
+    minimum: 'Show up, warm up, execute.',
     coachNote: 'Test day is a skill day. Your fitness is already built. Your only job is clean execution and even pacing.',
   }
 }

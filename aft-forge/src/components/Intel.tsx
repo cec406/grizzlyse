@@ -43,7 +43,7 @@ export function Intel({ profile }: { profile: Profile }) {
       <Panel className="intel-hero">
         <div className="intel-hero-copy">
           <Eyebrow>INTEL / CURRENT AS OF OCTOBER 2026</Eyebrow>
-          <h2>Standards are a moving target. Know the current one.</h2>
+          <h2>Current test standards.</h2>
           <p>
             The AFT is the test of record. The CFT is now the combat-specific test for 24 MOSs. The old
             height/weight tables and tape test are gone, replaced by waist-to-height ratio. This page is
@@ -208,8 +208,8 @@ export function Intel({ profile }: { profile: Profile }) {
                 <div className="research-icon"><HeartPulse size={17} /></div>
                 <strong>Why observed max HR matters</strong>
                 <p>
-                  Your observed max is higher than the Tanaka estimate. Use the observed number for zones,
-                  but do not make every run a max test. Most aerobic adaptation happens below threshold.
+                  Use an observed max HR for zones when you have one; age formulas are only estimates.
+                  Most aerobic adaptation happens below threshold.
                 </p>
                 <span className="research-tag">Field observation + standard HR-zone practice</span>
               </div>
@@ -237,9 +237,8 @@ export function Intel({ profile }: { profile: Profile }) {
             <h3>Support and technical specialties</h3>
             <p>
               Most support MOSs — technical warrants, medics, admins, mechanics — train on the general AFT
-              standard and WHtR, not the CFT. That does not mean train like a civilian — the extra margin is
-              what makes you look like a super soldier instead of a test passer. Combat-arms soldiers and
-              the 24 designated specialties add the CFT.
+              standard and WHtR. The CFT applies only to the 24 designated combat specialties. Training to
+              the combat standard (350) adds margin.
             </p>
             <div className="warrant-intel-list">
               <div><Check size={14} /> AFT general 300 / 60 min per event</div>
