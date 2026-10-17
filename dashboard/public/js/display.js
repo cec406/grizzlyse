@@ -1,9 +1,9 @@
 // Wall display / kiosk. Rotates through live boards, updates over SSE, and
 // needs no interaction. Keys: ← → change board, Space pause, F fullscreen.
-import { h, append, clear, fmtDateShort, relTime, daysUntil } from './util.js?v=20261012-3';
-import { icon } from './icons.js?v=20261012-3';
-import { computeFields, COLORS } from '../../shared/schema.js?v=20261012-3';
-import * as store from './store.js?v=20261012-3';
+import { h, append, clear, fmtDateShort, relTime, daysUntil } from './util.js?v=2.1.1';
+import { icon } from './icons.js?v=2.1.1';
+import { computeFields, COLORS, APP_NAME } from '../../shared/schema.js?v=2.1.1';
+import * as store from './store.js?v=2.1.1';
 
 const root = document.getElementById('kiosk');
 let views = ['overview', 'workorders', 'schedule', 'parts', 'assets'];
@@ -64,7 +64,7 @@ function render() {
     h('div', { class: 'kiosk-brand' },
       h('span', { class: 'kiosk-logo' }, icon('activity', 30)),
       h('div', {},
-        h('div', { class: 'kiosk-shop' }, s.shopName || 'Shopline'),
+        h('div', { class: 'kiosk-shop' }, s.shopName || APP_NAME),
         h('div', { class: 'kiosk-sub' }, s.shopSubtitle || ''),
       ),
     ),
@@ -225,15 +225,15 @@ const VIEWS = {
     const s = store.state.settings || {};
     const demo = store.state.mode === 'browser';
     const rows = [
-      { title: s.brandName || 'Shopline', sub: s.brandTagline || 'Maintenance operations software', owner: s.brandUrl ? 'website' : '' },
-      { title: 'What it tracks', sub: 'Work orders · preventive maintenance · parts & stock alerts · asset status · crew & vendors', owner: '' },
+      { title: s.brandName || APP_NAME, sub: s.brandTagline || 'The mini-ERP for shops that hate subscriptions', owner: s.brandUrl ? 'website' : '' },
+      { title: 'What it tracks', sub: 'Quotes & invoices · job costs · purchasing & stock · work orders · PM schedule · crew & vendors', owner: '' },
       { title: 'How it runs', sub: demo
-        ? 'Demo mode — the whole shop runs right here in the browser, no server required'
+        ? 'Demo mode — the whole business runs right here in the browser, no server required'
         : 'Live mode — every screen on the shop network updates in real time', owner: '' },
-      { title: 'Want one?', sub: s.brandUrl || s.shopSubtitle || 'Fully editable in place, on any shop PC or TV', owner: '' },
+      { title: 'Want one?', sub: s.brandUrl || s.shopSubtitle || 'Runs on any shop PC or TV — one data file, no subscriptions', owner: '' },
     ];
     return h('div', { class: 'k-panel wide' },
-      h('div', { class: 'k-panel-head' }, icon('activity', 24), s.shopName || 'Shopline — Maintenance Dashboard'),
+      h('div', { class: 'k-panel-head' }, icon('activity', 24), s.shopName || `${APP_NAME} — Business OS`),
       h('ul', { class: 'k-list big' }, rows.map((row) => h('li', { class: 'k-row' },
         h('div', { class: 'k-row-body' },
           h('div', { class: 'k-row-title' }, row.title),
@@ -272,9 +272,9 @@ document.addEventListener('keydown', (e) => {
 });
 
 (async function start() {
-  window.__shoplineErrors = [];
-  window.addEventListener('error', (e) => window.__shoplineErrors.push(String(e.error?.stack || e.message)));
-  window.addEventListener('unhandledrejection', (e) => window.__shoplineErrors.push('unhandled: ' + String(e.reason?.stack || e.reason)));
+  window.__grizzworksErrors = [];
+  window.addEventListener('error', (e) => window.__grizzworksErrors.push(String(e.error?.stack || e.message)));
+  window.addEventListener('unhandledrejection', (e) => window.__grizzworksErrors.push('unhandled: ' + String(e.reason?.stack || e.reason)));
   try {
     await store.load();
     applySettings();

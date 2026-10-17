@@ -3,12 +3,15 @@
 //   * browser mode (demo) — runs entirely in this browser against a seeded
 //     localStorage database, so the dashboard works as a static site, in a
 //     demo, or opened straight from disk.
-// Views subscribe and re-render on change.
-import { api, getActor } from './api.js?v=20261012-3';
-import { collections, collectionByName } from '../../shared/schema.js?v=20261012-3';
-import { localDb, watchStorage } from './localdb.js?v=20261012-3';
+// Views subscribe and re-render on change. The admin-PIN money gate is
+// enforced by the server (demo: locally) — this store only tracks whether
+// THIS screen is currently unlocked.
+import { api, getActor, getSessionToken, setSessionToken, clearSessionToken } from './api.js?v=2.1.1';
+import { collections, collectionByName } from '../../shared/schema.js?v=2.1.1';
+import { localDb, watchStorage } from './localdb.js?v=2.1.1';
 
 const listeners = new Set();
+const SESSION_KEY = 'grizzworks.session';
 
 export const state = {
   collections: {},
@@ -19,6 +22,7 @@ export const state = {
   lastSync: null,
   clients: 0,
   mode: null, // 'server' | 'browser'
+  moneyLocked: false, // true = this screen may not see money until PIN entry
 };
 
 for (const c of collections) state.collections[c.name] = [];
@@ -69,15 +73,42 @@ async function detectMode() {
 export async function load() {
   const mode = await detectMode();
   state.mode = mode;
-  const snap = mode === 'server' ? await api.state() : localDb.snapshot();
+  let snap = mode === 'server' ? await api.state() : localDb.snapshot();
+
+  // Money gate: if a PIN is set, try to re-authenticate this screen silently
+  // with its stored session token (server restarts expire sessions).
+  let verified = false;
+  if (mode === 'server' && snap.settings?.adminPinSet) {
+    const stored = getSessionToken();
+    if (stored) {
+      try {
+        const r = await api.unlock({ token: stored });
+        setSessionToken(r.token);
+        try { localStorage.setItem(SESSION_KEY, r.token); } catch { /* blocked */ }
+        snap = await api.state();
+        verified = true;
+      } catch {
+        clearSessionToken();
+      }
+    }
+  } else if (mode === 'server') {
+    clearSessionToken();
+  }
   state.collections = snap.collections;
   state.settings = snap.settings || {};
   state.activity = snap.activity || [];
   state.meta = snap.meta || {};
   state.clients = snap.clients || (mode === 'browser' ? 1 : 0);
   state.lastSync = new Date();
+  state.moneyLocked = computeMoneyLocked(snap.settings);
   ready = true;
   notify({ type: 'loaded', mode });
+}
+
+function computeMoneyLocked(settings) {
+  if (!settings?.adminPinSet) return false;
+  if (state.mode === 'browser') return !localDb.isUnlocked();
+  return !getSessionToken(); // server-verified on load(); events recompute below
 }
 
 function upsert(collectionName, item) {
@@ -113,6 +144,7 @@ export function applyEvent(event) {
       break;
     case 'settings':
       state.settings = event.settings;
+      state.moneyLocked = computeMoneyLocked(event.settings);
       break;
     case 'reload':
     case 'hello':
@@ -176,8 +208,18 @@ export function options(name) {
   const meta = collectionByName[name];
   if (!meta) return [];
   const fieldName = meta.primary;
+  let labelOf = (r) => r[fieldName] || r.id;
+  if (name === 'invoices' || name === 'bills') {
+    // Document pickers read like a statement: number · party · balance due.
+    labelOf = (r) => {
+      const party = name === 'invoices' ? label('customers', r.customerId) : label('vendors', r.vendorId);
+      const bal = (Number(r.total) || 0) - (Number(r.paid) || 0);
+      const due = bal > 0.005 ? `$${bal.toFixed(2)} due` : 'settled';
+      return `${r.number || '—'} · ${party || '—'} · ${due}`;
+    };
+  }
   return col(name)
-    .map((r) => ({ value: r.id, label: r[fieldName] || r.id }))
+    .map((r) => ({ value: r.id, label: labelOf(r) }))
     .sort((a, b) => String(a.label).localeCompare(String(b.label), undefined, { numeric: true }));
 }
 
@@ -247,6 +289,22 @@ export async function importAll(data) {
   await load();
 }
 
+// Document workflow op (send / accept / receive / record / void …).
+// Server mode: REST op endpoint. Browser mode: the local engine's op().
+export async function docAction(collectionName, id, action, payload) {
+  const actor = getActor() || 'Operator';
+  if (state.mode === 'browser') {
+    const result = localDb.op(collectionName, id, action, payload, actor);
+    if (!result) throw new Error('Not found');
+    return result;
+  }
+  const result = await api.docAction(collectionName, id, action, payload);
+  if (result?.record) upsert(collectionName, result.record);
+  if (result?.created) upsert('invoices', result.created);
+  notify({ type: 'update', collection: collectionName, item: result?.record, local: true });
+  return result;
+}
+
 // Demo only: put the pristine sample shop back.
 export async function resetDemo() {
   if (state.mode !== 'browser') throw new Error('Reset is only available in demo mode');
@@ -258,4 +316,38 @@ export async function clearAll() {
   if (state.mode !== 'server') throw new Error('Clear is only available in server mode');
   await api.clear();
   await load();
+}
+
+// ---- admin PIN money gate ---------------------------------------------------
+// Money data is redacted by the SERVER (demo: locally) while locked; this
+// only manages this screen's session.
+export function moneyLocked() {
+  return Boolean(state.moneyLocked);
+}
+
+// Enter the admin PIN on this screen. Throws on a wrong PIN.
+export async function unlock(pin) {
+  if (state.mode === 'browser') {
+    await localDb.unlock(pin);
+    await load();
+    notify({ type: 'unlock' });
+    return;
+  }
+  const r = await api.unlock({ pin });
+  setSessionToken(r.token);
+  try { localStorage.setItem(SESSION_KEY, r.token); } catch { /* blocked */ }
+  await load();
+  notify({ type: 'unlock' });
+}
+
+// Lock this screen again (and drop its server session).
+export async function lockNow() {
+  if (state.mode === 'browser') {
+    localDb.lockNow();
+  } else {
+    try { await api.lock(); } catch { /* already gone */ }
+    clearSessionToken();
+  }
+  await load();
+  notify({ type: 'lock' });
 }

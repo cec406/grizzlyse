@@ -1,5 +1,5 @@
 /* =========================================================================
-   Shopline - maintenance dashboard styles
+   GrizzWorks - the mini-ERP for shops that hate subscriptions
    Themes: dark (default), light, and a high-contrast kiosk theme.
    ========================================================================= */
 
@@ -61,7 +61,10 @@ button { font-family: inherit; }
 .inline-gap { display: inline-flex; align-items: center; gap: 8px; }
 
 /* ---------- app layout ---------- */
-.app { display: grid; grid-template-columns: 248px 1fr; height: 100vh; overflow: hidden; }
+/* The row must be pinned to the viewport height (minmax(0, 1fr)); otherwise the
+   implicit row auto-sizes to its content on tall pages, grows past 100vh, and
+   overflow:hidden clips it - so the inner panes never scroll. */
+.app { display: grid; grid-template-columns: 248px 1fr; grid-template-rows: minmax(0, 1fr); height: 100vh; overflow: hidden; }
 .main { display: flex; flex-direction: column; min-width: 0; }
 
 .sidebar {
@@ -468,3 +471,87 @@ html[data-theme="kiosk"] {
   .kiosk-header { grid-template-columns: 1fr; text-align: center; }
   .kiosk-right { text-align: center; }
 }
+
+/* ---------- GrizzWorks: nav sections, profiles, documents, reports ---------- */
+.nav-section {
+  margin: 12px 4px 2px; font-size: 10.5px; font-weight: 700; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--muted); opacity: .75;
+}
+.kpi.good .kpi-value { color: var(--good); }
+
+/* first-run profile picker */
+.profile-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.profile-item {
+  display: flex; align-items: center; gap: 10px; text-align: left; width: 100%;
+  padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--panel-2); color: var(--text); cursor: pointer; transition: border-color .12s, transform .06s;
+}
+.profile-item:hover { border-color: var(--accent); }
+.profile-item:active { transform: scale(.99); }
+.profile-item .icon { color: var(--muted); }
+
+/* document form + line editor */
+.doc-dialog { max-width: min(860px, 94vw); }
+.doc-lines-wrap { border-top: 1px solid var(--border-soft); padding-top: 10px; margin-top: 4px; }
+.doc-lines-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.lines-editor { display: flex; flex-direction: column; gap: 6px; }
+.lines-rows { display: flex; flex-direction: column; gap: 6px; }
+.lines-empty { padding: 6px 2px; }
+.lines-row {
+  display: grid; grid-template-columns: minmax(150px, 1.2fr) minmax(160px, 2fr) 70px 90px 52px 90px 30px;
+  gap: 6px; align-items: center; background: var(--bg-2); border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm); padding: 6px 8px;
+}
+.lines-row .lr-kind { display: flex; gap: 6px; }
+.lines-row .lr-kind select { min-width: 84px; }
+.lines-row .lr-desc input { width: 100%; }
+.lines-row .lr-num input { width: 100%; text-align: right; }
+.lines-row .lr-tax { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.lines-row .lr-amount { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.lines-addbar { display: flex; gap: 8px; flex-wrap: wrap; }
+.lines-totals {
+  align-self: flex-end; min-width: 230px; display: flex; flex-direction: column; gap: 2px;
+  padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--panel-2);
+}
+.line-total-row { display: flex; justify-content: space-between; gap: 18px; font-size: 13.5px; }
+.line-total-row.grand { border-top: 1px solid var(--border); margin-top: 3px; padding-top: 5px; font-size: 15px; }
+.line-total-row.grand b { color: var(--accent); }
+
+/* document detail */
+.doc-dialog.view-mode .dialog-body { display: flex; flex-direction: column; gap: 12px; }
+.doc-meta { display: flex; gap: 22px; flex-wrap: wrap; }
+.doc-totals {
+  align-self: flex-end; min-width: 250px; display: flex; flex-direction: column; gap: 2px;
+  padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--panel-2);
+}
+.doc-lines-table td:nth-child(4), .doc-lines-table td:nth-child(5), .doc-lines-table th:nth-child(4), .doc-lines-table th:nth-child(5) { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* reports */
+.reports-tabs { margin-bottom: 12px; flex-wrap: wrap; }
+.report-table tfoot td { border-top: 2px solid var(--border); font-weight: 700; padding: 8px; background: var(--bg-2); }
+.report-table td.num, .report-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.panel-body .mini-kpis { margin-bottom: 12px; }
+
+/* mobile: collapse the line grid */
+@media (max-width: 860px) {
+  .lines-row { grid-template-columns: 1fr 1fr 70px 80px 30px; }
+  .lines-row .lr-tax, .lines-row .lr-amount { display: none; }
+}
+
+/* ---------- admin PIN money gate ---------- */
+.pin-gate { display: grid; place-items: center; min-height: 320px; }
+.pin-gate-body { display: flex; align-items: center; gap: 18px; max-width: 560px; }
+.pin-gate-icon {
+  width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center;
+  background: rgba(245, 158, 11, 0.12); color: var(--warn); border: 1px solid rgba(245, 158, 11, 0.35);
+  flex: none;
+}
+.pin-gate-text h3 { margin: 0 0 6px; }
+.pin-gate-text p { margin: 0 0 12px; }
+
+/* ---------- off-canvas drawer backdrop ---------- */
+.drawer-backdrop {
+  position: fixed; inset: 0; z-index: 65; background: rgba(4, 10, 22, 0.45);
+  opacity: 0; pointer-events: none; transition: opacity .2s ease;
+}
+body.drawer-open .drawer-backdrop { opacity: 1; pointer-events: auto; }

@@ -1,15 +1,18 @@
 // All application views. Each returns a DOM node; app.js decides which to mount.
-import { h, append, clear, sortItems, fmtDate, fmtDateShort, daysUntil, relTime, debounce, todayIso, download } from './util.js?v=20261012-3';
-import { icon } from './icons.js?v=20261012-3';
+import { h, append, clear, sortItems, fmtDate, fmtDateShort, daysUntil, relTime, debounce, todayIso, download, money } from './util.js?v=2.1.1';
+import { icon } from './icons.js?v=2.1.1';
 import {
-  collections, collectionByName, settingsSchema, computeFields, COLORS, TYPES,
-} from '../../shared/schema.js?v=20261012-3';
-import * as store from './store.js?v=20261012-3';
-import { getActor, setActor } from './api.js?v=20261012-3';
+  collections, collectionByName, settingsSchema, computeFields, COLORS, TYPES, APP_NAME, APP_VERSION, round2,
+} from '../../shared/schema.js?v=2.1.1';
+import * as erp from '../../shared/erp.js?v=2.1.1';
+import { profileOf } from '../../shared/profiles.js?v=2.1.1';
+import * as store from './store.js?v=2.1.1';
+import { getActor, setActor } from './api.js?v=2.1.1';
 import {
   chip, statusChip, dueBadge, dataTable, workBoard, openForm, iconButton,
   sectionHeader, activityList, kpi, barChart, confirmDialog, toast, displayValue, fieldControl,
-} from './components.js?v=20261012-3';
+  openDocForm, docDetail, printDoc, openPaymentForm, receiveDialog, changeAdminPin,
+} from './components.js?v=2.1.1';
 
 // ---- shared helpers ------------------------------------------------------
 function ui(ctx, key, defaults) {
@@ -59,10 +62,15 @@ function toolbar(ctx, key, { searchPlaceholder, filters = [], right = [] }) {
   return bar;
 }
 
-function addButton(collection) {
+function addButton(collection, ctx) {
   const meta = collectionByName[collection];
+  if ((collection === 'payments' || collection === 'vendorpayments') && ctx) {
+    const isCustomer = collection === 'payments';
+    return h('button', { class: 'btn primary', onclick: () => recordPaymentFlow(ctx, isCustomer) },
+      icon('dollar', 16), isCustomer ? 'Record Payment' : 'Pay a Vendor Bill');
+  }
   return h('button', { class: 'btn primary', onclick: () => openForm({ collection }) },
-    icon('plus', 16), `Add ${meta.singular}`);
+    icon('plus', 16), `New ${meta.singular}`);
 }
 
 // ---- Overview ------------------------------------------------------------
@@ -84,6 +92,29 @@ export function overviewView(ctx) {
   const dueWeekPm = schedule.filter((s) => { const d = daysUntil(s.nextDue); return d !== null && d >= 0 && d <= 7; });
 
   const root = h('div', { class: 'view overview' });
+
+  // ---- money row: is the business healthy, not just the shop floor ----
+  const dbv = dbView();
+  const ar = erp.arAging(dbv);
+  const ap = erp.apAging(dbv);
+  const rev30 = erp.revenueSince(dbv, isoDaysAgo(30));
+  const openQuotes = store.col('quotes').filter((q) => ['Draft', 'Sent'].includes(q.status));
+  const quoteValue = openQuotes.reduce((s, q) => s + (Number(q.total) || 0), 0);
+  const invState = store.col('invoices').map((i) => ({ ...i, ...computeFields('invoices', i) }));
+  const overdueInv = invState.filter((i) => i.isOverdue);
+  const overdueInvValue = overdueInv.reduce((s, i) => s + (Number(i.balance) || 0), 0);
+
+  const moneyKpis = store.moneyLocked()
+    ? h('div', { class: 'kpi-row' },
+        kpi('Money', 'Locked', 'warn', 'billing & balances hidden — enter the admin PIN'))
+    : h('div', { class: 'kpi-row' },
+        kpi('Outstanding (AR)', money(ar.total) || '$0', ar.total ? 'accent' : '', `${ar.rows.length} customer${ar.rows.length === 1 ? '' : 's'}`),
+        kpi('Overdue Invoices', overdueInv.length, overdueInv.length ? 'bad' : '', overdueInv.length ? `${money(overdueInvValue)} late` : 'nothing late'),
+        kpi('Revenue (30d)', money(rev30) || '$0', 'accent', 'invoiced, incl. tax'),
+        kpi('Owed to Vendors', money(ap.total) || '$0', ap.total ? 'warn' : '', 'accounts payable'),
+        kpi('Open Quotes', openQuotes.length, openQuotes.length ? '' : '', quoteValue ? `${money(quoteValue)} quoted` : ''),
+      );
+  root.append(moneyKpis);
 
   const kpis = h('div', { class: 'kpi-row' },
     kpi('Open Work Orders', openWos.length, 'accent', `${dueSoonWos.length} due this week`),
@@ -111,6 +142,10 @@ export function overviewView(ctx) {
   for (const s of overduePm.slice(0, 5)) push('bad', s.task, `${absDays(s.nextDue)} overdue PM${s.assetId ? ' · ' + store.label('assets', s.assetId) : ''}`, () => ctx.focusRecord('schedule', s.id, 'table'));
   for (const p of lowParts.slice(0, 6)) push('warn', p.name, `${p.qty} ${p.unit} on hand · min ${p.minQty}${p.location ? ' · ' + p.location : ''}`, () => ctx.focusRecord('parts', p.id, 'table'));
   for (const a of downAssets.slice(0, 5)) push('warn', a.name, `${a.status} · ${a.category}${a.location ? ' · ' + a.location : ''}`, () => ctx.focusRecord('assets', a.id, 'table'));
+  for (const i of overdueInv.slice(0, 4)) push('bad', `${i.number} — ${store.label('customers', i.customerId) || 'no customer'}`, `${money(i.balance)} overdue · due ${fmtDateShort(i.dueDate)}`, () => ctx.focusRecord('invoices', i.id, 'table'));
+  for (const b of store.col('bills').map((x) => ({ ...x, ...computeFields('bills', x) })).filter((x) => x.isOverdue).slice(0, 3)) {
+    push('warn', `${b.number} — ${store.label('vendors', b.vendorId) || 'vendor'}`, `${money(b.balance)} owed · due ${fmtDateShort(b.dueDate)}`, () => ctx.focusRecord('bills', b.id, 'table'));
+  }
   if (!attList.children.length) attList.append(h('li', { class: 'list-item empty-ok' }, icon('check', 16), h('div', {}, 'All clear — nothing needs attention.')));
   attention.append(attList);
   grid.append(attention);
@@ -229,7 +264,7 @@ export function collectionView(ctx, collection) {
       'Low stock only',
     ));
   }
-  right.push(addButton(collection));
+  right.push(addButton(collection, ctx));
 
   root.append(sectionHeader(meta.label, `${store.col(collection).length} records`));
   root.append(toolbar(ctx, collection, {
@@ -238,8 +273,8 @@ export function collectionView(ctx, collection) {
     right,
   }));
 
-  if (collection === 'parts') root.append(partsSummary(store.col('parts')));
-  if (collection === 'assets') root.append(assetsSummary(store.col('assets')));
+  const summary = collectionSummary(collection);
+  if (summary) root.append(summary);
 
   let items = store.col(collection).filter((r) => matchesSearch(r, meta, u.search));
   if (u.status && meta.statusKey) items = items.filter((r) => r[meta.statusKey] === u.status);
@@ -254,11 +289,14 @@ export function collectionView(ctx, collection) {
       } }, icon('check', 15), 'Serviced')]
     : collection === 'parts'
       ? (r) => [
-          iconButton('minus', async () => { await store.save('parts', r.id, { qty: Math.max(0, Number(r.qty) - 1) }); }, 'Remove one'),
+          iconButton('minus', async () => { await store.save('parts', r.id, { qty: Math.max(0, Number(r.qty) - 1) }); }, 'Remove one (logged as an adjustment)'),
           h('span', { class: 'qty-pill' }, `${r.qty}`),
-          iconButton('plus', async () => { await store.save('parts', r.id, { qty: Number(r.qty) + 1 }); }, 'Add one'),
+          iconButton('plus', async () => { await store.save('parts', r.id, { qty: Number(r.qty) + 1 }); }, 'Add one (logged as an adjustment)'),
+          iconButton('clock', () => partsHistory(r), 'Stock history'),
         ]
-      : null;
+      : collection === 'customers' || collection === 'jobs'
+        ? (r) => [iconButton('chart', () => partyLedger(collection, r), 'Account history')]
+        : docActions(collection, ctx);
 
   const sortGetters = collection === 'schedule' ? { nextDue: (r) => r.nextDue } : {};
 
@@ -273,6 +311,11 @@ export function collectionView(ctx, collection) {
       if (meta.statusKey && (r[meta.statusKey] === 'Down')) return 'row-bad';
       if (meta.statusKey && r[meta.statusKey] === 'Maintenance') return 'row-warn';
       if (collection === 'schedule') { const d = daysUntil(r.nextDue); return d !== null && d < 0 ? 'row-bad' : d !== null && d <= 3 ? 'row-warn' : ''; }
+      if (collection === 'invoices' || collection === 'bills') {
+        const state = computeFields(collection, r);
+        if (state.isOverdue) return 'row-bad';
+        if (r.status === 'Partial' || r.status === 'Unpaid') return 'row-warn';
+      }
       return '';
     },
   }));
@@ -290,6 +333,96 @@ function partsSummary(parts) {
   );
 }
 
+// Mini-KPI strip shown above each collection table. Money collections show
+// money; master collections show their health.
+function collectionSummary(collection) {
+  const dbv = dbView();
+  switch (collection) {
+    case 'parts':
+      return partsSummary(store.col('parts'));
+    case 'assets':
+      return assetsSummary(store.col('assets'));
+    case 'customers': {
+      const ar = erp.arAging(dbv);
+      return h('div', { class: 'mini-kpis' },
+        kpi('Customers', store.col('customers').length),
+        store.moneyLocked() ? null : kpi('Outstanding', money(ar.total) || '$0', ar.total ? 'accent' : '', 'receivable'),
+        store.moneyLocked() ? null : kpi('Overdue', store.col('invoices').filter((i) => computeFields('invoices', i).isOverdue).length, '', 'invoices late'),
+      );
+    }
+    case 'jobs': {
+      const jobs = store.col('jobs');
+      if (store.moneyLocked()) {
+        return h('div', { class: 'mini-kpis' }, kpi('Jobs', jobs.length, '', 'costs & margins hidden — admin PIN required'));
+      }
+      const rows = erp.jobCosting(dbv);
+      const open = rows.filter((r) => ['Quoted', 'Active', 'On Hold'].includes(r.job.status));
+      const margin = open.reduce((s, r) => s + r.margin, 0);
+      return h('div', { class: 'mini-kpis' },
+        kpi('Active / Open', open.length, open.length ? 'accent' : '', `${jobs.length} total`),
+        kpi('Open Invoiced', money(open.reduce((s, r) => s + r.invoiced, 0)) || '$0', '', 'on open jobs'),
+        kpi('Open Margin', money(margin) || '$0', margin < 0 ? 'bad' : margin > 0 ? 'good' : '', 'invoiced − costs'),
+      );
+    }
+    case 'quotes': {
+      const open = store.col('quotes').filter((q) => ['Draft', 'Sent'].includes(q.status));
+      return h('div', { class: 'mini-kpis' },
+        kpi('Open', open.length, open.length ? 'accent' : '', `${store.col('quotes').length} total`),
+        kpi('Quoted Value', money(open.reduce((s, q) => s + (Number(q.total) || 0), 0)) || '$0', '', 'draft + sent'),
+        kpi('Accepted', store.col('quotes').filter((q) => q.status === 'Accepted').length),
+      );
+    }
+    case 'invoices': {
+      const ar = erp.arAging(dbv);
+      const overdue = store.col('invoices').filter((i) => computeFields('invoices', i).isOverdue);
+      return h('div', { class: 'mini-kpis' },
+        kpi('Invoices', store.col('invoices').length),
+        kpi('Outstanding', money(ar.total) || '$0', ar.total ? 'accent' : ''),
+        kpi('Overdue', overdue.length, overdue.length ? 'bad' : '', money(overdue.reduce((s, i) => s + (Number(i.balance) || 0), 0)) || '$0'),
+        kpi('Collected (30d)', money(store.col('payments').filter((p) => p.date >= isoDaysAgo(30)).reduce((s, p) => s + (Number(p.amount) || 0), 0)) || '$0'),
+      );
+    }
+    case 'purchaseorders': {
+      const open = store.col('purchaseorders').filter((p) => ['Ordered', 'Partial'].includes(p.status));
+      return h('div', { class: 'mini-kpis' },
+        kpi('Open POs', open.length, open.length ? 'accent' : '', `${store.col('purchaseorders').length} total`),
+        kpi('On Order', money(open.reduce((s, p) => s + Math.max(0, (Number(p.subtotal) || 0) - (Number(p.receivedValue) || 0)), 0)) || '$0', '', 'not yet received'),
+      );
+    }
+    case 'bills': {
+      const ap = erp.apAging(dbv);
+      const overdue = store.col('bills').filter((b) => computeFields('bills', b).isOverdue);
+      return h('div', { class: 'mini-kpis' },
+        kpi('Bills', store.col('bills').length),
+        kpi('Owed', money(ap.total) || '$0', ap.total ? 'warn' : '', 'accounts payable'),
+        kpi('Overdue', overdue.length, overdue.length ? 'bad' : '', 'past due date'),
+      );
+    }
+    case 'payments':
+      return h('div', { class: 'mini-kpis' },
+        kpi('Payments', store.col('payments').length),
+        kpi('Collected (30d)', money(store.col('payments').filter((p) => p.date >= isoDaysAgo(30)).reduce((s, p) => s + (Number(p.amount) || 0), 0)) || '$0', 'accent'),
+      );
+    case 'vendorpayments':
+      return h('div', { class: 'mini-kpis' },
+        kpi('Payments Sent', store.col('vendorpayments').length),
+        kpi('Paid (30d)', money(store.col('vendorpayments').filter((p) => p.date >= isoDaysAgo(30)).reduce((s, p) => s + (Number(p.amount) || 0), 0)) || '$0'),
+      );
+    case 'timeentries': {
+      const weekAgo = isoDaysAgo(7);
+      const recent = store.col('timeentries').filter((t) => t.date >= weekAgo);
+      const hours = recent.reduce((s, t) => s + (Number(t.hours) || 0), 0);
+      const billable = recent.filter((t) => t.billable !== false).reduce((s, t) => s + (Number(t.hours) || 0), 0);
+      return h('div', { class: 'mini-kpis' },
+        kpi('Hours (7d)', hours || '0', hours ? 'accent' : '', `${recent.length} entries`),
+        kpi('Billable (7d)', hours ? `${Math.round((billable / hours) * 100)}%` : '—', '', money(billable) + ' of work'),
+      );
+    }
+    default:
+      return null;
+  }
+}
+
 function assetsSummary(assets) {
   return h('div', { class: 'mini-kpis' },
     kpi('Total Assets', assets.length),
@@ -298,6 +431,322 @@ function assetsSummary(assets) {
     kpi('High Criticality', assets.filter((a) => a.criticality === 'High').length),
   );
 }
+
+// ---- money helpers ---------------------------------------------------------
+function dbView() {
+  const c = (n) => store.col(n);
+  return {
+    quotes: c('quotes'), invoices: c('invoices'), payments: c('payments'),
+    purchaseorders: c('purchaseorders'), bills: c('bills'), vendorpayments: c('vendorpayments'),
+    customers: c('customers'), vendors: c('vendors'), jobs: c('jobs'), parts: c('parts'),
+    people: c('people'), timeentries: c('timeentries'), stockmoves: c('stockmoves'),
+    ledger: c('ledger'), accounts: c('accounts'),
+    settings: store.state.settings,
+  };
+}
+
+function isoDaysAgo(n) {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  return d.toISOString().slice(0, 10);
+}
+
+const mb = (iconName, label, onclick, tone = '') => h('button', { class: `mini-btn ${tone}`, onclick }, icon(iconName, 15), label);
+
+// Per-status workflow buttons for the document tables. Every button maps to a
+// real engine operation — the UI never edits money state by hand.
+function docActions(collection, ctx) {
+  const run = async (record, action, payload, label) => {
+    try {
+      await store.docAction(collection, record.id, action, payload);
+      toast(label);
+    } catch (err) {
+      toast(err.message, 'error');
+    }
+  };
+  const voidDoc = async (record) => {
+    if (await confirmDialog({ title: `Void ${record.number}?`, message: 'Reversal entries will be posted to the ledger. The document stays on file (cannot be deleted).', confirmLabel: 'Void document' })) {
+      run(record, 'void', {}, `${record.number} voided — books reversed`);
+    }
+  };
+  return (r) => {
+    const btns = [];
+    if (collection === 'quotes') {
+      if (r.status === 'Draft') btns.push(mb('external', 'Send', () => run(r, 'send', {}, `Quote ${r.number} sent`)));
+      if (r.status === 'Sent') {
+        btns.push(mb('check', 'Accept', () => run(r, 'accept', {}, `Quote ${r.number} accepted — invoice drafted`, 'go')));
+        btns.push(mb('x', 'Decline', () => run(r, 'decline', {}, `Quote ${r.number} declined`)));
+      }
+      if (r.status !== 'Draft') btns.push(mb('invoice', 'View', () => docDetail({ collection, record: r })));
+    } else if (collection === 'invoices') {
+      if (r.status === 'Draft') btns.push(mb('external', 'Send', () => run(r, 'send', {}, `Invoice ${r.number} sent — AR posted`)));
+      if (r.status === 'Sent' || r.status === 'Partial') {
+        btns.push(mb('dollar', 'Pay', () => openPaymentForm({ collection: 'payments', doc: r })));
+        btns.push(mb('x', 'Void', () => voidDoc(r)));
+      }
+      if (r.status !== 'Draft') btns.push(mb('invoice', 'View', () => docDetail({ collection, record: r })));
+      btns.push(mb('print', 'Print', () => printDoc(collection, r)));
+    } else if (collection === 'purchaseorders') {
+      if (r.status === 'Draft') btns.push(mb('external', 'Order', () => run(r, 'order', {}, `PO ${r.number} ordered`)));
+      if (r.status === 'Ordered' || r.status === 'Partial') btns.push(mb('box', 'Receive', () => receiveDialog({ record: r })));
+      if (r.status === 'Received') btns.push(mb('check', 'Close', () => run(r, 'close', {}, `PO ${r.number} closed`)));
+      if (r.status !== 'Draft') btns.push(mb('invoice', 'View', () => docDetail({ collection, record: r })));
+    } else if (collection === 'bills') {
+      if (r.status === 'Draft') btns.push(mb('receipt', 'Record', () => run(r, 'record', {}, `Bill ${r.number} recorded — AP posted`)));
+      if (r.status === 'Unpaid' || r.status === 'Partial') {
+        btns.push(mb('dollar', 'Pay', () => openPaymentForm({ collection: 'vendorpayments', doc: r })));
+        btns.push(mb('x', 'Void', () => voidDoc(r)));
+      }
+      if (r.status !== 'Draft') btns.push(mb('invoice', 'View', () => docDetail({ collection, record: r })));
+    }
+    return btns;
+  };
+}
+
+// Stock history for one part (from the append-only moves ledger).
+function partsHistory(part) {
+  const moves = store.col('stockmoves').filter((m) => m.partId === part.id);
+  const rows = moves.slice(0, 50).map((m) => h('tr', {},
+    h('td', {}, fmtDateShort(m.date)),
+    h('td', {}, m.reason),
+    h('td', {}, `${m.qty > 0 ? '+' : ''}${m.qty} ${part.unit || ''}`),
+    h('td', {}, m.notes || m.refType || ''),
+  ));
+  const overlay = h('div', { class: 'overlay' });
+  const close = () => overlay.remove();
+  overlay.append(h('div', { class: 'dialog small', role: 'dialog', 'aria-modal': 'true' },
+    h('div', { class: 'dialog-head' }, h('h3', {}, `Stock history — ${part.name}`), iconButton('x', close, 'Close')),
+    h('div', { class: 'dialog-body' },
+      h('p', { class: 'muted small' }, `On hand: ${part.qty} ${part.unit} · avg cost ${money(part.avgCost ?? part.cost)}`),
+      h('table', { class: 'data-table' },
+        h('thead', {}, h('tr', {}, h('th', {}, 'Date'), h('th', {}, 'Reason'), h('th', {}, 'Change'), h('th', { class: 'wide' }, 'Source'))),
+        h('tbody', {}, rows.length ? rows : h('tr', {}, h('td', { colspan: 4, class: 'empty' }, 'No stock moves yet.'))),
+      ),
+    ),
+    h('div', { class: 'dialog-foot' }, h('span', { class: 'spacer' }), h('button', { class: 'btn primary', onclick: close }, 'Done')),
+  ));
+  overlay.addEventListener('mousedown', (e) => { if (e.target === overlay) close(); });
+  document.body.append(overlay);
+}
+
+// Account history for a customer or job: their documents side by side.
+function partyLedger(collection, record) {
+  const isCustomer = collection === 'customers';
+  const invoices = isCustomer ? store.col('invoices').filter((i) => i.customerId === record.id) : [];
+  const bills = isCustomer ? [] : store.col('bills').filter((b) => b.vendorId === record.id);
+  const jobs = store.col('jobs').filter((j) => (isCustomer ? j.customerId === record.id : false));
+  const overlay = h('div', { class: 'overlay' });
+  const close = () => overlay.remove();
+  const row = (doc) => h('tr', {},
+    h('td', {}, doc.number),
+    h('td', {}, fmtDateShort(doc.date)),
+    h('td', {}, statusChip(doc.status)),
+    h('td', {}, money(doc.total)),
+    h('td', {}, money((Number(doc.total) || 0) - (Number(doc.paid) || 0))),
+  );
+  overlay.append(h('div', { class: 'dialog', role: 'dialog', 'aria-modal': 'true' },
+    h('div', { class: 'dialog-head' }, h('h3', {}, `${record.name || record.title} — account`), iconButton('x', close, 'Close')),
+    h('div', { class: 'dialog-body' },
+      isCustomer ? h('table', { class: 'data-table' },
+        h('thead', {}, h('tr', {}, h('th', {}, 'Invoice'), h('th', {}, 'Date'), h('th', {}, 'Status'), h('th', {}, 'Total'), h('th', {}, 'Balance'))),
+        h('tbody', {}, invoices.length ? invoices.map(row) : h('tr', {}, h('td', { colspan: 5, class: 'empty' }, 'No invoices yet.'))),
+      ) : h('table', { class: 'data-table' },
+        h('thead', {}, h('tr', {}, h('th', {}, 'Bill'), h('th', {}, 'Date'), h('th', {}, 'Status'), h('th', {}, 'Total'), h('th', {}, 'Balance'))),
+        h('tbody', {}, bills.length ? bills.map(row) : h('tr', {}, h('td', { colspan: 5, class: 'empty' }, 'No bills yet.'))),
+      ),
+      isCustomer && jobs.length ? h('p', { class: 'muted small' }, `Jobs: ${jobs.map((j) => j.title).join(', ')}`) : null,
+    ),
+    h('div', { class: 'dialog-foot' }, h('span', { class: 'spacer' }), h('button', { class: 'btn primary', onclick: close }, 'Done')),
+  ));
+  overlay.addEventListener('mousedown', (e) => { if (e.target === overlay) close(); });
+  document.body.append(overlay);
+}
+
+// Record a payment starting from the payments list (pick the document first).
+export function recordPaymentFlow(ctx, isCustomer) {
+  const target = isCustomer ? 'invoices' : 'bills';
+  const open = store.col(target).filter((d) => ['Sent', 'Partial', 'Unpaid'].includes(d.status));
+  if (!open.length) {
+    toast(isCustomer ? 'No open invoices to pay — send one first' : 'No open bills — record one first', 'error');
+    return;
+  }
+  const overlay = h('div', { class: 'overlay' });
+  const close = () => overlay.remove();
+  const pick = h('select', { class: 'input' }, ...store.options(target).filter((o) => open.some((d) => d.id === o.value)).map((o) => h('option', { value: o.value }, o.label)));
+  const form = h('form', { class: 'dialog small', role: 'dialog', 'aria-modal': 'true', onsubmit: (e) => {
+    e.preventDefault();
+    const doc = store.byId(target, pick.value);
+    if (!doc) return;
+    close();
+    openPaymentForm({ collection: isCustomer ? 'payments' : 'vendorpayments', doc });
+  } });
+  form.append(
+    h('div', { class: 'dialog-head' }, h('h3', {}, isCustomer ? 'Record Payment' : 'Pay a Vendor Bill'), iconButton('x', close, 'Close')),
+    h('div', { class: 'dialog-body' }, h('label', { class: 'field' }, h('span', { class: 'field-label' }, isCustomer ? 'Invoice' : 'Bill'), pick)),
+    h('div', { class: 'dialog-foot' },
+      h('button', { type: 'button', class: 'btn ghost', onclick: close }, 'Cancel'),
+      h('button', { type: 'submit', class: 'btn primary' }, icon('dollar', 16), 'Continue'),
+    ),
+  );
+  overlay.append(form);
+  overlay.addEventListener('mousedown', (e) => { if (e.target === overlay) close(); });
+  document.body.append(overlay);
+  pick.focus();
+}
+
+// ---- Reports ---------------------------------------------------------------
+const REPORT_TABS = [
+  { id: 'pnl', label: 'Profit & Loss', icon: 'chart' },
+  { id: 'ar', label: 'Receivable (AR)', icon: 'dollar' },
+  { id: 'ap', label: 'Payable (AP)', icon: 'receipt' },
+  { id: 'jobs', label: 'Job Costing', icon: 'target' },
+  { id: 'inventory', label: 'Inventory', icon: 'box' },
+  { id: 'sales', label: 'Sales', icon: 'invoice' },
+  { id: 'journal', label: 'Journal', icon: 'list' },
+];
+
+export function reportsView(ctx) {
+  const u = ui(ctx, 'reports', { tab: 'pnl' });
+  const dbv = dbView();
+  const root = h('div', { class: 'view' });
+  root.append(sectionHeader('Reports', 'Straight off the ledger — the same numbers every screen sees'));
+
+  const tabs = h('div', { class: 'segmented reports-tabs' },
+    ...REPORT_TABS.map((t) => h('button', { class: `seg ${u.tab === t.id ? 'active' : ''}`, onclick: () => { u.tab = t.id; ctx.rerender(); } }, icon(t.icon, 14), t.label)));
+  root.append(tabs);
+
+  const body = h('div', { class: 'view-body' }, h('div', { class: 'panel' },
+    h('div', { class: 'panel-body' }, REPORTS[u.tab] ? REPORTS[u.tab](dbv, ctx) : null)));
+  root.append(body);
+  return root;
+}
+
+// Small table builder for reports: headers[], rows[][], foot?[][]
+function reportTable(headers, rows, foot) {
+  const table = h('table', { class: 'data-table report-table' });
+  table.append(h('thead', {}, h('tr', {}, headers.map((hd) => h('th', { class: hd.right ? 'num' : '' }, hd.label)))));
+  const tbody = h('tbody');
+  if (!rows.length) tbody.append(h('tr', {}, h('td', { colspan: headers.length, class: 'empty' }, 'Nothing to report yet — this fills in as the business is used.')));
+  for (const row of rows) tbody.append(h('tr', {}, row.map((cell, i) => h('td', { class: headers[i]?.right ? 'num' : '' }, cell))));
+  table.append(tbody);
+  if (foot) {
+    table.append(h('tfoot', {}, h('tr', {}, foot.map((cell, i) => h('td', { class: headers[i]?.right ? 'num' : '' }, cell)))));
+  }
+  return table;
+}
+
+const REPORTS = {
+  pnl(dbv) {
+    const data = erp.pnl(dbv, 12);
+    const rows = data.keys.map((k) => {
+      const m = data.byMonth[k];
+      return [
+        new Date(k + '-15').toLocaleDateString(undefined, { month: 'short', year: '2-digit' }),
+        money(m.income), money(m.expense),
+        money(round2(m.income - m.expense)),
+      ];
+    });
+    return h('div', {},
+      reportTable(
+        [{ label: 'Month' }, { label: 'Income', right: true }, { label: 'Expense', right: true }, { label: 'Net', right: true }],
+        rows,
+        ['12-month total', money(data.totals.income), money(data.totals.expense), money(data.net)],
+      ),
+      h('p', { class: 'muted small' }, 'Income and expense straight from the double-entry ledger (posted invoices, bills and payments). Labor shows up when billed; payroll export comes from Time.'),
+    );
+  },
+  ar(dbv) {
+    const data = erp.arAging(dbv);
+    const rows = data.rows.map((r) => [r.party, money(r.current), money(r.d30), money(r.d60), money(r.d90), money(r.older), h('b', {}, money(r.total))]);
+    return h('div', {},
+      h('div', { class: 'mini-kpis' }, kpi('Total receivable', money(data.total) || '$0', data.total ? 'accent' : '')),
+      reportTable(
+        [{ label: 'Customer' }, { label: 'Current', right: true }, { label: '1–30', right: true }, { label: '31–60', right: true }, { label: '61–90', right: true }, { label: '90+', right: true }, { label: 'Balance', right: true }],
+        rows,
+        ['Total', money(data.total), '', '', '', '', money(data.total)],
+      ),
+      h('p', { class: 'muted small' }, 'Aged by due date. Call the 60+ column first — that is where margins go to die.'),
+    );
+  },
+  ap(dbv) {
+    const data = erp.apAging(dbv);
+    const rows = data.rows.map((r) => [r.party, money(r.current), money(r.d30), money(r.d60), money(r.d90), money(r.older), h('b', {}, money(r.total))]);
+    return h('div', {},
+      h('div', { class: 'mini-kpis' }, kpi('Total payable', money(data.total) || '$0', data.total ? 'warn' : '')),
+      reportTable(
+        [{ label: 'Vendor' }, { label: 'Current', right: true }, { label: '1–30', right: true }, { label: '31–60', right: true }, { label: '61–90', right: true }, { label: '90+', right: true }, { label: 'Balance', right: true }],
+        rows,
+        ['Total', money(data.total), '', '', '', '', money(data.total)],
+      ),
+      h('p', { class: 'muted small' }, 'Bills recorded but not fully paid, aged by due date. Protect early-payment discounts before this column grows.'),
+    );
+  },
+  jobs(dbv) {
+    const rows = erp.jobCosting(dbv).map((r) => [
+      r.job.title,
+      store.label('customers', r.job.customerId) || '—',
+      statusChip(r.job.status),
+      money(r.invoiced),
+      money(r.collected),
+      money(r.cost),
+      h('b', { style: r.margin < 0 ? { color: 'var(--bad)' } : { color: 'var(--good)' } }, money(r.margin)),
+    ]);
+    return h('div', {},
+      reportTable(
+        [{ label: 'Job' }, { label: 'Customer' }, { label: 'Status' }, { label: 'Invoiced', right: true }, { label: 'Collected', right: true }, { label: 'Costs', right: true }, { label: 'Margin', right: true }],
+        rows,
+      ),
+      h('p', { class: 'muted small' }, 'Costs = part cost on invoices (COGS) + vendor bills tagged to the job + logged time at pay rate. Quotes convert into invoices with the same job tag, so margin stays comparable.'),
+    );
+  },
+  inventory(dbv) {
+    const data = erp.inventoryValuation(dbv);
+    const rows = data.rows
+      .sort((a, b) => b.value - a.value)
+      .map((r) => [
+        r.part.name,
+        r.part.sku || '—',
+        `${r.part.qty} ${r.part.unit || ''}`,
+        money(r.part.avgCost ?? r.part.cost),
+        money(r.value),
+      ]);
+    return h('div', {},
+      h('div', { class: 'mini-kpis' },
+        kpi('Stock at cost', money(data.value) || '$0'),
+        kpi('Stock at list price', money(data.retail) || '$0', '', `${data.rows.length} SKUs`),
+      ),
+      reportTable(
+        [{ label: 'Part' }, { label: 'SKU' }, { label: 'On hand' }, { label: 'Avg cost', right: true }, { label: 'Value', right: true }],
+        rows,
+      ),
+      h('p', { class: 'muted small' }, 'Valued at moving-average cost, maintained automatically by goods receipts and sales.'),
+    );
+  },
+  sales(dbv) {
+    const rows = erp.salesByCustomer(dbv).map((r) => [
+      r.name, String(r.count), money(r.invoiced), money(r.paid), money(round2(r.invoiced - r.paid)),
+    ]);
+    return h('div', {},
+      reportTable(
+        [{ label: 'Customer' }, { label: 'Invoices' }, { label: 'Invoiced', right: true }, { label: 'Collected', right: true }, { label: 'Outstanding', right: true }],
+        rows,
+      ),
+      h('p', { class: 'muted small' }, 'Lifetime invoiced vs collected per customer (voided and drafts excluded).'),
+    );
+  },
+  journal(dbv) {
+    const rows = erp.journalRows(dbv, 120).map((e) => [
+      fmtDate(e.date), e.memo, e.readable, money(e.amount),
+    ]);
+    return h('div', {},
+      reportTable(
+        [{ label: 'Date' }, { label: 'Memo', }, { label: 'Postings' }, { label: 'Amount', right: true }],
+        rows,
+      ),
+      h('p', { class: 'muted small' }, 'The raw double-entry journal every document posts to — the export your accountant gets. Append-only: corrections are reversals, never edits.'),
+    );
+  },
+};
 
 // ---- Activity ------------------------------------------------------------
 export function activityView(ctx) {
@@ -430,8 +879,60 @@ export function settingsView(ctx) {
   ));
   body.append(data);
 
+  // About & updates
+  const about = h('div', { class: 'panel' });
+  about.append(h('div', { class: 'panel-head' }, icon('activity', 17), h('h3', {}, 'About & Updates')));
+  about.append(h('div', { class: 'panel-body' },
+    h('div', { class: 'setting-row' },
+      h('div', {},
+        h('div', { class: 'strong' }, `${APP_NAME} v${APP_VERSION}`),
+        h('div', { class: 'muted small' }, `The mini-ERP for shops that hate subscriptions. Business profile: ${profileOf(s.profile).label}`),
+      ),
+      h('div', { class: 'row-actions' },
+        h('button', { class: 'btn ghost', onclick: (e) => checkForUpdates(e.currentTarget) }, icon('refresh', 16), 'Check for updates'),
+      ),
+    ),
+    h('p', { class: 'muted small' }, 'Updates ship as a zip from grizzlyse.com — replace the app folder, keep data/db.json. Your books never move unless you move them.'),
+  ));
+  body.append(about);
+
+  // Admin PIN (money gate)
+  const pinCard = h('div', { class: 'panel' });
+  pinCard.append(h('div', { class: 'panel-head' }, icon('lock', 17), h('h3', {}, 'Admin PIN (money access)')));
+  pinCard.append(h('div', { class: 'panel-body' },
+    h('p', { class: 'muted' }, s.adminPinSet
+      ? 'PIN is set — money views (quotes, invoices, payments, POs, bills, reports) are hidden from screens that have not unlocked. The server withholds the data itself.'
+      : 'No PIN — money is visible to everyone on the shop network. Set one to keep billing private from the floor.'),
+    h('p', { class: 'muted small' }, 'The PIN is stored only as a hash on the server and is never sent to browsers. After a server restart, each screen asks for the PIN once.'),
+    h('div', { class: 'row-actions' },
+      h('button', { class: 'btn primary', onclick: () => changeAdminPin({ requireCurrent: Boolean(s.adminPinSet) }) },
+        icon(s.adminPinSet ? 'refresh' : 'plus', 16), s.adminPinSet ? 'Change PIN' : 'Set Admin PIN'),
+      s.adminPinSet ? h('button', { class: 'btn ghost', onclick: () => changeAdminPin({ requireCurrent: true, remove: true }) }, icon('trash', 16), 'Remove PIN') : null,
+      s.adminPinSet ? h('button', { class: 'btn ghost', onclick: () => store.lockNow() }, icon('lock', 16), 'Lock this screen now') : null,
+    ),
+  ));
+  body.append(pinCard);
+
   root.append(body);
   return root;
+}
+
+// ---- About / updates (Settings) -------------------------------------------
+async function checkForUpdates(button) {
+  button.disabled = true;
+  try {
+    const res = await fetch('https://grizzlyse.com/grizzworks/latest.json', { cache: 'no-store' });
+    const info = await res.json();
+    if (info?.version && info.version !== APP_VERSION) {
+      toast(`GrizzWorks ${info.version} is available${info.notes ? ' — ' + info.notes : ''}`, 'warn');
+      if (info.url) window.open(info.url, '_blank');
+    } else {
+      toast('You are up to date');
+    }
+  } catch {
+    toast('Could not check for updates (offline?)', 'error');
+  }
+  button.disabled = false;
 }
 
 function controlForSettings(field, value) {

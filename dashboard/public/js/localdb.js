@@ -1,20 +1,24 @@
-// Browser-local database. When the dashboard is opened as a plain file or
-// hosted as a static site (e.g. as a live demo on a website) there is no
-// Node server and no shared JSON file — so records are kept in this browser's
-// localStorage instead. Semantics mirror lib/db.js exactly: schema coercion,
-// timestamps and an activity log, so the rest of the app cannot tell the two
-// modes apart.
+// Browser-local database. When the app is opened as a plain file or hosted as
+// a static site (the live demo) there is no Node server and no shared JSON
+// file — records are kept in this browser's localStorage instead.
 //
-// First run is seeded with the sample shop (shared/seed.js), so the demo is
-// populated the moment it loads. Edits save instantly; other open tabs pick
-// the change up through the browser 'storage' event.
+// ALL record/money rules come from the shared engine (shared/records.js +
+// shared/erp.js) — the exact same code the Node server runs, so a customer
+// trying the demo exercises the real posting engine: invoices, payments,
+// stock moves, the works.
+//
+// First run is seeded with the sample business (shared/seed.js). Edits save
+// instantly; other open tabs pick the change up through the 'storage' event.
 // NOTE on the import depth: this module is loaded both by the browser (served
 // at /js/localdb.js, so ../.. normalizes to the site root where /shared lives)
 // and directly by Node (tests), where ../.. really is the project root.
-import { collections, collectionByName, coerceValue } from '../../shared/schema.js?v=20261012-3';
-import { buildSeed } from '../../shared/seed.js?v=20261012-3';
+import { collections } from '../../shared/schema.js?v=2.1.1';
+import { makeEngine } from '../../shared/records.js?v=2.1.1';
+import { buildSeed } from '../../shared/seed.js?v=2.1.1';
+import { isMoneyCollection, redactSnapshot, sanitizeSettings, sha256Hex } from '../../shared/gate.js?v=2.1.1';
 
-export const STORAGE_KEY = 'shopline.db.v1';
+export const STORAGE_KEY = 'grizzworks.db.v1';
+const LEGACY_KEYS = ['shopline.db.v1'];
 
 // A tiny Storage-compatible shim for environments without localStorage
 // (tests, private-mode edge cases) so the app still works in-memory.
@@ -31,25 +35,13 @@ export function memoryStorage() {
 export function browserStorage() {
   try {
     if (typeof localStorage !== 'undefined') {
-      localStorage.setItem('shopline.probe', '1');
-      localStorage.removeItem('shopline.probe');
+      localStorage.setItem('grizzworks.probe', '1');
+      localStorage.removeItem('grizzworks.probe');
       return localStorage;
     }
   } catch { /* blocked */ }
   return memoryStorage();
 }
-
-const newId = (prefix) => `${prefix}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
-
-const ID_PREFIX = {
-  workorders: 'wo',
-  assets: 'ast',
-  schedule: 'pm',
-  parts: 'part',
-  people: 'per',
-  vendors: 'ven',
-  resources: 'res',
-};
 
 // A demo nobody has touched quietly refreshes itself after this long, so a
 // website showcase never shows stale dates. Once any edit is made the data
@@ -58,11 +50,17 @@ const SEED_TTL_DAYS = 45;
 
 export function makeLocalDb(storage = browserStorage(), key = STORAGE_KEY) {
   let db = null;
+  let engine = null;
+  let unlocked = false; // money gate: true after a successful PIN entry
   const listeners = new Set();
+
+  const pinHash = () => db?.settings?.adminPinHash || '';
+  const gateOpen = () => !pinHash() || unlocked;
+  const LOCKED_MSG = 'Money is locked — enter the admin PIN first.';
 
   function persist() {
     try {
-      db.meta = { ...db.meta, version: 1, updatedAt: new Date().toISOString() };
+      db.meta = { ...db.meta, version: 2, updatedAt: new Date().toISOString() };
       storage.setItem(key, JSON.stringify(db));
     } catch (err) {
       console.error('[localdb] could not save', err);
@@ -75,113 +73,58 @@ export function makeLocalDb(storage = browserStorage(), key = STORAGE_KEY) {
     }
   }
 
+  function guardMoney(name) {
+    if (pinHash() && !unlocked && isMoneyCollection(name)) throw new Error(LOCKED_MSG);
+  }
+
+  function broadcastExtras(extras) {
+    for (const extra of extras || []) {
+      if (!extra?.item) continue;
+      emit({ type: 'update', collection: extra.collection, item: extra.item });
+    }
+  }
+
+  function buildEngine() {
+    const e = makeEngine(db, {
+      actorDefault: 'this browser',
+      afterMutation: persist,
+      onExtras: broadcastExtras,
+    });
+    // Settings events must not carry the PIN hash to the client layer.
+    e.setEmitter((event) => emit(event.settings ? { ...event, settings: sanitizeSettings(event.settings) } : event));
+    return e;
+  }
+
+  function withEngine() {
+    if (!engine) engine = buildEngine();
+    return engine;
+  }
+
   function freshSeed() {
     const seed = buildSeed();
-    seed.meta = { ...seed.meta, version: 1, seededOn: new Date().toISOString().slice(0, 10) };
+    seed.meta = { ...seed.meta, version: 2, seededOn: new Date().toISOString().slice(0, 10) };
     return seed;
   }
 
   function load() {
-    try {
-      const raw = storage.getItem(key);
-      if (raw) db = JSON.parse(raw);
-    } catch { db = null; }
+    let raw = null;
+    try { raw = storage.getItem(key); } catch { /* blocked */ }
+    // Legacy installs (the old product name) migrate silently.
+    if (!raw) {
+      for (const legacy of LEGACY_KEYS) {
+        try {
+          const old = storage.getItem(legacy);
+          if (old) { raw = old; storage.removeItem(legacy); break; }
+        } catch { /* blocked */ }
+      }
+    }
+    try { db = raw ? JSON.parse(raw) : null; } catch { db = null; }
     if (!db || typeof db !== 'object') db = freshSeed();
-    for (const c of collections) if (!Array.isArray(db[c.name])) db[c.name] = [];
-    if (!Array.isArray(db.activity)) db.activity = [];
-    if (!db.settings || typeof db.settings !== 'object') db.settings = {};
-    if (!db.meta || typeof db.meta !== 'object') db.meta = { version: 1 };
-    const seededOn = Date.parse(db.meta.seededOn || '');
+    const seededOn = Date.parse(db.meta?.seededOn || '');
     const ageOk = !Number.isNaN(seededOn) && (Date.now() - seededOn) < SEED_TTL_DAYS * 86400000;
-    if (!db.meta.userModified && !ageOk) {
-      db = freshSeed();
-    }
+    if (!db.meta?.userModified && !ageOk) db = freshSeed();
+    engine = buildEngine(); // runs ensureShape + catchUp (posts seeded docs)
     persist();
-    return db;
-  }
-
-  function coerceRecord(collectionName, input, base = {}) {
-    const col = collectionByName[collectionName];
-    const out = { ...base };
-    for (const field of col.fields) {
-      if (field.type === 'computed') continue;
-      if (!Object.prototype.hasOwnProperty.call(input, field.key)) continue;
-      out[field.key] = coerceValue(field, input[field.key]);
-    }
-    return out;
-  }
-
-  function logActivity(actor, text) {
-    const entry = { id: newId('act'), at: new Date().toISOString(), actor: actor || 'this browser', text };
-    db.activity.unshift(entry);
-    db.activity = db.activity.slice(0, 300);
-    return entry;
-  }
-
-  function create(collectionName, input, actor) {
-    const col = collectionByName[collectionName];
-    const record = coerceRecord(collectionName, input, {});
-    for (const field of col.fields) {
-      if (record[field.key] === undefined && field.default !== undefined) record[field.key] = field.default;
-    }
-    record.id = newId(ID_PREFIX[collectionName] || 'rec');
-    record.createdAt = new Date().toISOString();
-    record.updatedAt = record.createdAt;
-    db[collectionName].unshift(record);
-    db.meta = { ...db.meta, userModified: true };
-    const note = logActivity(actor, `Added ${col.singular.toLowerCase()} "${record[col.primary] || record.id}"`);
-    persist();
-    emit({ type: 'create', collection: collectionName, item: record, activity: note, actor });
-    return record;
-  }
-
-  function update(collectionName, id, patch, actor) {
-    const col = collectionByName[collectionName];
-    const record = db[collectionName].find((r) => r.id === id);
-    if (!record) return null;
-    const merged = coerceRecord(collectionName, patch, record);
-    merged.updatedAt = new Date().toISOString();
-    Object.assign(record, merged);
-    db.meta = { ...db.meta, userModified: true };
-    const note = logActivity(actor, `Updated ${col.singular.toLowerCase()} "${record[col.primary] || record.id}"`);
-    persist();
-    emit({ type: 'update', collection: collectionName, item: record, activity: note, actor });
-    return record;
-  }
-
-  function remove(collectionName, id, actor) {
-    const col = collectionByName[collectionName];
-    const idx = db[collectionName].findIndex((r) => r.id === id);
-    if (idx === -1) return null;
-    const [record] = db[collectionName].splice(idx, 1);
-    db.meta = { ...db.meta, userModified: true };
-    const note = logActivity(actor, `Deleted ${col.singular.toLowerCase()} "${record[col.primary] || record.id}"`);
-    persist();
-    emit({ type: 'delete', collection: collectionName, item: record, activity: note, actor });
-    return record;
-  }
-
-  function updateSettings(patch, actor) {
-    db.settings = { ...db.settings, ...patch };
-    db.meta = { ...db.meta, userModified: true };
-    const note = logActivity(actor, 'Updated dashboard settings');
-    persist();
-    emit({ type: 'settings', settings: db.settings, activity: note, actor });
-    return db.settings;
-  }
-
-  function replaceAll(incoming, actor) {
-    const next = { ...incoming };
-    for (const c of collections) {
-      if (!Array.isArray(next[c.name])) next[c.name] = [];
-    }
-    if (!Array.isArray(next.activity)) next.activity = [];
-    if (!next.settings || typeof next.settings !== 'object') next.settings = { ...db.settings };
-    next.meta = { ...(next.meta || {}), version: 1, restoredAt: new Date().toISOString(), userModified: true };
-    db = next;
-    const note = logActivity(actor, 'Restored database from backup');
-    persist();
-    emit({ type: 'reload', actor, activity: note });
     return db;
   }
 
@@ -190,14 +133,16 @@ export function makeLocalDb(storage = browserStorage(), key = STORAGE_KEY) {
     const keepSettings = { ...db.settings };
     db = freshSeed();
     db.settings = keepSettings;
-    const note = logActivity(actor || 'this browser', 'Reset demo data — sample shop restored');
+    unlocked = false; // a fresh database re-locks
+    engine = buildEngine();
+    const note = engine.logActivity(actor || 'this browser', 'Reset demo data — sample shop restored');
     persist();
     emit({ type: 'reload', actor, activity: note });
     return db;
   }
 
   function snapshot() {
-    return {
+    return redactSnapshot({
       collections: Object.fromEntries(collections.map((c) => [c.name, db[c.name]])),
       settings: db.settings,
       activity: db.activity.slice(0, 50),
@@ -205,7 +150,21 @@ export function makeLocalDb(storage = browserStorage(), key = STORAGE_KEY) {
       serverTime: new Date().toISOString(),
       clients: 1,
       mode: 'browser',
-    };
+    }, gateOpen());
+  }
+
+  // Demo money gate: verify the PIN against the locally stored hash.
+  async function unlock(pin) {
+    if (!pinHash()) throw new Error('No admin PIN is set.');
+    if ((await sha256Hex(pin)) !== pinHash()) throw new Error('Wrong PIN.');
+    unlocked = true;
+    emit({ type: 'reload' });
+    return { ok: true };
+  }
+
+  function lockNow() {
+    unlocked = false;
+    emit({ type: 'reload' });
   }
 
   load();
@@ -214,11 +173,15 @@ export function makeLocalDb(storage = browserStorage(), key = STORAGE_KEY) {
     mode: 'browser',
     load,
     snapshot,
-    create,
-    update,
-    remove,
-    updateSettings,
-    replaceAll,
+    isUnlocked: () => gateOpen(),
+    unlock,
+    lockNow,
+    create: (name, input, actor) => { guardMoney(name); return withEngine().create(name, input, actor); },
+    update: (name, id, patch, actor) => { guardMoney(name); return withEngine().update(name, id, patch, actor); },
+    remove: (name, id, actor) => { guardMoney(name); return withEngine().remove(name, id, actor); },
+    op: (name, id, action, payload, actor) => { guardMoney(name); return withEngine().op(name, id, action, payload || {}, actor); },
+    updateSettings: (patch, actor) => { if (!gateOpen()) throw new Error('Unlock with the admin PIN to change settings.'); return withEngine().updateSettings(patch, actor); },
+    replaceAll: (incoming, actor) => withEngine().replaceAll(incoming, actor),
     wipe,
     onChange: (fn) => {
       listeners.add(fn);
@@ -238,7 +201,7 @@ export const localDb = makeLocalDb();
 export function watchStorage(onChange) {
   if (typeof window === 'undefined') return () => {};
   const handler = (e) => {
-    if (e.key === STORAGE_KEY || e.key === null) onChange(e);
+    if (e.key === STORAGE_KEY || e.key === null || LEGACY_KEYS.includes(e.key)) onChange(e);
   };
   window.addEventListener('storage', handler);
   return () => window.removeEventListener('storage', handler);

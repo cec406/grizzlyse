@@ -1,25 +1,47 @@
 // Application shell: navigation, hash routing, global search, theme, and the
 // render loop that re-draws the active view whenever the store changes.
-import { h, append, clear, debounce, fmtDateShort, relTime, daysUntil } from './util.js?v=20261012-3';
-import { icon, brandMark } from './icons.js?v=20261012-3';
-import { collections, collectionByName, computeFields } from '../../shared/schema.js?v=20261012-3';
-import * as store from './store.js?v=20261012-3';
-import { openForm, toast, statusChip } from './components.js?v=20261012-3';
+import { h, append, clear, debounce, fmtDateShort, relTime, daysUntil } from './util.js?v=2.1.1';
+import { icon, brandMark } from './icons.js?v=2.1.1';
+import { collections, collectionByName, computeFields, APP_NAME, APP_VERSION } from '../../shared/schema.js?v=2.1.1';
+import { PROFILES, profileOf, hiddenNames } from '../../shared/profiles.js?v=2.1.1';
+import { isMoneyCollection, isMoneyView } from '../../shared/gate.js?v=2.1.1';
+import * as store from './store.js?v=2.1.1';
+import { openForm, toast, statusChip, pinGatePanel } from './components.js?v=2.1.1';
 import {
-  overviewView, workordersView, collectionView, activityView, settingsView,
-} from './views.js?v=20261012-3';
+  overviewView, workordersView, collectionView, activityView, settingsView, reportsView,
+} from './views.js?v=2.1.1';
 
 const NAV = [
-  { id: 'overview', label: 'Overview', icon: 'dashboard' },
-  { id: 'workorders', label: 'Work Orders', icon: 'clipboard' },
-  { id: 'schedule', label: 'Schedule', icon: 'calendar' },
-  { id: 'parts', label: 'Parts', icon: 'box' },
-  { id: 'assets', label: 'Assets', icon: 'machine' },
-  { id: 'people', label: 'People', icon: 'people' },
-  { id: 'vendors', label: 'Vendors', icon: 'truck' },
-  { id: 'resources', label: 'Resources', icon: 'folder' },
-  { id: 'activity', label: 'Activity', icon: 'activity' },
-  { id: 'settings', label: 'Settings', icon: 'settings' },
+  { section: 'Operate', items: [
+    { id: 'overview', label: 'Overview', icon: 'dashboard' },
+    { id: 'workorders', label: 'Work Orders', icon: 'clipboard' },
+    { id: 'schedule', label: 'Schedule', icon: 'calendar' },
+    { id: 'jobs', label: 'Jobs', icon: 'target' },
+    { id: 'parts', label: 'Parts', icon: 'box' },
+    { id: 'assets', label: 'Assets', icon: 'machine' },
+  ]},
+  { section: 'Sell', items: [
+    { id: 'customers', label: 'Customers', icon: 'people' },
+    { id: 'quotes', label: 'Quotes', icon: 'invoice' },
+    { id: 'invoices', label: 'Invoices', icon: 'invoice' },
+    { id: 'payments', label: 'Payments', icon: 'dollar' },
+  ]},
+  { section: 'Buy', items: [
+    { id: 'vendors', label: 'Vendors', icon: 'truck' },
+    { id: 'purchaseorders', label: 'Purchase Orders', icon: 'cart' },
+    { id: 'bills', label: 'Bills', icon: 'receipt' },
+    { id: 'vendorpayments', label: 'Payments Sent', icon: 'dollar' },
+  ]},
+  { section: 'Team', items: [
+    { id: 'people', label: 'People', icon: 'people' },
+    { id: 'timeentries', label: 'Time', icon: 'timer' },
+    { id: 'resources', label: 'Resources', icon: 'folder' },
+  ]},
+  { section: 'Business', items: [
+    { id: 'reports', label: 'Reports', icon: 'chart' },
+    { id: 'activity', label: 'Activity', icon: 'activity' },
+    { id: 'settings', label: 'Settings', icon: 'settings' },
+  ]},
 ];
 
 const CONTENT = document.getElementById('content');
@@ -67,6 +89,18 @@ function isEditing() {
   return tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA' || el.isContentEditable;
 }
 
+// Collections visible for this business profile (nav + New menu + search).
+// Computed here from the real collection list + the profile's hide list, so
+// there is no registration step that can silently go stale.
+function visibleNavIds() {
+  const hide = hiddenNames(store.state.settings.profile);
+  const out = new Set();
+  for (const c of collections) {
+    if (!c.system && !hide.has(c.name)) out.add(c.name);
+  }
+  return out;
+}
+
 function render() {
   if (isEditing()) {
     pendingRender = true;
@@ -76,13 +110,17 @@ function render() {
   const view = parseHash();
   ctx.view = view;
 
+  const visible = visibleNavIds();
   let node;
   if (view === 'overview') node = overviewView(ctx);
   else if (view === 'workorders') node = workordersView(ctx);
   else if (view === 'activity') node = activityView(ctx);
   else if (view === 'settings') node = settingsView(ctx);
-  else if (collectionByName[view]) node = collectionView(ctx, view);
-  else node = h('div', { class: 'view' }, h('div', { class: 'panel' }, h('p', {}, 'Not found.')));
+  else if (view === 'reports') node = store.moneyLocked() ? pinGatePanel('reports') : reportsView(ctx);
+  else if (collectionByName[view] && visible.has(view)) {
+    node = store.moneyLocked() && isMoneyView(view) ? pinGatePanel(view) : collectionView(ctx, view);
+  }
+  else node = h('div', { class: 'view' }, h('div', { class: 'panel' }, h('p', {}, 'Not found. Switch profiles in Settings if this module is hidden for your business type.')));
 
   clear(CONTENT);
   CONTENT.append(node);
@@ -110,12 +148,27 @@ function updateNav(active) {
   document.querySelectorAll('.nav-item').forEach((el) => {
     el.classList.toggle('active', el.dataset.nav === active);
   });
-  document.getElementById('sidebar').classList.remove('open');
+  closeDrawer();
+}
+
+// ---- drawer (mobile/tablet hamburger) --------------------------------------
+// The off-canvas drawer overlays the menu button when open, so closing it is
+// not just "click the button again": a backdrop catches clicks anywhere
+// outside the drawer, and dead space inside the drawer closes it too.
+function toggleDrawer(force) {
+  const sidebar = document.getElementById('sidebar');
+  const open = typeof force === 'boolean' ? force : !sidebar.classList.contains('open');
+  sidebar.classList.toggle('open', open);
+  document.body.classList.toggle('drawer-open', open);
+}
+
+function closeDrawer() {
+  toggleDrawer(false);
 }
 
 function updateTopbar() {
   const s = store.state.settings;
-  document.getElementById('shop-name').textContent = s.shopName || 'Shopline';
+  document.getElementById('shop-name').textContent = s.shopName || APP_NAME;
   document.getElementById('shop-sub').textContent = s.shopSubtitle || '';
 
   const dot = document.getElementById('conn-dot');
@@ -134,7 +187,7 @@ function updateTopbar() {
     document.getElementById('last-sync').textContent = '';
   }
 
-  // Sidebar badges
+  // Sidebar badges — ops first, then money.
   const wos = store.col('workorders').filter((w) => w.status !== 'Done');
   const overdue = wos.filter((w) => { const d = daysUntil(w.due); return d !== null && d < 0; }).length;
   setBadge('workorders', overdue || wos.length, overdue ? 'bad' : '');
@@ -144,6 +197,12 @@ function updateTopbar() {
   setBadge('assets', down, down ? 'bad' : '');
   const pmDue = store.col('schedule').filter((r) => { const d = daysUntil(computeFields('schedule', r).nextDue); return d !== null && d <= 3; }).length;
   setBadge('schedule', pmDue, pmDue ? 'warn' : '');
+  const invOverdue = store.col('invoices').filter((r) => computeFields('invoices', r).isOverdue).length;
+  setBadge('invoices', invOverdue, invOverdue ? 'bad' : '');
+  const openQuotes = store.col('quotes').filter((r) => ['Draft', 'Sent'].includes(r.status)).length;
+  setBadge('quotes', openQuotes, '');
+  const billOverdue = store.col('bills').filter((r) => computeFields('bills', r).isOverdue).length;
+  setBadge('bills', billOverdue, billOverdue ? 'warn' : '');
 }
 
 function setBadge(id, count, tone) {
@@ -158,32 +217,43 @@ function setBadge(id, count, tone) {
 function buildSidebar() {
   clear(SIDEBAR);
   const brand = h('div', { class: 'brand' },
-    h('div', { class: 'brand-mark' }, icon('activity', 20)),
-    h('div', {}, h('div', { class: 'brand-name' }, 'Shopline'), h('div', { class: 'brand-tag' }, 'Maintenance OS')),
+    h('div', { class: 'brand-mark' }, brandMark(22)),
+    h('div', {}, h('div', { class: 'brand-name' }, APP_NAME), h('div', { class: 'brand-tag' }, 'Business OS')),
   );
   SIDEBAR.append(brand);
   const nav = h('nav', { class: 'nav' });
-  for (const item of NAV) {
-    nav.append(h('a', {
-      class: 'nav-item', href: `#/${item.id}`, dataset: { nav: item.id },
-      onclick: () => { document.getElementById('sidebar').classList.remove('open'); },
-    }, icon(item.icon, 18), h('span', {}, item.label), h('span', { class: 'nav-badge', style: { display: 'none' } })));
+  const visible = visibleNavIds();
+  for (const group of NAV) {
+    const items = group.items.filter((item) => visible.has(item.id));
+    if (!items.length) continue;
+    nav.append(h('div', { class: 'nav-section' }, group.section));
+    for (const item of items) {
+      nav.append(h('a', {
+        class: 'nav-item', href: `#/${item.id}`, dataset: { nav: item.id },
+        onclick: () => closeDrawer(),
+      }, icon(item.icon, 18), h('span', {}, item.label), h('span', { class: 'nav-badge', style: { display: 'none' } })));
+    }
   }
   SIDEBAR.append(nav);
   SIDEBAR.append(h('div', { class: 'sidebar-foot' },
-    h('div', { class: 'muted small' }, 'Shopline v1.0'),
-    h('div', { class: 'muted small' }, 'Local · network-shared'),
+    h('div', { class: 'muted small' }, `${APP_NAME} v${APP_VERSION}`),
+    h('div', { class: 'muted small' }, 'Local · no subscriptions'),
   ));
+  // Tapping dead space inside the drawer also closes it — the drawer overlaps
+  // the menu button when open, so "click the button again" is not an option.
+  SIDEBAR.addEventListener('click', (e) => {
+    if (e.target === SIDEBAR || e.target.classList.contains('nav') || e.target.closest('.brand') || e.target.closest('.sidebar-foot')) closeDrawer();
+  });
 }
 
 function buildTopbar() {
   const topbar = document.getElementById('topbar');
   clear(topbar);
 
-  const menuBtn = h('button', { class: 'icon-btn menu-btn', title: 'Menu', onclick: () => document.getElementById('sidebar').classList.toggle('open') }, icon('list', 20));
+  const menuBtn = h('button', { class: 'icon-btn menu-btn', title: 'Menu', onclick: () => toggleDrawer() }, icon('list', 20));
 
   const titleWrap = h('div', { class: 'topbar-title' },
-    h('h1', { id: 'shop-name' }, 'Shopline'),
+    h('h1', { id: 'shop-name' }, APP_NAME),
     h('p', { id: 'shop-sub' }, ''),
   );
 
@@ -193,8 +263,11 @@ function buildTopbar() {
     onfocus: (e) => { if (e.target.value) runSearch(e.target.value); },
   });
   const searchWrap = h('div', { class: 'global-search' }, icon('search', 16), searchInput);
+  // Click-away closer for the search results / New menu. The New button itself
+  // is exempt — otherwise its own opening click would immediately clear the
+  // menu it just rendered (a real bug a real browser caught).
   document.addEventListener('click', (e) => {
-    if (!e.target.closest('.global-search')) clear(SEARCH_RESULTS);
+    if (!e.target.closest('.global-search') && !e.target.closest('#new-btn') && !e.target.closest('.popover')) clear(SEARCH_RESULTS);
   });
 
   const conn = h('div', { class: 'conn', title: 'Live sync status' },
@@ -202,7 +275,7 @@ function buildTopbar() {
     h('div', { class: 'conn-text' }, h('span', { id: 'conn-label' }, 'Connecting…'), h('span', { class: 'muted small', id: 'last-sync' }, '')),
   );
 
-  const newBtn = h('button', { class: 'btn ghost', onclick: openNewMenu }, icon('plus', 16), 'New');
+  const newBtn = h('button', { class: 'btn ghost', id: 'new-btn', onclick: openNewMenu }, icon('plus', 16), 'New');
   const kioskBtn = h('button', { class: 'btn primary', onclick: () => window.open('display.html', '_blank') }, icon('monitor', 16), 'Kiosk');
   const themeBtn = h('button', { class: 'icon-btn', title: 'Toggle theme', onclick: () => toggleTheme(themeBtn) },
     icon(currentTheme() === 'light' ? 'sun' : 'moon', 18));
@@ -214,9 +287,13 @@ function buildTopbar() {
 function openNewMenu() {
   clear(SEARCH_RESULTS);
   const menu = h('div', { class: 'popover' });
+  const visible = visibleNavIds();
+  const locked = store.moneyLocked();
   for (const c of collections) {
+    if (!visible.has(c.name)) continue;
+    if (locked && isMoneyCollection(c.name)) continue;
     menu.append(h('button', { class: 'popover-item', onclick: () => { clear(SEARCH_RESULTS); openForm({ collection: c.name }); } },
-      icon(c.icon, 16), `New ${c.singular}`));
+      icon(c.icon, 16), c.name === 'payments' ? 'Record Payment' : c.name === 'vendorpayments' ? 'Pay a Vendor Bill' : c.name === 'timeentries' ? 'Log Time' : `New ${c.singular}`));
   }
   SEARCH_RESULTS.append(menu);
 }
@@ -226,8 +303,12 @@ function runSearch(query) {
   const q = query.trim().toLowerCase();
   clear(SEARCH_RESULTS);
   if (q.length < 2) return;
+  const visible = visibleNavIds();
+  const locked = store.moneyLocked();
   const results = [];
   for (const c of collections) {
+    if (!visible.has(c.name)) continue;
+    if (locked && isMoneyCollection(c.name)) continue;
     const meta = c;
     for (const record of store.col(c.name)) {
       const hay = [
@@ -263,18 +344,18 @@ function currentTheme() {
 function toggleTheme(button) {
   const next = currentTheme() === 'light' ? 'dark' : 'light';
   document.documentElement.dataset.theme = next;
-  localStorage.setItem('shopline.theme', next);
+  localStorage.setItem('grizzworks.theme', next);
   button?.replaceChildren(icon(next === 'light' ? 'sun' : 'moon', 18));
 }
 
 function initTheme() {
-  const saved = localStorage.getItem('shopline.theme') || 'dark';
+  const saved = localStorage.getItem('grizzworks.theme') || localStorage.getItem('shopline.theme') || 'dark';
   document.documentElement.dataset.theme = saved;
 }
 
-// ---- welcome (demo mode) ---------------------------------------------------
-// A one-time intro for people opening the dashboard as a demo / static site,
-// so the first thing a visitor sees explains that everything is clickable.
+// ---- welcome + first-run profile picker -----------------------------------
+// Demo mode gets the explainer; a fresh server install gets the profile picker
+// (repair shop vs construction vs retail) before anything else.
 function showWelcome() {
   const overlay = h('div', { class: 'overlay' });
   const close = () => {
@@ -288,20 +369,20 @@ function showWelcome() {
     h('div', { class: 'dialog-head' },
       h('div', { class: 'welcome-mark' }, brandMark(44)),
       h('div', {},
-        h('h3', {}, store.state.settings.shopName || 'Shopline'),
-        h('div', { class: 'muted' }, store.state.settings.brandTagline || 'Live maintenance operations dashboard'),
+        h('h3', {}, store.state.settings.shopName || APP_NAME),
+        h('div', { class: 'muted' }, store.state.settings.brandTagline || 'The mini-ERP for shops that hate subscriptions'),
       ),
     ),
     h('div', { class: 'dialog-body welcome-body' },
       h('p', {}, 'This is a fully interactive demo — everything is clickable, and your changes are saved right in this browser.'),
       h('ul', { class: 'welcome-list' },
-        h('li', {}, h('b', {}, 'Edit anything'), ' — click a table cell to change it, drag work orders across the board, or open a full record form.'),
+        h('li', {}, h('b', {}, 'Run the business'), ' — quote a job, send an invoice, record a payment; the ledger and reports update themselves.'),
         h('li', {}, h('b', {}, 'Watch the wall board'), ' — the Kiosk button opens a TV view that rotates through the shop’s live status.'),
         h('li', {}, h('b', {}, 'Reset any time'), ' — Settings → Reset demo data puts the sample shop back.'),
       ),
     ),
     h('div', { class: 'dialog-foot' },
-      h('span', { class: 'muted small' }, 'Run your own shop with it: node server.js'),
+      h('span', { class: 'muted small' }, 'Run your own business with it: node server.js'),
       h('span', { class: 'spacer' }),
       h('button', { class: 'btn primary', onclick: close }, 'Start exploring'),
     ),
@@ -311,36 +392,81 @@ function showWelcome() {
   document.body.append(overlay);
 }
 
+function showProfilePicker() {
+  const overlay = h('div', { class: 'overlay' });
+  const close = () => {
+    overlay.remove();
+    document.removeEventListener('keydown', onKey);
+  };
+  const onKey = (e) => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', onKey);
+  const dialog = h('div', { class: 'dialog', role: 'dialog', 'aria-modal': 'true' },
+    h('div', { class: 'dialog-head' },
+      h('div', { class: 'welcome-mark' }, brandMark(44)),
+      h('div', {}, h('h3', {}, 'Welcome to GrizzWorks'), h('div', { class: 'muted' }, 'What kind of business is this?')),
+    ),
+    h('div', { class: 'dialog-body' },
+      h('p', { class: 'muted' }, 'This tailors the navigation and defaults. You can change it any time in Settings — the data model is the same either way.'),
+      h('div', { class: 'profile-list' },
+        ...Object.entries(PROFILES).map(([key, p]) => h('button', { class: 'profile-item', onclick: async () => {
+          await store.saveSettings({ profile: key, ...p.defaults });
+          toast(`Set up for: ${p.label}`);
+          close();
+        } },
+          h('div', {}, h('div', { class: 'strong' }, p.label), h('div', { class: 'muted small' }, p.blurb)),
+          icon('chevron', 16),
+        )),
+      ),
+    ),
+    h('div', { class: 'dialog-foot' },
+      h('span', { class: 'muted small' }, 'Runs entirely on this machine — no account, no subscription.'),
+      h('span', { class: 'spacer' }),
+      h('button', { class: 'btn ghost', onclick: close }, 'Decide later'),
+    ),
+  );
+  overlay.append(dialog);
+  overlay.addEventListener('mousedown', (e) => { if (e.target === overlay) close(); });
+  document.body.append(overlay);
+}
+
 function maybeShowWelcome() {
-  if (store.state.mode !== 'browser') return;
-  if (store.state.settings.showWelcome === false) return;
-  let seen = '';
-  try { seen = localStorage.getItem('shopline.welcomeSeen') || ''; } catch { /* blocked */ }
-  if (seen) return;
-  try { localStorage.setItem('shopline.welcomeSeen', new Date().toISOString()); } catch { /* blocked */ }
-  showWelcome();
+  if (store.state.mode === 'browser') {
+    if (store.state.settings.showWelcome === false) return;
+    let seen = '';
+    try { seen = localStorage.getItem('grizzworks.welcomeSeen') || localStorage.getItem('shopline.welcomeSeen') || ''; } catch { /* blocked */ }
+    if (seen) return;
+    try { localStorage.setItem('grizzworks.welcomeSeen', new Date().toISOString()); } catch { /* blocked */ }
+    showWelcome();
+    return;
+  }
+  // Fresh server install: nothing recorded yet → offer the profile picker once.
+  const untouched = Object.values(store.state.collections).every((list) => !list.length);
+  if (untouched && !store.state.settings.profile) showProfilePicker();
 }
 
 // ---- boot ----------------------------------------------------------------
 function installErrorReporting() {
-  window.__shoplineErrors = window.__shoplineErrors || [];
+  window.__grizzworksErrors = window.__grizzworksErrors || [];
   window.addEventListener('error', (e) => {
-    window.__shoplineErrors.push(String(e.error?.stack || e.message));
-    console.error('[shopline]', e.error || e.message);
+    window.__grizzworksErrors.push(String(e.error?.stack || e.message));
+    console.error('[grizzworks]', e.error || e.message);
   });
   window.addEventListener('unhandledrejection', (e) => {
-    window.__shoplineErrors.push('unhandled: ' + String(e.reason?.stack || e.reason));
-    console.error('[shopline] unhandled rejection', e.reason);
+    window.__grizzworksErrors.push('unhandled: ' + String(e.reason?.stack || e.reason));
+    console.error('[grizzworks] unhandled rejection', e.reason);
   });
 }
 
 async function boot() {
   installErrorReporting();
   initTheme();
+  // Drawer backdrop (created once; CSS shows it only while the drawer is open)
+  document.body.append(h('div', { class: 'drawer-backdrop', onclick: closeDrawer }));
   buildSidebar();
   buildTopbar();
 
-  store.subscribe(() => {
+  store.subscribe((event) => {
+    if (event?.type === 'settings') buildSidebar(); // profile changed → nav changes
     updateTopbar();
     render();
   });
@@ -361,6 +487,7 @@ async function boot() {
   } catch (err) {
     CONTENT.append(h('div', { class: 'panel' }, h('p', {}, 'Could not reach the server: ' + err.message)));
   }
+  buildSidebar(); // now with real settings/profile
   render();
   maybeShowWelcome();
 }
