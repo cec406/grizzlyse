@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ArrowLeft, ArrowRight, Check, Info, Shield, X } from 'lucide-react'
-import type { Profile, Scores } from '../types'
+import type { Profile, Scores, Sex } from '../types'
 import { nextMonday, todayISO } from '../lib/date'
 import { Panel, Pill, RestDayPicker, SectionHeader } from './ui'
 
@@ -13,9 +13,11 @@ const STEPS = ['IDENTITY', 'BASELINE', 'BODY', 'SETUP'] as const
  */
 type Draft = Omit<
   Profile,
-  'age' | 'heightIn' | 'weightLb' | 'waistIn' | 'goalWeightLb' | 'goalWaistIn' | 'maxHr'
+  'age' | 'sex' | 'heightIn' | 'weightLb' | 'waistIn' | 'goalWeightLb' | 'goalWaistIn' | 'maxHr'
 > & {
   age: string
+  /** Empty until the Soldier explicitly picks a band — scoring must never guess. */
+  sex: Sex | ''
   heightIn: string
   weightLb: string
   waistIn: string
@@ -24,7 +26,7 @@ type Draft = Omit<
   maxHr: string
 }
 
-function numberOr(value: string, fallback: number): number {
+function numberOr(value: string, fallback: number | null): number | null {
   const parsed = Number(value)
   return value.trim() !== '' && Number.isFinite(parsed) && parsed > 0 ? parsed : fallback
 }
@@ -77,7 +79,7 @@ export function Onboarding({ onCreate, onCancel }: { onCreate: (profile: Profile
   const [draft, setDraft] = useState<Draft>(() => ({
     name: '',
     age: '',
-    sex: 'male',
+    sex: '',
     heightIn: '',
     weightLb: '',
     waistIn: '',
@@ -91,7 +93,7 @@ export function Onboarding({ onCreate, onCancel }: { onCreate: (profile: Profile
     trainingDays: 5,
     sessionMinutes: 75,
     maxHr: '',
-    restingHr: 60,
+    restingHr: null,
     garminOverlay: false,
     sledAccess: false,
     scores: { mdl: 0, hrp: 0, sdc: 0, plk: 0, run: 0 },
@@ -105,29 +107,35 @@ export function Onboarding({ onCreate, onCancel }: { onCreate: (profile: Profile
     setDraft((current) => ({ ...current, scores: { ...current.scores, [key]: value } }))
   }
 
+  const ageParsed = Number(draft.age)
+  const ageValid = Number.isFinite(ageParsed) && ageParsed >= 17 && ageParsed <= 100
+  const identityComplete = draft.sex !== '' && ageValid
+
   function create() {
-    const weightLb = numberOr(draft.weightLb, 180)
-    const waistIn = numberOr(draft.waistIn, 34)
+    const sex = draft.sex
+    // Guarded by the wizard (Next is disabled until gender + age are set), but
+    // never fall back to a guessed band — test data with no gender must not be saved.
+    if (!sex || !draft.age.trim()) return
+    const age = Number(draft.age)
+    const weightLb = numberOr(draft.weightLb, null)
+    const waistIn = numberOr(draft.waistIn, null)
     const safe: Profile = {
       ...draft,
+      sex,
       name: draft.name.trim() || 'Operator',
-      age: numberOr(draft.age, 30),
-      heightIn: numberOr(draft.heightIn, 68),
+      age: Number.isFinite(age) && age > 0 ? age : null,
+      heightIn: numberOr(draft.heightIn, null),
       weightLb,
       waistIn,
-      goalWeightLb: numberOr(draft.goalWeightLb, weightLb),
-      goalWaistIn: numberOr(draft.goalWaistIn, waistIn),
-      maxHr: numberOr(draft.maxHr, 185),
+      goalWeightLb: numberOr(draft.goalWeightLb, null),
+      goalWaistIn: numberOr(draft.goalWaistIn, null),
+      maxHr: numberOr(draft.maxHr, null),
+      restingHr: null,
       startDate: draft.startDate || nextMonday(),
       testDate: draft.testDate,
       restDays: draft.restDays.length ? draft.restDays : [0, 6],
       trainingDays: Math.max(2, 7 - (draft.restDays.length ? draft.restDays.length : 2)),
-      scores: {
-        ...draft.scores,
-        sdc: draft.scores.sdc || 180,
-        plk: draft.scores.plk || 60,
-        run: draft.scores.run || 1200,
-      },
+      scores: { ...draft.scores },
     }
     onCreate(safe)
   }
@@ -164,11 +172,12 @@ export function Onboarding({ onCreate, onCancel }: { onCreate: (profile: Profile
         {step === 0 && (
           <div className="form-grid onboarding-grid">
             <label><span>NAME / RANK</span><input autoFocus value={draft.name} placeholder="Name or rank" onChange={(e) => update('name', e.target.value)} /></label>
-            <label><span>AGE</span><input type="number" min={17} max={80} inputMode="numeric" value={draft.age} onChange={(e) => update('age', e.target.value)} /></label>
-            <label><span>SEX</span>
-              <select value={draft.sex} onChange={(e) => update('sex', e.target.value as Profile['sex'])}>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+            <label><span>AGE *</span><input type="number" min={17} max={80} inputMode="numeric" value={draft.age} onChange={(e) => update('age', e.target.value)} /></label>
+            <label><span>GENDER *</span>
+              <select value={draft.sex} onChange={(e) => update('sex', e.target.value as Sex | '')}>
+                <option value="" disabled>— Select —</option>
+                <option value="male">Male (M)</option>
+                <option value="female">Female (F)</option>
               </select>
             </label>
             <label><span>MOS / TRACK (OPTIONAL)</span><input value={draft.mos} onChange={(e) => update('mos', e.target.value)} /></label>
@@ -180,8 +189,14 @@ export function Onboarding({ onCreate, onCancel }: { onCreate: (profile: Profile
             </label>
             <div className="profile-note">
               <Info size={15} />
-              <p>Scoring pulls the official AFT tables for your sex and age band (17–21 through 62+). The run and plank stay sex-neutral events on the combat standard.</p>
+              <p>Scoring pulls the official AFT tables for your gender and age band (17–21 through 62+). The run and plank stay sex-neutral events on the combat standard.</p>
             </div>
+            {!identityComplete && (
+              <div className="form-error">
+                <Info size={14} />
+                <span>Enter a valid age (17–100) and select a gender — both are required to pick your official scoring table.</span>
+              </div>
+            )}
           </div>
         )}
 
@@ -213,7 +228,7 @@ export function Onboarding({ onCreate, onCancel }: { onCreate: (profile: Profile
             </div>
             <div className="profile-note">
               <Info size={15} />
-              <p>Leave a field blank if you do not have the number yet. Blank fields use neutral defaults, and you can change them later in Profile.</p>
+              <p>Leave a field blank if you do not have the number yet — blank stays blank and shows as '—' until you add it in Profile. Nothing is assumed, and scoring only needs your age and gender.</p>
             </div>
           </div>
         )}
@@ -270,7 +285,12 @@ export function Onboarding({ onCreate, onCancel }: { onCreate: (profile: Profile
               </button>
             )}
             {step < STEPS.length - 1 ? (
-              <button type="button" className="button button-primary" onClick={() => setStep((s) => s + 1)}>
+              <button
+                type="button"
+                className="button button-primary"
+                onClick={() => setStep((s) => s + 1)}
+                disabled={step === 0 && !identityComplete}
+              >
                 Next <ArrowRight size={15} />
               </button>
             ) : (

@@ -29,6 +29,7 @@ import { getWeekForDate, sessionTypeLabel } from '../lib/plan'
 import { downloadIcs } from '../lib/ics'
 import { todayISO } from '../lib/date'
 import { Eyebrow, KeyValue, Panel, Pill, ProgressBar, SectionHeader, Stat } from './ui'
+import { orDash } from '../lib/metrics'
 
 function TimeField({
   seconds,
@@ -73,7 +74,7 @@ export function RunLab({
 }) {
   const [runDraft, setRunDraft] = useState(profile.scores.run)
   const [targetDraft, setTargetDraft] = useState(
-    timeToSeconds(thresholdForPoints('run', 90, profile, profile.standard) ?? '15:50'),
+    timeToSeconds(thresholdForPoints('run', 90, profile, profile.standard) ?? ''),
   )
   const [saved, setSaved] = useState(false)
   const week = getWeekForDate(program, todayISO()) ?? program[0]
@@ -108,10 +109,10 @@ export function RunLab({
               AFT-specific session, and less body weight to carry. Use the watch for data, not as the coach.
             </p>
             <div className="run-hero-stats">
-              <div><span>VDOT EST.</span><strong>{vdot.toFixed(1)}</strong></div>
-              <div><span>CURRENT PACE</span><strong>{formatPace(currentPace)}</strong></div>
-              <div><span>TARGET PACE</span><strong>{formatPace(targetPace)}</strong></div>
-              <div><span>AT {profile.goalWeightLb} LB</span><strong>{secondsToTime(projected)}</strong></div>
+              <div><span>VDOT EST.</span><strong>{runDraft > 0 ? vdot.toFixed(1) : '—'}</strong></div>
+              <div><span>CURRENT PACE</span><strong>{runDraft > 0 ? formatPace(currentPace) : '—'}</strong></div>
+              <div><span>TARGET PACE</span><strong>{targetDraft > 0 ? formatPace(targetPace) : '—'}</strong></div>
+              <div><span>AT {orDash(profile.goalWeightLb)} LB</span><strong>{profile.weightLb && profile.goalWeightLb ? secondsToTime(projected) : '—'}</strong></div>
             </div>
           </div>
           <div className="run-hero-input">
@@ -131,7 +132,7 @@ export function RunLab({
             <div className="run-target">
               <label>
                 <span>90-POINT TARGET</span>
-                <strong>{goalThreshold ?? '15:50'}</strong>
+                <strong>{goalThreshold ?? '—'}</strong>
               </label>
               <label>
                 <span>YOUR TARGET</span>
@@ -148,11 +149,11 @@ export function RunLab({
           </div>
           <div className="hr-hero">
             <div>
-              <strong>{profile.maxHr}</strong>
+              <strong>{orDash(profile.maxHr)}</strong>
               <span>bpm observed</span>
             </div>
             <div>
-              <strong>{hrRef.tanaka}</strong>
+              <strong>{orDash(hrRef.tanaka)}</strong>
               <span>Tanaka estimate</span>
             </div>
           </div>
@@ -165,7 +166,7 @@ export function RunLab({
               <div key={zone.zone} className="hr-zone-row">
                 <span className="hr-zone-code">{zone.zone}</span>
                 <strong>{zone.name}</strong>
-                <span>{zone.low}–{zone.high}</span>
+                <span>{zone.low ?? '—'}–{zone.high ?? '—'}</span>
                 <small>{zone.use}</small>
               </div>
             ))}
@@ -226,7 +227,7 @@ export function RunLab({
               </div>
               <div className="race-hr">
                 <HeartPulse size={16} />
-                <span>First mile: {zones[3].low}–{zones[3].high} bpm. Second mile: {zones[4].low}–{zones[4].high} bpm. Final 400 m: all-out.</span>
+                <span>First mile: {zones[3].low ?? '—'}–{zones[3].high ?? '—'} bpm. Second mile: {zones[4].low ?? '—'}–{zones[4].high ?? '—'} bpm. Final 400 m: all-out.</span>
               </div>
             </Panel>
 
@@ -239,26 +240,26 @@ export function RunLab({
               <div className="weight-engine">
                 <div>
                   <span>NOW</span>
-                  <strong>{profile.weightLb} lb</strong>
-                  <small>{secondsToTime(runDraft)}</small>
+                  <strong>{orDash(profile.weightLb)} lb</strong>
+                  <small>{runDraft > 0 ? secondsToTime(runDraft) : '—'}</small>
                 </div>
                 <ArrowRight size={18} />
                 <div>
                   <span>GOAL</span>
-                  <strong>{profile.goalWeightLb} lb</strong>
-                  <small>{secondsToTime(projected)}</small>
+                  <strong>{orDash(profile.goalWeightLb)} lb</strong>
+                  <small>{profile.weightLb && profile.goalWeightLb ? secondsToTime(projected) : '—'}</small>
                 </div>
               </div>
               <div className="weight-gain">
                 <Zap size={16} />
                 <span>
-                  Modeled change: <strong>{secondsToTime(runDraft - projected)}</strong> on your 2-mile
+                  Modeled change: <strong>{profile.weightLb && profile.goalWeightLb && runDraft > 0 ? secondsToTime(Math.max(0, runDraft - projected)) : '—'}</strong> on your 2-mile
                   at goal weight, before any change in training.
                 </span>
               </div>
               <div className="weight-engine-bars">
-                <ProgressBar value={profile.weightLb} max={profile.weightLb} label="Current" right={`${profile.weightLb} lb`} tone="amber" />
-                <ProgressBar value={profile.goalWeightLb} max={profile.weightLb} label="Goal" right={`${profile.goalWeightLb} lb`} tone="lime" />
+                <ProgressBar value={profile.weightLb ?? 0} max={Math.max(1, profile.weightLb ?? 1)} label="Current" right={orDash(profile.weightLb)} tone="amber" />
+                <ProgressBar value={Math.min(profile.goalWeightLb ?? 0, profile.weightLb ?? 0)} max={Math.max(1, profile.weightLb ?? 1)} label="Goal" right={orDash(profile.goalWeightLb)} tone="lime" />
               </div>
             </Panel>
           </div>
@@ -348,8 +349,8 @@ export function RunLab({
             <div className="engine-kv">
               <KeyValue label="Easy HR" value={`${zones[1].low}–${zones[1].high} bpm`} />
               <KeyValue label="Threshold HR" value={`${zones[3].low}–${zones[3].high} bpm`} />
-              <KeyValue label="Max HR" value={`${profile.maxHr} bpm`} />
-              <KeyValue label="Resting HR" value={`${profile.restingHr} bpm`} />
+              <KeyValue label="Max HR" value={`${orDash(profile.maxHr)} bpm`} />
+              <KeyValue label="Resting HR" value={`${orDash(profile.restingHr)} bpm`} />
             </div>
           </Panel>
 

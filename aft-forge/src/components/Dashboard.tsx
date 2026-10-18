@@ -33,6 +33,7 @@ import {
   formatInches,
   formatPace,
   formatPaceRange,
+  orDash,
   paceZones,
   readinessBand,
   twoMilePace,
@@ -82,7 +83,7 @@ export function Dashboard({
   const currentWaist = latestBody?.waistIn ?? profile.waistIn
   const ratio = waistToHeight(currentWaist, profile.heightIn)
   const waistLimit = maxWaist(profile.heightIn)
-  const waistGap = Math.max(0, currentWaist - waistLimit)
+  const waistGap = currentWaist ? Math.max(0, currentWaist - waistLimit) : 0
   const latestCheckin = [...logs.checkins].sort((a, b) => a.date.localeCompare(b.date)).at(-1)
   const readiness = latestCheckin?.readiness ?? 0
   const band = readinessBand(readiness)
@@ -154,17 +155,17 @@ export function Dashboard({
             </div>
             <div>
               <span>WHtR</span>
-              <strong>{ratio.toFixed(3)}</strong>
-              <small>{ratio < 0.55 ? 'PASS' : 'GATE'}</small>
+              <strong>{orDash(ratio, (n) => n.toFixed(3))}</strong>
+              <small>{ratio > 0 ? (ratio < 0.55 ? 'PASS' : 'GATE') : 'NO DATA'}</small>
             </div>
             <div>
               <span>2-MILE</span>
-              <strong>{secondsToTime(profile.scores.run)}</strong>
-              <small>{formatPace(twoMilePace(profile.scores.run))} /mi</small>
+              <strong>{profile.scores.run > 0 ? secondsToTime(profile.scores.run) : '—'}</strong>
+              <small>{profile.scores.run > 0 ? `${formatPace(twoMilePace(profile.scores.run))} /mi` : 'untested'}</small>
             </div>
             <div>
               <span>TO GOAL</span>
-              <strong>{Math.max(0, Math.round(currentWeight - profile.goalWeightLb))}</strong>
+              <strong>{orDash(currentWeight != null && profile.goalWeightLb != null ? Math.max(0, Math.round(currentWeight - profile.goalWeightLb)) : null)}</strong>
               <small>lb</small>
             </div>
           </div>
@@ -476,39 +477,41 @@ export function Dashboard({
           <Panel className="gate-panel">
             <div className="panel-topline">
               <Eyebrow>BODY COMP GATE</Eyebrow>
-              <Pill tone={bodyGo ? 'lime' : 'red'}>{bodyGo ? 'PASS' : 'FAIL'}</Pill>
+              <Pill tone={ratio > 0 ? (bodyGo ? 'lime' : 'red') : 'neutral'}>{ratio > 0 ? (bodyGo ? 'PASS' : 'FAIL') : 'NO DATA'}</Pill>
             </div>
             <div className="gate-numbers">
               <div>
                 <span>WAIST</span>
-                <strong>{formatInches(currentWaist)}</strong>
-                <small>limit {formatInches(waistLimit)}</small>
+                <strong>{orDash(currentWaist, formatInches)}</strong>
+                <small>limit {orDash(waistLimit, formatInches)}</small>
               </div>
               <div>
                 <span>RATIO</span>
-                <strong>{ratio.toFixed(3)}</strong>
+                <strong>{orDash(ratio, (n) => n.toFixed(3))}</strong>
                 <small>standard &lt; 0.550</small>
               </div>
               <div>
                 <span>WEIGHT</span>
-                <strong>{Math.round(currentWeight)}</strong>
-                <small>goal {profile.goalWeightLb} lb</small>
+                <strong>{orDash(currentWeight)}</strong>
+                <small>goal {orDash(profile.goalWeightLb)} lb</small>
               </div>
             </div>
             <div className="waist-gauge">
-              <div className="waist-gauge-fill" style={{ width: `${Math.min(100, (ratio / 0.62) * 100)}%` }} />
+              <div className="waist-gauge-fill" style={{ width: `${Math.min(100, ((ratio || 0) / 0.62) * 100)}%` }} />
               <span className="waist-gauge-mark" style={{ left: `${(0.55 / 0.62) * 100}%` }} />
             </div>
             <div className="gate-callout">
               <Flame size={16} />
               <p>
-                {waistGap > 0
-                  ? `${waistGap.toFixed(1)} in to standard. Model says that arrives around ${Math.round(weightForWaist(profile))} lb — before your ${profile.goalWeightLb} lb goal.`
-                  : 'You are inside the waist standard. Keep the trend moving in the right direction.'}
+                {profile.heightIn && currentWaist
+                  ? waistGap > 0
+                    ? `${waistGap.toFixed(1)} in to standard. Model says that arrives around ${Math.round(weightForWaist(profile))} lb — before your ${profile.goalWeightLb} lb goal.`
+                    : 'You are inside the waist standard. Keep the trend moving in the right direction.'
+                  : 'Enter your weight, waist, and height in Profile to unlock the body comp gate.'}
               </p>
             </div>
             <div className="gate-foot">
-              <span>At {profile.goalWeightLb} lb, model 2-mile: <strong>{secondsToTime(projectedRun)}</strong></span>
+              <span>{profile.goalWeightLb ? `At ${orDash(profile.goalWeightLb)} lb, model 2-mile: <strong>${secondsToTime(projectedRun)}</strong>` : 'Set a goal weight in Profile for the projection.'}</span>
               <span>AFT model: <strong>{projectedScore}</strong></span>
             </div>
           </Panel>
@@ -561,14 +564,14 @@ export function Dashboard({
         <Panel className="fuel-panel">
           <SectionHeader
             eyebrow="FUEL / MUSCLE RETENTION"
-            title={`${calories.calories.toLocaleString()} kcal · ${calories.protein} g protein`}
+            title={calories.ready ? `${calories.calories.toLocaleString()} kcal · ${orDash(calories.protein)} g protein` : 'Add weight, height, and age'}
             description="A moderate deficit, high protein, and two strength days reduce waist while preserving run performance."
             action={<button type="button" className="text-button" onClick={() => onNavigate('body')}>Open Fuel <ChevronRight size={15} /></button>}
           />
           <div className="fuel-stats">
-            <Stat label="PROTEIN" value={calories.protein} unit="g" detail="≈ 1.8 g/kg" tone="lime" icon={<ShieldCheck size={15} />} />
-            <Stat label="DEFICIT" value={calories.deficit} unit="kcal" detail={`${calories.rateLbPerWeek} lb/wk`} tone="amber" icon={<Flame size={15} />} />
-            <Stat label={`WEEKS TO ${profile.goalWeightLb}`} value={calories.weeksToGoal} unit="wk" detail="at current deficit" tone="blue" icon={<Target size={15} />} />
+            <Stat label="PROTEIN" value={orDash(calories.protein)} unit="g" detail="≈ 1.8 g/kg" tone="lime" icon={<ShieldCheck size={15} />} />
+            <Stat label="DEFICIT" value={orDash(calories.deficit)} unit="kcal" detail={calories.ready ? `${calories.rateLbPerWeek} lb/wk` : '—'} tone="amber" icon={<Flame size={15} />} />
+            <Stat label={`WEEKS TO ${profile.goalWeightLb ? orDash(profile.goalWeightLb) : 'GOAL'}`} value={orDash(calories.weeksToGoal)} unit="wk" detail="at current deficit" tone="blue" icon={<Target size={15} />} />
           </div>
           <div className="fuel-note">
             <HeartPulse size={16} />

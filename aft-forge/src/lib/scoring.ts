@@ -83,7 +83,8 @@ export const AGE_GROUPS = [
   '62+',
 ]
 
-export function ageGroup(age: number): string {
+export function ageGroup(age: number | null): string {
+  if (age == null || Number.isNaN(age) || age <= 0) return '—'
   if (age <= 21) return '17-21'
   if (age <= 26) return '22-26'
   if (age <= 31) return '27-31'
@@ -94,6 +95,12 @@ export function ageGroup(age: number): string {
   if (age <= 56) return '52-56'
   if (age <= 61) return '57-61'
   return '62+'
+}
+
+/** e.g. "32-36 · male" or "32-36 · combat / sex-neutral". */
+export function bandLabel(profile: Profile): string {
+  const standard = profile.standard === 'combat' ? 'combat / sex-neutral' : profile.sex
+  return `${ageGroup(profile.age)} · ${standard}`
 }
 
 export function timeToSeconds(value: string): number {
@@ -203,6 +210,26 @@ export function thresholdForPoints(
   return easier?.[1] ?? null
 }
 
+/**
+ * Point value the training plan programs toward. The app's default is 450
+ * points (90 per event); once an event is already there, aim at 100 so the
+ * plan keeps progressing instead of chasing a target already met.
+ */
+export function programmingPoints(event: EventKey, profile: Profile, standard: Standard): number {
+  const current = scoreEvent(event, profile.scores[event], profile, standard).score
+  return current >= 90 ? 100 : 90
+}
+
+/** Current-score-aware target threshold for one event, in the profile's own table. */
+export function programmingThreshold(
+  event: EventKey,
+  profile: Profile,
+  standard: Standard,
+): { points: number; value: string | null } {
+  const points = programmingPoints(event, profile, standard)
+  return { points, value: thresholdForPoints(event, points, profile, standard) }
+}
+
 export function scoreThresholds(
   event: EventKey,
   profile: Profile,
@@ -215,12 +242,13 @@ export function scoreThresholds(
   }))
 }
 
-export function maxWaist(heightIn: number): number {
+export function maxWaist(heightIn: number | null): number {
+  if (heightIn == null || heightIn <= 0) return 0
   return Math.round(heightIn * 0.55 * 10) / 10
 }
 
-export function waistToHeight(waistIn: number, heightIn: number): number {
-  if (!heightIn) return 0
+export function waistToHeight(waistIn: number | null, heightIn: number | null): number {
+  if (!waistIn || !heightIn) return 0
   return waistIn / heightIn
 }
 
@@ -246,8 +274,8 @@ export function projectedScoreAtWeight(
 
 export function estimateRunAtWeight(
   currentSeconds: number,
-  currentWeight: number,
-  targetWeight: number,
+  currentWeight: number | null,
+  targetWeight: number | null,
 ): number {
   if (!currentSeconds || !currentWeight || !targetWeight) return currentSeconds
   const minutes = currentSeconds / 60

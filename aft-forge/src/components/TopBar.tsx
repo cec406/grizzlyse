@@ -64,7 +64,7 @@ export function TopBar({
           <span className="operator-avatar">{(profile.name || 'O').slice(0, 1).toUpperCase()}</span>
           <span className="operator-meta">
             <strong>{profile.name || 'Operator'}</strong>
-            <small>{profile.age}{profile.sex === 'male' ? 'M' : 'F'} · {ageGroup(profile.age)} · {profile.standard === 'combat' ? 'COMBAT' : 'GENERAL'}</small>
+            <small>{profile.age ?? '—'}{profile.sex === 'male' ? 'M' : 'F'} · {ageGroup(profile.age)} · {profile.standard === 'combat' ? 'COMBAT' : 'GENERAL'}</small>
           </span>
           <Activity size={14} className="operator-pulse" />
         </div>

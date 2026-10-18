@@ -29,13 +29,15 @@ export interface Scores {
 
 export interface Profile {
   name: string
-  age: number
+  /** Blank (null) until entered — grading requires it, but nothing is assumed. */
+  age: number | null
   sex: Sex
-  heightIn: number
-  weightLb: number
-  waistIn: number
-  goalWeightLb: number
-  goalWaistIn: number
+  /** Blank (null) means "not entered yet"; empty fields stay empty everywhere. */
+  heightIn: number | null
+  weightLb: number | null
+  waistIn: number | null
+  goalWeightLb: number | null
+  goalWaistIn: number | null
   mos: string
   standard: Standard
   startDate: string
@@ -45,8 +47,8 @@ export interface Profile {
   restDays: number[]
   trainingDays: number
   sessionMinutes: number
-  maxHr: number
-  restingHr: number
+  maxHr: number | null
+  restingHr: number | null
   garminOverlay: boolean
   /** When false, the plan swaps every sled-based SDC drill for a no-sled substitute. */
   sledAccess: boolean

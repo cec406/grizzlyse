@@ -24,7 +24,7 @@ import {
   thresholdForPoints,
   waistToHeight,
 } from '../lib/scoring'
-import { formatInches, formatPace, twoMilePace } from '../lib/metrics'
+import { formatInches, formatPace, orDash, twoMilePace } from '../lib/metrics'
 import { Eyebrow, Panel, Pill, ProgressBar, Ring, SectionHeader } from './ui'
 
 function clampNumber(value: number, min: number, max: number): number {
@@ -71,12 +71,12 @@ export function AftLab({
 }: {
   profile: Profile
   onSaveScores: (scores: Scores) => void
-  onSaveBody: (weightLb: number, waistIn: number) => void
+  onSaveBody: (weightLb: number | null, waistIn: number | null) => void
   onUpdateProfile: (profile: Profile) => void
 }) {
   const [draft, setDraft] = useState<Scores>(profile.scores)
-  const [waistDraft, setWaistDraft] = useState(profile.waistIn)
-  const [heightDraft, setHeightDraft] = useState(profile.heightIn)
+  const [waistDraft, setWaistDraft] = useState<number | null>(profile.waistIn)
+  const [heightDraft, setHeightDraft] = useState<number | null>(profile.heightIn)
   const [selectedEvent, setSelectedEvent] = useState<EventKey>('run')
   const [saved, setSaved] = useState(false)
   const [bodySaved, setBodySaved] = useState(false)
@@ -116,7 +116,7 @@ export function AftLab({
             <Eyebrow>AFT SCORE MODEL / {profile.standard === 'combat' ? 'COMBAT STANDARD' : 'GENERAL STANDARD'}</Eyebrow>
             <h2>{result.passed ? 'Inside standard.' : 'Not yet a go.'}</h2>
             <p>
-              Age {profile.age} · {profile.sex === 'male' ? 'Male' : 'Female'} · {profile.standard === 'combat' ? 'Combat, sex-neutral' : 'General, sex- and age-normed'}.
+              Age {profile.age ?? '—'} · {profile.sex === 'male' ? 'Male' : 'Female'} · {profile.standard === 'combat' ? 'Combat, sex-neutral' : 'General, sex- and age-normed'}.
               The model uses the official AFT tables effective 1 June 2025.
             </p>
             <div className="aft-score-badges">
@@ -183,12 +183,12 @@ export function AftLab({
             <ShieldCheck size={17} />
             <p>
               Scoring uses the official AFT tables for <strong>{profile.sex === 'male' ? 'male' : 'female'}, age band {ageGroup(profile.age)}</strong> (you
-              are {profile.age}). Change age or sex in Profile and every table, target, and plan recalculates.
+              are {profile.age ?? '—'}). Change age or gender in Profile and every table, target, and plan recalculates.
             </p>
           </div>
           <div className="standard-grid">
             <div><span>AGE BAND</span><strong>{ageGroup(profile.age)}</strong></div>
-            <div><span>SEX</span><strong>{profile.sex === 'male' ? 'MALE' : 'FEMALE'}</strong></div>
+            <div><span>GENDER</span><strong>{profile.sex === 'male' ? 'MALE' : 'FEMALE'}</strong></div>
             <div><span>STANDARD</span><strong>{profile.standard.toUpperCase()}</strong></div>
             <div><span>TARGET</span><strong>{profile.standard === 'combat' ? 350 : 300}</strong></div>
           </div>
@@ -308,7 +308,7 @@ export function AftLab({
               <Info size={15} />
               <p>
                 The 90-point row is the app’s working target. It produces a 450 total without
-                requiring a max effort on any single event. For your profile, that means a {targetRun ?? '15:50'} 2-mile.
+                requiring a max effort on any single event. For your profile, that means a {targetRun ?? '—'} 2-mile.
               </p>
             </div>
           </Panel>
@@ -383,8 +383,11 @@ export function AftLab({
                 <input
                   type="number"
                   step="0.5"
-                  value={heightDraft}
-                  onChange={(event) => setHeightDraft(clampNumber(Number(event.target.value), 48, 90))}
+                  value={heightDraft ?? ''}
+                  onChange={(event) => {
+                    const v = Number(event.target.value)
+                    setHeightDraft(Number.isFinite(v) && v > 0 ? clampNumber(v, 48, 90) : null)
+                  }}
                 />
               </label>
               <label>
@@ -392,8 +395,11 @@ export function AftLab({
                 <input
                   type="number"
                   step="0.25"
-                  value={waistDraft}
-                  onChange={(event) => setWaistDraft(clampNumber(Number(event.target.value), 20, 80))}
+                  value={waistDraft ?? ''}
+                  onChange={(event) => {
+                    const v = Number(event.target.value)
+                    setWaistDraft(Number.isFinite(v) && v > 0 ? clampNumber(v, 20, 80) : null)
+                  }}
                 />
               </label>
             </div>
@@ -402,8 +408,8 @@ export function AftLab({
               {bodySaved ? 'Waist logged' : 'Log waist measurement'}
             </button>
             <div className="whtr-foot">
-              <span>Current: {formatInches(profile.waistIn)}</span>
-              <span>Goal: {formatInches(profile.goalWaistIn)}</span>
+              <span>Current: {orDash(profile.waistIn, formatInches)}</span>
+              <span>Goal: {orDash(profile.goalWaistIn, formatInches)}</span>
             </div>
           </Panel>
 

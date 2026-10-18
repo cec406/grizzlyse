@@ -23,6 +23,12 @@ export function estimateVdot(seconds: number): number {
   return -4.6 + 0.182258 * velocity + 0.000104 * velocity * velocity
 }
 
+/** Render a metric that may not be entered yet as "—" instead of a defaulted number. */
+export function orDash(value: number | null | undefined, format?: (n: number) => string): string {
+  if (value == null || !Number.isFinite(value) || value <= 0) return '—'
+  return format ? format(value) : String(Math.round(value))
+}
+
 export interface PaceZone {
   name: string
   short: string
@@ -32,15 +38,17 @@ export interface PaceZone {
   purpose: string
 }
 
-export function paceZones(currentRunSeconds: number, maxHr: number): PaceZone[] {
-  const racePace = twoMilePace(currentRunSeconds)
+export function paceZones(currentRunSeconds: number, maxHr: number | null): PaceZone[] {
+  const racePace = twoMilePace(currentRunSeconds > 0 ? currentRunSeconds : 960)
+  const hr = (low: number, high: number): string =>
+    maxHr ? `${Math.round(maxHr * low)}–${Math.round(maxHr * high)} bpm` : '—'
   return [
     {
       name: 'Recovery',
       short: 'Z1',
       fast: racePace * 1.28,
       slow: racePace * 1.4,
-      hr: `${Math.round(maxHr * 0.5)}–${Math.round(maxHr * 0.6)} bpm`,
+      hr: hr(0.5, 0.6),
       purpose: 'Flush the legs. Nose-breathing easy. Never turns into a workout.',
     },
     {
@@ -48,7 +56,7 @@ export function paceZones(currentRunSeconds: number, maxHr: number): PaceZone[] 
       short: 'Z2',
       fast: racePace * 1.16,
       slow: racePace * 1.3,
-      hr: `${Math.round(maxHr * 0.6)}–${Math.round(maxHr * 0.72)} bpm`,
+      hr: hr(0.6, 0.72),
       purpose: 'Builds capillaries and fat oxidation. This is the engine that drops your 2-mile time.',
     },
     {
@@ -56,7 +64,7 @@ export function paceZones(currentRunSeconds: number, maxHr: number): PaceZone[] 
       short: 'Z3/Z4',
       fast: racePace * 1.03,
       slow: racePace * 1.08,
-      hr: `${Math.round(maxHr * 0.78)}–${Math.round(maxHr * 0.87)} bpm`,
+      hr: hr(0.78, 0.87),
       purpose: 'Comfortably hard. 4–6 minute repeats. Improves the pace you can hold without redlining.',
     },
     {
@@ -64,7 +72,7 @@ export function paceZones(currentRunSeconds: number, maxHr: number): PaceZone[] 
       short: 'Z5',
       fast: racePace * 0.94,
       slow: racePace * 1.0,
-      hr: `${Math.round(maxHr * 0.88)}–${Math.round(maxHr * 0.94)} bpm`,
+      hr: hr(0.88, 0.94),
       purpose: '800 m repeats at or slightly faster than goal 2-mile pace. Short, controlled, full recovery.',
     },
     {
@@ -72,7 +80,7 @@ export function paceZones(currentRunSeconds: number, maxHr: number): PaceZone[] 
       short: 'Z5+',
       fast: racePace * 0.88,
       slow: racePace * 0.94,
-      hr: `${Math.round(maxHr * 0.93)}+ bpm`,
+      hr: maxHr ? `${Math.round(maxHr * 0.93)}+ bpm` : '—',
       purpose: '200–400 m fast strides. Neuromuscular sharpening. Never grind.',
     },
   ]
@@ -81,18 +89,20 @@ export function paceZones(currentRunSeconds: number, maxHr: number): PaceZone[] 
 export interface HrZone {
   zone: string
   name: string
-  low: number
-  high: number
+  low: number | null
+  high: number | null
   use: string
 }
 
-export function hrZones(maxHr: number): HrZone[] {
+export function hrZones(maxHr: number | null): HrZone[] {
+  const zone = (low: number, high: number): { low: number | null; high: number | null } =>
+    maxHr ? { low: Math.round(maxHr * low), high: Math.round(maxHr * high) } : { low: null, high: null }
   return [
-    { zone: 'Z1', name: 'Recovery', low: Math.round(maxHr * 0.5), high: Math.round(maxHr * 0.6), use: 'Walk, mobility, recovery' },
-    { zone: 'Z2', name: 'Aerobic base', low: Math.round(maxHr * 0.6), high: Math.round(maxHr * 0.72), use: 'Easy runs, long run' },
-    { zone: 'Z3', name: 'Tempo', low: Math.round(maxHr * 0.72), high: Math.round(maxHr * 0.82), use: 'Steady threshold work' },
-    { zone: 'Z4', name: 'Threshold', low: Math.round(maxHr * 0.82), high: Math.round(maxHr * 0.9), use: '4–6 min repeats' },
-    { zone: 'Z5', name: 'VO2 / race', low: Math.round(maxHr * 0.9), high: maxHr, use: '800 m repeats, test day' },
+    { zone: 'Z1', name: 'Recovery', ...zone(0.5, 0.6), use: 'Walk, mobility, recovery' },
+    { zone: 'Z2', name: 'Aerobic base', ...zone(0.6, 0.72), use: 'Easy runs, long run' },
+    { zone: 'Z3', name: 'Tempo', ...zone(0.72, 0.82), use: 'Steady threshold work' },
+    { zone: 'Z4', name: 'Threshold', ...zone(0.82, 0.9), use: '4–6 min repeats' },
+    { zone: 'Z5', name: 'VO2 / race', ...zone(0.9, 1), use: '800 m repeats, test day' },
   ]
 }
 
@@ -141,21 +151,31 @@ export interface CaloriePlan {
   rateLbPerWeek: number
   weeklyLoss: number
   weeksToGoal: number
+  /** False when age/weight/height are not entered yet — nothing is estimated or assumed. */
+  ready: boolean
 }
 
 export function caloriePlan(profile: Profile): CaloriePlan {
-  const weightKg = profile.weightLb / 2.20462
-  const heightCm = profile.heightIn * 2.54
-  const bmr = 10 * weightKg + 6.25 * heightCm - 5 * profile.age + 5
+  const weightLb = profile.weightLb ?? 0
+  const heightIn = profile.heightIn ?? 0
+  const age = profile.age ?? 0
+  const ready = weightLb > 0 && heightIn > 0 && age >= 17 && age <= 100
+  const weightKg = weightLb / 2.20462
+  const heightCm = heightIn * 2.54
+  const bmr = ready ? 10 * weightKg + 6.25 * heightCm - 5 * age + 5 : 0
   const activity = profile.trainingDays >= 5 ? 1.55 : profile.trainingDays >= 3 ? 1.45 : 1.35
-  const tdee = Math.round(bmr * activity)
-  const deficit = 550
-  const calories = Math.max(1800, Math.round(tdee - deficit))
-  const protein = Math.round(clamp(weightKg * 1.8, 150, 230))
-  const fat = Math.round((calories * 0.25) / 9)
-  const carbs = Math.round((calories - protein * 4 - fat * 9) / 4)
-  const weeklyLoss = (tdee - calories) * 7 / 3500
-  const toLose = Math.max(0, profile.weightLb - profile.goalWeightLb)
+  const tdee = Math.round(bmr * (ready ? activity : 0))
+  // Moderate deficit: never more than ~20% of TDEE, and never drive a small
+  // Soldier below a safe floor. A flat −550 kcal is unsafe for lighter Soldiers.
+  const deficit = ready ? Math.min(550, Math.round(tdee * 0.2)) : 0
+  const floor = ready ? (profile.sex === 'female' ? 1400 : 1600) : 0
+  const calories = ready ? Math.max(floor, Math.round(tdee - deficit)) : 0
+  // Protein at ~1.8 g/kg without the old 150 g floor (wrong for smaller Soldiers).
+  const protein = ready ? Math.max(90, Math.round(weightKg * 1.8)) : 0
+  const fat = ready ? Math.round((calories * 0.25) / 9) : 0
+  const carbs = ready ? Math.max(0, Math.round((calories - protein * 4 - fat * 9) / 4)) : 0
+  const weeklyLoss = ready ? (tdee - calories) * 7 / 3500 : 0
+  const toLose = Math.max(0, weightLb - (profile.goalWeightLb ?? 0))
   return {
     bmr: Math.round(bmr),
     tdee,
@@ -167,30 +187,38 @@ export function caloriePlan(profile: Profile): CaloriePlan {
     rateLbPerWeek: Math.round(weeklyLoss * 10) / 10,
     weeklyLoss: Math.round(weeklyLoss * 100) / 100,
     weeksToGoal: weeklyLoss > 0 ? Math.ceil(toLose / weeklyLoss) : 0,
+    ready,
   }
 }
 
 export function waistAtWeight(profile: Profile, targetWeight: number): number {
   // Conservative field estimate: ~0.075 in of waist per pound of fat loss.
-  const delta = profile.weightLb - targetWeight
-  return Math.max(28, profile.waistIn - delta * 0.075)
+  const weightLb = profile.weightLb ?? 0
+  const waistIn = profile.waistIn ?? 0
+  const delta = weightLb - targetWeight
+  return Math.max(28, waistIn - delta * 0.075)
 }
 
 export function weightForWaist(profile: Profile): number {
-  const inchesToLose = Math.max(0, profile.waistIn - profile.goalWaistIn)
-  return Math.max(profile.goalWeightLb, profile.weightLb - inchesToLose / 0.075)
+  const weightLb = profile.weightLb ?? 0
+  const waistIn = profile.waistIn ?? 0
+  const goalWaistIn = profile.goalWaistIn ?? 0
+  const goalWeightLb = profile.goalWeightLb ?? 0
+  const inchesToLose = Math.max(0, waistIn - goalWaistIn)
+  return Math.max(goalWeightLb, weightLb - inchesToLose / 0.075)
 }
 
 export function projectedWaistDate(profile: Profile, rateLbPerWeek: number): string {
   if (rateLbPerWeek <= 0) return '—'
   const weightNeeded = weightForWaist(profile)
-  const weeks = Math.max(0, (profile.weightLb - weightNeeded) / rateLbPerWeek)
+  const weeks = Math.max(0, ((profile.weightLb ?? 0) - weightNeeded) / rateLbPerWeek)
   const date = new Date()
   date.setDate(date.getDate() + Math.ceil(weeks * 7))
   return date.toISOString().slice(0, 10)
 }
 
-export function maxHrReference(age: number): { tanaka: number; classic: number } {
+export function maxHrReference(age: number | null): { tanaka: number | null; classic: number | null } {
+  if (age == null || !Number.isFinite(age) || age <= 0) return { tanaka: null, classic: null }
   return {
     tanaka: Math.round(208 - 0.7 * age),
     classic: 220 - age,

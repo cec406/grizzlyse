@@ -96,11 +96,11 @@ export function ProfileModal({
           <div className="form-grid">
             <label><span>NAME</span><input value={draft.name} onChange={(e) => update('name', e.target.value)} /></label>
             <label><span>MOS / TRACK</span><input value={draft.mos} onChange={(e) => update('mos', e.target.value)} /></label>
-            <label><span>AGE</span><input type="number" value={draft.age} onChange={(e) => update('age', Number(e.target.value) || 18)} /></label>
-            <label><span>SEX</span>
+            <label><span>AGE</span><input type="number" value={draft.age ?? ''} onChange={(e) => { const v = Number(e.target.value); update('age', Number.isFinite(v) && v > 0 ? v : null) }} /></label>
+            <label><span>GENDER</span>
               <select value={draft.sex} onChange={(e) => update('sex', e.target.value as Profile['sex'])}>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <option value="male">Male (M)</option>
+                <option value="female">Female (F)</option>
               </select>
             </label>
             <label><span>STANDARD</span>
@@ -117,18 +117,18 @@ export function ProfileModal({
           </div>
           <div className="profile-note">
             <Info size={15} />
-            <p>AFT scoring uses the official tables for your sex and age band — currently {draft.sex === 'male' ? 'male' : 'female'}, {ageGroup(draft.age)} (age {draft.age}). No account required; this profile lives on this device.</p>
+            <p>AFT scoring uses the official tables for your gender and age band — currently {draft.sex === 'male' ? 'male' : 'female'}, {ageGroup(draft.age)} (age {draft.age}). No account required; this profile lives on this device.</p>
           </div>
         </Panel>
 
         <Panel className="profile-section">
           <SectionHeader eyebrow="BODY" title="Measurements" />
           <div className="form-grid">
-            <label><span>HEIGHT (IN)</span><input type="number" step="0.5" value={draft.heightIn} onChange={(e) => update('heightIn', Number(e.target.value) || 60)} /></label>
-            <label><span>CURRENT WEIGHT</span><input type="number" step="0.5" value={draft.weightLb} onChange={(e) => update('weightLb', Number(e.target.value) || 100)} /></label>
-            <label><span>CURRENT WAIST</span><input type="number" step="0.25" value={draft.waistIn} onChange={(e) => update('waistIn', Number(e.target.value) || 25)} /></label>
-            <label><span>GOAL WEIGHT</span><input type="number" step="1" value={draft.goalWeightLb} onChange={(e) => update('goalWeightLb', Number(e.target.value) || 100)} /></label>
-            <label><span>GOAL WAIST</span><input type="number" step="0.25" value={draft.goalWaistIn} onChange={(e) => update('goalWaistIn', Number(e.target.value) || 25)} /></label>
+            <label><span>HEIGHT (IN)</span><input type="number" step="0.5" value={draft.heightIn ?? ''} onChange={(e) => { const v = Number(e.target.value); update('heightIn', Number.isFinite(v) && v > 0 ? v : null) }} /></label>
+            <label><span>CURRENT WEIGHT</span><input type="number" step="0.5" value={draft.weightLb ?? ''} onChange={(e) => { const v = Number(e.target.value); update('weightLb', Number.isFinite(v) && v > 0 ? v : null) }} /></label>
+            <label><span>CURRENT WAIST</span><input type="number" step="0.25" value={draft.waistIn ?? ''} onChange={(e) => { const v = Number(e.target.value); update('waistIn', Number.isFinite(v) && v > 0 ? v : null) }} /></label>
+            <label><span>GOAL WEIGHT</span><input type="number" step="1" value={draft.goalWeightLb ?? ''} onChange={(e) => { const v = Number(e.target.value); update('goalWeightLb', Number.isFinite(v) && v > 0 ? v : null) }} /></label>
+            <label><span>GOAL WAIST</span><input type="number" step="0.25" value={draft.goalWaistIn ?? ''} onChange={(e) => { const v = Number(e.target.value); update('goalWaistIn', Number.isFinite(v) && v > 0 ? v : null) }} /></label>
           </div>
         </Panel>
 
@@ -194,8 +194,8 @@ export function ProfileModal({
         <Panel className="profile-section">
           <SectionHeader eyebrow="WATCH + PHYSIOLOGY" title="Garmin / HR" />
           <div className="form-grid">
-            <label><span>OBSERVED MAX HR</span><input type="number" value={draft.maxHr} onChange={(e) => update('maxHr', Number(e.target.value) || 180)} /></label>
-            <label><span>RESTING HR</span><input type="number" value={draft.restingHr} onChange={(e) => update('restingHr', Number(e.target.value) || 55)} /></label>
+            <label><span>OBSERVED MAX HR</span><input type="number" value={draft.maxHr ?? ''} onChange={(e) => { const v = Number(e.target.value); update('maxHr', Number.isFinite(v) && v > 0 ? v : null) }} /></label>
+            <label><span>RESTING HR</span><input type="number" value={draft.restingHr ?? ''} onChange={(e) => { const v = Number(e.target.value); update('restingHr', Number.isFinite(v) && v > 0 ? v : null) }} /></label>
             <label className="toggle-row">
               <span>GARMIN COACH OVERLAY</span>
               <button
@@ -495,10 +495,10 @@ export function QuickLogModal({
   open: boolean
   profile: Profile
   onClose: () => void
-  onSave: (values: { weight: number; waist: number; sleep: number; soreness: number; stress: number }) => void
+  onSave: (values: { weight: number | null; waist: number | null; sleep: number; soreness: number; stress: number }) => void
 }) {
-  const [weight, setWeight] = useState(profile.weightLb)
-  const [waist, setWaist] = useState(profile.waistIn)
+  const [weight, setWeight] = useState<number | null>(profile.weightLb)
+  const [waist, setWaist] = useState<number | null>(profile.waistIn)
   const [sleep, setSleep] = useState(3)
   const [soreness, setSoreness] = useState(3)
   const [stress, setStress] = useState(3)
@@ -541,8 +541,8 @@ export function QuickLogModal({
         <div className="quicklog-section">
           <SectionHeader eyebrow="BODY" title="Weight and waist" />
           <div className="inline-form">
-            <label><span>WEIGHT</span><input type="number" step="0.5" value={weight} onChange={(e) => setWeight(Number(e.target.value) || 0)} /></label>
-            <label><span>WAIST</span><input type="number" step="0.25" value={waist} onChange={(e) => setWaist(Number(e.target.value) || 0)} /></label>
+            <label><span>WEIGHT</span><input type="number" step="0.5" value={weight ?? ''} onChange={(e) => { const v = Number(e.target.value); setWeight(Number.isFinite(v) && v > 0 ? v : null) }} /></label>
+            <label><span>WAIST</span><input type="number" step="0.25" value={waist ?? ''} onChange={(e) => { const v = Number(e.target.value); setWaist(Number.isFinite(v) && v > 0 ? v : null) }} /></label>
           </div>
         </div>
         <div className="quicklog-section">

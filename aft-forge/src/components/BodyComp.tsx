@@ -15,7 +15,7 @@ import {
   TrendingDown,
 } from 'lucide-react'
 import type { LogState, Profile } from '../types'
-import { caloriePlan, formatInches, weightForWaist } from '../lib/metrics'
+import { caloriePlan, formatInches, orDash, weightForWaist } from '../lib/metrics'
 import { maxWaist, waistToHeight } from '../lib/scoring'
 import { addDays, formatTiny, todayISO } from '../lib/date'
 import { Eyebrow, Panel, Pill, ProgressBar, Ring, SectionHeader, Stat, TrendChart } from './ui'
@@ -28,7 +28,7 @@ export function BodyComp({
 }: {
   profile: Profile
   logs: LogState
-  onSaveBody: (weightLb: number, waistIn?: number, date?: string) => void
+  onSaveBody: (weightLb: number | null, waistIn?: number | null, date?: string) => void
 }) {
   const body = useMemo(
     () => [...logs.body].sort((a, b) => a.date.localeCompare(b.date)),
@@ -37,16 +37,27 @@ export function BodyComp({
   const latest = body.at(-1)
   const currentWeight = latest?.weightLb ?? profile.weightLb
   const currentWaist = latest?.waistIn ?? profile.waistIn
-  const [weightDraft, setWeightDraft] = useState(currentWeight)
-  const [waistDraft, setWaistDraft] = useState(currentWaist)
+  const [weightDraft, setWeightDraft] = useState<number | null>(currentWeight)
+  const [waistDraft, setWaistDraft] = useState<number | null>(currentWaist)
   const [saved, setSaved] = useState(false)
   const plan = caloriePlan(profile)
-  const ratio = waistToHeight(currentWaist, profile.heightIn)
-  const limit = maxWaist(profile.heightIn)
-  const waistGap = Math.max(0, currentWaist - limit)
+  // 0 = "not entered yet"; never display as a real number.
+  const startWeight = profile.weightLb ?? 0
+  const startWaist = profile.waistIn ?? 0
+  const goalWeight = profile.goalWeightLb ?? 0
+  const goalWaist = profile.goalWaistIn ?? 0
+  const curWeight = currentWeight ?? startWeight
+  const curWaist = currentWaist ?? startWaist
+  const ratio = waistToHeight(curWaist, profile.heightIn ?? 0)
+  const limit = maxWaist(profile.heightIn ?? 0)
+  const waistGap = Math.max(0, curWaist - limit)
   const passWeight = weightForWaist(profile)
-  const projectedPassDate = addDays(todayISO(), Math.round(((profile.weightLb - passWeight) / Math.max(0.5, plan.rateLbPerWeek)) * 7))
-  const toLose = Math.max(0, currentWeight - profile.goalWeightLb)
+  const toLose = curWeight > goalWeight ? curWeight - goalWeight : 0
+  const hasBody = plan.ready
+  const ratioKnown = profile.heightIn != null && profile.heightIn > 0 && curWaist > 0
+  const projectedPassDate = hasBody && passWeight > 0 && plan.rateLbPerWeek > 0
+    ? addDays(todayISO(), Math.round(((startWeight - passWeight) / plan.rateLbPerWeek) * 7))
+    : null
 
   const weightPoints = useMemo<ChartPoint[]>(() => {
     const actual = body
@@ -56,37 +67,41 @@ export function BodyComp({
         value: entry.weightLb,
         projected: false,
       }))
-    const projection = Array.from({ length: 8 }, (_, index) => {
-      const step = toLose / 8
-      const value = Math.max(profile.goalWeightLb, currentWeight - (index + 1) * step)
-      return {
-        label: formatTiny(addDays(latest?.date ?? todayISO(), (index + 1) * 28)),
-        value,
-        projected: true,
-      }
-    })
+    const projection = curWeight > goalWeight && goalWeight > 0
+      ? Array.from({ length: 8 }, (_, index) => {
+          const step = toLose / 8
+          const value = Math.max(goalWeight, curWeight - (index + 1) * step)
+          return {
+            label: formatTiny(addDays(latest?.date ?? todayISO(), (index + 1) * 28)),
+            value,
+            projected: true,
+          }
+        })
+      : []
     return [...actual, ...projection]
-  }, [body, currentWeight, latest?.date, profile.goalWeightLb, toLose])
+  }, [body, curWeight, goalWeight, latest?.date, toLose])
 
   const waistPoints = useMemo<ChartPoint[]>(() => {
     const actual = body
       .filter((entry) => Boolean(entry.waistIn))
       .map((entry) => ({
         label: formatTiny(entry.date),
-        value: entry.waistIn ?? currentWaist,
+        value: entry.waistIn ?? curWaist,
         projected: false,
       }))
-    const projection = Array.from({ length: 8 }, (_, index) => {
-      const waistToLose = Math.max(0, currentWaist - profile.goalWaistIn)
-      const value = Math.max(profile.goalWaistIn, currentWaist - (index + 1) * (waistToLose / 8))
-      return {
-        label: formatTiny(addDays(latest?.date ?? todayISO(), (index + 1) * 28)),
-        value,
-        projected: true,
-      }
-    })
+    const projection = curWaist > goalWaist && goalWaist > 0
+      ? Array.from({ length: 8 }, (_, index) => {
+          const waistToLose = Math.max(0, curWaist - goalWaist)
+          const value = Math.max(goalWaist, curWaist - (index + 1) * (waistToLose / 8))
+          return {
+            label: formatTiny(addDays(latest?.date ?? todayISO(), (index + 1) * 28)),
+            value,
+            projected: true,
+          }
+        })
+      : []
     return [...actual, ...projection]
-  }, [body, currentWaist, latest?.date, profile.goalWaistIn])
+  }, [body, curWaist, goalWaist, latest?.date])
 
   function logBody() {
     onSaveBody(weightDraft, waistDraft)
@@ -117,10 +132,10 @@ export function BodyComp({
               </span>
             </div>
             <div className="body-hero-stats">
-              <div><span>NOW</span><strong>{Math.round(currentWeight)}</strong><small>lb</small></div>
-              <div><span>GOAL</span><strong>{profile.goalWeightLb}</strong><small>lb</small></div>
-              <div><span>WAIST</span><strong>{formatInches(currentWaist)}</strong><small>limit {formatInches(limit)}</small></div>
-              <div><span>TO LOSE</span><strong>{Math.round(toLose)}</strong><small>lb</small></div>
+              <div><span>NOW</span><strong>{orDash(curWeight)}</strong><small>lb</small></div>
+              <div><span>GOAL</span><strong>{orDash(goalWeight)}</strong><small>lb</small></div>
+              <div><span>WAIST</span><strong>{orDash(curWaist, formatInches)}</strong><small>limit {orDash(limit, formatInches)}</small></div>
+              <div><span>TO LOSE</span><strong>{orDash(toLose)}</strong><small>lb</small></div>
             </div>
           </div>
           <div className="body-ring">
@@ -128,10 +143,10 @@ export function BodyComp({
               value={ratio}
               max={0.62}
               size={196}
-              label={ratio.toFixed(3)}
+              label={orDash(ratio, (n) => n.toFixed(3))}
               sublabel="WHtR"
-              tone={ratio < 0.55 ? 'lime' : 'red'}
-              caption={ratio < 0.55 ? 'PASS' : 'OVER 0.550'}
+              tone={!ratioKnown ? 'amber' : ratio < 0.55 ? 'lime' : 'red'}
+              caption={!ratioKnown ? 'NO DATA' : ratio < 0.55 ? 'PASS' : 'OVER 0.550'}
             />
             <div className="body-ring-legend">
               <span><i className="legend-dot lime" /> compliant</span>
@@ -156,8 +171,11 @@ export function BodyComp({
               <input
                 type="number"
                 step="0.5"
-                value={weightDraft}
-                onChange={(event) => setWeightDraft(Number(event.target.value) || 0)}
+                value={weightDraft ?? ''}
+                onChange={(event) => {
+                  const v = Number(event.target.value)
+                  setWeightDraft(Number.isFinite(v) && v > 0 ? v : null)
+                }}
               />
             </label>
             <label>
@@ -165,8 +183,11 @@ export function BodyComp({
               <input
                 type="number"
                 step="0.25"
-                value={waistDraft}
-                onChange={(event) => setWaistDraft(Number(event.target.value) || 0)}
+                value={waistDraft ?? ''}
+                onChange={(event) => {
+                  const v = Number(event.target.value)
+                  setWaistDraft(Number.isFinite(v) && v > 0 ? v : null)
+                }}
               />
             </label>
           </div>
@@ -179,26 +200,30 @@ export function BodyComp({
           </div>
           <div className="body-progress-row">
             <ProgressBar
-              value={Math.max(0, profile.weightLb - currentWeight)}
-              max={Math.max(1, profile.weightLb - profile.goalWeightLb)}
+              value={Math.max(0, startWeight - curWeight)}
+              max={Math.max(1, startWeight - goalWeight)}
               label="Weight progress"
-              right={`${Math.round(Math.max(0, profile.weightLb - currentWeight))} / ${Math.round(Math.max(1, profile.weightLb - profile.goalWeightLb))} lb`}
+              right={profile.weightLb != null ? `${Math.round(Math.max(0, startWeight - curWeight))} / ${Math.round(Math.max(1, startWeight - goalWeight))} lb` : '—'}
             />
             <ProgressBar
-              value={Math.max(0, profile.waistIn - currentWaist)}
-              max={Math.max(0.1, profile.waistIn - profile.goalWaistIn)}
+              value={Math.max(0, startWaist - curWaist)}
+              max={Math.max(0.1, startWaist - goalWaist)}
               label="Waist progress"
-              right={`${(Math.max(0, profile.waistIn - currentWaist)).toFixed(1)} / ${(Math.max(0.1, profile.waistIn - profile.goalWaistIn)).toFixed(1)} in`}
+              right={profile.waistIn != null ? `${(Math.max(0, startWaist - curWaist)).toFixed(1)} / ${(Math.max(0.1, startWaist - goalWaist)).toFixed(1)} in` : '—'}
               tone="amber"
             />
           </div>
           <div className="body-pass-estimate">
             <CircleGauge size={17} />
-            <span>
-              Model estimate: WHtR standard arrives around <strong>{Math.round(passWeight)} lb</strong>
-              {' '}and roughly {formatTiny(projectedPassDate)} at {plan.rateLbPerWeek} lb/week. Your {profile.goalWeightLb} lb
-              goal is for performance, not just compliance.
-            </span>
+            {hasBody && passWeight > 0 ? (
+              <span>
+                Model estimate: WHtR standard arrives around <strong>{Math.round(passWeight)} lb</strong>
+                {' '}and roughly {projectedPassDate ? formatTiny(projectedPassDate) : '—'} at {plan.rateLbPerWeek} lb/week. Your {orDash(goalWeight)} lb
+                goal is for performance, not just compliance.
+              </span>
+            ) : (
+              <span>Enter your weight, height, and age in Profile to unlock the pass estimate.</span>
+            )}
           </div>
         </Panel>
       </div>
@@ -210,18 +235,18 @@ export function BodyComp({
               eyebrow="WEIGHT TREND"
               title="Projected trajectory."
               description="Solid points are logs. Hollow points are the model’s projection if you hold the deficit and training."
-              action={<Pill tone={currentWeight > profile.goalWeightLb ? 'amber' : 'lime'}>{currentWeight > profile.goalWeightLb ? 'CUT ACTIVE' : 'GOAL ZONE'}</Pill>}
+              action={<Pill tone={curWeight > goalWeight && goalWeight > 0 ? 'amber' : 'lime'}>{curWeight > 0 && goalWeight > 0 ? (curWeight > goalWeight ? 'CUT ACTIVE' : 'GOAL ZONE') : 'NO DATA'}</Pill>}
             />
-            <TrendChart points={weightPoints} goal={profile.goalWeightLb} unit="lb" tone="lime" />
+            <TrendChart points={weightPoints} goal={goalWeight} unit="lb" tone="lime" />
           </Panel>
           <Panel className="waist-chart-panel">
             <SectionHeader
               eyebrow="WAIST TREND"
               title="Waist-to-height trend."
               description="Waist can move faster than the scale when sleep and stress improve. Keep the tape method consistent."
-              action={<Pill tone={ratio < 0.55 ? 'lime' : 'red'}>{waistGap > 0 ? `${waistGap.toFixed(1)} IN TO PASS` : 'PASS'}</Pill>}
+              action={<Pill tone={!ratioKnown ? 'amber' : ratio < 0.55 ? 'lime' : 'red'}>{!ratioKnown ? 'NO DATA' : waistGap > 0 ? `${waistGap.toFixed(1)} IN TO PASS` : 'PASS'}</Pill>}
             />
-            <TrendChart points={waistPoints} goal={profile.goalWaistIn} unit="in" tone="amber" />
+            <TrendChart points={waistPoints} goal={goalWaist} unit="in" tone="amber" />
           </Panel>
         </div>
 
@@ -229,20 +254,20 @@ export function BodyComp({
           <Panel className="calorie-panel">
             <SectionHeader
               eyebrow="FUEL PLAN"
-              title={`${plan.calories.toLocaleString()} kcal / day`}
+              title={plan.ready ? `${plan.calories.toLocaleString()} kcal / day` : 'Add weight, height, and age'}
               description="A moderate deficit that protects training quality."
               action={<Pill tone="lime">MUSCLE PRESERVATION</Pill>}
             />
             <div className="macro-grid">
-              <Stat label="PROTEIN" value={plan.protein} unit="g" detail="1.8 g/kg · every meal" tone="lime" icon={<ShieldCheck size={15} />} />
-              <Stat label="CARBS" value={plan.carbs} unit="g" detail="fuel the runs" tone="blue" icon={<Flame size={15} />} />
-              <Stat label="FAT" value={plan.fat} unit="g" detail="25% of calories" tone="amber" icon={<Droplet size={15} />} />
+              <Stat label="PROTEIN" value={orDash(plan.protein)} unit="g" detail="1.8 g/kg · every meal" tone="lime" icon={<ShieldCheck size={15} />} />
+              <Stat label="CARBS" value={orDash(plan.carbs)} unit="g" detail="fuel the runs" tone="blue" icon={<Flame size={15} />} />
+              <Stat label="FAT" value={orDash(plan.fat)} unit="g" detail="25% of calories" tone="amber" icon={<Droplet size={15} />} />
             </div>
             <div className="calorie-kv">
-              <div><span>BMR</span><strong>{plan.bmr.toLocaleString()} kcal</strong></div>
-              <div><span>TDEE</span><strong>{plan.tdee.toLocaleString()} kcal</strong></div>
-              <div><span>DEFICIT</span><strong>{plan.deficit.toLocaleString()} kcal</strong></div>
-              <div><span>RATE</span><strong>{plan.rateLbPerWeek} lb/wk</strong></div>
+              <div><span>BMR</span><strong>{orDash(plan.bmr)} kcal</strong></div>
+              <div><span>TDEE</span><strong>{orDash(plan.tdee)} kcal</strong></div>
+              <div><span>DEFICIT</span><strong>{orDash(plan.deficit)} kcal</strong></div>
+              <div><span>RATE</span><strong>{orDash(plan.rateLbPerWeek)} lb/wk</strong></div>
             </div>
             <div className="fuel-rules">
               <div><span>01</span><p>Protein anchor at every meal: 45–55 g.</p></div>

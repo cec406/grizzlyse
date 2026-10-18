@@ -17,6 +17,8 @@ import {
 import type { DayPlan, LogState, Profile, WeekPlan } from '../types'
 import { phaseColor, sessionTypeLabel, weekCompletion } from '../lib/plan'
 import { downloadIcs } from '../lib/ics'
+import { bandLabel, computeAft, EVENT_KEYS, EVENT_META } from '../lib/scoring'
+import { caloriePlan } from '../lib/metrics'
 import { formatShort, isToday, todayISO } from '../lib/date'
 import { Eyebrow, Panel, Pill, ProgressBar, SectionHeader } from './ui'
 
@@ -38,6 +40,14 @@ export function PlanView({
   const [selectedWeekIndex, setSelectedWeekIndex] = useState(currentWeek)
   const week = program[Math.min(selectedWeekIndex, program.length - 1)] ?? program[0]
   const [openDay, setOpenDay] = useState<DayPlan | null>(null)
+
+  const aft = computeAft(profile.scores, profile, profile.standard)
+  const ranked = EVENT_KEYS
+    .map((event) => ({ event, score: aft.eventScores[event].score }))
+    .sort((a, b) => a.score - b.score)
+  const weakest = ranked[0]
+  const strongest = ranked[ranked.length - 1]
+  const hasScores = EVENT_KEYS.some((event) => profile.scores[event] > 0)
 
   if (!week) {
     return (
@@ -63,8 +73,9 @@ export function PlanView({
           <p>
             Your week is built around your rest days: strength, quality runs, the long run, and AFT
             rehearsals fill the training days; the rest are rest days.
-            Every session has a 30-minute minimum version for days that get cut short. In rolling
-            mode each 4-week cycle starts a little heavier than the last.
+            Every session has a 30-minute minimum version for days that get cut short. Targets and
+            prescriptions use the <strong>{bandLabel(profile)}</strong> AFT table and your current scores.
+            In rolling mode each 4-week cycle starts a little heavier than the last.
           </p>
           <div className="plan-hero-stats">
             <div>
@@ -125,7 +136,7 @@ export function PlanView({
           <div className="rail-principles">
             <div className="rail-label">DAILY STANDARDS</div>
             <div><Shield size={14} /> 7–9 h sleep</div>
-            <div><Flame size={14} /> 190 g protein</div>
+            <div><Flame size={14} /> {caloriePlan(profile).protein} g protein</div>
             <div><Footprints size={14} /> Easy runs easy</div>
             <div><Target size={14} /> Waist at navel weekly</div>
           </div>
@@ -221,14 +232,18 @@ export function PlanView({
       <Panel className="plan-principles">
         <SectionHeader
           eyebrow="WHY THIS PLAN"
-          title="Hold strength, build the run, take the waist down."
-          description="The program is deliberately conservative on heavy lifting because your deadlift is already maxed. It is aggressive on aerobic volume because that is your lowest-scoring event and the biggest driver of body composition."
+          title="Scaled to your score sheet."
+          description={
+            hasScores
+              ? `${EVENT_META[weakest.event].label} is your lowest-scoring event at ${weakest.score} points, so it gets the most attention. ${EVENT_META[strongest.event].label} leads at ${strongest.score} and is maintained rather than maxed. Every target comes from the ${bandLabel(profile)} table.`
+              : `Every prescription scales to your current scores and the ${bandLabel(profile)} AFT table. Enter baseline scores in AFT Lab and the plan re-scales to what you actually need.`
+          }
         />
         <div className="principle-grid">
           <div>
             <span className="principle-num">01</span>
             <strong>Two hard days, not five.</strong>
-            <p>Tuesday threshold and Friday AFT rehearsal are the only truly hard sessions. Everything else is base-building or strength maintenance.</p>
+            <p>The threshold run and AFT rehearsal are the only truly hard sessions. Everything else is base-building or strength maintenance.</p>
           </div>
           <div>
             <span className="principle-num">02</span>
@@ -238,7 +253,7 @@ export function PlanView({
           <div>
             <span className="principle-num">03</span>
             <strong>High frequency, submaximal effort.</strong>
-            <p>HRP and plank are trained 3–5 times per week at submaximal volume. One max set per week is enough.</p>
+            <p>HRP and plank get repeated submaximal work through the week. One max set per week is enough.</p>
           </div>
           <div>
             <span className="principle-num">04</span>

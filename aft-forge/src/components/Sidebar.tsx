@@ -83,7 +83,7 @@ export function Sidebar({
           </div>
           <div className="warrant-title">{profile.name || 'SOLDIER'}</div>
           <div className="warrant-sub">
-            {profile.mos ? `${profile.mos} · ` : ''}AGE {profile.age} · ON THIS DEVICE
+            {profile.mos ? `${profile.mos} · ` : ''}AGE {profile.age ?? '—'} · ON THIS DEVICE
           </div>
           <div className="warrant-rule" />
           <div className="warrant-row">

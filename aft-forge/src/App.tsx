@@ -118,25 +118,27 @@ function App() {
     setProfile((current) => ({ ...current, scores }))
   }
 
-  function saveBody(weightLb: number, waistIn?: number, date = todayISO()) {
-    setLogs((current) => {
-      const existingIndex = current.body.findIndex((entry) => entry.date === date)
-      const entry = { date, weightLb, waistIn }
-      const body = [...current.body]
-      if (existingIndex >= 0) body[existingIndex] = entry
-      else body.push(entry)
-      return { ...current, body }
-    })
+  function saveBody(weightLb: number | null, waistIn?: number | null, date = todayISO()) {
+    if (weightLb != null) {
+      setLogs((current) => {
+        const existingIndex = current.body.findIndex((entry) => entry.date === date)
+        const entry = { date, weightLb, waistIn: waistIn ?? undefined }
+        const body = [...current.body]
+        if (existingIndex >= 0) body[existingIndex] = entry
+        else body.push(entry)
+        return { ...current, body }
+      })
+    }
     setProfile((current) => ({
       ...current,
-      weightLb,
+      weightLb: weightLb ?? current.weightLb,
       waistIn: waistIn ?? current.waistIn,
     }))
   }
 
   function saveCheckin(values: {
-    weight: number
-    waist: number
+    weight: number | null
+    waist: number | null
     sleep: number
     soreness: number
     stress: number

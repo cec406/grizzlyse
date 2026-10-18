@@ -21,7 +21,7 @@ import {
   thresholdForPoints,
   waistToHeight,
 } from '../lib/scoring'
-import { formatInches } from '../lib/metrics'
+import { formatInches, orDash } from '../lib/metrics'
 import { Eyebrow, Panel, Pill, SectionHeader } from './ui'
 
 const CFT_EVENTS = [
@@ -37,6 +37,7 @@ const CFT_EVENTS = [
 export function Intel({ profile }: { profile: Profile }) {
   const ratio = waistToHeight(profile.waistIn, profile.heightIn)
   const limit = maxWaist(profile.heightIn)
+  const ratioKnown = ratio > 0
 
   return (
     <div className="intel-page">
@@ -52,7 +53,7 @@ export function Intel({ profile }: { profile: Profile }) {
           <div className="intel-hero-badges">
             <Pill tone="lime" dot>{profile.standard === 'combat' ? 'AFT COMBAT: 350' : 'AFT GENERAL: 300'}</Pill>
             <Pill tone="amber">WHtR UNDER 0.55</Pill>
-            <Pill tone={ratio < 0.55 ? 'lime' : 'red'}>WHtR {ratio.toFixed(3)}</Pill>
+            <Pill tone={!ratioKnown ? 'neutral' : ratio < 0.55 ? 'lime' : 'red'}>WHtR {orDash(ratio, (n) => n.toFixed(3))}</Pill>
           </div>
         </div>
         <div className="intel-hero-side">
@@ -74,7 +75,7 @@ export function Intel({ profile }: { profile: Profile }) {
             </div>
             <div className="intel-verdict-row">
               <span>Max waist</span>
-              <strong>{formatInches(limit)}</strong>
+              <strong>{orDash(limit, formatInches)}</strong>
             </div>
           </div>
           <div className="intel-verdict-note">
@@ -120,7 +121,7 @@ export function Intel({ profile }: { profile: Profile }) {
             <div className="standards-note">
               <Shield size={16} />
               <p>
-                These rows reflect your current profile: age {profile.age}, {profile.sex}, {profile.standard} standard.
+                These rows reflect your current profile: age {profile.age ?? '—'}, {profile.sex}, {profile.standard} standard.
                 Combat scoring is sex-neutral but still age-normed.
               </p>
             </div>
@@ -254,16 +255,16 @@ export function Intel({ profile }: { profile: Profile }) {
           <Panel className="whtr-intel">
             <div className="panel-topline">
               <Eyebrow>WHtR QUICK CARD</Eyebrow>
-              <Pill tone={ratio < 0.55 ? 'lime' : 'red'}>{ratio < 0.55 ? 'PASS' : 'FAIL'}</Pill>
+              <Pill tone={!ratioKnown ? 'neutral' : ratio < 0.55 ? 'lime' : 'red'}>{!ratioKnown ? 'NO DATA' : ratio < 0.55 ? 'PASS' : 'FAIL'}</Pill>
             </div>
             <div className="whtr-intel-big">
-              <strong>{ratio.toFixed(3)}</strong>
+              <strong>{orDash(ratio, (n) => n.toFixed(3))}</strong>
               <span>current ratio</span>
             </div>
             <div className="whtr-intel-rows">
-              <div><span>Height</span><strong>{profile.heightIn} in</strong></div>
-              <div><span>Waist</span><strong>{formatInches(profile.waistIn)}</strong></div>
-              <div><span>Max waist</span><strong>{formatInches(limit)}</strong></div>
+              <div><span>Height</span><strong>{orDash(profile.heightIn)} in</strong></div>
+              <div><span>Waist</span><strong>{orDash(profile.waistIn, formatInches)}</strong></div>
+              <div><span>Max waist</span><strong>{orDash(limit, formatInches)}</strong></div>
               <div><span>Standard</span><strong>&lt; 0.550</strong></div>
             </div>
             <p className="whtr-intel-copy">

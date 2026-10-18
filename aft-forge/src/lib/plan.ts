@@ -1,5 +1,6 @@
 import type {
   DayPlan,
+  EventKey,
   ExerciseBlock,
   ExerciseBlockItem,
   Phase,
@@ -9,7 +10,13 @@ import type {
 } from '../types'
 import { addDays, clamp, daysBetween, formatShort, parseISO, weekday } from './date'
 import { formatPace, paceZones, twoMilePace } from './metrics'
-import { secondsToTime, thresholdForPoints, timeToSeconds } from './scoring'
+import {
+  bandLabel,
+  EVENT_META,
+  programmingThreshold,
+  secondsToTime,
+  timeToSeconds,
+} from './scoring'
 
 const PHASE_THEME: Record<Phase, string> = {
   FOUNDATION: 'Base building',
@@ -84,7 +91,10 @@ function roundToFive(value: number): number {
 }
 
 function deadliftAnchor(profile: Profile): number {
-  return Math.max(135, profile.scores.mdl || 135)
+  if (profile.scores.mdl > 0) return profile.scores.mdl
+  // Untested 3RM: anchor to ~80% of the band's MDL target instead of inventing a number.
+  const goal = goalValue('mdl', profile)
+  return roundToFive((goal ?? 230) * 0.8)
 }
 
 function deadliftLoads(profile: Profile, phase: Phase, week: number): { low: number; high: number } {
@@ -101,10 +111,37 @@ function deadliftLoads(profile: Profile, phase: Phase, week: number): { low: num
   return { low: roundToFive(anchor * low * mult), high: roundToFive(anchor * high * mult) }
 }
 
+/**
+ * Seconds (time events) or reps/lb (count events) for the plan's target in the
+ * Soldier's own age/gender/standard table, using their current score.
+ */
+function goalValue(event: EventKey, profile: Profile): number | null {
+  const { value } = programmingThreshold(event, profile, profile.standard)
+  if (!value) return null
+  const target = EVENT_META[event].unit === 'time' ? timeToSeconds(value) : Number(value)
+  const current = profile.scores[event]
+  // Never program toward a result the Soldier has already beaten.
+  if (current <= 0) return target
+  return EVENT_META[event].lowerIsBetter ? Math.min(target, current) : Math.max(target, current)
+}
+
+function goalText(event: EventKey, profile: Profile): string {
+  const value = goalValue(event, profile)
+  if (value == null) return '—'
+  if (event === 'mdl') return `${Math.round(value)} lb`
+  if (event === 'hrp') return `${Math.round(value)} reps`
+  return secondsToTime(value)
+}
+
+function goalLabel(event: EventKey, profile: Profile): string {
+  const { points } = programmingThreshold(event, profile, profile.standard)
+  return `${goalText(event, profile)} (${points} pts)`
+}
+
 function targetRunSeconds(profile: Profile): number {
-  const threshold = thresholdForPoints('run', 90, profile, profile.standard)
-  if (!threshold) return Math.max(840, Math.round(profile.scores.run * 0.9))
-  return timeToSeconds(threshold)
+  const goal = goalValue('run', profile)
+  if (goal) return goal
+  return profile.scores.run > 0 ? Math.max(840, Math.round(profile.scores.run * 0.9)) : 1020
 }
 
 function runPaces(profile: Profile): {
@@ -116,7 +153,8 @@ function runPaces(profile: Profile): {
   current: string
   goalSeconds: number
 } {
-  const zones = paceZones(profile.scores.run, profile.maxHr)
+  const currentRun = profile.scores.run > 0 ? profile.scores.run : targetRunSeconds(profile)
+  const zones = paceZones(currentRun, profile.maxHr)
   const goalSeconds = targetRunSeconds(profile)
   return {
     easy: `${formatPace(zones[1].fast)}–${formatPace(zones[1].slow)} /mi`,
@@ -124,15 +162,44 @@ function runPaces(profile: Profile): {
     interval: `${formatPace(zones[3].fast)}–${formatPace(zones[3].slow)} /mi`,
     rep: `${formatPace(zones[4].fast)}–${formatPace(zones[4].slow)} /mi`,
     goal: `${formatPace(twoMilePace(goalSeconds))} /mi`,
-    current: `${formatPace(twoMilePace(profile.scores.run))} /mi`,
+    current: `${formatPace(twoMilePace(currentRun))} /mi`,
     goalSeconds,
   }
 }
 
-function hrpSets(phase: Phase, week: number): string {
-  const base = phase === 'FOUNDATION' ? [5, 10] : phase === 'BUILD' ? [5, 12] : phase === 'PEAK' ? [4, 15] : [3, 12]
+interface HrpWork {
+  sets: number
+  reps: number
+  goal: number | null
+  current: number
+}
+
+/**
+ * HRP density scaled to the Soldier's own 90/100-point rep target and current
+ * max. Sets stay submaximal (~30% of current max) and total work climbs with
+ * the phase, so a 26-rep standard and a 47-rep standard do not get the same
+ * prescription.
+ */
+function hrpWork(profile: Profile, phase: Phase, week: number): HrpWork {
+  const goal = goalValue('hrp', profile)
+  const goalReps = goal ?? 40
+  const current = profile.scores.hrp > 0 ? profile.scores.hrp : Math.max(5, Math.round(goalReps * 0.6))
+  const perSet = clamp(roundToFive(current * 0.3), 5, 20)
   const bonus = Math.min(3, cycleFor(week) - 1)
-  return `${base[0]} x ${base[1] + bonus}`
+  const reps = clamp(perSet + bonus, 5, 20)
+  const share =
+    phase === 'FOUNDATION'
+      ? 0.6
+      : phase === 'BUILD'
+        ? 0.75
+        : phase === 'PEAK'
+          ? 0.9
+          : phase === 'SHARPEN'
+            ? 0.5
+            : 0.4
+  const total = Math.max(reps * 3, Math.round(goalReps * share))
+  const sets = clamp(Math.ceil(total / reps), 3, 6)
+  return { sets, reps, goal, current }
 }
 
 function thresholdPrescription(phase: Phase, week: number): string {
@@ -142,8 +209,46 @@ function thresholdPrescription(phase: Phase, week: number): string {
   return `${sets} x ${minutes} min`
 }
 
-function plankSeconds(week: number): number {
-  return Math.min(90, 45 + (cycleFor(week) - 1) * 5)
+interface PlankWork {
+  hold: number
+  sets: number
+  goal: number | null
+  current: number
+}
+
+/**
+ * Plank holds are set at ~75% of the Soldier's current max and progress toward
+ * the band's 90/100-point hold. A fixed 45–90 sec prescription never reaches
+ * the actual 2:47–3:08 standard.
+ */
+function plankWork(profile: Profile, phase: Phase, week: number): PlankWork {
+  const goal = goalValue('plk', profile)
+  const goalSeconds = goal ?? 120
+  const current = profile.scores.plk > 0 ? profile.scores.plk : Math.min(goalSeconds, 60)
+  const bump = Math.min(15, (cycleFor(week) - 1) * 5)
+  const hold = Math.max(30, Math.min(goalSeconds, roundToFive(current * 0.75) + bump))
+  const sets = phase === 'PEAK' || phase === 'SHARPEN' ? 2 : 3
+  return { hold, sets, goal, current }
+}
+
+interface SdcWork {
+  rounds: number
+  target: number
+  rest: string
+  goal: number | null
+  current: number
+}
+
+/** SDC rounds carry a per-round time target derived from the current score and band goal. */
+function sdcWork(profile: Profile, phase: Phase): SdcWork {
+  const goal = goalValue('sdc', profile)
+  const current = profile.scores.sdc > 0 ? profile.scores.sdc : goal ? Math.round(goal * 1.15) : 180
+  const baseRounds = phase === 'FOUNDATION' || phase === 'BUILD' ? 2 : phase === 'PEAK' ? 3 : 1
+  const gap = goal ? Math.max(0, current / goal - 1) : 0
+  const rounds = clamp(baseRounds + (gap > 0.25 && phase !== 'PEAK' ? 1 : 0), 1, 3)
+  const target = Math.round((current * (phase === 'PEAK' ? 0.96 : 0.95)) / 5) * 5
+  const rest = gap > 0.2 ? '4 min full recovery' : '3–4 min rest'
+  return { rounds, target, rest, goal, current }
 }
 
 function engineMinutes(phase: Phase, week: number): { low: number; high: number } {
@@ -176,6 +281,8 @@ function garminRunItem(): ExerciseBlockItem {
 
 function buildLower(profile: Profile, week: number, dayIndex: number, date: string, phase: Phase): DayPlan {
   const load = deadliftLoads(profile, phase, week)
+  const hrp = hrpWork(profile, phase, week)
+  const plank = plankWork(profile, phase, week)
   return {
     ...baseDay(week, dayIndex, date),
     title: 'Lower Strength + Push Capacity',
@@ -192,15 +299,15 @@ function buildLower(profile: Profile, week: number, dayIndex: number, date: stri
         { name: 'Trap-bar deadlift', prescription: `3 x 3 @ ${load.low}–${load.high} lb (RPE 7). Stop one rep shy of a grind.`, cue: 'Push the floor away. Hips and shoulders rise together.' },
         { name: 'Front squat or safety-bar squat', prescription: '3 x 5 @ RPE 7', cue: 'Elbows up, brace, full foot.' },
         { name: 'Split squat', prescription: '3 x 8/leg @ RPE 7', cue: 'Front shin vertical, back knee soft.' },
-        { name: 'Hand-release push-up density', prescription: `${hrpSets(phase, week)} quality reps, 30 sec rest between sets`, cue: 'Stop every set before form breaks. Full T every rep.' },
-        { name: 'Front plank', prescription: `3 x ${plankSeconds(week)} sec`, cue: 'Ribs down, glutes on, breathe through the nose.' },
+        { name: 'Hand-release push-up density', prescription: `${hrp.sets} x ${hrp.reps} quality reps, 30 sec rest between sets`, cue: 'Stop every set before form breaks. Full T every rep.' },
+        { name: 'Front plank', prescription: `${plank.sets} x ${plank.hold} sec`, cue: 'Ribs down, glutes on, breathe through the nose.' },
       ]),
       block('Finisher / 10 min', [
         { name: 'Zone 2 bike or incline walk', prescription: '10 min easy', cue: 'This is recovery, not a second workout.' },
       ]),
     ],
-    minimum: `3 x 3 deadlift, ${hrpSets(phase, week)} HRP, 3 x ${plankSeconds(week)} sec plank.`,
-    coachNote: 'Deadlift and HRP hold with consistent submaximal work. Keep quality high and spend most recovery on the run.',
+    minimum: `3 x 3 deadlift, ${hrp.sets} x ${hrp.reps} HRP, ${plank.sets} x ${plank.hold} sec plank.`,
+    coachNote: `Band targets for ${bandLabel(profile)}: MDL ${goalLabel('mdl', profile)}, HRP ${goalLabel('hrp', profile)}, plank ${goalLabel('plk', profile)}. Loads follow your current 3RM; the table sets the score target, not the bar weight.`,
   }
 }
 
@@ -229,7 +336,7 @@ function buildThreshold(profile: Profile, week: number, dayIndex: number, date: 
             { name: 'Threshold repeats', prescription: `${rx} @ ${paces.threshold} with 2 min walk/jog`, cue: 'Comfortably hard. You should be able to speak 3–4 words, not a sentence.' },
             { name: 'Cooldown', prescription: '10 min easy jog/walk', cue: 'Let HR fall under 140 before you stop moving.' },
           ]),
-      block('SDC skill / 15 min', profile.sledAccess
+      block(`SDC skill / 15 min · goal ${goalText('sdc', profile)}`, profile.sledAccess
         ? [
             { name: 'Sled drag', prescription: '3 x 25 m @ 90 lb, full recovery', cue: 'Drive through the legs, arms long, no jerking.' },
             { name: 'Lateral shuttle', prescription: '3 x 25 m each direction', cue: 'Feet never cross. Stay low.' },
@@ -245,7 +352,7 @@ function buildThreshold(profile: Profile, week: number, dayIndex: number, date: 
     minimum: profile.sledAccess
       ? `3 min of threshold + 3 sled drags + 2 carries. Skip the rest.`
       : `3 min of threshold + 3 drags + 2 carries. Skip the rest.`,
-    coachNote: `Your current 2-mile pace is ${paces.current}. Threshold repeats should feel slower than that: comfortably hard, not a race. If HR spikes well above the threshold zone, walk until it settles.`,
+    coachNote: `Your current 2-mile pace is ${paces.current}; the band goal is ${goalLabel('run', profile)} (${paces.goal}). SDC goal is ${goalLabel('sdc', profile)} — you are at ${profile.scores.sdc > 0 ? secondsToTime(profile.scores.sdc) : 'untested'}. Threshold repeats should feel slower than race pace: comfortably hard, not a race. If HR spikes well above the threshold zone, walk until it settles.`,
   }
 }
 
@@ -284,6 +391,7 @@ function buildUpper(profile: Profile, week: number, dayIndex: number, date: stri
 function buildEngine(profile: Profile, week: number, dayIndex: number, date: string, phase: Phase): DayPlan {
   const paces = runPaces(profile)
   const minutes = engineMinutes(phase, week)
+  const plank = plankWork(profile, phase, week)
   return {
     ...baseDay(week, dayIndex, date),
     title: 'Aerobic Base + Mobility',
@@ -304,7 +412,7 @@ function buildEngine(profile: Profile, week: number, dayIndex: number, date: str
           ]),
       block('Mobility / 10 min', [
         { name: 'Hip + ankle flow', prescription: 'Couch stretch 60 sec/side, 90/90 x 8/side, calf stretch 45 sec/side', cue: 'Breathe into the stretch.' },
-        { name: 'Core', prescription: '3 x 60 sec plank + 10 dead bugs', cue: 'Stop the set when the low back arches.' },
+        { name: 'Core', prescription: `2 x ${Math.min(90, plank.hold)} sec plank + 10 dead bugs`, cue: 'Stop the set when the low back arches.' },
       ]),
     ],
     minimum: `25 min easy walk/run + 5 min mobility.`,
@@ -314,7 +422,9 @@ function buildEngine(profile: Profile, week: number, dayIndex: number, date: str
 
 function buildRehearsal(profile: Profile, week: number, dayIndex: number, date: string, phase: Phase): DayPlan {
   const paces = runPaces(profile)
-  const sdcRounds = phase === 'FOUNDATION' ? 2 : phase === 'BUILD' ? 2 : phase === 'PEAK' ? 3 : 1
+  const hrp = hrpWork(profile, phase, week)
+  const sdc = sdcWork(profile, phase)
+  const plank = plankWork(profile, phase, week)
   const runRepeats = phase === 'FOUNDATION' ? '2 x 400 m' : phase === 'BUILD' ? '3 x 400 m' : phase === 'PEAK' ? '2 x 800 m' : '2 x 400 m'
   return {
     ...baseDay(week, dayIndex, date),
@@ -322,29 +432,42 @@ function buildRehearsal(profile: Profile, week: number, dayIndex: number, date: 
     type: 'aft',
     durationMin: 65,
     intent: 'Rehearse the test order, transitions, and pacing under the same conditions as test day.',
-    focus: ['AFT', 'HRP', 'SDC', 'RUN'],
+    focus: ['AFT', 'HRP', 'SDC', 'PLK', 'RUN'],
     blocks: [
       block('Warm-up / 12 min', [
         { name: 'Easy jog + prep', prescription: '10 min easy + dynamic hips, ankles, shoulders', cue: 'Get warm, stay relaxed.' },
       ]),
-      block('Test-order rehearsal', [
-        { name: 'HRP', prescription: phase === 'PEAK' ? '2 min test set' : '4 x 30 sec quality reps, 30 sec rest', cue: 'Full T, chest and thighs together.' },
+      block(`Test-order rehearsal · ${bandLabel(profile)}`, [
+        {
+          name: 'HRP',
+          prescription: phase === 'PEAK'
+            ? `2 min test set — target ${goalText('hrp', profile)}`
+            : `${hrp.sets} x ${hrp.reps} quality reps, 30 sec rest — target ${goalText('hrp', profile)}`,
+          cue: 'Full T, chest and thighs together.',
+        },
         {
           name: 'SDC',
           prescription: profile.sledAccess
-            ? `${sdcRounds} full round(s), 3–4 min rest`
-            : `${sdcRounds} no-sled simulation round(s): 2 x 25 m sprint, 2 x 25 m lateral shuffle, 25 m carry @ 2 x 40 lb, 3–4 min rest`,
+            ? `${sdc.rounds} full round(s) @ ${secondsToTime(sdc.target)} target, ${sdc.rest} — band goal ${goalText('sdc', profile)}`
+            : `${sdc.rounds} no-sled simulation round(s): 2 x 25 m sprint, 2 x 25 m lateral shuffle, 25 m carry @ 2 x 40 lb @ ${secondsToTime(sdc.target)} target, ${sdc.rest} — band goal ${goalText('sdc', profile)}`,
           cue: 'Race the transitions, not the first 10 m.',
         },
-        { name: 'Run', prescription: `${runRepeats} @ ${phase === 'PEAK' ? paces.goal : paces.interval} with 2 min walk/jog`, cue: 'Even splits. Negative split the last rep.' },
+        {
+          name: 'Plank',
+          prescription: phase === 'PEAK'
+            ? `Test hold — target ${goalText('plk', profile)}`
+            : `${plank.sets} x ${plank.hold} sec`,
+          cue: 'Ribs down, glutes on. Stop when the line breaks.',
+        },
+        { name: 'Run', prescription: `${runRepeats} @ ${phase === 'PEAK' ? paces.goal : paces.interval} with 2 min walk/jog — band goal ${goalText('run', profile)}`, cue: 'Even splits. Negative split the last rep.' },
         { name: 'Deadlift speed', prescription: `3 x 3 @ ${roundToFive(deadliftAnchor(profile) * Math.min(0.7, 0.6 * cycleMultiplier(week)))} lb, fast and clean`, cue: 'Speed pulls. No grinding.' },
       ]),
       block('Cooldown / 10 min', [
         { name: 'Walk + breathe', prescription: '8–10 min easy walk, nasal breathing', cue: 'Downshift before you drive home.' },
       ]),
     ],
-    minimum: '2 min HRP + 2 SDC rounds + 2 x 400 m. Skip the deadlift.',
-    coachNote: 'The AFT is one continuous session: five events plus transitions. Rehearse the full order weekly so pacing and transitions are automatic.',
+    minimum: `2 min HRP + ${sdc.rounds} SDC round(s) + ${plank.sets} x ${plank.hold} sec plank + 2 x 400 m. Skip the deadlift.`,
+    coachNote: `Test-order targets for ${bandLabel(profile)}: HRP ${goalLabel('hrp', profile)}, SDC ${goalLabel('sdc', profile)}, plank ${goalLabel('plk', profile)}, run ${goalLabel('run', profile)}, MDL ${goalLabel('mdl', profile)}. The AFT is one continuous session: five events plus transitions. Rehearse the full order weekly so pacing and transitions are automatic.`,
   }
 }
 
@@ -465,18 +588,18 @@ function buildTest(profile: Profile, week: number, dayIndex: number, date: strin
         { name: 'Fuel', prescription: '300–500 ml fluid + 30–60 g carbs if tolerated', cue: 'Nothing new on test day.' },
       ]),
       block('Test order', [
-        { name: '3RM deadlift', prescription: 'Open at a weight you know is good. One clean attempt, then decide.', cue: 'Take the safe opener.' },
-        { name: 'Hand-release push-up', prescription: '2 min. Sets of 5–8, short pauses in the front leaning rest.', cue: 'Chest and thighs touch together. Full T on every rep.' },
-        { name: 'Sprint-drag-carry', prescription: 'Controlled sprint, strong drag, quick lateral, secure carry, finish hard.', cue: 'Turn the sled with your legs, not your lower back.' },
-        { name: 'Plank', prescription: 'Hold 5–10 sec past your target, then stop.', cue: 'Squeeze glutes, tuck ribs, breathe.' },
-        { name: 'Two-mile run', prescription: `Target ${secondsToTime(paces.goalSeconds)} (${paces.goal}). First mile controlled, second mile at effort.`, cue: 'No sprinting in the first 800 m.' },
+        { name: '3RM deadlift', prescription: `Band target ${goalLabel('mdl', profile)}. Open at a weight you know is good. One clean attempt, then decide.`, cue: 'Take the safe opener.' },
+        { name: 'Hand-release push-up', prescription: `2 min — target ${goalLabel('hrp', profile)}. Sets of 5–8, short pauses in the front leaning rest.`, cue: 'Chest and thighs touch together. Full T on every rep.' },
+        { name: 'Sprint-drag-carry', prescription: `Band target ${goalLabel('sdc', profile)}. Controlled sprint, strong drag, quick lateral, secure carry, finish hard.`, cue: 'Turn the sled with your legs, not your lower back.' },
+        { name: 'Plank', prescription: `Band target ${goalLabel('plk', profile)}. Hold 5–10 sec past your target, then stop.`, cue: 'Squeeze glutes, tuck ribs, breathe.' },
+        { name: 'Two-mile run', prescription: `Band target ${goalLabel('run', profile)} (${paces.goal}). First mile controlled, second mile at effort.`, cue: 'No sprinting in the first 800 m.' },
       ]),
       block('After-action', [
         { name: 'Cooldown', prescription: '10–15 min walk + fluids + 30–40 g protein', cue: 'Log the score while it is fresh.' },
       ]),
     ],
     minimum: 'Show up, warm up, execute.',
-    coachNote: 'Test day is a skill day. Your fitness is already built. Your only job is clean execution and even pacing.',
+    coachNote: `Every target above comes from the official table for ${bandLabel(profile)}. Test day is a skill day. Your fitness is already built. Your only job is clean execution and even pacing.`,
   }
 }
 

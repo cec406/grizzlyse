@@ -10,7 +10,7 @@ const PROFILE_PREFIX = 'forge.profile.v2.'
 const LOG_PREFIX = 'forge.logs.v2.'
 
 /** Bump to wipe all local data and return every device to the setup wizard. */
-export const SCHEMA_VERSION = 2
+export const SCHEMA_VERSION = 3
 
 export interface RosterMember {
   id: string
@@ -25,18 +25,18 @@ export interface Roster {
   members: RosterMember[]
 }
 
-/** Neutral defaults so any Soldier in the unit can start from zero. */
+/** A true blank slate — nothing assumed. Identity and body fields are filled in setup or Profile. */
 export function makeDefaultProfile(): Profile {
   const startDate = nextMonday()
   return {
     name: '',
-    age: 30,
+    age: null,
     sex: 'male',
-    heightIn: 68,
-    weightLb: 180,
-    waistIn: 34,
-    goalWeightLb: 180,
-    goalWaistIn: 32,
+    heightIn: null,
+    weightLb: null,
+    waistIn: null,
+    goalWeightLb: null,
+    goalWaistIn: null,
     mos: '',
     standard: 'general',
     startDate,
@@ -44,8 +44,8 @@ export function makeDefaultProfile(): Profile {
     restDays: [0, 6],
     trainingDays: 5,
     sessionMinutes: 75,
-    maxHr: 185,
-    restingHr: 60,
+    maxHr: null,
+    restingHr: null,
     garminOverlay: false,
     sledAccess: false,
     scores: {
@@ -59,9 +59,10 @@ export function makeDefaultProfile(): Profile {
 }
 
 export function makeDefaultLogs(profile?: Profile): LogState {
-  const body = profile
-    ? [{ date: todayISO(), weightLb: profile.weightLb, waistIn: profile.waistIn }]
-    : []
+  const body =
+    profile && profile.weightLb != null
+      ? [{ date: todayISO(), weightLb: profile.weightLb, waistIn: profile.waistIn ?? undefined }]
+      : []
   return {
     completed: {},
     body,
@@ -179,7 +180,7 @@ export function clearEverything(): void {
 }
 
 export function exportAll(profile: Profile, logs: LogState): string {
-  return JSON.stringify({ app: 'aft-forge', version: 2, profile, logs, exportedAt: new Date().toISOString() }, null, 2)
+  return JSON.stringify({ app: 'aft-forge', version: 3, profile, logs, exportedAt: new Date().toISOString() }, null, 2)
 }
 
 export function parseBackup(text: string): { profile: Profile; logs: LogState } | null {

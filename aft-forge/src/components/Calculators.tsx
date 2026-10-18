@@ -13,6 +13,7 @@ import {
   waistToHeight,
 } from '../lib/scoring'
 import { Eyebrow, Panel, Pill, ProgressBar, Ring, SectionHeader } from './ui'
+import { orDash } from '../lib/metrics'
 
 function clampNumber(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, Number.isFinite(value) ? value : min))
@@ -56,8 +57,8 @@ export function Calculators({
   onUpdateProfile: (profile: Profile) => void
 }) {
   const [draft, setDraft] = useState<Scores>(profile.scores)
-  const [heightDraft, setHeightDraft] = useState(profile.heightIn)
-  const [waistDraft, setWaistDraft] = useState(profile.waistIn)
+  const [heightDraft, setHeightDraft] = useState<number | null>(profile.heightIn)
+  const [waistDraft, setWaistDraft] = useState<number | null>(profile.waistIn)
   const [saved, setSaved] = useState(false)
   const [bodySaved, setBodySaved] = useState(false)
 
@@ -93,7 +94,7 @@ export function Calculators({
             <Eyebrow>AFT SCORE CALCULATOR</Eyebrow>
             <h2>{result.passed ? 'Inside standard.' : 'Not yet a go.'}</h2>
             <p>
-              Age {profile.age} ({ageGroup(profile.age)} band) · {profile.sex === 'male' ? 'Male' : 'Female'} ·{' '}
+              Age {profile.age ?? '—'} ({ageGroup(profile.age)} band) · {profile.sex === 'male' ? 'Male' : 'Female'} ·{' '}
               {profile.standard === 'combat' ? 'Combat, sex-neutral' : 'General, sex- and age-normed'}.
               Model uses the official AFT tables effective 1 June 2025.
             </p>
@@ -127,11 +128,11 @@ export function Calculators({
           </div>
           <div className="whtr-hero">
             <div>
-              <strong>{ratio.toFixed(3)}</strong>
+              <strong>{orDash(ratio, (n) => n.toFixed(3))}</strong>
               <span>ratio</span>
             </div>
             <div>
-              <strong>{limit.toFixed(1)}</strong>
+              <strong>{orDash(limit, (n) => n.toFixed(1))}</strong>
               <span>max waist (in)</span>
             </div>
           </div>
@@ -146,8 +147,11 @@ export function Calculators({
               <input
                 type="number"
                 step="0.5"
-                value={heightDraft}
-                onChange={(event) => setHeightDraft(clampNumber(Number(event.target.value), 48, 90))}
+                value={heightDraft ?? ''}
+                onChange={(event) => {
+                  const v = Number(event.target.value)
+                  setHeightDraft(Number.isFinite(v) && v > 0 ? clampNumber(v, 48, 90) : null)
+                }}
               />
             </label>
             <label>
@@ -155,8 +159,11 @@ export function Calculators({
               <input
                 type="number"
                 step="0.25"
-                value={waistDraft}
-                onChange={(event) => setWaistDraft(clampNumber(Number(event.target.value), 20, 80))}
+                value={waistDraft ?? ''}
+                onChange={(event) => {
+                  const v = Number(event.target.value)
+                  setWaistDraft(Number.isFinite(v) && v > 0 ? clampNumber(v, 20, 80) : null)
+                }}
               />
             </label>
           </div>

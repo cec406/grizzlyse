@@ -81,8 +81,10 @@ Allow Node.js on private networks when Windows Firewall asks, or other devices w
 
 ## What every Soldier does on first open
 
-1. **Setup wizard (4 steps):** name / age / sex / MOS / standard → baseline AFT scores (blank is fine) → height, weight, waist, goals → block start, optional test date, rest days, sled access.
+1. **Setup wizard (4 steps):** name / age / gender (required, no default) / MOS / standard → baseline AFT scores (blank is fine) → height, weight, waist, goals → block start, optional test date, rest days, sled access.
 2. The app builds the rolling plan, scores the current AFT from the official tables, and starts the log.
+
+**A blank slate.** No field ships pre-filled: age, weight, waist, goals, max HR, and baseline scores start empty on every device and show **—** until they are entered. Age and gender are required (the tables can't grade without them); everything else is optional and nothing is assumed. The scoring engine grades any age (17–21 through 62+) and both genders, and combat-standard scoring uses the sex-neutral tables.
 
 **Multiple Soldiers, one phone?** Each profile lives on the device separately. Open **Profile → Operators** to switch between Soldiers, add a new one, or remove one. Handy for a shared training room tablet.
 
@@ -104,9 +106,11 @@ Every 4-week cycle nudges the work up: deadlift loads +2.5%, +1 rep per HRP set,
 
 If you rarely have a sled (default), every SDC block swaps to no-sled substitutes: **plate/strap drags, lateral shuttles, farmer carries, hill or stair sprints, and a no-sled SDC simulation circuit**. The Armory has a dedicated no-sled SDC section. Flip **SLED ACCESS** in Profile when you have one for a test week.
 
-## Standards — age and sex aware
+## Standards — age and gender aware
 
-Scoring always uses the official AFT tables for **your sex and age band** (17–21 through 62+). The AFT Lab and Calculators show exactly which table is in use, e.g. *male, 32–36 band (age 35)*. Change age or sex in Profile and every table, target, pace, and plan recalculates.
+Scoring always uses the official AFT tables for **your gender and age band** (17–21 through 62+). The AFT Lab and Calculators show exactly which table is in use, e.g. *male, 32–36 band (age 35)*. Change age or gender in Profile and every table, target, pace, and plan recalculates.
+
+**Programming follows the table, not a template.** HRP set/rep volume, plank holds, SDC round targets, run pace goals, and test-day targets are all derived from your current scores and the 90-point threshold in your own age/gender/standard table (100 points once an event is already there). The Mission Plan shows the working targets for your band, so two Soldiers on the same phone can get materially different prescriptions.
 
 ### AFT
 

@@ -650,6 +650,15 @@ h3 {
   border-color: #d7ff85;
 }
 
+.button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  border-color: var(--line-2);
+  background: transparent;
+  color: var(--muted);
+  box-shadow: none;
+}
+
 .button-ghost {
   background: rgba(255, 255, 255, 0.02);
   color: var(--muted);
@@ -5710,6 +5719,25 @@ h3 {
 .profile-note svg {
   flex-shrink: 0;
   color: var(--amber);
+}
+
+.form-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 12px;
+  padding: 9px 11px;
+  border: 1px solid rgba(255, 112, 83, 0.35);
+  border-radius: 7px;
+  background: rgba(255, 112, 83, 0.06);
+  color: var(--red);
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.form-error svg {
+  flex-shrink: 0;
+  margin-top: 1px;
 }
 
 .session-footer {
