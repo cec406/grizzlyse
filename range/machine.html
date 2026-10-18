@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GRIZZLY RANGE // Machine</title>
+<meta name="theme-color" content="#0a0e13" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0e13'/%3E%3Ctext x='3' y='24' font-family='monospace' font-size='21' font-weight='bold' fill='%23fbbf24'%3E%3E_%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="range.css" />
+<link rel="stylesheet" href="machine.css" />
+</head>
+<body>
+
+<header class="m-top">
+  <a class="m-brand" href="index.html" title="Range home"><span class="m-mark">&gt;_</span> GRIZZLY <b>RANGE</b></a>
+  <span class="m-div"></span>
+  <span class="m-code" id="m-code">M-00</span>
+  <span class="m-name" id="m-name">Loading machine...</span>
+  <span class="tag green" id="m-status">online</span>
+  <span class="spacer"></span>
+  <label class="m-switch">MACHINE
+    <select id="m-select" aria-label="Switch machine"></select>
+  </label>
+  <a class="btn btn-sm btn-ghost" href="index.html">Range home</a>
+  <a class="btn btn-sm" id="m-direct" target="_blank" rel="noopener">Open app &#8599;</a>
+</header>
+
+<main class="m-grid">
+  <aside class="m-rail">
+    <div class="r-kicker" id="m-code2">M-00</div>
+    <h1 id="m-title">Loading...</h1>
+    <p class="r-tag" id="m-tagline"></p>
+
+    <div class="r-ring" id="m-ring"></div>
+    <div class="r-prog"><i id="m-fill" style="width:0%"></i></div>
+    <div class="r-row"><span id="m-label">Not started</span><b id="m-pct">0%</b></div>
+
+    <dl class="r-kv">
+      <dt>Host</dt><dd id="m-host">-</dd>
+      <dt>Role</dt><dd id="m-role">-</dd>
+      <dt>Tracked</dt><dd id="m-total">-</dd>
+      <dt>XP / points</dt><dd id="m-xp">0</dd>
+      <dt>Last seen</dt><dd id="m-last">not opened</dd>
+    </dl>
+
+    <div class="r-label brief-label">Mission brief</div>
+    <p class="r-brief" id="m-brief"></p>
+    <div class="r-next" id="m-next"></div>
+
+    <div class="r-label">Controls</div>
+    <div class="r-actions">
+      <button class="btn btn-sm btn-gold" id="m-practice">Practice</button>
+      <button class="btn btn-sm" id="m-reload">Reload machine</button>
+      <button class="btn btn-sm btn-ghost" id="m-view">Open lab view</button>
+      <button class="btn btn-sm btn-ghost" id="m-reset">Reset progress</button>
+    </div>
+
+    <div class="r-label others-label">Other machines</div>
+    <div class="r-others" id="m-others"></div>
+
+    <div class="r-note">Progress is read from this machine's own local save. Nothing is uploaded.</div>
+  </aside>
+
+  <section class="m-stage">
+    <div class="m-stagebar">
+      <span class="dot"></span>
+      <span class="r-host" id="m-stage-host">range.local</span>
+      <span class="spacer"></span>
+      <span class="dim">synthetic machine</span>
+      <span class="tag grey" id="m-scope">local only</span>
+    </div>
+    <iframe id="m-frame" title="Training machine" loading="eager" allow="clipboard-write"></iframe>
+  </section>
+</main>
+
+<footer class="m-foot">
+  <span>GRIZZLY RANGE // TRAINING NETWORK</span>
+  <span class="sep">//</span>
+  <span>NO REAL SYSTEMS</span>
+  <span class="spacer"></span>
+  <span id="m-foot-code">M-00</span>
+  <span class="sep">//</span>
+  <a href="../sites.html">site index</a>
+</footer>
+
+<div id="m-overlay"></div>
+
+<script src="machines.js"></script>
+<script src="practice.js"></script>
+<script src="machine.js"></script>
+</body>
+</html>

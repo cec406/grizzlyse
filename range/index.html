@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GRIZZLY RANGE // Cyber Training Lab</title>
+<meta name="description" content="Grizzly System Engineering's browser-based cyber training range: five machines, one operator desktop." />
+<meta name="theme-color" content="#0a0e13" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0e13'/%3E%3Ctext x='3' y='24' font-family='monospace' font-size='21' font-weight='bold' fill='%23fbbf24'%3E%3E_%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="range.css" />
+</head>
+<body>
+
+<div id="boot" class="boot">
+  <div class="boot-inner">
+    <div class="boot-brand">
+      <div class="boot-mark"><span></span><span></span><span></span><span></span></div>
+      <div>
+        <strong>GRIZZLY SYSTEMS ENGINEERING</strong>
+        <small>RANGE CONTROL // TRAINING NETWORK</small>
+      </div>
+    </div>
+    <pre id="boot-log" class="boot-log"></pre>
+    <div class="boot-bar"><i id="boot-bar"></i></div>
+    <div class="boot-foot">SYNTHETIC TRAINING ENVIRONMENT // NO REAL SYSTEMS</div>
+  </div>
+</div>
+
+<div id="lock" class="lock" hidden>
+  <div class="lock-class">GRIZZLY RANGE // TRAINING NETWORK // LOCAL OPERATOR</div>
+  <div class="lock-clock"><strong id="lock-time">--:--</strong><span id="lock-date">---</span></div>
+  <div class="lock-user">
+    <div class="lock-avatar">OP</div>
+    <strong>operator</strong>
+    <small>RANGE-CONTROL\local</small>
+    <button class="btn btn-gold" id="enter-range">Enter the range</button>
+    <span class="lock-hint">Press Enter to sign in</span>
+  </div>
+  <div class="lock-foot">FIVE MACHINES ONLINE // PROGRESS STAYS IN THIS BROWSER</div>
+</div>
+
+<div id="desktop" class="desktop">
+  <div class="classbar top">GRIZZLY RANGE <span class="sep">//</span> SYNTHETIC TRAINING NETWORK <span class="sep">//</span> UNCLASSIFIED <span class="sep">//</span> NO REAL SYSTEMS</div>
+
+  <div class="wall" aria-hidden="true">
+    <div class="wall-grid"></div>
+    <div class="wall-glow"></div>
+    <div class="wall-mark">RANGE</div>
+    <div class="wall-sub">GRIZZLY SYSTEMS ENGINEERING <span>//</span> CYBER TRAINING LAB</div>
+  </div>
+
+  <div id="icons" class="icons"></div>
+  <div id="windows" class="windows"></div>
+
+  <nav class="taskbar" aria-label="Taskbar">
+    <button class="start" id="start-btn" aria-label="Open Start">
+      <span class="winlogo"><i></i><i></i><i></i><i></i></span>
+      <span class="start-label">Start</span>
+    </button>
+    <div class="tb-div"></div>
+    <div id="pins" class="pins"></div>
+    <div id="tasks" class="tasks"></div>
+    <div class="tray">
+      <button id="ready-chip" class="ready-chip" title="Range readiness">
+        <span class="rc-label">READY</span>
+        <span class="rc-bar"><i id="ready-fill"></i></span>
+        <b id="ready-val">0%</b>
+      </button>
+      <button id="net-btn" class="tray-btn" title="Range network is local">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 18h18M5 18V9m4 9V5m4 13v-7m4 7v-9"/></svg>
+      </button>
+      <div class="clock"><span id="clock-time">--:--</span><span id="clock-date">---</span></div>
+      <button id="show-desktop" class="show-desktop" title="Show desktop"></button>
+    </div>
+  </nav>
+
+  <div class="classbar bottom">OPERATOR: local <span class="sep">//</span> RANGE: grizzlyse.com/range <span class="sep">//</span> ALL DATA SYNTHETIC <span class="sep">//</span> PROGRESS LOCAL ONLY</div>
+</div>
+
+<div id="start-menu" class="start-menu" hidden>
+  <div class="start-search">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="start-filter" placeholder="Search apps and machines" autocomplete="off" />
+    <span class="kbd">Esc</span>
+  </div>
+  <div class="start-label-row">Range apps</div>
+  <div id="start-grid" class="start-grid"></div>
+  <div class="start-label-row">Machines</div>
+  <div id="start-machines" class="start-machines"></div>
+  <div class="start-foot">
+    <div class="start-user"><span class="avatar">OP</span><div><strong>operator</strong><small>RANGE-CONTROL\local</small></div></div>
+    <div class="start-actions">
+      <a class="btn btn-ghost btn-sm" href="../sites.html">Site index</a>
+      <button class="btn btn-ghost btn-sm" id="signout">Sign out</button>
+    </div>
+  </div>
+</div>
+
+<div id="overlay-root"></div>
+<div id="toast-root" class="toast-root" role="status" aria-live="polite"></div>
+
+<script src="machines.js"></script>
+<script src="practice.js"></script>
+<script src="range.js"></script>
+</body>
+</html>
