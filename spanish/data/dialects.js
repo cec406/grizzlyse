@@ -39,7 +39,7 @@ export const DIALECTS = [
       'Puerto Ricans call themselves Boricua, from the Taíno name for the island, Borikén.',
       'The coquí is a tiny tree frog whose two-note song is the island sound.',
       'Bomba and plena are the island music and dance traditions, alongside salsa and reggaetón.',
-      'Food to try: mofongo, arroz con gandules, tostones, and a piña colada.'
+      'Food to try: mofongo, arroz con gandules, tostones, and a piña colada — ask for the sin alcohol version for younger travellers.'
     ]
   },
   {
@@ -57,7 +57,7 @@ export const DIALECTS = [
     slang: [
       { es: '¿Qué onda?', en: 'What is up?', note: 'The classic casual greeting.' },
       { es: 'chido', en: 'cool', note: 'Also padre. Very common.' },
-      { es: 'güey', en: 'dude', note: 'Between friends only; from buey (ox).' },
+      { es: 'compa', en: 'buddy', note: 'Short for compadre — friendly and informal.' },
       { es: 'órale', en: 'okay / wow / come on', note: 'All-purpose reaction.' },
       { es: 'no manches', en: 'no way / you are kidding', note: 'Polite version.' },
       { es: 'la neta', en: 'the truth / for real', note: 'La neta, sí. = For real, yes.' },
@@ -131,7 +131,7 @@ export const DIALECTS = [
       { es: '¿Qué lo qué?', en: 'What is up?', note: 'Dominican, said loudly.' },
       { es: 'diache', en: 'darn / wow', note: 'Dominican, softened from diablo.' },
       { es: 'tíguere', en: 'clever guy / streetwise man', note: 'Dominican.' },
-      { es: 'jeva', en: 'girl / girlfriend', note: 'Caribbean slang.' },
+      { es: 'pana', en: 'buddy', note: 'Very common in Venezuela and the Caribbean.' },
       { es: 'guagua', en: 'bus', note: 'Also Puerto Rico.' },
       { es: 'chévere', en: 'cool', note: 'Pan-Caribbean.' },
       { es: 'en nota', en: 'in a good mood', note: 'Dominican.' }
@@ -145,7 +145,7 @@ export const DIALECTS = [
     culture: [
       'Music shapes the language: son and salsa from Cuba, merengue and bachata from the Dominican Republic.',
       'Baseball is the shared passion across the Caribbean.',
-      'Many Taíno words survive: huracán, canoa, maíz, tabaco.'
+      'Many Taíno words survive: huracán, canoa, maíz, iguana.'
     ]
   },
   {
@@ -169,7 +169,7 @@ export const DIALECTS = [
       { es: 'plata', en: 'money', note: 'Common across the region.' },
       { es: 'fiaca', en: 'laziness', note: 'Tengo fiaca. = I feel lazy.' },
       { es: 'mate', en: 'the herbal drink', note: 'And the ritual around it.' },
-      { es: 'quilombo', en: 'mess / chaos', note: 'Informal; can be rude in some settings.' }
+      { es: 'lío', en: 'a mess / trouble', note: 'Estoy en un lío. = I am in a mess.' }
     ],
     phrases: [
       { es: '¿Todo bien?', en: 'Everything good?' },
@@ -203,7 +203,8 @@ export const DIALECTS = [
       { es: '¿Quiubo?', en: 'What is up?', note: 'Short for ¿qué hubo?.' },
       { es: 'a la orden', en: 'you are welcome / at your service', note: 'Polite and common.' },
       { es: 'rumba', en: 'party / night out', note: 'Vamos de rumba. = Let us go out.' },
-      { es: 'guayabo', en: 'hangover', note: 'Tengo guayabo. = I have a hangover.' },
+      { es: 'guayaba', en: 'guava', note: 'A sweet tropical fruit, common in Puerto Rico.' },
+      { es: 'guayabo', en: 'hangover', note: 'Colloquial, informal — Tengo guayabo. = I have a hangover. Marked: adult-life vocabulary, not for classroom use.' },
       { es: 'plata', en: 'money', note: 'Shared across the region.' }
     ],
     phrases: [

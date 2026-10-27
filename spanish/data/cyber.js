@@ -141,14 +141,14 @@ export const CYBER_MODULES = [
       { es: 'fraude', translit: 'FROW-deh', en: 'fraud', pos: 'noun', gender: 'm' },
       { es: 'advertir', translit: 'ahd-ber-TEER', en: 'to warn', pos: 'verb' },
       { es: 'informar', translit: 'een-for-MAR', en: 'to report, to inform', pos: 'verb' },
-      { es: 'violación', translit: 'byoh-lah-SYOHN', en: 'violation, breach', pos: 'noun', gender: 'f' },
+      { es: 'brecha de seguridad', translit: 'BREH-chah deh seh-goo-ree-DAHD', en: 'security breach', pos: 'noun', gender: 'f' },
       { es: 'reglas', translit: 'REH-glahs', en: 'rules', pos: 'noun', gender: 'p' },
       { es: 'responsabilidad', translit: 'rres-pon-sah-bee-lee-DAHD', en: 'responsibility', pos: 'noun', gender: 'f' }
     ],
     phrases: [
       { es: 'No comparta su contraseña con nadie.', translit: 'noh kom-PAR-tah soo kon-trah-SEH-nyah kon NAH-dyeh', en: 'Do not share your password with anyone.' },
       { es: 'Este correo es fraudulento.', translit: 'ES-teh koh-RREH-oh es frow-doo-LEN-toh', en: 'This email is fraudulent.' },
-      { es: 'Hay que informar sobre la violación.', translit: 'ay keh een-for-MAR SOH-breh lah byoh-lah-SYOHN', en: 'We need to report the breach.' },
+      { es: 'Hay que informar sobre la brecha de seguridad.', translit: 'ay keh een-for-MAR SOH-breh lah BREH-chah deh seh-goo-ree-DAHD', en: 'We need to report the security breach.' },
       { es: 'Guarde los datos de forma segura.', translit: 'GWAR-deh lohs DAH-tohs deh FOR-mah seh-GOO-rah', en: 'Keep the data safe.' },
       { es: 'Haga una copia de seguridad.', translit: 'AH-gah OO-nah KOH-pyoh deh seh-goo-ree-DAHD', en: 'Make a backup.' },
       { es: 'Verifique la dirección del remitente.', translit: 'beh-ree-FEE-keh lah dee-rek-SYOHN del rreh-mee-TEN-teh', en: 'Check the sender’s address.' }

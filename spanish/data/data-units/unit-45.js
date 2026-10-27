@@ -19,7 +19,7 @@ export const unit = {
         ['Aquí se respeta la tradición.', 'Here tradition is respected.']
       ],
       examples: [
-        { es: 'En Puerto Rico se habla español y también inglés.', trans: 'en P WEL-toh REE-koh seh AH-blah es-pah-NYOL ee tam-BYEN een-GLES', en: 'In Puerto Rico Spanish is spoken and also English.' },
+        { es: 'En Puerto Rico se habla español y también inglés.', trans: 'en PWEL-toh REE-koh seh AH-blah es-pah-NYOL ee tam-BYEN een-GLES', en: 'In Puerto Rico Spanish is spoken and also English.' },
         { es: 'Se dice que la música cuenta nuestra historia.', trans: 'seh DEE-seh keh lah MOO-see-kah KWEN-tah NWES-trah ees-TOH-ryah', en: 'They say that music tells our story.' }
       ]
     },

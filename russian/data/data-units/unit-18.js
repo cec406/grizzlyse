@@ -14,7 +14,7 @@ export const unit = {
         ['Russian', 'English'],
         ['У меня́ боли́т голова́.', 'My head hurts.'],
         ['У меня́ боли́т живо́т.', 'My stomach hurts.'],
-        ['У него́ боли́т но́га.', 'His leg hurts.'],
+        ['У него́ боли́т нога́.', 'His leg hurts.'],
         ['У неё боля́т но́ги.', 'Her legs hurt.']
       ],
       examples: [
@@ -118,7 +118,7 @@ export const unit = {
       { type: 'typing', q: 'Type “to feel” in Russian', answer: 'чувствовать', accepts: ['чу́вствовать'], ru: 'чу́вствовать' },
       { type: 'mc-ru', q: '“healthy” in Russian', options: ['здоро́вый', 'больно́й', 'бо́льно', 'здоро́вье'], answer: 'здоро́вый', ru: 'здоро́вый' },
       { type: 'mc-en', q: 'Что зна́чит «себя́»?', options: ['oneself', 'myself', 'each other', 'nobody'], answer: 'oneself', ru: 'себя́' },
-      { type: 'mc-ru', q: 'Complete: У него́ ___ но́га.', options: ['боли́т', 'боля́т', 'боль', 'боле́ть'], answer: 'боли́т', ru: 'боли́т но́га' },
+      { type: 'mc-ru', q: 'Complete: У него́ ___ нога́.', options: ['боли́т', 'боля́т', 'боль', 'боле́ть'], answer: 'боли́т', ru: 'боли́т нога́' },
       { type: 'typing', q: 'Type “head” in Russian', answer: 'голова', accepts: ['голова́'], ru: 'голова́' },
       { type: 'mc-en', q: 'Что зна́чит «апте́ка»?', options: ['pharmacy', 'hospital', 'medicine', 'doctor'], answer: 'pharmacy', ru: 'апте́ка' },
       { type: 'mc-ru', q: '“throat” in Russian', options: ['го́рло', 'голова́', 'живо́т', 'рука́'], answer: 'го́рло', ru: 'го́рло' },

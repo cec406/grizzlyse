@@ -56,7 +56,7 @@ function defaultState() {
     skillBest: {}, // gameId -> best score
     badges: [],
     mastery: {},
-    settings: { name: '', audio: true, speed: 0, showTranslit: true, levelFilter: 'all' }
+    settings: { name: '', audio: true, speed: 0, showTranslit: true, levelFilter: 'all', sfx: true, autoSpeak: true }
   };
 }
 
@@ -89,7 +89,9 @@ export function saveState() {
 function mutate(fn) {
   const s = loadState();
   fn(s);
-  return saveState();
+  const out = saveState();
+  notifyChanged();
+  return out;
 }
 
 export function addXp(n) {
@@ -234,7 +236,9 @@ export function importStateJSON(text) {
   const parsed = safeParse(text);
   if (!parsed || typeof parsed !== 'object') throw new Error('Not valid JSON');
   cache = { ...defaultState(), ...parsed };
+  cache.settings = { ...defaultState().settings, ...(parsed.settings || {}) };
   saveState();
+  notifyChanged();
   return cache;
 }
 

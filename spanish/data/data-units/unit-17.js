@@ -95,7 +95,7 @@ export const unit = {
     { id: 'u17-playa', es: 'playa', translit: 'PLAH-yah', en: 'beach', pos: 'noun', gender: 'f' },
     { id: 'u17-television', es: 'televisión', translit: 'teh-leh-vee-SYON', en: 'television', pos: 'noun', gender: 'f' },
     { id: 'u17-escuela', es: 'escuela', translit: 'es-KWEH-lah', en: 'school', pos: 'noun', gender: 'f' },
-    { id: 'u17-diez', es: 'diez', translit: 'dyes', en: 'ten', pos: 'numeral' }
+    { id: 'u17-diez', es: 'diez', translit: 'dyehs', en: 'ten', pos: 'numeral' }
   ],
   phrases: [
     { id: 'p-u17-1', es: 'Cuando era niño...', trans: 'KWAN-do EH-rah NEE-nyo', en: 'When I was a child...' },

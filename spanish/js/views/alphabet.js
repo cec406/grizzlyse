@@ -2,7 +2,7 @@
 import { esc } from '../ui.js';
 import { LETTERS, PRONUNCIATION_GUIDES, LETTER_GROUPS, GROUP_NAMES } from '../../data/index.js';
 import { letterBy } from '../../data/letters.js';
-import { markLetters, addXp, recordActivity } from '../state.js';
+import { markLetters, lettersLearned, addXp, recordActivity } from '../state.js';
 import { soundExercise, flashExercise, readExercise, typeExercise, drillExercise } from './alphabet-exercises.js';
 
 const TABS = ['chart', 'groups', 'exercises', 'guides'];
@@ -41,7 +41,8 @@ export function attach(root) {
 
 function bindTabContent(root, tab) {
   if (!root.addEventListener) return;
-  root.addEventListener('click', (e) => {
+  if (root.__tabClick) root.removeEventListener('click', root.__tabClick);
+  root.__tabClick = (e) => {
     const b = e.target.closest ? e.target.closest('[data-action]') : null;
     const action = b && b.getAttribute('data-action');
     if (!action) return;
@@ -54,17 +55,21 @@ function bindTabContent(root, tab) {
       const det = root.querySelector('[data-slot="detail"]');
       if (det) det.innerHTML = '';
     } else if (action === 'hear-all') {
-      for (const l of LETTERS) if (window.speak) window.speak(l.example);
+      // speak() cancels the previous utterance, so queue them one by one
+      LETTERS.forEach((l, i) => setTimeout(() => { if (window.speak) window.speak(l.example); }, i * 1100));
     } else if (action === 'mark-all') {
-      markLetters(LETTERS.map((l) => l.upper + l.lower));
-      addXp(15); recordActivity();
+      const all = LETTERS.map((l) => l.upper + l.lower);
+      const before = lettersLearned();
+      markLetters(all);
       if (b) b.textContent = 'Marked ✓';
+      if (!all.every((k) => before.includes(k))) { addXp(15); recordActivity(); }
     } else if (action.startsWith('ex-')) {
       const which = action.slice(3);
       const slot = root.querySelector('[data-slot="ex"]');
       if (slot && EXERCISES[which]) EXERCISES[which](slot);
     }
-  });
+  };
+  root.addEventListener('click', root.__tabClick);
 }
 
 const TAB_RENDER = {

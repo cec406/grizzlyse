@@ -19,7 +19,7 @@ export const VERB_DRILLS = [
   { context: 'Yo ___ a mi madre. (querer, present)', es: 'Yo quiero a mi madre.', correct: 'quiero', options: ['quiero', 'quieres', 'quiere', 'queremos'], explain: 'querer e→ie: yo quiero.' },
   { context: 'Tú ___ fútbol? (jugar, present)', es: '¿Tú juegas fútbol?', correct: 'juegas', options: ['juegas', 'juego', 'juega', 'juegan'], explain: 'jugar is stem-changing (u→ue): tú juegas.' },
   { context: 'Yo ___ la televisión. (ver, present)', es: 'Yo veo la televisión.', correct: 'veo', options: ['veo', 'ves', 've', 'vemos'], explain: 'ver: yo veo.' },
-  { context: '¿Vosotros ___ español? (hablar, present)', es: '¿Vosotros habláis español?', correct: 'habláis', options: ['habláis', 'hablamos', 'hablan', 'habla'], explain: '-ar verbs (Spain): vosotros habláis.' },
+  { context: '¿Ustedes ___ español? (hablar, present)', es: '¿Ustedes hablan español?', correct: 'hablan', options: ['hablan', 'hablamos', 'habláis', 'habla'], explain: 'Latin-American default: ustedes hablan.' },
   { context: 'Usted ___ español? (hablar, polite present)', es: '¿Usted habla español?', correct: 'habla', options: ['habla', 'hablas', 'hablo', 'hablan'], explain: 'Usted takes the él form: usted habla.' },
   { context: 'Ellos ___ muchos libros. (leer, present)', es: 'Ellos leen muchos libros.', correct: 'leen', options: ['leen', 'lee', 'leemos', 'leo'], explain: '-er verbs: ellos leen.' },
   { context: 'Yo ___ una carta. (escribir, present)', es: 'Yo escribo una carta.', correct: 'escribo', options: ['escribo', 'escribes', 'escribe', 'escriben'], explain: '-ir verbs: yo escribo.' },

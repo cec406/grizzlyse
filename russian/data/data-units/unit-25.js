@@ -101,7 +101,7 @@ export const unit = {
   quiz: [
     { type: 'mc-en', q: 'Что зна́чит «лу́чше»?', options: ['better', 'worse', 'more', 'less'], answer: 'better', ru: 'лу́чше' },
     { type: 'mc-en', q: 'Что зна́чит «ху́же»?', options: ['worse', 'better', 'more', 'less'], answer: 'worse', ru: 'ху́же' },
-    { type: 'mc-ru', q: 'Comparative of «бы́стрый»', options: ['быстре́е', 'бы́стрее', 'бы́стро', 'бы́стрый'], answer: 'быстре́е', ru: 'быстре́е' },
+    { type: 'mc-ru', q: 'Comparative of «бы́стрый»', options: ['быстре́е', 'ме́дленнее', 'бы́стро', 'бы́стрый'], answer: 'быстре́е', ru: 'быстре́е' },
     { type: 'mc-ru', q: 'Comparative of «хоро́ший»', options: ['лу́чше', 'хороше́е', 'бо́льше', 'ху́же'], answer: 'лу́чше', ru: 'лу́чше' },
     { type: 'typing', q: 'Type “than” in Russian', answer: 'чем', accepts: [], ru: 'чем' },
     { type: 'typing', q: 'Type “the most” in Russian', answer: 'самый', accepts: ['са́мый'], ru: 'са́мый' },

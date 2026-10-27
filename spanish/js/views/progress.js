@@ -3,6 +3,9 @@ import { esc } from '../ui.js';
 import { loadState, addBadge, badges, levelProgress, exportStateJSON, importStateJSON, resetState } from '../state.js';
 import { weakest, queueStats } from '../srs-store.js';
 import { allVocab, UNITS } from '../../data/index.js';
+import { allPackWords } from '../../data/word-packs.js';
+import { allCyberTerms } from '../../data/cyber.js';
+import { GAMES } from '../games/registry.js';
 import { href } from '../router.js';
 import { levelTitle } from '../fun.js';
 
@@ -24,7 +27,7 @@ const ACHIEVEMENTS = [
   { id: 'streak-7', title: 'Week warrior', desc: '7-day streak', test: (s) => s.streak >= 7 },
   { id: 'streak-30', title: 'Monthly machine', desc: '30-day streak', test: (s) => s.streak >= 30 },
   { id: 'game-10', title: 'Player', desc: 'Play 10 games', test: (s) => gameCount(s) >= 10 },
-  { id: 'game-30', title: 'Gamer', desc: 'Play 30 games', test: (s) => gameCount(s) >= 30 },
+  { id: 'game-all', title: 'Game master', desc: 'Try all 12 practice games', test: (s) => gameCount(s) >= 12 },
   { id: 'review-50', title: 'Reviewer', desc: 'Review 50 cards', test: (s) => reviewCount(s) >= 50 },
   { id: 'perfect-run', title: 'Flawless', desc: 'Finish any game with 100%', test: (s) => Object.keys(s.skillBest).filter((k) => s.skillBest[k] === 100).length >= 1 },
   { id: 'placement', title: 'Placed', desc: 'Take the placement test', test: (s) => s.placementDone },
@@ -36,7 +39,10 @@ const ACHIEVEMENTS = [
   { id: 'examen', title: 'Examen listo', desc: 'Pass the Unit 47 proficiency exam', test: (s) => (s.lessonsCompleted || []).includes('u47') }
 ];
 
-function gameCount(s) { return Object.keys(s.skillBest || {}).reduce((n, k) => n + Number((s.skillBest[k] || 0) > 0), 0); }
+const GAME_IDS = new Set(GAMES.map((g) => g.id));
+function gameCount(s) {
+  return Object.keys(s.skillBest || {}).filter((k) => GAME_IDS.has(k) && (s.skillBest[k] || 0) > 0).length;
+}
 function reviewCount(s) {
   return Object.values(s.mastery || {}).reduce((n, c) => n + (c.n || 0), 0);
 }
@@ -48,6 +54,8 @@ export function render() {
   const earned = badges();
   const weak = weakest();
   const vocab = allVocab();
+  for (const w of allPackWords()) if (!vocab.has(w.id)) vocab.set(w.id, { word: w });
+  for (const t of allCyberTerms()) if (t.id && !vocab.has(t.id)) vocab.set(t.id, { word: t });
   const qs = queueStats();
   const skills = Object.entries(s.accuracy).map(([k, v]) => ({ k, ok: v.ok, tot: v.tot, pct: Math.round((v.ok / Math.max(1, v.tot)) * 100) })).sort((a, b) => a.pct - b.pct);
 
@@ -122,22 +130,6 @@ export function attach(root) {
       a.click();
       URL.revokeObjectURL(url);
       out('<div class="banner ok-banner">Progress exported.</div>');
-    } else if (action === 'import') {
-      const file = e.target.files && e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          try {
-            importStateJSON(String(reader.result));
-            out('<div class="banner ok-banner">Progress imported. <button type="button" class="ghost" data-action="reload">Reload page</button></div>');
-          } catch (err) {
-            out(`<div class="banner warn">Import failed: ${esc(String(err.message))}</div>`);
-          }
-        };
-        reader.readAsText(file);
-        const rb = root.querySelector('[data-action="reload"]');
-        if (rb) rb.addEventListener('click', () => location.reload());
-      }
     } else if (action === 'reset') {
       if (window.confirm('Erase ALL progress? This cannot be undone.')) {
         resetState();
@@ -146,4 +138,26 @@ export function attach(root) {
       }
     }
   });
+  // file input: handle "change" (a click fires before any file is chosen)
+  const fileInput = root.querySelector('input[data-action="import"]');
+  if (fileInput) {
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files && fileInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          importStateJSON(String(reader.result));
+          const msg = root.querySelector('[data-slot="msg"]');
+          if (msg) msg.innerHTML = '<div class="banner ok-banner">Progress imported. <button type="button" class="ghost" data-action="reload">Reload page</button></div>';
+          const rb = root.querySelector('[data-action="reload"]');
+          if (rb) rb.addEventListener('click', () => location.reload());
+        } catch (err) {
+          const msg = root.querySelector('[data-slot="msg"]');
+          if (msg) msg.innerHTML = '<div class="banner warn">Import failed: ' + esc(String(err.message)) + '</div>';
+        }
+      };
+      reader.readAsText(file);
+    });
+  }
 }

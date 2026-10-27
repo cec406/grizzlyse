@@ -139,7 +139,7 @@ export const WORD_PACKS = [
       { id: 'wp-biblioteca', es: 'biblioteca', translit: 'bee-blee-oh-TEH-kah', en: 'library', pos: 'noun', gender: 'f' },
       { id: 'wp-mapa', es: 'mapa', translit: 'MAH-pah', en: 'map', pos: 'noun', gender: 'm' },
       { id: 'wp-globo', es: 'globo', translit: 'GLOH-boh', en: 'globe, balloon', pos: 'noun', gender: 'm' },
-      { id: 'wp-ordenador', es: 'ordenador', translit: 'or-deh-nah-DOR', en: 'computer', pos: 'noun', gender: 'm' },
+      { id: 'wp-ordenador', es: 'computadora', translit: 'kom-poo-tah-DOH-rah', en: 'computer', pos: 'noun', gender: 'f' },
       { id: 'wp-pantalla', es: 'pantalla', translit: 'pahn-TAH-yah', en: 'screen', pos: 'noun', gender: 'f' },
       { id: 'wp-saber', es: 'saber', translit: 'sah-BER', en: 'to know', pos: 'verb' },
       { id: 'wp-estudiar', es: 'estudiar', translit: 'es-too-DYAR', en: 'to study', pos: 'verb' }
@@ -309,9 +309,9 @@ export const WORD_PACKS = [
     title: 'Technology & internet', titleEs: 'Tecnología e internet',
     desc: 'Computers, networks, software and the digital world — the vocabulary of the online age.',
     words: [
-      { id: 'wp-ordenador2', es: 'ordenador', translit: 'or-deh-nah-DOR', en: 'computer', pos: 'noun', gender: 'm' },
+      { id: 'wp-ordenador2', es: 'computadora', translit: 'kom-poo-tah-DOH-rah', en: 'computer', pos: 'noun', gender: 'f' },
       { id: 'wp-portatil', es: 'portátil', translit: 'por-TAH-teel', en: 'laptop', pos: 'noun', gender: 'm' },
-      { id: 'wp-movil', es: 'móvil', translit: 'MOH-beel', en: 'mobile phone', pos: 'noun', gender: 'm' },
+      { id: 'wp-movil', es: 'celular', translit: 'seh-loo-LAR', en: 'mobile phone', pos: 'noun', gender: 'm' },
       { id: 'wp-pantalla2', es: 'pantalla', translit: 'pahn-TAH-yah', en: 'screen', pos: 'noun', gender: 'f' },
       { id: 'wp-teclado', es: 'teclado', translit: 'teh-KLAH-doh', en: 'keyboard', pos: 'noun', gender: 'm' },
       { id: 'wp-raton2', es: 'ratón', translit: 'rah-TOHN', en: 'mouse (device)', pos: 'noun', gender: 'm' },

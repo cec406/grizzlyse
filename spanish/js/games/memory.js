@@ -1,4 +1,6 @@
 // Memory match: pair Spanish words with their English meanings.
+// Spanish words stay face-up (you practise reading them); English meanings
+// start hidden and only reveal when you pick them or the pair matches.
 import { pickN, shuffle } from './logic.js';
 import { esc } from '../ui.js';
 
@@ -23,67 +25,70 @@ export function buildQuestion(pool, pairs = 6, rng = Math.random) {
     items,
     cards: deck,
     correctCount: items.length,
+    correctValue: items.map((it) => it.es + ' = ' + it.en).join(' · '),
     check: (u) => Array.isArray(u) && u.length === items.length,
     customRender(body, respond) {
       let first = null;
       let matched = new Array(items.length).fill(false);
       let locked = false;
+      let done = false;
+      let revealed = false;
       const cells = new Map();
       body.innerHTML = `<div class="mem-grid"></div>
-        <div class="mem-status"></div>
+        <div class="mem-status" role="status" aria-live="polite"></div>
         <button type="button" class="ghost" data-action="giveup">I give up</button>`;
       const grid = body.querySelector('.mem-grid');
       const status = body.querySelector('.mem-status');
+      const pairsFound = () => matched.filter(Boolean).length;
       deck.forEach((c) => {
         const cell = document.createElement('button');
         cell.type = 'button';
         cell.className = 'mem-cell';
         cell.dataset.key = c.key;
         cell.dataset.word = c.word;
-        cell.textContent = c.side === 'es' ? c.text : '';
         cell.dataset.side = c.side;
         grid.appendChild(cell);
         cells.set(c.key, cell);
       });
-      const paint = () => {
-        let found = 0;
+      const paint = (peek) => {
         deck.forEach((c) => {
           const cell = cells.get(c.key);
-          if (matched[c.word]) {
-            cell.classList.add('matched');
-            cell.textContent = c.text;
-            found++;
-          } else if (cell === first) {
-            cell.classList.add('picked');
-          } else {
-            cell.classList.remove('picked');
-            cell.textContent = '';
-          }
+          const isMatched = matched[c.word];
+          const visible = isMatched || c.side === 'es' || cell === first || peek === true;
+          cell.textContent = visible ? c.text : '?';
+          cell.classList.toggle('matched', isMatched);
+          cell.classList.toggle('picked', cell === first && !isMatched);
+          cell.disabled = isMatched || done;
+          cell.setAttribute('aria-label',
+            c.side === 'es' ? 'Spanish word: ' + c.text
+              : (visible ? 'English meaning: ' + c.text : 'Hidden English meaning'));
         });
-        status.textContent = `${found}/${items.length} pairs found`;
-        if (found === items.length) respond(items.map((it) => it.id || it.es));
+        status.textContent = `${pairsFound()}/${items.length} pairs found`;
+        if (!done && pairsFound() === items.length) {
+          done = true;
+          status.textContent = 'All pairs found!';
+          respond(items.map((it) => it.id || it.es));
+        }
       };
       body.addEventListener('click', (e) => {
         const give = e.target.closest ? e.target.closest('[data-action="giveup"]') : null;
-        if (give) { respond([]); return; }
+        if (give) { if (!done) { done = true; respond([]); } return; }
         const cell = e.target.closest ? e.target.closest('.mem-cell') : null;
-        if (!cell || locked) return;
+        if (!cell || locked || done) return;
         const word = Number(cell.dataset.word);
         if (matched[word]) return;
         if (!first) { first = cell; paint(); return; }
         if (first === cell) { first = null; paint(); return; }
         locked = true;
-        if (first.dataset.word === cell.dataset.word) {
+        if (Number(first.dataset.word) === word && first.dataset.side !== cell.dataset.side) {
           matched[word] = true;
           first = null;
           locked = false;
           paint();
         } else {
-          const f = first;
-          first = null;
-          const flasher = `body .mem-cell`; void flasher;
-          setTimeout(() => { locked = false; paint(); }, 450);
-          void f;
+          status.textContent = 'No match — look at the English meaning and try again.';
+          paint(true);
+          setTimeout(() => { first = null; locked = false; paint(); }, 750);
         }
       });
       paint();

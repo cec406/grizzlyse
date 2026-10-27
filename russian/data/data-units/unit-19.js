@@ -4,7 +4,7 @@ export const unit = {
   level: 'A2',
   number: 19,
   title: 'Clothes and colours',
-  titleRu: 'Оде́жда и цве́та',
+  titleRu: 'Оде́жда и цвета́',
   story: 'Shopping for clothes means adjectives, colours and the verb to wear. This unit shows you how adjectives agree with nouns, and gives you the phrases to ask a price and try something on.',
   grammar: [
     {
@@ -91,7 +91,7 @@ export const unit = {
       { who: 'Продаве́ц', ru: 'До́брый день! Вам помо́чь?', en: 'Good afternoon! Can I help you?' },
       { who: 'Том', ru: 'Да, ско́лько сто́ит э́та си́няя руба́шка?', en: 'Yes, how much is this blue shirt?' },
       { who: 'Продаве́ц', ru: 'Две ты́сячи рубле́й.', en: 'Two thousand rubles.' },
-      { who: 'Том', ru: 'О́чень дорого́. А есть дешёвые руба́шки?', en: 'Very expensive. Are there cheaper shirts?' },
+      { who: 'Том', ru: 'О́чень до́рого. А есть дешёвые руба́шки?', en: 'Very expensive. Are there cheaper shirts?' },
       { who: 'Продаве́ц', ru: 'Да, вот бе́лые и зелёные. Мо́жно приме́рить.', en: 'Yes, here are white and green ones. You may try them on.' }
     ],
     questions: [

@@ -100,7 +100,7 @@ export const unit = {
     title: 'En la entrevista de trabajo (At the job interview)',
     lines: [
       { who: 'Señora López', es: 'Buenos días. ¿Está listo para la entrevista?', en: 'Good morning. Are you ready for the interview?' },
-      { who: 'Luis', es: 'Buenos días, señora. Sí, estoy listo.', en: 'Good morning, ma am. Yes, I am ready.' },
+      { who: 'Luis', es: 'Buenos días, señora. Sí, estoy listo.', en: 'Good morning, madam. Yes, I am ready.' },
       { who: 'Señora López', es: '¿Dónde trabaja ahora?', en: 'Where do you work now?' },
       { who: 'Luis', es: 'Trabajo en un hotel. Soy mesero.', en: 'I work in a hotel. I am a waiter.' },
       { who: 'Señora López', es: '¿Puede trabajar los fines de semana?', en: 'Can you work on weekends?' },

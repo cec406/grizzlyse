@@ -12,7 +12,7 @@ export const GRAMMAR_TOPICS = [
       ['Plural', '-ы/-и/-а/-я', 'столы́, кни́ги, окна', 'tables, books, windows']
     ],
     examples: [
-      { ru: 'два сто́ла', en: 'two tables (2-4 → genitive singular)' },
+      { ru: 'два стола́', en: 'two tables (2-4 → genitive singular)' },
       { ru: 'пять столов', en: 'five tables (5+ → genitive plural)' }
     ]
   },
@@ -46,7 +46,7 @@ export const GRAMMAR_TOPICS = [
     ],
     examples: [
       { ru: 'Я читаю кни́гу.', en: 'I read / I am reading a book.' },
-      { ru: 'Она́ говори́т по-ру́сски.', en: 'She speaks Russian. (no её running)' }
+      { ru: 'Она́ говори́т по-ру́сски.', en: 'She speaks Russian.' }
     ]
   },
   {
@@ -228,7 +228,7 @@ export const GRAMMAR_TOPICS = [
   },
   {
     id: 'conjunctions', level: 'A2', title: 'Conjunctions',
-    intro: 'Link clauses exactly as in English, but note что (that), чтобы (so that), потomy что (because).',
+    intro: 'Link clauses exactly as in English, but note что (that), чтобы (so that), потому что (because).',
     table: [
       ['Russian', 'English', 'Example'],
       ['и', 'and', 'хлеб и масло'],
@@ -264,7 +264,7 @@ export const GRAMMAR_TOPICS = [
   },
   {
     id: 'numbers', level: 'A1', title: 'Numbers and counting',
-    intro: 'Numbers 1-4 take the nominative/genitive singular; 5-20 take the genitive plural. Learn the words, then the patterns.',
+    intro: '1 takes the nominative singular; 2-4 take the genitive singular; 5-20 take the genitive plural. Learn the words, then the patterns.',
     table: [
       ['Number', 'Russian', 'Number', 'Russian'],
       ['1', 'один', '6', 'шесть'],

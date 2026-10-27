@@ -12,7 +12,7 @@ export const unit = {
       explanation: 'Six people, six words. Unlike English, он/она́/оно́ also mean "it" depending on the gender of the noun. вы does double duty: polite "you" for one person and "you all" for many.',
       table: [
         ['Russian', 'English', 'Note'],
-        ['я', 'I', 'always lowercase, even alone'],
+        ['я', 'I', 'lowercase — except at the start of a sentence'],
         ['ты', 'you (one friend)', 'informal'],
         ['он', 'he / it (m)', 'masculine noun'],
         ['она́', 'she / it (f)', 'feminine noun'],
@@ -33,7 +33,7 @@ export const unit = {
         ['Ending', 'Gender', 'Example', 'Meaning'],
         ['consonant / -й', 'masculine', 'друг', 'friend (m)'],
         ['-а / -я', 'feminine', 'подру́га', 'friend (f)'],
-        ['-о / -е', 'neuter', 'и́мя', 'name']
+        ['-о / -е', 'neuter', 'мо́ре', 'sea']
       ],
       examples: [
         { ru: 'Э́то мой друг.', trans: 'eta moy drug', en: 'This is my friend. (m)' },

@@ -120,7 +120,7 @@ export const KEYBOARD_LESSONS = [
     id: 'frases', title: 'Sentences', icon: '💬',
     desc: 'Real sentences with accents and inverted punctuation. Use the space bar.',
     items: ['¿Cómo te llamas?', 'Me llamo Ana.', '¿De dónde eres?', 'Soy de Puerto Rico.',
-      '¡Mucho gusto!', '¿Dónde está la playa?', 'El niño está en la mañana.']
+      '¡Mucho gusto!', '¿Dónde está la playa?', 'El niño está en la cama.']
   },
   {
     id: 'pro', title: 'Tech & work', icon: '💻',

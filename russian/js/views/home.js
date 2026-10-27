@@ -3,6 +3,7 @@ import { esc } from '../ui.js';
 import { levelProgress, loadState, wordsLearned, lessonDone, placementInfo } from '../state.js';
 import { href } from '../router.js';
 import { UNITS } from '../../data/index.js';
+import { levelTitle } from '../fun.js';
 
 export function render() {
   const s = loadState();
@@ -10,8 +11,9 @@ export function render() {
   const placement = placementInfo();
   const done = s.lessonsCompleted.length;
   const total = UNITS.length;
-  const firstOpen = UNITS.find((u) => !lessonDone(u.id));
-  const next = firstOpen || UNITS[UNITS.length - 1];
+  const START = { A1: 'u01', A2: 'u11', B1: 'u23', B2: 'u35' };
+  const startIdx = Math.max(0, UNITS.findIndex((u) => u.id === (placement.level ? START[placement.level] : 'u01')));
+  const next = UNITS.slice(startIdx).find((u) => !lessonDone(u.id)) || UNITS.find((u) => !lessonDone(u.id)) || UNITS[UNITS.length - 1];
   const words = wordsLearned().length;
   const pct = total ? Math.round((done / total) * 100) : 0;
 
@@ -28,7 +30,7 @@ export function render() {
     <h1>Приве́т! Let's learn Russian.</h1>
     <p class="lead">A written-first, zero→B2 course with games, spaced repetition and reading.</p>
     <div class="stat-strip">
-      <div class="stat-card">${esc(lvl.level)}<span>Level</span></div>
+      <div class="stat-card">${esc(lvl.level)}<span>${esc(levelTitle(lvl.level))}</span></div>
       <div class="stat-card">${esc(s.xp)}<span>XP</span></div>
       <div class="stat-card">${esc(s.streak)}<span>day streak</span></div>
       <div class="stat-card">${esc(words)}<span>words learned</span></div>

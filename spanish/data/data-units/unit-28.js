@@ -114,7 +114,7 @@ export const unit = {
       { who: 'Luis', es: 'Sí, sigo soltero. Pero tengo una novia desde hace dos años.', en: 'Yes, I am still single. But I have had a girlfriend for two years.' },
       { who: 'Ana', es: 'Qué bueno. ¿Se llevan bien?', en: 'That is good. Do you get along well?' },
       { who: 'Luis', es: 'Nos llevamos muy bien. Discutimos poco y tenemos mucha confianza.', en: 'We get along very well. We rarely argue and we trust each other.' },
-      { who: 'Ana', es: 'Eso es lo más importante. ¡Salud!', en: 'That is the most important thing. Cheers!' }
+      { who: 'Ana', es: 'Eso es lo más importante. ¡Salud!', en: 'That is the most important thing. Cheers! (a toast — also said after a sneeze)' }
     ],
     questions: [
       { type: 'mc-en', q: '¿Quién se casa el año que viene?', options: ['The sister of Luis', 'Luis', 'Ana', 'Marta'], answer: 'The sister of Luis' },

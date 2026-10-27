@@ -34,7 +34,7 @@ export const unit = {
         ['возмо́жный', 'возмо́жность', 'possibility']
       ],
       examples: [
-        { ru: 'Ско́рость движе́ния бы́ла высо́кой.', trans: 'skorost dvizheniya byla vysokoy', en: 'The speed of movement was high.' }
+        { ru: 'Ско́рость движе́ния была́ высо́кой.', trans: 'skorost dvizheniya byla vysokoy', en: 'The speed of movement was high.' }
       ]
     },
     {
@@ -80,7 +80,7 @@ export const unit = {
     { ru: 'Э́то реше́ние бы́ло тру́дным.', translit: 'eta resheniye bylo trudnym', en: 'This decision was difficult.', words: [{ id: 'u39-reshenie', ru: 'реше́ние', en: 'decision' }] },
     { ru: 'Всё зави́сит от измене́ния пого́ды.', translit: 'vsyo zavisit ot izmeneniya pogody', en: 'Everything depends on the change in the weather.', words: [{ id: 'u39-izmenenie', ru: 'измене́ния', en: 'change' }] },
     { ru: 'У нас есть зна́ния и о́пыт.', translit: 'u nas yest znaniya i opyt', en: 'We have knowledge and experience.', words: [{ id: 'u39-znanie', ru: 'зна́ния', en: 'knowledge' }] },
-    { ru: 'Ско́рость движе́ния бы́ла высо́кой.', translit: 'skorost dvizheniya byla vysokoy', en: 'The speed of movement was high.', words: [{ id: 'u39-skorost', ru: 'Ско́рость', en: 'speed' }, { id: 'u39-dvizhenie', ru: 'движе́ния', en: 'movement' }] }
+    { ru: 'Ско́рость движе́ния была́ высо́кой.', translit: 'skorost dvizheniya byla vysokoy', en: 'The speed of movement was high.', words: [{ id: 'u39-skorost', ru: 'Ско́рость', en: 'speed' }, { id: 'u39-dvizhenie', ru: 'движе́ния', en: 'movement' }] }
   ],
   dialogue: {
     title: 'Об абстра́кциях (About abstractions)', 
@@ -121,7 +121,7 @@ export const unit = {
       { type: 'typing', q: 'Type “content” in Russian', answer: 'содержание', accepts: ['содержа́ние'], ru: 'содержа́ние' },
       { type: 'mc-ru', q: '“significance” in Russian', options: ['зна́чимость', 'ва́жность', 'ско́рость', 'возмо́жность'], answer: 'зна́чимость', ru: 'зна́чимость' },
       { type: 'mc-en', q: 'Что зна́чит «число́»?', options: ['number', 'speed', 'content', 'decision'], answer: 'number', ru: 'число́' },
-      { type: 'mc-ru', q: 'Complete: ___ движе́ния бы́ла высо́кой.', options: ['Ско́рость', 'Ва́жность', 'Сло́жность', 'Возмо́жность'], answer: 'Ско́рость', ru: 'Ско́рость' },
+      { type: 'mc-ru', q: 'Complete: ___ движе́ния была́ высо́кой.', options: ['Ско́рость', 'Ва́жность', 'Сло́жность', 'Возмо́жность'], answer: 'Ско́рость', ru: 'Ско́рость' },
       { type: 'typing', q: 'Type “knowledge” in Russian', answer: 'знание', accepts: ['зна́ние'], ru: 'зна́ние' },
       { type: 'mc-en', q: 'Что зна́чит «ва́жность»?', options: ['importance', 'significance', 'possibility', 'speed'], answer: 'importance', ru: 'ва́жность' },
       { type: 'mc-ru', q: '“concept” in Russian', options: ['поня́тие', 'определе́ние', 'содержа́ние', 'отноше́ние'], answer: 'поня́тие', ru: 'поня́тие' },

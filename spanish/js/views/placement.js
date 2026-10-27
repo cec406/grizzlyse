@@ -1,6 +1,6 @@
 // Placement test: 14 MC questions climb from A1 to B2. Sets the starting level.
 import { esc } from '../ui.js';
-import { setPlacement, addXp, recordActivity } from '../state.js';
+import { setPlacement, addXp, recordActivity, placementInfo } from '../state.js';
 import { href } from '../router.js';
 
 export const PLACEMENT_QUESTIONS = [
@@ -23,8 +23,8 @@ export const PLACEMENT_QUESTIONS = [
 const TARGET = {
   A1: { min: 0, note: 'Start at the alphabet and Unit 1 — solid fundamentals make everything easier.' },
   A2: { min: 4, note: 'You know the basics. Start at Unit 11 (A2) but don\'t skip alphabet practice.' },
-  B1: { min: 8, note: 'You can handle everyday life. Start at Unit 23 (B1).' },
-  B2: { min: 11, note: 'Strong! Start at Unit 35 (B2) and push into sophisticated topics.' }
+  B1: { min: 8, note: 'You can handle everyday life. Start at Unit 21 (B1).' },
+  B2: { min: 11, note: 'Strong! Start at Unit 31 (B2) and push into sophisticated topics.' }
 };
 
 export function resolveLevel(correct) {
@@ -48,6 +48,7 @@ export function attach(root) {
   if (!seat) return;
   let i = 0;
   let correct = 0;
+  const missed = [];
   const q = PLACEMENT_QUESTIONS;
   const renderQ = () => {
     const cur = q[i];
@@ -64,24 +65,29 @@ export function attach(root) {
     const level = resolveLevel(correct);
     const t = TARGET[level];
     setPlacement(level);
-    addXp(correct * 2);
+    if (!placementInfo().done) addXp(correct * 2);
     recordActivity();
-    const first = { A1: 'u01', A2: 'u11', B1: 'u23', B2: 'u35' }[level];
+    const first = { A1: 'u01', A2: 'u11', B1: 'u21', B2: 'u31' }[level];
     seat.innerHTML = `
       <div class="ex-done">
         <h2>Your level: <span class="level-chip">${level}</span></h2>
         <p><b>${correct} of ${q.length}</b> correct. ${esc(t.note)}</p>
+        ${missed.length ? `<details class="missed"><summary>Review ${missed.length} missed sentence(s)</summary><ul>${missed.map((m) => `<li><span class="es">${esc(m.es)}</span> — <b>${esc(m.correct)}</b></li>`).join('')}</ul></details>` : ''}
         <div class="btn-row">
           <a class="btn primary big" href="${href('lesson', { unitId: first })}">Start at ${level} →</a>
           <a class="btn big" href="#/alphabet">Start at the alphabet</a>
+          <button type="button" class="btn" data-action="retake">Retake</button>
         </div>
       </div>`;
   };
   if (root.addEventListener) {
     root.addEventListener('click', (e) => {
+      const rt = e.target.closest ? e.target.closest('[data-action="retake"]') : null;
+      if (rt) { location.hash = '#/home'; setTimeout(() => { location.hash = '#/placement'; }, 0); return; }
       const b = e.target.closest ? e.target.closest('[data-action="pick"]') : null;
       if (b) {
         if (b.getAttribute('data-val') === curAnswer(q[i])) correct++;
+        else missed.push(q[i]);
         i++;
         if (i >= q.length) done();
         else renderQ();

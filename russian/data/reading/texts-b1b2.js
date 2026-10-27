@@ -11,7 +11,7 @@ export const READING_B = [
       { ru: 'путеше́ствие', en: 'journey' },
       { ru: 'про́шлым ле́том', en: 'last summer' },
       { ru: 'дру́г', en: 'friend' },
-      { ru: 'пое́зд', en: 'train' },
+      { ru: 'по́езд', en: 'train' },
       { ru: 'кре́пость', en: 'fortress' },
       { ru: 'попро́бовали', en: 'we tried' },
       { ru: 'незабыва́емый', en: 'unforgettable' }

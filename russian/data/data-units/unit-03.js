@@ -110,7 +110,7 @@ export const unit = {
     { type: 'mc-en', q: 'Что зна́чит «пять»?', options: ['five', 'four', 'nine', 'ten'], answer: 'five', ru: 'пять' },
     { type: 'mc-en', q: 'Что зна́чит «во́семь»?', options: ['eight', 'seven', 'six', 'nine'], answer: 'eight', ru: 'во́семь' },
     { type: 'mc-ru', q: 'How do you say “three”?', options: ['три', 'два', 'четы́ре', 'семь'], answer: 'три', ru: 'три' },
-    { type: 'mc-ru', q: '“twenty” in Russian', options: ['два́дцать', 'де́сять', 'две́надцать', 'сто'], answer: 'два́дцать', ru: 'два́дцать' },
+    { type: 'mc-ru', q: '“twenty” in Russian', options: ['два́дцать', 'де́сять', 'двена́дцать', 'сто'], answer: 'два́дцать', ru: 'два́дцать' },
     { type: 'typing', q: 'Type “ten” in Russian', answer: 'десять', accepts: ['де́сять'], ru: 'де́сять' },
     { type: 'typing', q: 'Type “one hundred” in Russian', answer: 'сто', accepts: [], ru: 'сто' },
     { type: 'mc-en', q: 'Что зна́чит «ско́лько»?', options: ['how many / how much', 'where', 'when', 'why'], answer: 'how many / how much', ru: 'ско́лько' },

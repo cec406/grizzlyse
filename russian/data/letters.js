@@ -4,7 +4,7 @@
 export const LETTERS = [
   { upper: 'А', lower: 'а', name: 'А', nameT: 'a', sound: 'a', approx: '"a" in "father" (short)', example: 'а́брикос', gloss: 'apricot', trans: 'abrikos', mnemonic: 'Looks and sounds like Latin A.', group: 1 },
   { upper: 'Б', lower: 'б', name: 'Бэ', nameT: 'be', sound: 'b', approx: '"b" in "bed"', example: 'ба́нк', gloss: 'bank', trans: 'bank', mnemonic: 'A "B" with a belly — still sounds B.', group: 3 },
-  { upper: 'В', lower: 'в', name: 'Вэ', nameT: 've', sound: 'v', approx: '"v" in "voice"', example: 'во́дка', gloss: 'vodka', trans: 'vodka', mnemonic: 'Looks like Latin B but sounds V — a false friend.', group: 2 },
+  { upper: 'В', lower: 'в', name: 'Вэ', nameT: 've', sound: 'v', approx: '"v" in "voice"', example: 'вода́', gloss: 'water', trans: 'voda', mnemonic: 'Looks like Latin B but sounds V — a false friend.', group: 2 },
   { upper: 'Г', lower: 'г', name: 'Гэ', nameT: 'ge', sound: 'g', approx: '"g" in "go" (always hard)', example: 'газе́та', gloss: 'newspaper', trans: 'gazyeta', mnemonic: 'Looks like a tiny cursive "r" but sounds G.', group: 3 },
   { upper: 'Д', lower: 'д', name: 'Дэ', nameT: 'de', sound: 'd', approx: '"d" in "dog"', example: 'до́ма', gloss: 'at home', trans: 'doma', mnemonic: '"D" with legs.', group: 3 },
   { upper: 'Е', lower: 'е', name: 'Е', nameT: 'ye', sound: 'ye', approx: '"ye" in "yes"', example: 'есть', gloss: 'to eat; there is', trans: 'yest', mnemonic: 'Sounds like the letter name "E" says its own name: ye.', group: 2 },

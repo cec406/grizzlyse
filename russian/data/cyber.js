@@ -69,7 +69,7 @@ export const CYBER_MODULES = [
       { ru: 'поруче́ние', translit: 'porucheniye', en: 'assignment, instruction', pos: 'noun', gender: 'n' },
       { ru: 'отчёт', translit: 'otchyot', en: 'report', pos: 'noun', gender: 'm' },
       { ru: 'гра́фик', translit: 'grafik', en: 'schedule, chart', pos: 'noun', gender: 'm' },
-      { ru: 'отпу́ск', translit: 'otpusk', en: 'vacation, leave', pos: 'noun', gender: 'm' },
+      { ru: 'о́тпуск', translit: 'otpusk', en: 'vacation, leave', pos: 'noun', gender: 'm' },
       { ru: 'командиро́вка', translit: 'komandirovka', en: 'business trip', pos: 'noun', gender: 'f' },
       { ru: 'сро́чный', translit: 'srochnyy', en: 'urgent', pos: 'adjective' },
       { ru: 'зара́нее', translit: 'zaranyeye', en: 'in advance', pos: 'adverb' },
@@ -142,7 +142,7 @@ export const CYBER_MODULES = [
       { ru: 'прове́рка', translit: 'proverka', en: 'check, verification', pos: 'noun', gender: 'f' },
       { ru: 'подде́льный', translit: 'poddelnyy', en: 'fake, counterfeit', pos: 'adjective' },
       { ru: 'моше́нничество', translit: 'moshennichestvo', en: 'fraud', pos: 'noun', gender: 'n' },
-      { ru: 'предупре́дить', translit: 'predupreedit', en: 'to warn, to prevent', pos: 'verb' },
+      { ru: 'предупреди́ть', translit: 'predupreedit', en: 'to warn, to prevent', pos: 'verb' },
       { ru: 'сообщи́ть', translit: 'soobshchit', en: 'to report, to inform', pos: 'verb' },
       { ru: 'наруше́ние', translit: 'narusheniye', en: 'violation, breach', pos: 'noun', gender: 'n' },
       { ru: 'пра́вила', translit: 'pravila', en: 'rules', pos: 'noun', gender: 'p' },
@@ -165,7 +165,7 @@ export const CYBER_MODULES = [
       { ru: 'соиска́тель', translit: 'soiskatel', en: 'applicant, candidate', pos: 'noun', gender: 'm' },
       { ru: 'о́пыт рабо́ты', translit: 'opyt raboty', en: 'work experience', pos: 'phrase' },
       { ru: 'на́вык', translit: 'navyk', en: 'skill', pos: 'noun', gender: 'm' },
-      { ru: 'навы́ки', translit: 'navyki', en: 'skills', pos: 'noun', gender: 'p' },
+      { ru: 'на́выки', translit: 'navyki', en: 'skills', pos: 'noun', gender: 'p' },
       { ru: 'отве́тственность', translit: 'otvetstvennost', en: 'responsibility', pos: 'noun', gender: 'f' },
       { ru: 'до́лжность', translit: 'dolzhnost', en: 'position, post', pos: 'noun', gender: 'f' },
       { ru: 'зарпла́та', translit: 'zarplata', en: 'salary', pos: 'noun', gender: 'f' },
@@ -173,13 +173,13 @@ export const CYBER_MODULES = [
       { ru: 'руково́дство', translit: 'rukovodstvo', en: 'leadership, management', pos: 'noun', gender: 'n' },
       { ru: 'стажиро́вка', translit: 'stazhirovka', en: 'internship', pos: 'noun', gender: 'f' },
       { ru: 'продвиже́ние', translit: 'prodvizheniye', en: 'promotion, advancement', pos: 'noun', gender: 'n' },
-      { ru: 'комле́га', translit: 'kollega', en: 'colleague', pos: 'noun', gender: 'm' },
+      { ru: 'колле́га', translit: 'kollega', en: 'colleague', pos: 'noun', gender: 'm' },
       { ru: 'отве́тственный', translit: 'otvetstvennyy', en: 'responsible, reliable', pos: 'adjective' }
     ],
     phrases: [
       { ru: 'Я ищу́ рабо́ту в ИТ.', translit: 'ya ishchu rabotu v it', en: 'I am looking for work in IT.' },
       { ru: 'Расскажи́те о ва́шем о́пыте.', translit: 'rasskazhite o vashem opyte', en: 'Tell me about your experience.' },
-      { ru: 'Каки́е у вас на́выки?', translit: ' kakiye u vas navyki', en: 'What skills do you have?' },
+      { ru: 'Каки́е у вас на́выки?', translit: 'kakiye u vas navyki', en: 'What skills do you have?' },
       { ru: 'Я рабо́таю в кома́нде разрабо́тчиков.', translit: 'ya rabotayu v komande razrabotchikov', en: 'I work in a team of developers.' },
       { ru: 'Э́то хоро́шая возможно́сть для ро́ста.', translit: 'eto khoroshaya vozmozhnost dlya rosta', en: 'This is a good opportunity for growth.' }
     ]

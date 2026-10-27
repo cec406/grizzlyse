@@ -25,12 +25,13 @@ export function buildQuestions(words, rng = Math.random) {
       en: item.en,
       did: item.id,
       check: (u) => u === word,
+      correctValue: word,
       customRender(body, respond) {
         const letters = word.split('');
         let wrong = 0;
+        let done = false;
         const guessed = new Set();
-        const ALPHA = 'abcdefghijklmnñopqrstuvwxyz'.split('');
-        const alphabet = rng() < 0 ? ALPHA : ALPHA;
+        const alphabet = 'abcdefghijklmnñopqrstuvwxyz'.split('');
         body.innerHTML = `
           <pre class="hangman">${STAGES[0]}</pre>
           <div class="hang-word"></div>
@@ -47,14 +48,14 @@ export function buildQuestions(words, rng = Math.random) {
           stageEl.textContent = STAGES[Math.min(wrong, STAGES.length - 1)];
           wordEl.innerHTML = letters.map((ch) => guessed.has(ch) ? `<span class="hg">${ch}</span>` : '<span class="hg u">_</span>').join('');
           wrongEl.textContent = wrong ? `Wrong: ${[...guessed].filter((g) => !letters.includes(g)).join(', ')}` : '';
-          if (letters.every((ch) => guessed.has(ch))) respond(word);
-          if (wrong >= 6) respond('');
+          if (!done && letters.every((ch) => guessed.has(ch))) { done = true; respond(word); }
+          if (!done && wrong >= 6) { done = true; respond(''); }
         };
         body.addEventListener('click', (e) => {
           const give = e.target.closest ? e.target.closest('[data-action="giveup"]') : null;
           if (give) { respond(''); return; }
           const k = e.target.closest ? e.target.closest('[data-ch]') : null;
-          if (!k || k.disabled) return;
+          if (!k || k.disabled || done) return;
           const ch = k.getAttribute('data-ch');
           k.disabled = true;
           k.classList.add('used');

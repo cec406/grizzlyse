@@ -10,6 +10,14 @@ No build step, no dependencies. Just modern browser ES modules.
 
 ---
 
+### Who it is for
+
+Built for learners of **every age** — children through adults. A1–A2 lessons are
+family-friendly; B1–C1 units add professional, exam and technical topics for older
+learners. Everyday menu/shop vocabulary (beer, wine, etc.) appears in neutral contexts,
+and slang entries are clearly marked as informal. Parents and teachers can skip the
+optional slang/dialect sections without breaking the course.
+
 ## Quick start
 
 The app uses ES modules, so it must be served over HTTP — opening `index.html` directly
@@ -34,6 +42,15 @@ npm run serve        # runs: python3 -m http.server 8000
 ```
 
 Then open <http://localhost:8000/>.
+
+### Fun & sound
+
+Games and flashcards chime for right answers and buzz on misses, and **auto-speak**
+reads the Russian aloud as you check it. Perfect runs and passed unit tests throw
+confetti. Toggle sound effects and auto-speak any time in **Audio setup → Fun & sound**.
+Your level gets a Russian-flavoured nickname — from *Новичок* to *Легенда*.
+
+Every game also has a deep link: `#/game/memory`, `#/game/typing`, `#/game/mc`, and so on.
 
 ### If the page looks blank
 

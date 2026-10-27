@@ -2,6 +2,7 @@
 import { KEY_ROWS } from '../keyboard.js';
 import { esc } from '../ui.js';
 import { finishSession, answerRecord, grade, difficultyConf } from './logic.js';
+import { play, confetti, autoSpeak } from '../fun.js';
 
 export function onSelectKeyboard(container, input) {
   const html = KEY_ROWS.map((row) =>
@@ -43,7 +44,7 @@ export function runGame(root, cfg) {
         <div class="progress"><div class="progress-fill" style="width:${Math.round(((i + 1) / questions.length) * 100)}%"></div></div>
         <div class="game-prompt">${q.promptHtml || esc(q.prompt || '')}</div>
         <div class="game-body" data-slot="body"></div>
-        <div class="feedback hidden" data-slot="fb">
+        <div class="feedback hidden" data-slot="fb" role="status" aria-live="polite">
           <button type="button" class="primary" data-action="next">Next →</button>
         </div>
       </section>`;
@@ -119,6 +120,8 @@ export function runGame(root, cfg) {
     rec.ok = graded.ok && val !== undefined;
     session.answers[i] = rec;
     if (cfg.onFeedback) cfg.onFeedback(rec, q);
+    play(rec.ok ? 'correct' : 'wrong');
+    if (q.ru) autoSpeak(q.ru);
     clearT();
     fb.classList.remove('hidden');
     const timed = val === undefined;
@@ -158,6 +161,7 @@ export function runGame(root, cfg) {
           <a class="btn ghost" href="#/practice">More games</a>
         </div>
       </section>`;
+    if (r.perfect) { play('win'); confetti(root); }
     bind(root, '[data-action="again"]', () => { if (again) again(); else show(0); });
     if (onComplete) onComplete(r);
   }
@@ -180,9 +184,7 @@ function bind(scope, sel, fn, once) {
     // (e.g. a button replaced when the view re-rendered) — otherwise a stale
     // bubbling event could fire a just-added listener and restart the session.
     if (e.target && e.target.isConnected === false) return;
-    let el = e.target && e.target.closest ? e.target.closest(sel) : null;
-    if (!el && scope.matches && scope.matches(sel)) el = scope;
-    if (!el) { const found = scope.querySelectorAll ? scope.querySelectorAll(sel)[0] : null; el = found; }
+    const el = e.target && e.target.closest ? e.target.closest(sel) : null;
     if (el) fn(el, e);
     if (once) scope.removeEventListener('click', handler);
   };

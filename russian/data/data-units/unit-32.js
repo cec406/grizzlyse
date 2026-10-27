@@ -114,7 +114,7 @@ export const unit = {
       { type: 'typing', q: 'Type “art” in Russian', answer: 'искусство', accepts: ['иску́сство'], ru: 'иску́сство' },
       { type: 'mc-ru', q: '“fascinating” in Russian', options: ['увлека́тельный', 'разнообра́зный', 'изве́стен', 'бога́тый'], answer: 'увлека́тельный', ru: 'увлека́тельный' },
       { type: 'mc-en', q: 'Что зна́чит «разнообра́зный»?', options: ['diverse', 'famous', 'old', 'rich'], answer: 'diverse', ru: 'разнообра́зный' },
-      { type: 'mc-ru', q: 'Complete: Го́род был ___ в XII ве́ке.', options: ['осно́ван', 'основа́н', 'основа́на', 'осно́ваны'], answer: 'осно́ван', ru: 'осно́ван' },
+      { type: 'mc-ru', q: 'Complete: Го́род был ___ в XII ве́ке.', options: ['осно́ван', 'осно́вана', 'осно́вано', 'осно́ваны'], answer: 'осно́ван', ru: 'осно́ван' },
       { type: 'typing', q: 'Type “painting” in Russian', answer: 'картина', accepts: ['карти́на'], ru: 'карти́на' },
       { type: 'mc-en', q: 'Что зна́чит «гид»?', options: ['guide', 'tourist', 'artist', 'visitor'], answer: 'guide', ru: 'гид' },
       { type: 'mc-ru', q: '“cathedral” in Russian', options: ['собо́р', 'це́рковь', 'музе́й', 'карти́на'], answer: 'собо́р', ru: 'собо́р' },

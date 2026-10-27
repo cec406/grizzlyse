@@ -34,7 +34,8 @@ export const VIEWS = {
   progress: { render: progressRender, attach: progressAttach },
   'audio-setup': { render: audioSetupRender, attach: audioSetupAttach },
   help: { render: helpRender, attach: helpAttach },
-  placement: { render: placementRender, attach: placementAttach }
+  placement: { render: placementRender, attach: placementAttach },
+  game: { render: practiceRender, attach: practiceAttach }
 };
 
 export function viewFor(name) {

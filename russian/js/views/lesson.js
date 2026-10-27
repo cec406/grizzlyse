@@ -5,8 +5,9 @@ import { UNITS } from '../../data/index.js';
 import { lessonDone, markLesson, addXp, addBadge, setBest, recordActivity, placementInfo } from '../state.js';
 import { href } from '../router.js';
 import { runGame } from '../games/runner.js';
-import { makeSession } from '../games/logic.js';
+import { makeSession, shuffle, difficultyConf } from '../games/logic.js';
 import { applyAnswer, applyResult } from '../srs-store.js';
+import { play, confetti } from '../fun.js';
 
 export function render(params) {
   const u = UNITS.find((x) => x.id === params.unitId) || UNITS[0];
@@ -107,7 +108,7 @@ export function attach(root, params) {
       const items = action === 'quiz' ? (u.quiz || []) : (u.test.questions || []);
       const game = { id: 'unit-' + action, title: action === 'quiz' ? u.title + ' quiz' : u.title + ' test', icon: action === 'quiz' ? '🎯' : '📝' };
       const questions = items.map((q) => toRunner(q));
-      const session = makeSession(game.id, questions, 'medium', { timers: false });
+      const session = makeSession(game.id, questions, difficultyConf('medium'), { timers: false });
       runGame(slot, {
         game,
         session,
@@ -117,14 +118,18 @@ export function attach(root, params) {
           if (action === 'test' && r.pct >= 70) {
             markLesson(u.id);
             addBadge('unit-' + u.id);
-            slot.innerHTML += `<div class="banner ok-banner"><b>Unit complete!</b> <a href="${href('lessons')}">See the course</a> or continue to the next unit.</div>`;
+            play('win');
+            confetti(slot);
+            const idx = UNITS.findIndex((x) => x.id === u.id);
+            const nu = UNITS[idx + 1];
+            slot.innerHTML += `<div class="banner ok-banner"><b>Unit complete!</b> <a href="${href('lessons')}">See the course</a>${nu ? ` or <a href="${href('lesson', { unitId: nu.id })}">continue to Unit ${nu.number}: ${esc(nu.title)} →</a>` : '.'}</div>`;
           } else if (action === 'test') {
             slot.innerHTML += `<div class="banner warn"><b>You need 70%+ to pass the test.</b> Review the words you missed and try again.</div>`;
           }
           recordActivity();
           addXp(0);
         },
-        again: () => attach(root, params)
+        again: () => { const btn = root.querySelector('[data-action="' + action + '"]'); if (btn) btn.click(); }
       });
     }
   });
@@ -133,7 +138,7 @@ export function attach(root, params) {
 
 function toRunner(q) {
   if (q.type === 'mc-ru' || q.type === 'mc-en') {
-    return { type: 'mc', prompt: q.q, options: q.options, correct: q.answer, ru: q.ru, en: q.answer, did: q.did, explain: q.what };
+    return { type: 'mc', prompt: q.q, options: shuffle(q.options), correct: q.answer, correctValue: q.answer, ru: q.ru, en: q.answer, did: q.did, explain: q.what };
   }
   return {
     type: 'type',
@@ -148,5 +153,7 @@ function toRunner(q) {
 }
 
 function normEq(a, b) {
-  return String(a).replace(/\u0301/g, '').toLowerCase().replace(/ё/g, 'е').trim() === String(b).replace(/\u0301/g, '').toLowerCase().replace(/ё/g, 'е').trim();
+  const clean = (x) => String(x).replace(/\u0301/g, '').toLowerCase().replace(/ё/g, 'е')
+    .replace(/[.,!?:;«»"'()…—–-]/g, '').replace(/\s+/g, ' ').trim();
+  return clean(a) === clean(b);
 }

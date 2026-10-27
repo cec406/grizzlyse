@@ -46,7 +46,7 @@ export const unit = {
         ['В гостя́х хорошо́, а до́ма лу́чше.', 'A guest feels good, but home is better.']
       ],
       examples: [
-        { ru: 'Без труда́ не вы́тащишь ры́бу из пруда́.', trans: 'bez truda ne vytashchish rybu iz pruda', en: 'No pain, no gain.' }
+        { ru: 'Без труда́ не вы́тащишь и ры́бку из пруда́.', trans: 'bez truda ne vytashchish i rybku iz pruda', en: 'No pain, no gain.' }
       ]
     }
   ],
@@ -113,7 +113,7 @@ export const unit = {
   test: {
     title: 'Unit 43 test — Idioms and set phrases',
     questions: [
-      { type: 'mc-ru', q: '«как ры́ба в воде́» значит…', options: ['сво́бодно, как до́ма', 'мо́кро', 'холодно', 'гру́стно'], answer: 'сво́бодно, как до́ма', ru: 'как ры́ба в воде́' },
+      { type: 'mc-ru', q: '«как ры́ба в воде́» значит…', options: ['свобо́дно, как до́ма', 'мо́кро', 'холодно', 'гру́стно'], answer: 'свобо́дно, как до́ма', ru: 'как ры́ба в воде́' },
       { type: 'mc-en', q: 'Что зна́чит «води́ть за́ нос»?', options: ['to string someone along', 'to be lost', 'to smell bad', 'to run fast'], answer: 'to string someone along', ru: 'води́ть за́ нос' },
       { type: 'typing', q: 'Type “idiom” in Russian', answer: 'идиома', accepts: ['идио́ма'], ru: 'идио́ма' },
       { type: 'typing', q: 'Type “to loaf around” in Russian', answer: 'бить баклуши', accepts: ['бить баклу́ши'], ru: 'бить баклу́ши' },

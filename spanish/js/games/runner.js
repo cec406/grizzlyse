@@ -44,7 +44,7 @@ export function runGame(root, cfg) {
         <div class="progress"><div class="progress-fill" style="width:${Math.round(((i + 1) / questions.length) * 100)}%"></div></div>
         <div class="game-prompt">${q.promptHtml || esc(q.prompt || '')}</div>
         <div class="game-body" data-slot="body"></div>
-        <div class="feedback hidden" data-slot="fb">
+        <div class="feedback hidden" data-slot="fb" role="status" aria-live="polite">
           <button type="button" class="primary" data-action="next">Next →</button>
         </div>
       </section>`;
@@ -184,9 +184,7 @@ function bind(scope, sel, fn, once) {
     // replaced when the view re-rendered) — otherwise a stale bubbling event
     // could fire a just-added listener and restart the session.
     if (e.target && e.target.isConnected === false) return;
-    let el = e.target && e.target.closest ? e.target.closest(sel) : null;
-    if (!el && scope.matches && scope.matches(sel)) el = scope;
-    if (!el) { const found = scope.querySelectorAll ? scope.querySelectorAll(sel)[0] : null; el = found; }
+    const el = e.target && e.target.closest ? e.target.closest(sel) : null;
     if (el) fn(el, e);
     if (once) scope.removeEventListener('click', handler);
   };

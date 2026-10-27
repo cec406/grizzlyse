@@ -99,7 +99,7 @@ export const unit = {
     title: 'О пого́де (Small talk about weather)',
     lines: [
       { who: 'Мария', ru: 'Кака́я сего́дня пого́да?', en: 'What is the weather like today?' },
-      { who: 'Том', ru: 'У́жасно! Идёт дождь и ду́ет ве́тер.', en: 'Terrible! It is raining and the wind is blowing.' },
+      { who: 'Том', ru: 'Ужа́сно! Идёт дождь и ду́ет ве́тер.', en: 'Terrible! It is raining and the wind is blowing.' },
       { who: 'Мария', ru: 'А вчера́ бы́ло со́лнечно и тепло́.', en: 'And yesterday it was sunny and warm.' },
       { who: 'Том', ru: 'Да. Я люблю́ ле́то. А ты?', en: 'Yes. I love summer. And you?' },
       { who: 'Мария', ru: 'Я люблю́ о́сень. Ле́том сли́шком жа́рко.', en: 'I love autumn. In summer it is too hot.' },

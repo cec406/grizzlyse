@@ -1,7 +1,7 @@
-// SRS: 5-review-box Leitner (boxes 1..5, box 0 = new/unlearned). Pure functions.
+// SRS: 6-review-box Leitner (boxes 1..6, box 0 = new/unlearned). Pure functions.
 
 export const BOX_INTERVAL_DAYS = [1, 1, 2, 4, 7, 15, 30];
-export const MAX_BOX = 5;
+export const MAX_BOX = 6;
 
 export function newCard(id, now = Date.now()) {
   return { id, box: 0, due: now, last: now, lapses: 0, ok: 0, n: 0, streak: 0 };
@@ -53,7 +53,7 @@ export function mostDue(cards, now = Date.now(), k = 10) {
 }
 
 export function summary(cards) {
-  const buckets = [0, 0, 0, 0, 0, 0];
+  const buckets = [0, 0, 0, 0, 0, 0, 0];
   let due = 0;
   const now = Date.now();
   for (const c of cards) {

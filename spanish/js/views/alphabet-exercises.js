@@ -26,6 +26,13 @@ function getSrs() {
   return srsMap;
 }
 
+function lettersFromQuestion(q) {
+  if (!q) return [];
+  if (q.alpha) return [q.alpha];
+  const text = String((q.es || '') + ' ' + (q.en || '')).toUpperCase();
+  return LETTERS.filter((l) => text.includes(l.upper) || text.includes(l.lower)).map((l) => l.upper + l.lower);
+}
+
 function runSession(target, game, questions, opts = {}) {
   const session = {
     gameId: game.id,
@@ -38,11 +45,11 @@ function runSession(target, game, questions, opts = {}) {
   runGame(target, {
     game,
     session,
-    onFeedback: (rec) => {
+    onFeedback: (rec, q) => {
       const skill = 'alphabet-' + game.id;
       recordAccuracy(skill, rec.ok);
       addXp(rec.ok ? opts.xp || 5 : 0);
-      if (rec.ok) markLetters(LETTERS.map((l) => l.upper + l.lower));
+      if (rec.ok) markLetters(lettersFromQuestion(q));
       recordActivity();
     },
     onComplete: () => { if (srsMap) { const o = {}; srsMap.forEach((v, k) => { o[k] = v; }); store(A_KEY, o); } },
@@ -65,6 +72,7 @@ export function soundExercise(target) {
     }
     qs[qs.length - 1].es = l.example;
     qs[qs.length - 1].en = l.mnemonic;
+    qs[qs.length - 1].alpha = l.upper + l.lower;
   }
   runSession(target, { id: 'alpha-sound', title: 'Sound match', icon: '🔤' }, qs, { xp: 4 });
 }
@@ -188,10 +196,10 @@ export function drillExercise(target) {
       </div>`;
     const mark = (sel, fn) => { const b = target.querySelector(sel); if (b) b.addEventListener('click', fn); };
     mark('[data-action="prev"]', () => { stage--; renderStage(); });
-    mark('[data-action="next"]', () => { stage++; renderStage(); markLetters(allLettersFrom(stages)); });
+    mark('[data-action="next"]', () => { stage++; renderStage(); });
     mark('[data-action="finish"]', () => {
       markLetters(allLettersFrom(stages));
-      markWords(READ_WORDS.map((w) => w.es));
+
       addXp(10); recordActivity(); recordAccuracy('alphabet-drill', true);
       target.innerHTML = `<div class="ex-done"><h3>Reading drill complete!</h3><p>+10 XP. You can read real Spanish words now.</p><button type="button" class="primary" data-action="again">Do it again</button></div>`;
       const ag = target.querySelector('[data-action="again"]');

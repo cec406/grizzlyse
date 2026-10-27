@@ -28,7 +28,7 @@ export const unit = {
         ['Russian', 'English'],
         ['Кури́ть вре́дно.', 'Smoking is harmful.'],
         ['Спорт поле́зен для здоро́вья.', 'Sport is good for health.'],
-        ['Мне вре́дно мно́го ко́фе.', 'Too much coffee is bad for me.'],
+        ['Мне вре́дно пить мно́го ко́фе.', 'Too much coffee is bad for me.'],
         ['Ово́щи поле́зны.', 'Vegetables are healthy.']
       ],
       examples: [

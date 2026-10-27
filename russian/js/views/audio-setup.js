@@ -1,8 +1,11 @@
 // Audio setup: detect Russian TTS voices, test them, install guides.
 import { esc } from '../ui.js';
 import { russianVoices, isAvailable, speak, onVoicesReady } from '../audio.js';
+import { settings, setSettings } from '../state.js';
+import { play, confetti } from '../fun.js';
 
 export function render() {
+  const s = settings();
   return `
   <section class="audio-setup">
     <h1>Настро́йка зву́ка <small>audio setup</small></h1>
@@ -62,10 +65,24 @@ export function render() {
       </ul>
     </details>
     <p class="hint">These same instructions are in <code>README.md</code>.</p>
+
+    <h2 class="sec">Fun &amp; sound</h2>
+    <p class="lead">Little chimes keep games lively. Auto-speak reads the Russian aloud after every question, and flashcard words speak themselves when you flip them.</p>
+    <div class="opt-list">
+      <label class="opt"><input type="checkbox" data-setting="sfx" ${s.sfx ? 'checked' : ''}> <b>Sound effects</b> <span>chimes for right answers, a soft buzz for “not quite”</span></label>
+      <label class="opt"><input type="checkbox" data-setting="autoSpeak" ${s.autoSpeak ? 'checked' : ''}> <b>Auto-speak answers</b> <span>hear each Russian word right as you check it</span></label>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="btn" data-action="sfx-correct">🔔 Correct chime</button>
+      <button type="button" class="btn" data-action="sfx-wrong">😕 Not-quite sound</button>
+      <button type="button" class="btn" data-action="sfx-win">🏆 Fanfare</button>
+      <button type="button" class="btn" data-action="confetti-test">🎉 Confetti!</button>
+    </div>
   </section>`;
 }
 
 export function attach(root) {
+  const s = settings();
   const slot = root.querySelector('[data-slot="voices"]');
   const status = root.querySelector('[data-slot="status"]');
   const paint = () => {
@@ -91,7 +108,16 @@ export function attach(root) {
     if (a === 'test') { const ok = speak('Привет, как дела?'); flash(status, ok); }
     if (a === 'slow') { const ok = speak('Я учу русский язык', 0.7); flash(status, ok); }
     if (a === 'reload') location.reload();
+    if (a === 'sfx-correct') { play('correct'); flash(status, `<div class="banner ok-banner">Correct chime — did you hear it?</div>`); }
+    if (a === 'sfx-wrong') { play('wrong'); flash(status, '<div class="banner">That soft buzz is the “not quite” sound.</div>'); }
+    if (a === 'sfx-win') { play('win'); flash(status, '<div class="banner ok-banner">Fanfare! You hear this on perfect runs and when you pass a unit test.</div>'); }
+    if (a === 'confetti-test') confetti(root);
     setTimeout(paint, 400);
+  });
+  root.addEventListener('change', (e) => {
+    const c = e.target && e.target.matches && e.target.matches('[data-setting]') ? e.target : null;
+    if (!c) return;
+    setSettings({ [c.getAttribute('data-setting')]: c.checked });
   });
 }
 

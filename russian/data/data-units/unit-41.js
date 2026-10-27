@@ -82,7 +82,7 @@ export const unit = {
     { ru: 'О́бщество меня́ется бы́стро.', translit: 'obshchestvo menyayetsya bystro', en: 'Society changes fast.', words: [{ id: 'u41-obshestvo', ru: 'О́бщество', en: 'society' }] },
     { ru: 'Пра́во го́лоса для всех.', translit: 'pravo golosa dlya vsekh', en: 'The right to vote for everyone.', words: [{ id: 'u41-pravo', ru: 'Пра́во', en: 'right' }] },
     { ru: 'Вы́боры прохо́дят ка́ждые четы́ре го́да.', translit: 'vybory prokhodyat kazhdye chetyre goda', en: 'Elections take place every four years.', words: [{ id: 'u41-vybory', ru: 'Вы́боры', en: 'elections' }] },
-    { ru: 'Зако́н даёт защи́ту граждана́м.', translit: 'zakon dayot zashchitu grazhdanam', en: 'The law gives protection to citizens.', words: [{ id: 'u41-zakon', ru: 'Зако́н', en: 'law' }, { id: 'u41-zashchita', ru: 'защи́ту', en: 'protection' }, { id: 'u41-grazhdanin', ru: 'граждана́м', en: 'citizen' }] },
+    { ru: 'Зако́н даёт защи́ту гражда́нам.', translit: 'zakon dayot zashchitu grazhdanam', en: 'The law gives protection to citizens.', words: [{ id: 'u41-zakon', ru: 'Зако́н', en: 'law' }, { id: 'u41-zashchita', ru: 'защи́ту', en: 'protection' }, { id: 'u41-grazhdanin', ru: 'гражда́нам', en: 'citizen' }] },
     { ru: 'Свобо́да и ра́венство — це́нности о́бщества.', translit: 'svoboda i ravenstvo tsennosti obshchestva', en: 'Freedom and equality are the values of society.', words: [{ id: 'u41-svoboda', ru: 'Свобо́да', en: 'freedom' }, { id: 'u41-ravenstvo', ru: 'ра́венство', en: 'equality' }, { id: 'u41-obshestvo', ru: 'о́бщества', en: 'society' }] }
   ],
   dialogue: {

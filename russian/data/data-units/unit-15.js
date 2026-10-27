@@ -121,7 +121,7 @@ export const unit = {
       { type: 'mc-en', q: 'Что зна́чит «семья́»?', options: ['family', 'friend', 'profession', 'work'], answer: 'family', ru: 'семья́' },
       { type: 'typing', q: 'Type “tea” in Russian', answer: 'чай', accepts: [], ru: 'чай' },
       { type: 'typing', q: 'Type “without” in Russian', answer: 'без', accepts: [], ru: 'без' },
-      { type: 'mc-ru', q: '“bus” in Russian', options: ['авто́бус', 'маши́на', 'пое́зд', 'самолёт'], answer: 'авто́бус', ru: 'авто́бус' },
+      { type: 'mc-ru', q: '“bus” in Russian', options: ['авто́бус', 'маши́на', 'по́езд', 'самолёт'], answer: 'авто́бус', ru: 'авто́бус' },
       { type: 'mc-en', q: 'Что зна́чит «молоко́»?', options: ['milk', 'sugar', 'tea', 'water'], answer: 'milk', ru: 'молоко́' },
       { type: 'mc-ru', q: 'Complete: Ко́фе ___ са́хара.', options: ['без', 'с', 'на', 'в'], answer: 'без', ru: 'без са́хара' },
       { type: 'typing', q: 'Type “engineer” in Russian', answer: 'инженер', accepts: ['инжене́р'], ru: 'инжене́р' },

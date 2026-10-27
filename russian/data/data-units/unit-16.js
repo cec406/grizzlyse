@@ -115,7 +115,7 @@ export const unit = {
   test: {
     title: 'Unit 16 test — Have and have not',
     questions: [
-      { type: 'mc-ru', q: 'Genitive of «вода́» after нет', options: ['воды́', 'во́ды', 'воду́', 'вода́'], answer: 'воды́', ru: 'воды́' },
+      { type: 'mc-ru', q: 'Genitive of «вода́» after нет', options: ['воды́', 'во́ды', 'водо́й', 'вода́'], answer: 'воды́', ru: 'воды́' },
       { type: 'mc-en', q: 'Что зна́чит «кни́га»?', options: ['book', 'cup', 'bottle', 'bread'], answer: 'book', ru: 'кни́га' },
       { type: 'typing', q: 'Type “wine” in Russian', answer: 'вино', accepts: ['вино́'], ru: 'вино́' },
       { type: 'typing', q: 'Type “a lot of” in Russian', answer: 'много', accepts: ['мно́го'], ru: 'мно́го' },

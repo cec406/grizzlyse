@@ -193,7 +193,7 @@ function renderDrill(model) {
         <div class="btn-row">
           ${model.itemIndex < model.items.length - 1
             ? '<button type="button" class="primary" data-action="nextItem">Next →</button>'
-            : '<button type="button" class="primary" data-action="restart">Finish &amp; restart ↻</button>'}
+            : '<button type="button" class="primary" data-action="finishItem">Finish ✓</button>'}
           <button type="button" class="btn" data-action="replay" data-speak="${esc(model.target)}">🔊 Hear it</button>
         </div>
       </div>
@@ -321,8 +321,8 @@ function bindPractice(root) {
   };
 
   const finishLesson = () => {
-    addXp(15); recordActivity(); recordAccuracy('keyboard', true, 1);
     const acc = stats.typed ? stats.correct / stats.typed : 1;
+    addXp(acc >= 0.9 ? 15 : 8); recordActivity(); recordAccuracy('keyboard', acc >= 0.9, 1);
     slot.innerHTML = `
       <div class="drill">
         <div class="big-ok">🏝 ${esc(lesson.icon)} ${esc(lesson.title)} — complete!</div>
@@ -344,7 +344,8 @@ function bindPractice(root) {
     });
   }
   if (root.addEventListener) {
-    root.addEventListener('click', (e) => {
+    if (root.__kbClick) root.removeEventListener('click', root.__kbClick);
+    root.__kbClick = (e) => {
       const b = e.target.closest ? e.target.closest('[data-action]') : null;
       if (!b) return;
       const a = b.getAttribute('data-action');
@@ -354,7 +355,9 @@ function bindPractice(root) {
       else if (a === 'clear') { buffer = ''; pendingDead = null; paint(); focusCapture(); }
       else if (a === 'hint') { hintOn = !hintOn; const h = slot.querySelector && slot.querySelector('.drill-hint'); if (h) h.style.display = hintOn ? 'block' : 'none'; }
       else if (a === 'accent') { const ch = b.getAttribute('data-ch'); if (ch) typeChar(ch); }
-    });
+      else if (a === 'finishItem') finishLesson();
+    };
+    root.addEventListener('click', root.__kbClick);
   }
 
   startLesson(lesson);

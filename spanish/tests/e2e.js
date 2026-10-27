@@ -137,7 +137,7 @@ const ANSWER_LOOP = `(async () => {
   return { done: false, iter };
 })()`;
 
-const ROUTES = ['#/home', '#/path', '#/alphabet', '#/keyboard', '#/lessons', '#/lesson/u01', '#/vocab', '#/practice', '#/review', '#/reading', '#/reading/rd-01', '#/dialects', '#/grammar', '#/cyber', '#/progress', '#/audio-setup', '#/help', '#/placement'];
+const ROUTES = ['#/home', '#/path', '#/alphabet', '#/keyboard', '#/lessons', '#/lesson/u01', '#/vocab', '#/practice', '#/game/mc', '#/review', '#/reading', '#/reading/rd-01', '#/dialects', '#/grammar', '#/cyber', '#/progress', '#/audio-setup', '#/help', '#/placement'];
 
 async function goto(cdp, hash) {
   await cdp.evalJs(`location.hash = ${JSON.stringify(hash)}`);

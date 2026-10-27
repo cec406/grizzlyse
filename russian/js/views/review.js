@@ -1,6 +1,6 @@
 // Daily Review — SRS-driven flashcard queue (all mistakes land here).
 import { esc } from '../ui.js';
-import { allVocab } from '../../data/index.js';
+import { allVocab, READING } from '../../data/index.js';
 import { allPackWords } from '../../data/word-packs.js';
 import { allCyberTerms } from '../../data/cyber.js';
 import { grade } from '../srs.js';
@@ -16,7 +16,7 @@ export function render() {
     <div class="stat-strip">
       <div class="stat-card">${esc(summary.due)}<span>due today</span></div>
       <div class="stat-card">${esc(summary.learned)}<span>learned</span></div>
-      <div class="stat-card">${esc(summary.buckets[5] || 0)}<span>in long-term box</span></div>
+      <div class="stat-card">${esc(summary.buckets[6] || 0)}<span>in long-term box</span></div>
     </div>
     <div data-slot="queue"></div>
     <div data-slot="session"></div>
@@ -39,8 +39,11 @@ export function attach(root) {
   if (queue.length && slot) startReview(slot, refresh);
 }
 
-function startReview(slot, refresh) {
-  const { queue } = reviewQueue();
+function startReview(slot, refresh, onlyIds) {
+  const { queue: dueQueue } = reviewQueue();
+  const queue = onlyIds && onlyIds.length
+    ? onlyIds.map((id) => ({ id, ...(getCard(id) || { id, box: 0, n: 0 }) }))
+    : dueQueue;
   if (!queue.length) {
     slot.innerHTML = `<div class="banner ok-banner"><b>All caught up!</b> 🎉 Nothing due right now.</div>`;
     return;
@@ -50,10 +53,15 @@ function startReview(slot, refresh) {
   // Resolve dictionary and professional-track words too, not just unit vocabulary.
   for (const w of allPackWords()) if (!vocab.has(w.id)) vocab.set(w.id, { word: w });
   for (const t of allCyberTerms()) if (t.id && !vocab.has(t.id)) vocab.set(t.id, { word: t });
+  for (const txt of READING) (txt.glossary || []).forEach((g, i) => {
+    const id = g.id || (txt.id + '-g' + i);
+    if (!vocab.has(id)) vocab.set(id, { word: { ru: g.ru, en: g.en, translit: g.trans } });
+  });
   let i = 0;
   let shown = false;
   let answered = 0;
   let correct = 0;
+  const missedIds = [];
   const doneCard = (card) => {
     const g = getCard(card.id);
     return g;
@@ -66,13 +74,13 @@ function startReview(slot, refresh) {
           <div class="stat-strip">
             <div class="stat-card">${esc(correct)}<span>correct</span></div>
             <div class="stat-card">${esc(answered)}<span>answered</span></div>
-            <div class="stat-card">+${esc(answered * 2)}<span>XP</span></div>
+            <div class="stat-card">+${esc(correct * 2)}<span>XP</span></div>
           </div>
-          ${correct === answered ? '<p>Perfect! The whole queue was refreshed.</p>' : '<p>Cards you missed will come back very soon — that\'s the plan.</p>'}
-          <button type="button" class="primary" data-action="again2">Review again</button>
+          ${answered > 0 && correct === answered ? '<p>Perfect! The whole queue was refreshed.</p>' : '<p>Cards you missed will come back very soon — that\'s the plan.</p>'}
+          <button type="button" class="primary" data-action="again2">${missedIds.length ? 'Review ' + missedIds.length + ' missed' : 'Review again'}</button>
         </div>`;
       const ag = slot.querySelector('[data-action="again2"]');
-      if (ag) ag.addEventListener('click', () => { refresh(); startReview(slot, refresh); });
+      if (ag) ag.addEventListener('click', () => { refresh(); startReview(slot, refresh, missedIds.length ? missedIds : undefined); });
       return;
     }
     const entry = cards[i];
@@ -106,6 +114,7 @@ function startReview(slot, refresh) {
         setCard(card.id, grade(card, q));
         answered++;
         if (q >= 3) correct++;
+        else missedIds.push(card.id);
         recordAccuracy('review', q >= 3);
         recordActivity();
         addXp(q >= 3 ? 2 : 0);

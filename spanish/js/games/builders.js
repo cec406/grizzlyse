@@ -77,22 +77,44 @@ export function buildScramble({ pool, sentences, count, rng = Math.random }) {
 }
 
 // Fill-in-the-blank from unit sentences.
-export function buildFill({ sentences, count, rng = Math.random }) {
+function blankWholeWord(text, target) {
+  const bare = String(target).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[.,!?:;«»"'()…¡¿—–-]/g, '').toLowerCase();
+  const parts = String(text).split(/(\s+)/);
+  for (let i = 0; i < parts.length; i++) {
+    const token = parts[i].normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[.,!?:;«»"'()…¡¿—–-]/g, '').toLowerCase();
+    if (token === bare) { parts[i] = '___'; return parts.join(''); }
+  }
+  return null;
+}
+
+export function buildFill({ sentences, pool, count, rng = Math.random }) {
+  const normOpt = (x) => String(x).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+  const poolWords = (pool || []).map((w) => w.es);
   const out = [];
   const sents = shuffle(sentences || [], rng);
   for (const s of sents) {
     const glosses = (s.words || []).filter((g2) => /[a-záéíóúüñ]/i.test(g2.es));
     if (!glosses.length) continue;
     const g = glosses[Math.floor(rng() * glosses.length)];
-    const blanked = s.es.replace(g.es, '___');
-    if (blanked === s.es) continue;
-    const dist = pickN(sents.filter((s2) => s2 !== s).flatMap((s2) => (s2.words || []).map((w) => w.es)).filter((r) => r !== g.es), 3, rng);
+    const blanked = blankWholeWord(s.es, g.es);
+    if (!blanked) continue;
     const correct = g.es;
+    const seen = new Set([normOpt(correct)]);
+    const dist = [];
+    for (const w of shuffle(sents.filter((s2) => s2 !== s).flatMap((s2) => (s2.words || []).map((x) => x.es)).concat(poolWords), rng)) {
+      const n = normOpt(w);
+      if (!n || seen.has(n)) continue;
+      seen.add(n);
+      dist.push(w);
+      if (dist.length === 3) break;
+    }
+    if (dist.length < 2) continue;
     const q = {
       type: 'mc',
       prompt: `Complete: «${blanked}» <small>(${s.en})</small>`,
-      options: [correct, ...dist],
+      options: shuffle([correct, ...dist], rng),
       correct,
+      correctValue: correct,
       es: s.es,
       en: s.en,
       did: g.id,
@@ -109,8 +131,9 @@ export function buildCase({ count, rng = Math.random }) {
   return pickN(CASE_DRILLS, count, rng).map((d) => ({
     type: 'mc',
     prompt: d.prompt,
-    options: d.options,
+    options: shuffle(d.options, rng),
     correct: d.correct,
+    correctValue: d.correct,
     es: d.es,
     explain: d.explain
   }));
@@ -121,8 +144,9 @@ export function buildVerb({ count, rng = Math.random }) {
   return pickN(VERB_DRILLS, count, rng).map((d) => ({
     type: 'mc',
     prompt: d.context,
-    options: d.options,
+    options: shuffle(d.options, rng),
     correct: d.correct,
+    correctValue: d.correct,
     es: d.es,
     explain: d.explain
   }));
@@ -133,8 +157,9 @@ export function buildAspect({ count, rng = Math.random }) {
   return pickN(ASPECT_DRILLS, count, rng).map((d) => ({
     type: 'mc',
     prompt: d.context,
-    options: d.options,
+    options: shuffle(d.options, rng),
     correct: d.correct,
+    correctValue: d.correct,
     es: d.es,
     explain: d.explain
   }));
@@ -162,5 +187,6 @@ export function buildSpeed(ctx) {
 
 // Hangman words come from the pool.
 export function hangmanWords({ pool, count, rng = Math.random }) {
-  return pickN(pool.filter((w) => w.es.replace(/[^a-záéíóúüñ]/gi, '').length >= 4), count, rng);
+  // single words only — hangman has no space/punctuation keys
+  return pickN(pool.filter((w) => /^[a-záéíóúüñ]{4,}$/i.test(w.es)), count, rng);
 }

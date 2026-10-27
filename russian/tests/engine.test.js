@@ -213,7 +213,7 @@ test('builders: mc/typing/fill produce valid questions', () => {
     en: 'Hello, how are you?',
     words: [{ id: 'a1', ru: 'Приве́т', en: 'hello' }]
   }];
-  const fills = buildFill({ sentences, count: 2 });
+  const fills = buildFill({ sentences, pool, count: 2 });
   assert.ok(fills.length >= 1);
   assert.ok(fills[0].options.includes(fills[0].correct));
   assert.equal(fills[0].did, 'a1');

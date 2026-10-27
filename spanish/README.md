@@ -14,6 +14,14 @@ No build step, no dependencies. Just modern browser ES modules.
 
 ---
 
+### Who it is for
+
+Built for learners of **every age** — children through adults. A1–A2 lessons are
+family-friendly; B1–C1 units add professional, exam and technical topics for older
+learners. Everyday menu/shop vocabulary (beer, wine, etc.) appears in neutral contexts,
+and slang entries are clearly marked as informal. Parents and teachers can skip the
+optional slang/dialect sections without breaking the course.
+
 ## Quick start
 
 The app uses ES modules, so it must be served over HTTP — opening `index.html` directly
@@ -168,7 +176,7 @@ and passes the full test harness.
 | B2 units | 10 | 10 | **complete** |
 | C1 units | 8 | 8 | **complete** |
 | Reading texts | 20 | 20 | A1×5, A2×5, B1×5, B2×5 |
-| Grammar reference | ≥10 | 21 | spans A1–C1 |
+| Grammar reference | ≥10 | 22 | spans A1–C1 |
 | Verb/por-para/gender drills | — | 3 sets | span A1–C1 |
 | Games | 12 | 12 | complete |
 | Dialect regions | ≥4 | 6 | Puerto Rico first |

@@ -20,7 +20,7 @@ export const READING_B = [
     questions: [
       { type: 'mc-en', q: 'What does the speaker do besides studying?', options: ['works', 'travels', 'rests', 'paints'], answer: 'works' },
       { type: 'mc-en', q: 'Where does the speaker work in the afternoon?', options: ['in a restaurant', 'at the university', 'in an office', 'at home'], answer: 'in a restaurant' },
-      { type: 'mc-en', q: 'What is the speaker goal?', options: ['to be an engineer', 'to be a teacher', 'to travel', 'to open a café'], answer: 'to be an engineer' }
+      { type: 'mc-en', q: 'What is the goal of the speaker?', options: ['to be an engineer', 'to be a teacher', 'to travel', 'to open a café'], answer: 'to be an engineer' }
     ]
   },
   {
@@ -42,7 +42,7 @@ export const READING_B = [
     questions: [
       { type: 'mc-en', q: 'Who is Luisa writing to?', options: ['her grandmother', 'her friend', 'her teacher', 'her sister'], answer: 'her grandmother' },
       { type: 'mc-en', q: 'What is the climate like in San Juan?', options: ['tropical and humid', 'cold and dry', 'windy and cool', 'snowy'], answer: 'tropical and humid' },
-      { type: 'mc-en', q: 'What has Luisa not tried yet?', options: ['mofongo', 'salsa', 'coffee', 'piña colada'], answer: 'mofongo' }
+      { type: 'mc-en', q: 'What has Luisa not tried yet?', options: ['mofongo', 'salsa', 'coffee', 'tostones'], answer: 'mofongo' }
     ]
   },
   {
@@ -50,7 +50,7 @@ export const READING_B = [
     level: 'B1',
     title: 'The environment',
     titleEs: 'El medio ambiente',
-    text: 'Nuestro planeta enfrenta problemas serios. La contaminación del aire y del agua afecta a todos. Para ayudar, podemos reciclar, ahorrar energía y usar menos plástico. Si cada persona hace su parte, el cambio es posible.',
+    text: 'Nuestro planeta enfrenta problemas serios. La contaminación del aire y del agua afectan a todos. Para ayudar, podemos reciclar, ahorrar energía y usar menos plástico. Si cada persona hace su parte, el cambio es posible.',
     translit: 'NWES-tro pla-NEH-ta en-FREN-ta pro-BLE-mas SEH-ryos la kon-ta-mee-na-SYON del A-ee-re ee del A-gwa a-FEK-ta a TO-dos PA-ra a-yoo-DAR po-DE-mos re-see-KLAR a-ko-RAR e-NER-hee-a ee oo-SAR ME-nos PLAS-tee-ko see KA-da per-SO-na A-se soo PAR-te el KAM-byo es po-SEE-ble',
     glossary: [
       { es: 'planeta', en: 'planet' },

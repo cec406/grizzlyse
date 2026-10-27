@@ -11,8 +11,9 @@ export function render() {
   const placement = placementInfo();
   const done = s.lessonsCompleted.length;
   const total = UNITS.length;
-  const firstOpen = UNITS.find((u) => !lessonDone(u.id));
-  const next = firstOpen || UNITS[UNITS.length - 1];
+  const START = { A1: 'u01', A2: 'u11', B1: 'u21', B2: 'u31' };
+  const startIdx = Math.max(0, UNITS.findIndex((u) => u.id === (placement.level ? START[placement.level] : 'u01')));
+  const next = UNITS.slice(startIdx).find((u) => !lessonDone(u.id)) || UNITS.find((u) => !lessonDone(u.id)) || UNITS[UNITS.length - 1];
   const words = wordsLearned().length;
   const pct = total ? Math.round((done / total) * 100) : 0;
 

@@ -35,7 +35,7 @@ export const unit = {
         ['carne', 'calne', 'meat']
       ],
       examples: [
-        { es: 'Vengo de Puelto Rico, la isla del encanto.', trans: 'BEN-goh deh P WEL-toh REE-koh lah EES-lah del en-KAN-toh', en: 'I come from Puerto Rico, the island of enchantment.' },
+        { es: 'Vengo de Puelto Rico, la isla del encanto.', trans: 'BEN-goh deh PWEL-toh REE-koh lah EES-lah del en-KAN-toh', en: 'I come from Puerto Rico, the island of enchantment.' },
         { es: 'Quiero comel arroz con habichuelas.', trans: 'KYEH-roh ko-MEL ah-RROS kon ah-bee-CHWEH-lahs', en: 'I want to eat rice and beans.' }
       ]
     },
@@ -63,7 +63,8 @@ export const unit = {
     { id: 'u42-maiz', es: 'maíz', translit: 'mah-EES', en: 'corn (taíno)', pos: 'noun', gender: 'm' },
     { id: 'u42-iguana', es: 'iguana', translit: 'ee-GWAH-nah', en: 'iguana (taíno)', pos: 'noun', gender: 'f' },
     { id: 'u42-caiman', es: 'caimán', translit: 'kai-MAN', en: 'caiman / alligator (taíno)', pos: 'noun', gender: 'm' },
-    { id: 'u42-tabaco', es: 'tabaco', translit: 'tah-BAH-koh', en: 'tobacco (taíno)', pos: 'noun', gender: 'm' },
+    { id: 'u42-colibri', es: 'colibrí', translit: 'koh-lee-BREE', en: 'hummingbird (taíno)', pos: 'noun', gender: 'm' },
+    { id: 'u42-tabaco', es: 'tabaco', translit: 'tah-BAH-koh', en: 'tobacco (taíno loanword)', pos: 'noun', gender: 'm' },
     { id: 'u42-name', es: 'ñame', translit: 'NYAH-meh', en: 'yam (African)', pos: 'noun', gender: 'm' },
     { id: 'u42-malanga', es: 'malanga', translit: 'mah-LAN-gah', en: 'taro root (African)', pos: 'noun', gender: 'f' },
     { id: 'u42-chevere', es: 'chévere', translit: 'CHEH-veh-reh', en: 'cool / great', pos: 'adjective' },
@@ -96,7 +97,7 @@ export const unit = {
       { who: 'Marta', es: '¡Ay bendito! ¿Qué es la que hay, pana? ¿Desde cuándo estás por acá?', en: 'Oh bless it! What is up, buddy? Since when are you around here?' },
       { who: 'Tomás', es: 'Ahí, luchando. Llegué ayer y todavía no he probado el mofongo.', en: 'Hanging in there. I arrived yesterday and I still have not tried the mofongo.' },
       { who: 'Marta', es: '¡Brutal! Allá en el Viejo San Juan hay un sitio que es la cosa.', en: 'Awesome! Over in Old San Juan there is a place that is the best.' },
-      { who: 'Tomás', es: 'Dale, vamos. ¿Cojo la guagua o caminamos?', en: 'All right, let us go. Do I take the bus or do we walk?' },
+      { who: 'Tomás', es: 'Dale, vamos. ¿Tomo la guagua o caminamos?', en: 'All right, let us go. Do I take the bus or do we walk?' },
       { who: 'Marta', es: 'La guagua pasa cada media hora, pero caminando llegamos más rápido.', en: 'The bus comes every half hour, but walking we arrive faster.' },
       { who: 'Tomás', es: 'Nítido. Entonces vamos a pie y después comemos algo.', en: 'Great. Then we go on foot and afterwards we eat something.' }
     ],
@@ -135,7 +136,7 @@ export const unit = {
       { type: 'mc-es', q: 'In Caribbean Spanish, the final s is often…', options: ['aspirada o muda', 'pronunciada con fuerza', 'convertida en t', 'duplicada'], answer: 'aspirada o muda', es: 'aspirada o muda' },
       { type: 'mc-en', q: '¿Qué significa «malanga»?', options: ['taro root', 'sweet potato', 'plantain', 'tomato'], answer: 'taro root', es: 'malanga' },
       { type: 'mc-es', q: 'Which greeting sounds very boricua?', options: ['¿Qué es la que hay?', '¿Cómo está usted?', 'Buenos días, señor.', 'Mucho gusto.'], answer: '¿Qué es la que hay?', es: '¿Qué es la que hay?' },
-      { type: 'typing', q: 'Type tobacco in Spanish.', answer: 'tabaco', accepts: [], es: 'tabaco' },
+      { type: 'typing', q: 'Type corn in Spanish.', answer: 'maíz', accepts: ['maiz'], es: 'maíz' },
       { type: 'mc-en', q: '¿Qué significa «socio»?', options: ['pal / partner', 'boss', 'stranger', 'teacher'], answer: 'pal / partner', es: 'socio' }
     ]
   }

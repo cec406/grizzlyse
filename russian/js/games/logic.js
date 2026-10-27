@@ -111,7 +111,7 @@ export function eq(a, b) {
 
 export function makeMc(qText, correct, distractors, rng) {
   const options = shuffle([correct, ...distractors], rng);
-  return { type: 'mc', prompt: qText, correct, options, check: (u) => u === correct };
+  return { type: 'mc', prompt: qText, correct, correctValue: correct, options, check: (u) => u === correct };
 }
 
 export function makeType(qText, correct, accepts = []) {
@@ -121,6 +121,7 @@ export function makeType(qText, correct, accepts = []) {
     prompt: qText,
     accepted: correct,
     accepts: list,
+    correctValue: correct,
     check: (u) => list.some((a) => eq(u, a))
   };
 }

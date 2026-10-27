@@ -7,12 +7,12 @@ export const PRONUNCIATION_GUIDES = [
     points: [
       'Every multi-syllable word has exactly one stressed vowel; the rest are unstressed.',
       'In the dictionary, stress is shown: приве́т (privYET).',
-      'Stress can move the sound: го́род (stress on the first о) but города́ (citY).',
+      'Stress can move the sound: го́род (stress on the first о) but города́ (city).',
       'Write the stress mark on every word you learn — it is part of the word.'
     ],
     examples: [
       { ru: 'за́мок — замо́к', en: 'a castle / a lock — stress alone changes the word' },
-      { ru: 'мо́ло́ко → молоко́', en: 'milk — only the last о is clear and strong' }
+      { ru: 'молоко́', en: 'milk — only the last о is clear and strong; the first two reduce to "a"' }
     ]
   },
   {
@@ -96,7 +96,7 @@ export const PRONUNCIATION_GUIDES = [
     title: 'Ж, Ш, Ц, Ч, Щ and the vowel letters',
     intro: 'After the always-hard Ж Ш Ц you never write ы-influencing soft vowels that would soften them; actual spelling rules appear in units, but a heads-up now saves confusion.',
     points: [
-      'After К Г Х Ж Ш Ч Щ Ц, the letter ы is replaced by и in most spellings: жить, шить, цирк.',
+      'After Ж Ш Ч Щ Ц, the letter ы is written и in most spellings: жить, шить, цирк. After К Г Х it stays ы: книга, ру́ки.',
       'After Ч and Щ, keep the vowels A, У (not Я, Ю) in many endings: часы, щука.',
       'These are spelling rules you learn gradually — trust the word, not the pronunciation guess.'
     ],

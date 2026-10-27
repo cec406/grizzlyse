@@ -110,7 +110,7 @@ export const GRAMMAR_TOPICS = [
   },
   {
     id: 'numbers', level: 'A1', title: 'Numbers and counting',
-    intro: 'Learn one to twenty, then the tens. Numbers never change form to agree with the noun.',
+    intro: 'Learn one to twenty, then the tens. Most numbers never change — but uno shortens to un before a masculine noun and una before a feminine one (un libro, una casa).',
     table: [
       ['Number', 'Spanish', 'Number', 'Spanish'],
       ['1', 'uno', '6', 'seis'],

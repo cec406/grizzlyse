@@ -28,7 +28,7 @@ export const unit = {
         ['Situation', 'Use', 'Example'],
         ['A friend walks in', 'ты / приве́т', 'Приве́т!'],
         ['Meeting your boss', 'вы / здра́вствуйте', 'Здра́вствуйте!'],
-        ['Saying goodbye (casual)', 'по́ка', 'По́ка!'],
+        ['Saying goodbye (casual)', 'пока́', 'По́ка!'],
         ['Saying goodbye (formal)', 'до свида́ния', 'До свида́ния!']
       ],
       examples: [
@@ -50,14 +50,14 @@ export const unit = {
   ],
   vocabulary: [
     { id: 'u1-privet', ru: 'приве́т', translit: 'privyet', en: 'hello (informal)', pos: 'interjection' },
-    { id: 'u1-zdravstvuyte', ru: 'здра́вствуйте', translit: 'zdrastvuyte', en: 'hello (formal)', pos: 'interjection' },
-    { id: 'u1-poka', ru: 'по́ка', translit: 'poka', en: 'bye (informal)', pos: 'interjection' },
+    { id: 'u1-zdravstvuyte', ru: 'здра́вствуйте', translit: 'zdravstvuyte', en: 'hello (formal)', pos: 'interjection' },
+    { id: 'u1-poka', ru: 'пока́', translit: 'poka', en: 'bye (informal)', pos: 'interjection' },
     { id: 'u1-dosvidaniya', ru: 'до свида́ния', translit: 'do svidaniya', en: 'goodbye (formal)', pos: 'phrase' },
     { id: 'u1-spasibo', ru: 'спаси́бо', translit: 'spasibo', en: 'thank you', pos: 'interjection' },
     { id: 'u1-pozhaluysta', ru: 'пожа́луйста', translit: 'pozhaluysta', en: 'please / you’re welcome', pos: 'interjection' },
     { id: 'u1-da', ru: 'да', translit: 'da', en: 'yes', pos: 'particle' },
     { id: 'u1-net', ru: 'нет', translit: 'nyet', en: 'no', pos: 'particle' },
-    { id: 'u1-izvinite', ru: 'извини́те', translit: 'izvinitye', en: 'excuse me / sorry', pos: 'interjection' },
+    { id: 'u1-izvinite', ru: 'извини́те', translit: 'izvinite', en: 'excuse me / sorry', pos: 'interjection' },
     { id: 'u1-khorosho', ru: 'хорошо́', translit: 'khorosho', en: 'well / good', pos: 'adverb' },
     { id: 'u1-plokho', ru: 'пло́хо', translit: 'plokho', en: 'bad / badly', pos: 'adverb' },
     { id: 'u1-kakdela', ru: 'как дела́?', translit: 'kak dela?', en: 'how are things?', pos: 'phrase' },
@@ -100,7 +100,7 @@ export const unit = {
   },
   quiz: [
     { type: 'mc-en', q: 'Что зна́чит «приве́т»?', options: ['hello (informal)', 'goodbye (formal)', 'thank you', 'please'], answer: 'hello (informal)', ru: 'приве́т' },
-    { type: 'mc-ru', q: 'How do you say “thank you”?', options: ['спаси́бо', 'по́ка', 'да', 'нет'], answer: 'спаси́бо', ru: 'спаси́бо' },
+    { type: 'mc-ru', q: 'How do you say “thank you”?', options: ['спаси́бо', 'пока́', 'да', 'нет'], answer: 'спаси́бо', ru: 'спаси́бо' },
     { type: 'mc-ru', q: '“How are you?” in Russian', options: ['Как дела́?', 'До свида́ния!', 'Что э́то?', 'Меня́ зову́т…'], answer: 'Как дела́?', ru: 'Как дела́?' },
     { type: 'typing', q: 'Type “hello (informal)” in Russian', answer: 'привет', accepts: [], ru: 'приве́т' },
     { type: 'typing', q: 'Type “yes” in Russian', answer: 'да', accepts: [], ru: 'да' },
@@ -114,15 +114,15 @@ export const unit = {
     title: 'Unit 1 test — Greetings',
     questions: [
       { type: 'mc-en', q: 'Что зна́чит «здра́вствуйте»?', options: ['hello (formal)', 'hello (informal)', 'bye', 'thanks'], answer: 'hello (formal)', ru: 'здра́вствуйте' },
-      { type: 'mc-ru', q: '“goodbye (formal)”', options: ['до свида́ния', 'по́ка', 'приве́т', 'да'], answer: 'до свида́ния', ru: 'до свида́ния' },
+      { type: 'mc-ru', q: '“goodbye (formal)”', options: ['до свида́ния', 'пока́', 'приве́т', 'да'], answer: 'до свида́ния', ru: 'до свида́ния' },
       { type: 'mc-ru', q: '“excuse me / sorry”', options: ['извини́те', 'пожа́луйста', 'спаси́бо', 'хорошо́'], answer: 'извини́те', ru: 'извини́те' },
       { type: 'typing', q: 'Type “thank you” in Russian', answer: 'спасибо', accepts: [], ru: 'спаси́бо' },
       { type: 'typing', q: 'Type “you (informal)” in Russian', answer: 'ты', accepts: [], ru: 'ты' },
-      { type: 'mc-en', q: 'Что зна́чит «по́ка»?', options: ['bye (informal)', 'good morning', 'please', 'no'], answer: 'bye (informal)', ru: 'по́ка' },
+      { type: 'mc-en', q: 'Что зна́чит «пока́»?', options: ['bye (informal)', 'good morning', 'please', 'no'], answer: 'bye (informal)', ru: 'пока́' },
       { type: 'mc-ru', q: '“very” in Russian', options: ['о́чень', 'пло́хо', 'нет', 'рад'], answer: 'о́чень', ru: 'о́чень' },
-      { type: 'typing', q: 'Type “how are things?” (three words)', answer: 'как дела', accepts: ['как дела?'], ru: 'как дела́?' },
+      { type: 'typing', q: 'Type “how are things?” (two words)', answer: 'как дела', accepts: ['как дела?'], ru: 'как дела́?' },
       { type: 'mc-en', q: 'Что зна́чит «меня́ зову́т А́нна»?', options: ['My name is Anna', 'Anna is here', 'I like Anna', 'Call Anna'], answer: 'My name is Anna', ru: 'Меня́ зову́т А́нна' },
-      { type: 'mc-ru', q: '“glad (masc.)”', options: ['рад', 'да', 'по́ка', 'нет'], answer: 'рад', ru: 'рад' }
+      { type: 'mc-ru', q: '“glad (masc.)”', options: ['рад', 'да', 'пока́', 'нет'], answer: 'рад', ru: 'рад' }
     ]
   }
 };

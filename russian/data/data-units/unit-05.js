@@ -69,6 +69,7 @@ export const unit = {
     { id: 'u5-sup', ru: 'суп', translit: 'sup', en: 'soup', pos: 'noun', gender: 'm' },
     { id: 'u5-salat', ru: 'сала́т', translit: 'salat', en: 'salad', pos: 'noun', gender: 'm' },
     { id: 'u5-sok', ru: 'сок', translit: 'sok', en: 'juice', pos: 'noun', gender: 'm' },
+    { id: 'u5-kompot', ru: 'ко́мпот', translit: 'kompot', en: 'fruit drink (kompot)', pos: 'noun', gender: 'm' },
     { id: 'u5-pivo', ru: 'пи́во', translit: 'pivo', en: 'beer', pos: 'noun', gender: 'n' },
     { id: 'u5-zavtrak', ru: 'за́втрак', translit: 'zavtrak', en: 'breakfast', pos: 'noun', gender: 'm' },
     { id: 'u5-obed', ru: 'обе́д', translit: 'obed', en: 'lunch / dinner (midday)', pos: 'noun', gender: 'm' },
@@ -128,9 +129,9 @@ export const unit = {
       { type: 'mc-ru', q: '“meat” in Russian', options: ['мя́со', 'ры́ба', 'молоко́', 'хлеб'], answer: 'мя́со', ru: 'мя́со' },
       { type: 'mc-en', q: 'Что зна́чит «обе́д»?', options: ['lunch', 'breakfast', 'supper', 'dinner party'], answer: 'lunch', ru: 'обе́д' },
       { type: 'mc-ru', q: 'Which sentence is correct?', options: ['Я люблю́ ры́бу.', 'Я люблю́ ры́ба.', 'Я люблю́ ры́бой.', 'Я люблю́ рыб.'], answer: 'Я люблю́ ры́бу.', ru: 'ры́бу' },
-      { type: 'typing', q: 'Type “beer” in Russian', answer: 'пиво', accepts: ['пи́во'], ru: 'пи́во' },
+      { type: 'typing', q: 'Type “fruit drink” in Russian', answer: 'компот', accepts: ['ко́мпот'], ru: 'ко́мпот' },
       { type: 'mc-en', q: 'Что зна́чит «сала́т»?', options: ['salad', 'soup', 'sauce', 'sandwich'], answer: 'salad', ru: 'сала́т' },
-      { type: 'mc-ru', q: '“food” in Russian', options: ['еда́', 'вода́', 'еда', 'блю́до'], answer: 'еда́', ru: 'еда́' },
+      { type: 'mc-ru', q: '“food” in Russian', options: ['еда́', 'вода́', 'чай', 'блю́до'], answer: 'еда́', ru: 'еда́' },
       { type: 'typing', q: 'Type “to want” in Russian', answer: 'хотеть', accepts: ['хоте́ть'], ru: 'хоте́ть' },
       { type: 'mc-en', q: 'Что зна́чит «за́втрак»?', options: ['breakfast', 'lunch', 'supper', 'dessert'], answer: 'breakfast', ru: 'за́втрак' }
     ]

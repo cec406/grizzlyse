@@ -7,7 +7,7 @@ export const READING_A = [
     title: 'My family',
     titleEs: 'Mi familia',
     text: 'Me llamo Sofía. Esta es mi familia. Mi mamá se llama Elena y mi papá se llama Carlos. Tengo un hermano y una hermana. Vivimos en San Juan, Puerto Rico. Quiero mucho a mi familia.',
-    translit: 'meh YAH-mo so-FEE-ah ES-tah es mee fa-MEE-lee-ah mee ma-MA se YAH-ma eh-LEH-na ee mee pa-PA se YAH-ma KAR-los TEN-go oon er-MA-no ee OO-na er-MA-na bee-BEE-mos en san HWAHN pwer-to REE-ko KYEH-ro MOO-cho a mee fa-MEE-lee-ah',
+    translit: 'meh YAH-mo so-FEE-ah ES-tah es mee fa-MEE-lee-ah mee ma-MA se YAH-ma eh-LEH-na ee mee pa-PA se YAH-ma KAR-los TEN-go oon er-MA-no ee OO-na er-MA-na bee-BEE-mos en san HWAHN pwer-toh REE-koh KYEH-ro MOO-cho a mee fa-MEE-lee-ah',
     glossary: [
       { es: 'familia', en: 'family' },
       { es: 'mamá', en: 'mom' },
@@ -50,7 +50,7 @@ export const READING_A = [
     level: 'A1',
     title: 'At the market',
     titleEs: 'En el mercado',
-    text: 'El sábado voy al mercado con mi mamá. Compramos frutas y verduras. Las naranjas son dulces y las manzanas son rojas. Mi mamá paga con dinero. Los precios son buenos.',
+    text: 'El sábado voy al mercado con mi mamá. Compramos frutas y verduras. Las naranjas son dulces y las manzanas son rojas. Mi mamá paga en efectivo. Los precios son buenos.',
     translit: 'el SA-ba-do boy al mer-KA-do kon mee ma-MA kom-PRA-mos FROO-tas ee ber-DOO-ras las na-RAN-has son DOOL-ses ee las man-SA-nas son RO-has mee ma-MA PA-ga kon dee-NEH-ro los PRE-syos son BWEH-nos',
     glossary: [
       { es: 'mercado', en: 'market' },
@@ -117,7 +117,7 @@ export const READING_A = [
     title: 'A trip to the island',
     titleEs: 'Un viaje a la isla',
     text: 'El verano pasado viajamos a Puerto Rico. Volamos desde Nueva York y llegamos a San Juan. Visitamos el Viejo San Juan y caminamos por las calles de colores. Comimos mofongo y bailamos salsa. Fue un viaje inolvidable.',
-    translit: 'el beh-RA-no pa-SA-do bya-HA-mos a pwer-to REE-ko bo-LA-mos DES-de NWEH-ba YORK ee ye-GA-mos a san HWAHN bee-see-TA-mos el BYEH-ho san HWAHN ee ka-mee-NA-mos por las KA-yes de ko-LO-res ko-MEE-mos mo-FON-go ee bay-LA-mos SAL-sa fweh oon BYA-he ee-nol-bee-DA-ble',
+    translit: 'el beh-RA-no pa-SA-do bya-HA-mos a pwer-toh REE-koh bo-LA-mos DES-de NWEH-ba YORK ee ye-GA-mos a san HWAHN bee-see-TA-mos el BYEH-ho san HWAHN ee ka-mee-NA-mos por las KA-yes de ko-LO-res ko-MEE-mos mo-FON-go ee bay-LA-mos SAL-sa fweh oon BYA-he ee-nol-bee-DA-ble',
     glossary: [
       { es: 'verano', en: 'summer' },
       { es: 'viajamos', en: 'we traveled' },

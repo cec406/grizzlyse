@@ -11,7 +11,7 @@ import { applyAnswer, applyResult } from '../srs-store.js';
 const LEVELS = ['all', 'A1', 'A2', 'B1', 'B2'];
 
 export function render(params) {
-  const unitId = params.unitId || 'all';
+  const unitId = params.unitId || settings().unitFilter || 'all';
   const s = settings();
   return `
   <section class="practice">
@@ -64,7 +64,7 @@ export function attach(root, params) {
       const val = chip.getAttribute('data-val');
       if (set === 'level') setSettings({ levelFilter: val });
       if (set === 'diff') setSettings({ difficulty: val });
-      if (root.querySelectorAll) root.querySelectorAll('.chip').forEach((c) => c.classList.toggle('active', c === chip));
+      if (chip.parentNode && chip.parentNode.querySelectorAll) chip.parentNode.querySelectorAll('.chip').forEach((c) => c.classList.toggle('active', c === chip));
       return;
     }
     if (chip && chip.tagName === 'SELECT') {
@@ -78,6 +78,17 @@ export function attach(root, params) {
       if (slot) launch(gameId, params.unitId || settings().unitFilter || 'all', slot);
     }
   });
+  // the Unit dropdown fires "change", not "click"
+  const unitSel = root.querySelector('[data-set="unit"]');
+  if (unitSel) {
+    unitSel.value = settings().unitFilter || 'all';
+    unitSel.addEventListener('change', () => setSettings({ unitFilter: unitSel.value }));
+  }
+  // deep link: #/game/<id> boots that game immediately
+  if (params.gameId && gameById(params.gameId)) {
+    const slot = root.querySelector('[data-slot="runner"]');
+    if (slot) launch(params.gameId, params.unitId || settings().unitFilter || 'all', slot);
+  }
 }
 
 function launch(gameId, unitId, slot) {

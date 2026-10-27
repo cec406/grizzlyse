@@ -8,6 +8,7 @@ export function render() {
   <section class="dialects">
     <h1>Dialectos <small>Spanish around the world</small></h1>
     <p class="lead">One language, many voices. Pick a region to hear how it sounds, learn its slang, and see what makes it tick. Puerto Rico first — that is your trip.</p>
+    <p class="hint">Slang is where a language relaxes: it is regional and often informal. Each entry says how it is used — check the note before trying it at school, at work, or with strangers.</p>
     <nav class="tabs region-tabs">
       ${DIALECTS.map((d, i) => `<button type="button" class="tab${i === 0 ? ' active' : ''}" data-action="region" data-region="${d.id}">${d.flag} ${esc(d.name)}</button>`).join('')}
     </nav>

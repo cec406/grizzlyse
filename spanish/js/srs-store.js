@@ -63,7 +63,6 @@ export function applyAnswer(rec, q) {
       if (w && w.box >= 3) { /* novel */ }
     } else {
       rememberWrong(q.did);
-      markWords([q.did]);
     }
   }
   if (q && q.pid) {

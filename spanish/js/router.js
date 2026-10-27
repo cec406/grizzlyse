@@ -29,6 +29,10 @@ export const PARAMS_FOR = {
   'reading-text': ['textId']
 };
 
+function safeDecode(v) {
+  try { return decodeURIComponent(v); } catch { return v; }
+}
+
 export function parseHash(hash) {
   let h = String(hash || '#/home');
   if (!h.startsWith('#')) return null;
@@ -41,7 +45,7 @@ export function parseHash(hash) {
     if (m) {
       const params = {};
       (PARAMS_FOR[route.name] || []).forEach((key, i) => {
-        params[key] = m[i + 1] ? decodeURIComponent(m[i + 1]) : undefined;
+        params[key] = m[i + 1] ? safeDecode(m[i + 1]) : undefined;
       });
       if (query) {
         for (const pair of query.split('&')) {
@@ -49,7 +53,7 @@ export function parseHash(hash) {
           const eq = pair.indexOf('=');
           const k = eq >= 0 ? pair.slice(0, eq) : pair;
           const v = eq >= 0 ? pair.slice(eq + 1) : '';
-          if (k) params[decodeURIComponent(k)] = decodeURIComponent(v);
+          if (k) params[safeDecode(k)] = safeDecode(v);
         }
       }
       return { name: route.name, params };

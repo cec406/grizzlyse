@@ -52,7 +52,7 @@ export const unit = {
       ],
       examples: [
         { es: 'Hoy es lunes y mañana es martes.', trans: 'oy es LOO-nes ee ma-NYA-nah es MAR-tes', en: 'Today is Monday and tomorrow is Tuesday.' },
-        { es: 'Mi cumpleaños es el diez de octubre.', trans: 'mee koom-pleh-A-nyohs es el dyes deh ok-TOO-breh', en: 'My birthday is the tenth of October.' }
+        { es: 'Mi cumpleaños es el diez de octubre.', trans: 'mee koom-pleh-A-nyohs es el dyehs deh ok-TOO-breh', en: 'My birthday is the tenth of October.' }
       ]
     }
   ],
@@ -66,7 +66,7 @@ export const unit = {
     { id: 'u04-siete', es: 'siete', translit: 'SYEH-teh', en: 'seven', pos: 'numeral' },
     { id: 'u04-ocho', es: 'ocho', translit: 'OH-choh', en: 'eight', pos: 'numeral' },
     { id: 'u04-nueve', es: 'nueve', translit: 'NWEH-beh', en: 'nine', pos: 'numeral' },
-    { id: 'u04-diez', es: 'diez', translit: 'dyes', en: 'ten', pos: 'numeral' },
+    { id: 'u04-diez', es: 'diez', translit: 'dyehs', en: 'ten', pos: 'numeral' },
     { id: 'u04-veinte', es: 'veinte', translit: 'BAYN-teh', en: 'twenty', pos: 'numeral' },
     { id: 'u04-cien', es: 'cien', translit: 'syen', en: 'one hundred', pos: 'numeral' },
     { id: 'u04-anos', es: 'años', translit: 'AH-nyohs', en: 'years', pos: 'noun', gender: 'm' },
@@ -102,7 +102,7 @@ export const unit = {
     { es: 'Hoy es lunes y mañana es martes.', translit: 'oy es LOO-nes ee ma-NYA-nah es MAR-tes', en: 'Today is Monday and tomorrow is Tuesday.', words: [{ id: 'u04-hoy', es: 'Hoy', en: 'today' }, { id: 'u04-lunes', es: 'lunes', en: 'Monday' }, { id: 'u04-manana', es: 'mañana', en: 'tomorrow' }, { id: 'u04-martes', es: 'martes', en: 'Tuesday' }] },
     { es: 'La semana tiene siete días.', translit: 'lah seh-MAH-nah TYEH-neh SYEH-teh DEE-ahs', en: 'The week has seven days.', words: [{ id: 'u04-semana', es: 'semana', en: 'week' }, { id: 'u04-tiene', es: 'tiene', en: 'has' }, { id: 'u04-siete', es: 'siete', en: 'seven' }, { id: 'u04-dias', es: 'días', en: 'days' }] },
     { es: '¿Cuántos años tienes?', translit: 'KWAN-tohs AH-nyohs TYEH-nes', en: 'How old are you?', words: [{ id: 'u04-cuantos', es: 'Cuántos', en: 'how many' }, { id: 'u04-anos', es: 'años', en: 'years' }, { id: 'u04-tienes', es: 'tienes', en: 'you have' }] },
-    { es: 'Hoy es sábado, el diez de octubre.', translit: 'oy es SAH-bah-doh el dyes deh ok-TOO-breh', en: 'Today is Saturday, the tenth of October.', words: [{ id: 'u04-hoy', es: 'Hoy', en: 'today' }, { id: 'u04-sabado', es: 'sábado', en: 'Saturday' }, { id: 'u04-diez', es: 'diez', en: 'ten' }] }
+    { es: 'Hoy es sábado, el diez de octubre.', translit: 'oy es SAH-bah-doh el dyehs deh ok-TOO-breh', en: 'Today is Saturday, the tenth of October.', words: [{ id: 'u04-hoy', es: 'Hoy', en: 'today' }, { id: 'u04-sabado', es: 'sábado', en: 'Saturday' }, { id: 'u04-diez', es: 'diez', en: 'ten' }] }
   ],
   dialogue: {
     title: 'En la fiesta de cumpleaños (At the birthday party)',

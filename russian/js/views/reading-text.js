@@ -3,7 +3,7 @@ import { esc } from '../ui.js';
 import { READING } from '../../data/index.js';
 import { href } from '../router.js';
 import { runGame } from '../games/runner.js';
-import { makeSession } from '../games/logic.js';
+import { makeSession, shuffle, difficultyConf, eq } from '../games/logic.js';
 import { applyAnswer, applyResult } from '../srs-store.js';
 import { setCard, recordActivity } from '../state.js';
 import { newCard } from '../srs.js';
@@ -39,7 +39,7 @@ function wordSpans(paragraph, r) {
     const key = clean.toLowerCase();
     const g = gloss.get(key);
     if (g) {
-      return `<button type="button" class="wrd" data-word="${esc(clean)}" data-id="${esc(g.id || '')}">${esc(tok)}</button>`;
+      return `<button type="button" class="wrd" data-word="${esc(clean)}" data-id="${esc(g.id || (r.id + '-g' + (r.glossary || []).indexOf(g)))}">${esc(tok)}</button>`;
     }
     return esc(tok);
   }).join('');
@@ -78,22 +78,23 @@ export function attach(root, params) {
     const slot = root.querySelector('[data-slot="runner"]');
     if (!slot) return;
     const questions = (r.questions || []).map((q) => qToRunner(q));
-    const session = makeSession('reading-' + r.id, questions, 'medium', { timers: false });
+    const session = makeSession('reading-' + r.id, questions, difficultyConf('medium'), { timers: false });
     runGame(slot, {
       game: { id: 'reading-' + r.id, title: r.title + ' — comprehension', icon: '📖' },
       session,
       onFeedback: (rec, q) => applyAnswer(rec, q),
       onComplete: (res) => { applyResult(res, { gameId: 'reading-' + r.id, unitId: r.id }); recordActivity(); },
-      again: () => attach(root, params)
+      again: () => { const b2 = root.querySelector('[data-action="quiz"]'); if (b2) b2.click(); }
     });
   });
 }
 
 function qToRunner(q) {
   if (q.type.startsWith('mc')) {
-    return { type: 'mc', prompt: q.q, options: q.options, correct: q.answer, ru: q.ru, en: q.answer };
+    return { type: 'mc', prompt: q.q, options: shuffle(q.options), correct: q.answer, correctValue: q.answer, ru: q.ru, en: q.answer };
   }
-  return { type: 'type', prompt: q.q, accepted: q.answer, accepts: q.accepts || [], ru: q.ru, en: q.answer };
+  const accepts = [q.answer, ...(q.accepts || [])];
+  return { type: 'type', prompt: q.q, accepted: q.answer, accepts, correctValue: q.answer, check: (u) => accepts.some((a) => eq(u, a)), ru: q.ru, en: q.answer };
 }
 
 void ruWords;

@@ -18,7 +18,7 @@ export const unit = {
         ['¡Hola!', 'any time, casual', 'Hi!']
       ],
       examples: [
-        { es: 'Buenos días, señora.', trans: 'BWEH-nos DEE-as se-NYO-ra', en: 'Good morning, ma am.' },
+        { es: 'Buenos días, señora.', trans: 'BWEH-nos DEE-as se-NYO-ra', en: 'Good morning, madam.' },
         { es: 'Buenas noches, hasta mañana.', trans: 'BWEH-nas NO-ches AS-ta ma-NYA-na', en: 'Good night, see you tomorrow.' }
       ]
     },

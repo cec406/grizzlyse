@@ -2,7 +2,7 @@
 import { parseHash } from './router.js';
 import { viewFor } from './views/index.js';
 import { speak } from './audio.js';
-import { loadState } from './state.js';
+import { loadState, subscribe } from './state.js';
 
 window.speak = speak;
 
@@ -39,6 +39,7 @@ function route() {
     main.innerHTML = view.render(params);
     if (view.attach) view.attach(main, params);
     highlightNav(r ? r.name : 'home');
+    if (main.focus) main.focus({ preventScroll: true });
     window.scrollTo && window.scrollTo(0, 0);
   } catch (err) {
     console.error('view render error', err);
@@ -52,6 +53,7 @@ function highlightNav(name) {
   links.forEach((a) => {
     const h = String(a.getAttribute('href') || '').slice(2);
     a.classList.toggle('active', h === active);
+    if (h === active) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
   });
 }
 
@@ -79,6 +81,7 @@ function paintXp() {
 export function start() {
   buildShell();
   paintXp();
+  subscribe(paintXp);
   route();
   window.addEventListener('hashchange', () => {
     route();
