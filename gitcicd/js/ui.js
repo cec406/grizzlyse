@@ -425,9 +425,24 @@
     renderHUD();
     GH.toast('&#127881; Mission complete! +30 XP', 'good');
     celebrate(false, 0, badges);
+    var chapter = ws && ws.chapter;
     var banner = GH.el('div', { class: 'mission-complete', html: '&#127881; <b>Objectives complete!</b> Nice work. Explore freely or head to the next chapter.' });
     if (box && box.parentNode) box.parentNode.insertBefore(banner, box.nextSibling);
-    if (m.kind === 'ci') { /* run already shows */ }
+    // surface the actual next chapter so the flow continues without hunting
+    var next = chapter ? nextAfter(chapter.id) : null;
+    if (next) {
+      var acts = GH.el('div', { class: 'fb-actions' });
+      acts.appendChild(GH.el('button', { class: 'btn primary', html: 'Next: ' + GH.esc(next.title) + ' &rarr;', onclick: function () { App.go('#/chapter/' + next.id); } }));
+      if (box && box.parentNode) box.parentNode.insertBefore(acts, box.nextSibling);
+    }
+  }
+
+  /* the chapter immediately after <id> in registration order */
+  function nextAfter(id) {
+    var flat = [];
+    GH.TRACKS.forEach(function (t) { t.chapters.forEach(function (c) { flat.push(c); }); });
+    for (var i = 0; i < flat.length; i++) if (flat[i].id === id) return flat[i + 1] || null;
+    return null;
   }
 
   /* ---------- CI mission ---------- */
@@ -453,14 +468,16 @@
           '</div>' +
         '</div>' +
         '<div class="mission-foot"><button class="btn ghost" id="m-hint">&#128161; Hint</button>' +
-          '<button class="btn ghost" id="m-solution">Show solution</button><span id="m-hint-text" class="muted small"></span></div>' +
+          (m.solution ? '<button class="btn ghost" id="m-solution">Show solution</button>' : '') +
+          '<span id="m-hint-text" class="muted small"></span></div>' +
       '</section>';
     var ta = GH.qs('#ci-text'); ta.value = text;
     ta.addEventListener('input', function () { ws.text = ta.value; });
     GH.qs('#ci-validate').onclick = function () { validateCI(); };
     GH.qs('#ci-run').onclick = function () { runCI(); };
     GH.qs('#m-hint').onclick = function () { GH.qs('#m-hint-text').innerHTML = GH.m(m.hint || ''); };
-    GH.qs('#m-solution').onclick = function () { if (m.solution) { ta.value = m.solution; ws.text = m.solution; validateCI(); } else GH.toast('No solution stored for this one.', 'bad'); };
+    var solBtn = GH.qs('#m-solution');
+    if (solBtn) solBtn.onclick = function () { if (m.solution) { ta.value = m.solution; ws.text = m.solution; validateCI(); } };
     GH.renderPipeline(GH.qs('#pipeline-box'), null);
     updateObjectives();
   }
@@ -495,6 +512,14 @@
 
   /* ---------- Quiz ---------- */
   function renderQuiz(zone, chapter, m) {
+    // shuffle option order so the answer position never gives it away
+    m.questions.forEach(function (q) {
+      var order = q.options.map(function (_, i) { return i; });
+      for (var i = order.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+      var newA = order.indexOf(q.a);
+      q.options = order.map(function (k) { return q.options[k]; });
+      q.a = newA;
+    });
     zone.innerHTML =
       '<section class="mission"><div class="mission-head"><span class="mission-tag">Quiz</span><h2>' + chapter.title + '</h2>' +
         '<p class="muted">' + GH.m(m.brief) + '</p></div>' +
@@ -527,7 +552,8 @@
     });
     GH.qs('#quiz-result').innerHTML = 'Score: <b>' + res.correct + '/' + res.total + '</b> (' + res.pct + '%)';
     GH.recordQuiz(m.id, res.pct);
-    if (res.pct >= 70) {
+    // 70% pass, with one miss tolerated on 3-question quizzes (2/3 = 67%)
+    if (res.pct >= 70 || res.correct / res.total >= 0.66) {
       GH.markMission(m.id);
       var badges = GH.checkBadges();
       renderHUD();

@@ -29,7 +29,7 @@ var ACH_DEFS = [
   { id: "firstwatch",  icon: "🎖️", name: "First Watch",    desc: "Complete Operation First Watch." },
   { id: "custodian",   icon: "🔗", name: "Custodian",      desc: "Finish First Watch without a single misstep." },
   { id: "bughunter",   icon: "🐛", name: "Bug Hunter",     desc: "Complete Operation Cold Chain." },
-  { id: "guardian",    icon: "🕯️", name: "Guardian",       desc: "Complete Operation Night Light." },
+  { id: "guardian",    icon: "🤲", name: "Guardian",       desc: "Complete Operation Helping Hand." },
   { id: "polyglot",    icon: "🌐", name: "Polyglot",       desc: "Reveal 15+ translations across cases." },
   { id: "sentinel",    icon: "🗼", name: "Sentinel",       desc: "Complete Operation Watchtower." },
   { id: "lifeline",    icon: "🏥", name: "Lifeline",       desc: "Complete Operation Deadbolt." },
@@ -38,7 +38,7 @@ var ACH_DEFS = [
   { id: "neighbor",    icon: "📞", name: "Community Hero", desc: "Complete Operation Porch Light." },
   { id: "aegis",       icon: "🛡️", name: "Aegis",          desc: "Complete Operation Aegis." },
   { id: "certified",   icon: "🎓", name: "Certified",      desc: "Pass the Final Certification Exam." },
-  { id: "safeharbor",  icon: "🚢", name: "Safe Harbor",    desc: "Complete Operation Hidden Harbor (Guardian path)." },
+  { id: "safeharbor",  icon: "💸", name: "Easy Money",     desc: "Complete Operation Easy Money (Guardian path)." },
   { id: "firebreak",   icon: "🧯", name: "Firebreak",      desc: "Complete Operation Firebreak (Sentinel path)." },
   { id: "dualspecial", icon: "🏆", name: "Dual Specialist", desc: "Clear every case in BOTH specializations." },
   { id: "ranger",      icon: "🧪", name: "Range Certified", desc: "Complete every Skills Lab with the real tools." }
@@ -890,7 +890,7 @@ function renderTerminal(body, step) {
       return;
     }
     if (c === "whoami") {
-      print(["analyst@ncib", "clearance: ACTIVE  ·  sandbox network: ISOLATED  ·  mood: professional"]);
+      print(["analyst@ncib", "status: ACTIVE  ·  sandbox network: ISOLATED  ·  mood: professional"]);
       return;
     }
     if (c === "hint") {

@@ -210,6 +210,13 @@ button { font: inherit; }
 .timerbar { height: 6px; border-radius: 99px; background: rgba(255,255,255,.08); overflow: hidden; margin-top: 8px; }
 .timerbar i { background: linear-gradient(90deg, var(--warn), var(--bad)); transition: width .1s linear; border-radius: 99px; }
 
+/* lesson peek inside a session */
+.peek { max-height: calc(100vh - 60px); overflow-y: auto; }
+.peek-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.peek-top .ses-title { flex: 1; justify-content: flex-end; color: var(--muted); font-size: .95rem; }
+.peek .lesson-hero { padding: 14px 16px; border-radius: 16px; margin-bottom: 14px; }
+.peek .lesson-hook { margin: 0; font-size: 1rem; }
+
 .prob { margin-top: 18px; }
 .prob-level { font-size: 11px; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); margin-bottom: 8px; }
 .prob-prompt { font-size: 21px; line-height: 1.5; margin-bottom: 20px; }
@@ -515,3 +522,13 @@ sub { font-size: .72em; }
 ::selection { background: rgba(56,189,248,.35); }
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.16); border-radius: 99px; }
+
+/* keyboard focus for everyone */
+:focus-visible { outline: 3px solid rgba(56,189,248,.75); outline-offset: 2px; border-radius: 4px; }
+
+/* color-mix fallbacks: older browsers keep readable borders/backgrounds */
+.realm-icon, .mode-icon, .path-icon, .fcell.on { border-color: rgba(255,255,255,.22); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

@@ -58,7 +58,7 @@
         controls(range('a', -10, 10, st.a) + range('b', -10, 10, st.b) +
           '<label class="viz-ctl"><span>operation</span><select data-v="op">' +
           '<option value="+"' + (st.op === '+' ? ' selected' : '') + '>add (+)</option>' +
-          '<option value="-" selected>subtract (&minus;)</option></select></label>') +
+          '<option value="-"' + (st.op === '-' ? ' selected' : '') + '>subtract (&minus;)</option></select></label>') +
         '<p class="viz-note">Subtracting a negative is the same as adding a positive: the arrow flips direction.</p>';
     }
     function render() {
@@ -98,7 +98,7 @@
             ' &rarr; ' + MH.nice(r.n / r.d, 4) + '</p>' +
         '</div>' +
         controls(num('n1', st.n1, 0, 12) + num('d1', st.d1, 1, 12) + num('n2', st.n2, 0, 12) + num('d2', st.d2, 1, 12) +
-          '<label class="viz-ctl"><span>op</span><select data-v="op"><option value="+"' + (st.op === '+' ? ' selected' : '') + '>+</option><option value="-" selected>&minus;</option></select></label>');
+          '<label class="viz-ctl"><span>op</span><select data-v="op"><option value="+"' + (st.op === '+' ? ' selected' : '') + '>+</option><option value="-"' + (st.op === '-' ? ' selected' : '') + '>&minus;</option></select></label>');
       root.querySelectorAll('[data-v]').forEach(function (el) {
         el.oninput = el.onchange = function () { st[el.dataset.v] = el.value; render(); };
       });
@@ -376,7 +376,17 @@
   MH.viz.sortbars = function (root) {
     var arr = [5, 2, 8, 1, 9, 3, 7, 4];
     var st = { comps: 0, i: 0, j: 0, hl: [-1, -1], done: false };
-    function reset() { arr = [5, 2, 8, 1, 9, 3, 7, 4]; st = { comps: 0, i: 0, j: 0, hl: [-1, -1], done: false }; }
+    function reset() {
+      // genuinely shuffle: Fisher-Yates over 1..8, avoid the already-sorted deal
+      do {
+        arr = [1, 2, 3, 4, 5, 6, 7, 8];
+        for (var k = arr.length - 1; k > 0; k--) {
+          var m = Math.floor(Math.random() * (k + 1));
+          var tmp = arr[k]; arr[k] = arr[m]; arr[m] = tmp;
+        }
+      } while (arr.every(function (v, i) { return v === i + 1; }));
+      st = { comps: 0, i: 0, j: 0, hl: [-1, -1], done: false };
+    }
     function step() {
       if (st.done) return;
       var n = arr.length;

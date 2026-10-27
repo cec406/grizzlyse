@@ -1,6 +1,6 @@
 /* ============================================================
    CODEWATCH — Missions 4–6
-   4. Operation Watchtower   (soldier OPSEC / foreign honeytrap)
+   4. Operation Watchtower   (soldier OPSEC / fake online persona)
    5. Operation Deadbolt     (hospital ransomware — Russian note)
    6. Operation Tin Shield   (grid / ICS intrusion — EMP prevention)
    ============================================================ */
@@ -17,7 +17,7 @@ var MISSIONS_B = [
   difficulty: 3,
   xp: 460,
   track: "sentinel",
-  tag: { en: "A honeytrap is hunting a soldier's secrets.", es: "Un 'honeytrap' caza los secretos de un soldado.", ru: "Приманка охотится за секретами солдата." },
+  tag: { en: "A fake online persona is hunting a soldier's secrets.", es: "Un perfil falso caza los secretos de un soldado.", ru: "Подставной аккаунт охотится за секретами солдата." },
   steps: [
     {
       type: "brief",
@@ -71,7 +71,7 @@ var MISSIONS_B = [
     {
       type: "choice",
       title: "Your Move",
-      prompt: "You've confirmed the honeytrap. What's the right play?",
+      prompt: "You've confirmed 'Elena' is a fake persona run by a hostile service. What's the right play?",
       options: [
         { k: "a", label: "Hand everything to Army counterintelligence and let THEM run the account. Brief Dana on OPSEC; let her keep chatting under CI guidance.", correct: true,
           feedback: "Correct. CI wants to keep 'Elena' alive — controlled engagement can map the handler network and feed disinformation. Killing the account now just makes the enemy open a new one you can't see." },

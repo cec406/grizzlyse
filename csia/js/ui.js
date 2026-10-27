@@ -228,6 +228,17 @@
     viewEl.innerHTML = defs() +
       '<section class="module">' +
         '<a class="back" href="#/track/' + (t.id || '') + '">&larr; ' + CY.esc(t.name) + '</a>' +
+        (function () {
+          // prev / next quick nav so learners never dead-end on a module page
+          var ms = (t.modules || []), i = ms.map(function (x) { return x.id; }).indexOf(id);
+          var prev = i > 0 ? ms[i - 1] : null, next = i > -1 && i < ms.length - 1 ? ms[i + 1] : null;
+          if (!prev && !next) return '';
+          return '<div class="module-nav">' +
+            (prev ? '<a class="btn tiny ghost" href="#/module/' + prev.id + '">&larr; ' + stripTags(prev.title) + '</a>' : '<span></span>') +
+            '<span class="muted small">' + (i + 1) + ' / ' + ms.length + '</span>' +
+            (next ? '<a class="btn tiny ghost" href="#/module/' + next.id + '">' + stripTags(next.title) + ' &rarr;</a>' : '<span></span>') +
+            '</div>';
+        })() +
         '<div class="module-hero" style="--c:' + t.color + '">' +
           '<span class="lesson-tag">' + (t.audience === 'advanced' ? 'Advanced' : 'Core') + ' &middot; ' + (m.minutes || 4) + ' min</span>' +
           '<h1>' + m.title + '</h1>' +
@@ -340,14 +351,22 @@
   }
 
   /* ---------------- ASSESSMENT ---------------- */
+  var assessDeck = null;   // shuffled per attempt so rote position-memory never helps
   App.viewAssessment = function () {
     var A = CY.ASSESSMENT;
+    var rng = CY.makeRng((Math.random() * 1e9) | 0);
+    var order = rng.shuffle(A.questions.map(function (_, i) { return i; }));
+    assessDeck = order.map(function (qi) {
+      var q = A.questions[qi];
+      var idx = rng.shuffle(q.options.map(function (_, i) { return i; }));
+      return { q: q.q, options: idx.map(function (i) { return q.options[i]; }), a: idx.indexOf(q.a), why: q.why };
+    });
     viewEl.innerHTML = defs() +
       '<section class="section"><div class="section-head"><h2>' + A.title + '</h2>' +
         '<span class="muted small">Pass mark ' + A.passPct + '%</span></div>' +
         '<p class="muted">' + CY.m(A.intro) + '</p>' +
         (CY.state.assessment.best ? '<p class="muted small">Best score so far: <b>' + CY.state.assessment.best + '%</b> (' + CY.state.assessment.attempts + ' attempt' + (CY.state.assessment.attempts === 1 ? '' : 's') + ')</p>' : '') +
-        '<div class="quiz">' + A.questions.map(function (q, qi) {
+        '<div class="quiz">' + assessDeck.map(function (q, qi) {
           return '<div class="quiz-q" data-q="' + qi + '"><div class="qq-text">' + (qi + 1) + '. ' + CY.m(q.q) + '</div>' +
             '<div class="qq-opts">' + q.options.map(function (o, oi) { return '<label class="qq-opt"><input type="radio" name="A' + qi + '" value="' + oi + '"> <span>' + CY.m(o) + '</span></label>'; }).join('') + '</div>' +
             '<div class="qq-why muted small" style="display:none"></div></div>';
@@ -358,9 +377,10 @@
   };
   function submitAssessment() {
     var A = CY.ASSESSMENT;
-    var answers = A.questions.map(function (q, i) { var e = CY.qs('input[name="A' + i + '"]:checked'); return e ? +e.value : -1; });
+    var deck = assessDeck || A.questions;
+    var answers = deck.map(function (q, i) { var e = CY.qs('input[name="A' + i + '"]:checked'); return e ? +e.value : -1; });
     var correct = 0;
-    A.questions.forEach(function (q, i) {
+    deck.forEach(function (q, i) {
       var box = CY.qs('.quiz-q[data-q="' + i + '"]');
       var ok = answers[i] === q.a; if (ok) correct++;
       box.classList.toggle('right', ok); box.classList.toggle('wrong', !ok);
@@ -368,13 +388,13 @@
       why.innerHTML = (ok ? '&#10003; Correct. ' : '&#10007; Correct answer: <b>' + CY.m(q.options[q.a]) + '</b>. ') + CY.m(q.why);
       CY.qsa('.qq-opt', box).forEach(function (o, oi) { o.classList.toggle('is-correct', oi === q.a); });
     });
-    var pct = Math.round((correct / A.questions.length) * 100);
+    var pct = Math.round((correct / deck.length) * 100);
     CY.state.assessment.attempts++;
     CY.state.assessment.best = Math.max(CY.state.assessment.best, pct);
     if (pct >= A.passPct) { CY.state.assessment.passed = true; CY.state.assessment.ts = Date.now(); CY.award(60, 'Assessment passed'); }
     var badges = CY.checkBadges();
     CY.save(); renderHUD();
-    CY.qs('#assess-result').innerHTML = 'Score: <b>' + correct + '/' + A.questions.length + '</b> (' + pct + '%)';
+    CY.qs('#assess-result').innerHTML = 'Score: <b>' + correct + '/' + deck.length + '</b> (' + pct + '%)';
     if (pct >= A.passPct) {
       CY.toast('&#127881; Passed with ' + pct + '%!', 'good');
       var box = CY.el('div', { class: 'module-complete', html: '&#128220; <b>Congratulations &mdash; you passed.</b> ' + (CY.certificateEligible() ? 'Your certificate is ready.' : 'Finish the core modules to unlock your certificate.') });

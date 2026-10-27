@@ -2,6 +2,8 @@
  * content/achievements.js — badges that reward good habits, not just speed.
  * ========================================================================= */
 
+import { MISSIONS } from './missions.js';
+
 export const ACHIEVEMENTS = [
   { id: 'first-command', title: 'Hello, Terminal', desc: 'Run your very first command.', xp: 25, icon: '▶', check: (s) => s.commandsRun >= 1 },
   { id: 'ten-commands', title: 'Warming Up', desc: 'Run 10 commands.', xp: 25, icon: '▶', check: (s) => s.commandsRun >= 10 },
@@ -12,10 +14,10 @@ export const ACHIEVEMENTS = [
   { id: 'permission-plumber', title: 'Permission Granted', desc: 'Run your first sudo command.', xp: 75, icon: '🔑', check: (s) => (s.commands || []).some((c) => /^\s*sudo\b/.test(c)) },
   { id: 'script-runner', title: 'Automate Everything', desc: 'Run a script you wrote.', xp: 75, icon: '⚙', check: (s) => (s.commands || []).some((c) => /\.\/[\w-]+\.sh/.test(c)) },
   { id: 'pipe-of-seven', title: 'Unix Philosopher', desc: 'Write a pipeline with five stages.', xp: 150, icon: '⑦', check: (s) => (s.commands || []).some((c) => c.split('|').length >= 6) },
-  { id: 'first-chapter', title: 'Chapter One Done', desc: 'Finish chapter 1.', xp: 100, icon: '★', check: (s) => s.missionsDone.some((m) => m.chapter === 1) },
+  { id: 'first-chapter', title: 'Chapter One Done', desc: 'Finish chapter 1.', xp: 100, icon: '★', check: (s) => s.missionsDone.some((id) => (MISSIONS.find((m) => m.id === id) || {}).chapter === 1) },
   { id: 'five-missions', title: 'Getting Somewhere', desc: 'Complete 5 missions.', xp: 100, icon: '★', check: (s) => s.missionsDone.length >= 5 },
   { id: 'half-way', title: 'Halfway There', desc: 'Complete 15 missions.', xp: 250, icon: '★', check: (s) => s.missionsDone.length >= 15 },
-  { id: 'all-missions', title: 'Zero To Hero', desc: 'Complete every mission.', xp: 500, icon: '★', check: (s) => s.missionsDone.length >= 34 },
+  { id: 'all-missions', title: 'Zero To Hero', desc: 'Complete every mission.', xp: 500, icon: '★', check: (s) => s.missionsDone.length >= MISSIONS.length },
   { id: 'first-ctf', title: 'Flag Finder', desc: 'Solve your first CTF challenge.', xp: 100, icon: '⚑', check: (s) => (s.ctfSolved || []).length >= 1 },
   { id: 'ctf-trio', title: 'Hacker Mindset', desc: 'Solve 3 CTF challenges.', xp: 200, icon: '⚑', check: (s) => (s.ctfSolved || []).length >= 3 },
   { id: 'ctf-all', title: 'Capture Them All', desc: 'Solve every CTF challenge.', xp: 400, icon: '⚑', check: (s) => (s.ctfSolved || []).length >= 6 },
@@ -24,7 +26,7 @@ export const ACHIEVEMENTS = [
   { id: 'all-code', title: 'Algorithm Adept', desc: 'Solve every coding exercise.', xp: 400, icon: '{ }', check: (s) => (s.labsSolved || []).length >= 12 },
   { id: 'powershell-pro', title: 'Blue Screen Wizard', desc: 'Use ten PowerShell cmdlets.', xp: 150, icon: 'W', check: (s) => (s.commands || []).filter((c) => /Get-|Set-|New-|Remove-|Select-|Where-|ForEach-|Sort-/.test(c)).length >= 10 },
   { id: 'scanner', title: 'Port Knocker', desc: 'Run nmap against a lab machine.', xp: 100, icon: '⌁', check: (s) => (s.commands || []).some((c) => /\bnmap\b/.test(c)) },
-  { id: 'ethical', title: 'Read the Rules', desc: 'Finish the responsible-disclosure mission.', xp: 150, icon: '⚖', check: (s) => (s.missionsDone || []).some((m) => m.id === 'responsible-disclosure') },
+  { id: 'ethical', title: 'Read the Rules', desc: 'Finish the responsible-disclosure mission.', xp: 150, icon: '⚖', check: (s) => (s.missionsDone || []).includes('responsible-disclosure') },
   { id: 'level-5', title: 'Level 5', desc: 'Reach level 5.', xp: 100, icon: '5', check: (s) => levelForXp(s.xp || 0) >= 5 },
   { id: 'level-10', title: 'Level 10', desc: 'Reach level 10.', xp: 300, icon: '10', check: (s) => levelForXp(s.xp || 0) >= 10 },
 ];

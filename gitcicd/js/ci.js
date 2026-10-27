@@ -57,6 +57,9 @@
   }
   function isKeyLine(t) { return /^[^:#][^:]*:(\s|$)/.test(t) || /^["'][^"']*["']\s*:/.test(t); }
 
+  /* simulated cache store: first run for a key = miss, later runs = hit */
+  var cacheStore = {};
+
   GH.parseYaml = function (text) {
     var raw = String(text == null ? '' : text).replace(/\r/g, '').split('\n');
     var lines = [];
@@ -256,7 +259,13 @@
         var act = String(st.uses);
         if (/^actions\/checkout@/.test(act)) { rec.log.push('Syncing repository: ' + (ctx.files && Object.keys(ctx.files).length) + ' file(s)'); rec.log.push("Checking out branch '" + ctx.branch + "'"); }
         else if (/^actions\/setup-node@/.test(act)) { rec.log.push('Found Node ' + ((st.with && st.with['node-version']) || '20')); rec.log.push('Setting up Node ' + ((st.with && st.with['node-version']) || '20')); }
-        else if (/^actions\/cache@/.test(act)) { rec.log.push('Cache restored from key: ' + (st.with && st.with.key ? st.with.key : 'deps') + (Math.random() < 0.5 ? ' (hit)' : ' (miss)')); }
+        else if (/^actions\/cache@/.test(act)) {
+          var ck = (st.with && st.with.key) ? st.with.key : 'deps';
+          // teach real cache behaviour deterministically: the first run populates
+          // the cache (miss), later runs with the same key restore it (hit)
+          if (cacheStore[ck]) rec.log.push('Cache restored from key: ' + ck + ' (hit)');
+          else { rec.log.push('Cache not found for key: ' + ck + ' (miss)'); rec.log.push('Cache saved with key: ' + ck); cacheStore[ck] = true; }
+        }
         else if (/^actions\/setup-python@/.test(act)) { rec.log.push('Setting up Python ' + ((st.with && st.with['python-version']) || '3.12')); }
         else if (/upload-artifact@/.test(act)) { var an = (st.with && st.with.name) || 'artifact'; entry.artifacts.push(an); rec.log.push('Uploaded artifact: ' + an); }
         else if (/download-artifact@/.test(act)) { rec.log.push('Downloaded artifact'); }

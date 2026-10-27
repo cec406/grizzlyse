@@ -644,10 +644,27 @@
           var mIdx = rest.indexOf('-m');
           var msg = mIdx !== -1 ? rest[mIdx + 1] : null;
           var all = rest.indexOf('-a') !== -1 || rest.indexOf('-am') !== -1 || rest.indexOf('-all') !== -1;
+          var amend = rest.indexOf('--amend') !== -1;
           if (mIdx === -1 && rest.indexOf('-am') !== -1) { var ai = rest.indexOf('-am'); msg = rest[ai + 1]; all = true; }
           if (mIdx === -1 && rest.indexOf('-a') !== -1) { var ai2 = rest.indexOf('-a'); if (rest[ai2 + 1]) msg = rest[ai2 + 1]; }
           if (all) { var self2 = this; keys(this.work).forEach(function (p) { if (p in self2.headSnapshot()) self2.index[p] = self2.work[p]; }); }
-          if (msg == null && this.mergeState === null) throw new Error('Aborting commit due to empty commit message.');
+          if (msg == null && this.mergeState === null && !amend) throw new Error('Aborting commit due to empty commit message.');
+          if (amend) {
+            // replace the tip commit: same parents, new message, index as the tree
+            var tip = this.headSha();
+            if (!tip) throw new Error('nothing to amend (no commits yet)');
+            var old = this.commits[tip];
+            var filesA = keys(this.index).length ? copy(this.index) : copy(old.files);
+            var newMsg = msg != null ? msg : old.message;
+            if (this.hooks && this.hooks.commitMsg) {
+              var cmA = this.hooks.commitMsg({ message: newMsg, repo: this });
+              if (cmA && cmA.ok === false) throw new Error(cmA.message || 'commit-msg hook failed');
+            }
+            var shaA = this.newCommit(old.parents, filesA, newMsg);
+            this.setHead(shaA, 'commit (amend): ' + newMsg);
+            this.index = copy(filesA);
+            return { out: '[' + (this.head.type === 'branch' ? this.head.name : 'detached HEAD') + ' ' + shaA.slice(0, 7) + '] ' + newMsg + ' (amended)' };
+          }
           var r = this.commit(msg || (this.mergeState ? 'Merged' : ''));
           var headName = this.head.type === 'branch' ? this.head.name : 'detached HEAD';
           return { out: '[' + headName + ' ' + r.sha.slice(0, 7) + (this.headSha() === r.sha && this.commits[r.sha].parents.length === 0 ? ' (root-commit)' : '') + '] ' + (msg || 'Merged') + '\n ' + Object.keys(this.commits[r.sha].files).length + ' file(s) changed' };
@@ -688,7 +705,8 @@
         case 'clean': { var n = this.clean(); return { out: 'Removed ' + GH.plural(n, 'untracked file') }; }
         case 'config': return { out: this.configText(rest) };
         case 'show': return { out: this.showText(rest[0]) };
-        case 'help': return { out: 'GitCI/CD Hero supports: init status add commit log diff branch checkout switch merge rebase reset revert cherry-pick tag remote push fetch pull clone stash reflog rm mv clean show config' };
+        case 'blame': return { out: this.blameText(rest.filter(function (a) { return a.charAt(0) !== '-'; })[0]) };
+        case 'help': return { out: 'GitCI/CD Hero supports: init status add commit (--amend) log diff branch checkout switch merge rebase reset revert cherry-pick tag remote push fetch pull clone stash reflog rm mv clean show blame config' };
         default: return { out: "git: '" + cmd + "' is not supported in this sandbox (or not a git command).", err: true };
       }
     } catch (e) {
@@ -777,7 +795,7 @@
     return list.map(function (s, i) { return 'stash@{' + i + '}: ' + s.message; }).join('\n');
   };
   Repo.prototype.reflogText = function () {
-    return this.reflog.slice(0, 15).map(function (r) { return (r.sha || '').slice(0, 7) + ' HEAD@{' + 0 + '}: ' + r.action + ' (' + r.ref + ')'; }).join('\n') || '(reflog empty)';
+    return this.reflog.slice(0, 15).map(function (r, i) { return (r.sha || '').slice(0, 7) + ' HEAD@{' + i + '}: ' + r.action + ' (' + r.ref + ')'; }).join('\n') || '(reflog empty)';
   };
   Repo.prototype.configText = function (args) {
     if (args[0] === 'user.name' && args[1]) { this.config.name = args[1]; return ''; }
@@ -796,6 +814,45 @@
       if (parentFiles[p] !== c.files[p]) { lines.push('diff --git a/' + p + ' b/' + p); lines = lines.concat(linesDiff(parentFiles[p], c.files[p])); }
     });
     return lines.join('\n');
+  };
+  /* git blame <file> — attribute each line of the file to the commit that last
+     changed it (the commit where the line was introduced relative to history). */
+  Repo.prototype.blameText = function (path) {
+    this.requireInit();
+    if (!path) return 'usage: git blame <file>';
+    var content = this.headSnapshot()[path];
+    if (content == null && this.work[path] != null) content = this.work[path];
+    if (content == null) return 'fatal: no such path \'' + path + '\' in HEAD';
+    var fileLines = String(content).split('\n');
+    var self = this;
+    // collect commits reachable from HEAD, newest first
+    var reach = [], seen = {}, stack = [this.headSha()];
+    while (stack.length) {
+      var s0 = stack.pop();
+      if (!s0 || seen[s0]) continue;
+      seen[s0] = 1;
+      if (this.commits[s0]) { reach.push(this.commits[s0]); (this.commits[s0].parents || []).forEach(function (p) { stack.push(p); }); }
+    }
+    reach.sort(function (a, b) { return b.time - a.time; });
+    var blame = {};
+    reach.forEach(function (c) {
+      var snap = c.files[path];
+      if (snap == null) return;
+      var mine = String(snap).split('\n');
+      var parentSnap = c.parents[0] && self.commits[c.parents[0]] ? self.commits[c.parents[0]].files[path] : null;
+      var parentLines = parentSnap == null ? [] : String(parentSnap).split('\n');
+      // lines present here but NOT in the parent were introduced by this commit
+      mine.forEach(function (ln) {
+        if (!(ln in blame) && parentLines.indexOf(ln) === -1) blame[ln] = c;
+      });
+    });
+    // anything still unattributed (e.g. identical lines everywhere) goes to the root
+    var rootC = reach.length ? reach[reach.length - 1] : null;
+    var out = fileLines.map(function (ln, i) {
+      var c = blame[ln] || rootC;
+      return (c ? c.sha.slice(0, 7) : '0000000') + ' (' + (c ? c.author : '?') + ' ' + (c ? c.message.slice(0, 22) : '?') + ') ' + (i + 1) + ') ' + ln;
+    });
+    return out.join('\n');
   };
 
   /* ---------- graph snapshot ---------- */

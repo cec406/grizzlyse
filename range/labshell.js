@@ -30,8 +30,8 @@
 
   var BOOTS = {
     compsci: ['mount /dev/zd0 ......................... OK', 'loader: bash 5.2 / pwsh 7 ............... OK', 'network: 10.10.10.0/24 (simulated) ....... OK'],
-    gsehack: ['mount /dev/ghost0 ....................... OK', 'crypto loop / netfilter / keyring ........ OK', 'range uplink: 7 relays ................... OK'],
-    cybercrime: ['mount /evidence (read-only) ............. OK', 'hashlib / metascope / polyglot ........... OK', 'feed: NCMEC / IC3 / CISA (fictional) ..... OK'],
+    gsehack: ['mount /dev/ghost0 ....................... OK', 'crypto loop / netfilter / keyring ........ OK', 'targets: 5 training systems (sandbox) .... OK'],
+    cybercrime: ['mount /evidence (read-only) ............. OK', 'hashlib / metascope / polyglot ........... OK', 'case files: fictional, safety-first ...... OK'],
     gitcicd: ['mount /repo ............................. OK', 'git engine / pipeline runner ............. OK', 'runner: local / no remote ................ OK'],
     csia: ['mount /awareness ........................ OK', 'phish corpus / mfa demo / hash lab ....... OK', 'certificate store ........................ OK']
   };
@@ -50,7 +50,7 @@
         '</div>' +
         '<pre class="gl-boot-log" id="gl-boot-log"></pre>' +
         '<div class="gl-boot-bar"><i id="gl-boot-fill"></i></div>' +
-        '<div class="gl-boot-foot"><span>UNCLASSIFIED // TRAINING SIMULATION</span><span class="spacer"></span><button class="gl-skip" id="gl-boot-skip">skip</button></div>' +
+        '<div class="gl-boot-foot"><span>TRAINING SIMULATION // NO REAL SYSTEMS</span><span class="spacer"></span><button class="gl-skip" id="gl-boot-skip">skip</button></div>' +
       '</div>';
     document.body.appendChild(el);
 

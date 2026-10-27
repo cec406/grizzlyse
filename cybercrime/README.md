@@ -2,8 +2,8 @@
 
 A fictional, browser-based training game where you play a digital forensics analyst
 rising through the ranks of the (invented) **National Cyber Investigation Bureau** —
-learning to be *the good guy* in cybercrime: tracing malware, working child-exploitation
-tips the right way, protecting soldiers from honeytraps, refusing hospital ransomware,
+learning to be *the good guy* in cybercrime: tracing malware, catching fraud rings
+the right way, protecting soldiers from fake online personas, refusing hospital ransomware,
 defending the power grid, following crypto, and shutting down scam waves.
 
 > **This is fiction.** Not affiliated with or endorsed by the FBI, DHS, CIA, CISA, NCMEC,
@@ -22,9 +22,9 @@ Then you choose a **specialization**, and the case files fork:
 
 | 🕊️ GUARDIAN — protect the vulnerable | 🛰️ SENTINEL — defend the homeland |
 |---|---|
-| 3. 🕯️ Night Light — child-exploitation cyber tip | 4. 🗼 Watchtower — honeytrap hunting a soldier |
+| 3. 🤲 Helping Hand — fake-charity fraud wave | 4. 🗼 Watchtower — fake persona hunting a soldier |
 | 8. 📞 Porch Light — Spanish-language scam wave | 5. 🏥 Deadbolt — hospital ransomware (Russian note) |
-| **10. 🚢 Hidden Harbor — labor-trafficking ring** (new) | 6. ⚡ Tin Shield — grid/EMP attack prevention |
+| **10. 💸 Easy Money — money-mule recruitment ring** (new) | 6. ⚡ Tin Shield — grid/EMP attack prevention |
 |   | **11. 🛰️ Firebreak — Russian APT espionage implant** (new) |
 
 Then both streams re-converge:
@@ -100,7 +100,7 @@ js/app.js             screens, routing, exam, certificate, settings
   matching games, and a fake forensic terminal are built around feedback, not failure.
 - **Ethics is the through-line**: warrants before searches, escalation before contact,
   "trained professionals only" for undercover work, no ransom payments, no vigilantism.
-- Child-exploitation content is handled at a strictly professional, non-graphic level —
-  hashes and logs, never imagery — with survivor/kid-facing help resources attached.
+- Sensitive themes are handled at a strictly professional, non-graphic level —
+  hashes, ledgers, and logs, never imagery — with kid-facing help resources attached.
 - Threat-actor names, gangs, and incidents are fictional; techniques taught are
   conceptual and defensive in nature.

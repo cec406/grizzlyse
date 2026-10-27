@@ -54,12 +54,12 @@ Add **`?lab=1`** to force it in a headless browser, e.g. `/gsehack/?lab=1`. This
 https://grizzlyse.com/range/
 ```
 
-- **Range Ops** - a graded work-order board. Each order names the machine, the scenario, the acceptance criteria, and points. **Practice** launches the app's sandbox/terminal; **Open course** goes to the mission that satisfies the order; **Validate** reads the app's own save.
-- **Machine Bay** - five cards, progress read from each app, boot in an in-window iframe.
-- **Operator Console** - `machines`, `status`, `scan`, `launch gsehack`, `brief cybercrime`, `reset csia confirm`.
+- **Range Ops** - a graded work-order board. Each order names the machine, the scenario, the acceptance criteria, and points. **Open machine** boots the app; **Practice** launches the app's sandbox/terminal; **Lab view** opens `machine.html?m=<id>` for that order; **Validate** reads the app's own save.
+- **Machine Bay** - five cards, progress read from each app, boot in an in-window iframe. The big button always targets the next incomplete machine and reads Resume or Start honestly.
+- **Operator Console** - `machines`, `status`, `scan` (distinguishes found saves from empty ones), `launch gsehack`, `brief cybercrime`, `reset csia confirm`.
 - **Range Status** - aggregate readiness, per-machine detail, next action.
 - **Field Notes** - operator handbook, route, safety rules.
-- **Machine view** - `/range/machine.html?m=<id>` is a dedicated workstation rail around one app.
+- **Machine view** - `/range/machine.html?m=<id>` is a dedicated workstation rail around one app. Unknown `?m=` values say so instead of silently loading M-01.
 
 Range Ops currently tracks 12 work orders across the five machines: terminal basics, permissions, log triage, GSEHACK missions, Git commits, CODEWATCH cases, Cyber Aware modules, the assessment, and a cross-machine task. Completion is stored separately in `grizzlyrange.ops.v1`; machine progress is never modified by validation.
 

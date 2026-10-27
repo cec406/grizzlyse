@@ -9,6 +9,8 @@ Host it by opening the file or dropping it on any static web server.
 ## Run / verify
 - **Play locally:** open `index.html` in a browser, or `python3 -m http.server` and browse to it.
 - **Tests:** `bash test/run.sh` — asserts all 26 checks across every mission.
+- **Tests without gjs** (e.g. Windows): `node test/run.node.js` — same 26 checks,
+  same pipeline, with a small GLib/timer shim backed by Node timers.
 
 There is **no Node.js in this environment and no package manager**. Tests run under
 **gjs** (SpiderMonkey) using the stub DOM in `test/prelude.js`. The runner extracts the

@@ -2,7 +2,7 @@
    CODEWATCH — Missions 1–3
    1. Operation First Watch   (academy / evidence basics)
    2. Operation Cold Chain    (malware outbreak response)
-   3. Operation Night Light   (child exploitation desk)
+   3. Operation Helping Hand (fraud & vulnerable persons desk)
    ============================================================ */
 'use strict';
 
@@ -107,7 +107,7 @@ var MISSIONS_A = [
       title: "The Reporting Matrix",
       prompt: "Match each real-world situation to the correct first call. Memorize this — you will use it every case.",
       pairs: [
-        { l: "Platform reports uploaded child-abuse file (hash match)", r: "NCMEC CyberTipline → ICAC task force" },
+        { l: "Platform reports an illegal upload (hash-list match)", r: "NCMEC CyberTipline → ICAC task force" },
         { l: "Someone scams victims out of money online", r: "FBI IC3 (ic3.gov)" },
         { l: "Intrusion detected at a power substation", r: "CISA + sector partners" },
         { l: "Person in danger right now", r: "911 / local police immediately" }
@@ -249,129 +249,130 @@ var MISSIONS_A = [
 /* ---------------------------------------------------------- */
 {
   id: "m3",
-  code: "OPERATION NIGHT LIGHT",
-  title: "Night Light",
-  icon: "🕯️",
+  code: "OPERATION HELPING HAND",
+  title: "Helping Hand",
+  icon: "🤲",
   difficulty: 3,
   xp: 520,
   track: "guardian",
-  tag: { en: "Triage a cyber tip. Save a kid the right way.", es: "Procesa una alerta cibernética. Salva a un niño como se debe.", ru: "Разберите киберобращение. Спасите ребёнка правильно." },
+  tag: { en: "A fake charity hunts a town's generosity.", es: "Una falsa caridad caza la generosidad del pueblo.", ru: "Поддельная благотворительность охотится на щедрость города." },
   steps: [
     {
       type: "brief",
-      title: "The Child Exploitation Desk",
+      title: "The Financial Crimes & Vulnerable Persons Desk",
       body: [
-        "You are rotating into NCIB's Child Exploitation Desk, working alongside a real-world-style ICAC (Internet Crimes Against Children) task force. This is the heaviest work in the field — and the reason many of us joined.",
-        "Tonight's queue contains a cyber tip: a social platform's automated system detected an uploaded file whose HASH matched a known-abuse hash list. No image content is in this room — only the fingerprint.",
-        "You will never see the illicit material in this training, and that is correct procedure: analysts work from hashes, logs, and metadata. The goal is a rescue, not a spectacle."
+        "You are rotating into NCIB's Financial Crimes & Vulnerable Persons Desk, working beside a state consumer-protection task force. This is Guardian work: protecting the people scammers hunt first.",
+        "Tonight's queue has a fraud tip from a school IT teacher: after the flood, Riverbend Food Bank's donation page began redirecting to a look-alike site. Donations meant for shelves were landing in a stranger's wallet.",
+        "Nobody is in physical danger — but a whole town's generosity is being stolen, and the ring's call script pushes donors into fear and secrecy. Your goal: stop the money, protect the donors, and take the ring apart in the right order."
       ],
-      callout: { style: "sens", label: "CONTENT ADVISORY & GROUND RULES", text: "This case discusses child exploitation investigation at a professional, non-graphic level: no illicit content is ever shown or described. If this topic touches your real life — as a survivor, a parent, or someone struggling with illegal urges — the REPORT & GET HELP panel (top bar) lists real, confidential resources including Stop It Now." }
+      callout: { style: "good", label: "THE VICTIM-CENTERED LAW", text: "In fraud cases the first responders are often victim specialists and bank fraud desks — detectives come behind them. People who were manipulated feel ashamed; the professional model treats them as victims, never as fools. No exceptions, no shortcuts." }
     },
     {
       type: "evidence",
-      title: "Cyber Tip Triage",
+      title: "Fraud Tip Triage",
       prompt: "The tip package has arrived. Work it.",
       items: [
-        { id: "n1", name: "Cyber tip report (platform)", icon: "🧾",
-          body: "Reporting provider: video platform (obligated reporter, 18 U.S.C. § 2258A)\nReason: uploaded file hash matched known-abuse hash list\nFile hash: 3b9d...a41 (PhotoDNA-style fingerprint + SHA-256)\nUpload time: 2026-09-30 21:14 UTC\nAccount: 'fitnesscoach_dan' — 2 prior tips, 1 unresolved\nTHIS REPORT DOES NOT CONTAIN THE MEDIA. Only fingerprints. That is by design." },
-        { id: "n2", name: "Account snapshot", icon: "👤",
-          body: "Alias: fitnesscoach_dan\nDisplay: 'Dan C. — Youth Fitness Coach, Riverbend'\nAge listed: 34 | Locates himself publicly: yes\nContacts: multiple accounts belonging to apparent minors\nPattern: builds trust with fitness/sports content, then invites kids to a private messaging app.\nSuspect: B. CARLETON — real identity corroborated by prior open case." },
-        { id: "n3", name: "Upload log", icon: "🗓️",
-          body: "2026-09-30 21:14 UTC — upload from IP 74.x.x.x (residential ISP, Riverbend)\n2026-09-28 20:02 UTC — chat invite sent to account 'K_marialuv' (listed age: 14)\n2026-09-27 — 'K' account created; friend requests to 3 other minor accounts\nDevice cluster: matches a laptop already identified in a 2025 NCIB case file." }
+        { id: "n1", name: "Fraud tip report (school district IT)", icon: "🧾",
+          body: "Reporting provider: Riverbend School District IT staff\nReason: the 'DONATE' button on foodbank-riverbend[.]org now points to foodbank-riverbend[.]com — one letter different\nPayments seen on the look-alike: gift cards, a Zelle handle, a bitcoin wallet\nVolume: about $38,400 moved in 9 days\nTHIS REPORT CONTAINS NO DONOR NAMES YET. Privacy first: names arrive through legal process." },
+        { id: "n2", name: "Fake charity snapshot", icon: "👤",
+          body: "Alias: 'Hope for Riverbend Relief'\nDisplay: 'Official Flood Relief — Verified'\nDomain registered: 2 days AFTER the flood (the real bank's site is 6 years old)\nScript: mass texts from a spoofed local prefix — 'Your donation failed. Re-donate by gift card tonight or your name comes off the gratitude wall.'\nRing: 3 phone numbers, one voice — calls himself 'Marco from the bank'." },
+        { id: "n3", name: "Payment flow", icon: "💰",
+          body: "Gift cards: photos of card codes texted to a chat, redeemed within minutes\nZelle: routed through 5 personal accounts of 'helpers' — classic mule pattern, money out within hours\nCrypto: small conversions through a mixing service\nPATTERN: urgency + impersonation + hard-to-reverse payment = the fraud triplet." }
       ]
     },
     {
       type: "choice",
       title: "First Action",
-      prompt: "It's 23:30. The suspect does not know the tip exists. What is your first action?",
+      prompt: "It's 23:30. The ring does not know the tip exists. What is your first action?",
       options: [
-        { k: "a", label: "Escalate to the ICAC task force lead and open the case under legal process — platform subpoena next, warrant after.", correct: true,
-          feedback: "Correct. Silence is your weapon. Escalate under legal process so every subsequent step stands up in court, and so victim-identification specialists start their work in parallel." },
-        { k: "b", label: "Message 'fitnesscoach_dan' pretending to be a kid to see if he confesses.", correct: false,
-          feedback: "Never. Untrained contact destroys cases: it tips evidence patterns, risks compromising the undercover officers already working this space, and can amount to entrapment. Only certified ICAC officers, under supervision and guidelines, ever engage suspects." },
-        { k: "c", label: "Post his photo in a neighborhood watch group to warn parents.", correct: false,
-          feedback: "Absolutely not. Public accusations against an un-arrested person can be defamation, can trigger evidence destruction, and have led innocent people to be harassed when misidentifications occur. The system is slow because it must be." }
+        { k: "a", label: "Escalate to the financial-crimes task force under legal process: preserve the look-alike site, freeze payments through the processors, and loop in the bank fraud unit.", correct: true,
+          feedback: "Correct. Money that is still moving is money you can still catch — but only if processors and banks hear from investigators, not from a viral post. Legal process first protects donors AND evidence." },
+        { k: "b", label: "Reply to 'Marco' pretending to be a generous grandmother to bait a confession.", correct: false,
+          feedback: "Never. Untrained contact destroys cases: it tips the ring, risks interfering with a controlled operation, and can amount to entrapment. Only certified officers, under supervision and guidelines, ever engage suspects." },
+        { k: "c", label: "Post the look-alike site in the town Facebook group with a big warning.", correct: false,
+          feedback: "Understandable instinct — but public accusations against un-arrested people invite defamation claims, tip off the ring, and scatter the mule accounts. Investigators warn through the bank and the real food bank's official channels once evidence is preserved." }
       ]
     },
     {
       type: "multi",
-      title: "Flag the Grooming Lines",
-      prompt: "Below are lines from the suspect's chats with account 'K' (listed age 14). Flag EVERY grooming red flag an experienced ICAC analyst would mark. (Trained undercover officers later took over 'K'. You'll see.)",
+      title: "Flag the Fraud Lines",
+      prompt: "Below are lines from the ring's call and text script. Flag EVERY fraud red flag an experienced analyst would mark. (A trained investigator's controlled persona later took over one donor contact. You'll see.)",
       options: [
-        { k: "f1", label: "'You're so mature for your age. Way older than 14 in here.' [head emoji]", why: "Age-distance flattery — normalizing adult/minor closeness. Classic first brick." },
-        { k: "f2", label: "'Don't tell your mom about our chats. She'd get us both in trouble.'", why: "Secrecy — isolating the child from protectors is the core grooming move." },
-        { k: "f3", label: "'New gaming headset is yours if you keep our streak going.'", why: "Gifts and reciprocity — creating debt and attachment." },
-        { k: "f4", label: "'Let's move to this other app, it's more private. Delete this one.'", why: "Platform migration to less-moderated, less-discoverable channels." },
-        { k: "f5", label: "'You can tell me anything. I'm basically your second family.'", why: "Pseudo-family bonding, positioning himself as the only understanding adult." },
-        { k: "f6", label: "'What did you do at practice today?'", why: "This one is innocent small talk on its face. Training flags only manipulative patterns, not every message — over-flagging burns credibility and alerts offenders." }
+        { k: "f1", label: "'Donate within the hour or your name comes off the gratitude wall.'", why: "Manufactured urgency — deadlines short-circuit careful thinking. Classic first brick." },
+        { k: "f2", label: "'This is our official relief account. The .org site is the old one.'", why: "Impersonation + the one-letter look-alike domain. The switch is the whole trick." },
+        { k: "f3", label: "'Send it as gift cards — it's faster with the bank backlog.'", why: "Gift cards are the fraud currency: instant, nearly impossible to reverse, untraceable." },
+        { k: "f4", label: "'Please don't mention the new donation link to your family — paperwork privacy.'", why: "Enforced secrecy isolates victims from the people who would spot the scam." },
+        { k: "f5", label: "'You can also drop cash at the lockbox behind the storage units.'", why: "Untraceable cash collection at an obscure location is collector infrastructure." },
+        { k: "f6", label: "'The food bank is open Tuesday through Saturday, nine to five.'", why: "A true, checkable statement about the REAL bank. Training flags manipulative patterns, not ordinary facts — over-flagging burns credibility." }
       ],
       correct: ["f1", "f2", "f3", "f4", "f5"],
-      explain: "Grooming is a pattern: flattery → isolation → secrecy → gifts → migration to private channels. Spotting the PATTERN is the skill. And note: 'K' was actually a trained ICAC undercover officer using a decoy persona — no child was ever in that chat. That is how modern stings protect kids: trained officers, strict guidelines, full recording."
+      explain: "Fraud is a pattern: urgency → impersonation → untraceable payment → secrecy. Spotting the PATTERN is the skill. And note: 'Rosa', the generous donor who kept emailing the ring, was actually a state investigator's controlled persona — no real donor was ever at risk in this training. That is how modern stings protect people: trained officers, strict guidelines, full recording."
     },
     {
       type: "translate",
       title: "Language Desk: Spanish",
       lang: "es",
-      context: "The victim-identification unit locates a REAL child exploited by Carleton in an earlier series of events: Mariana V., 14, Riverbend. Her mother gives a statement in Spanish. Your translation may hold timeline gold.",
+      context: "One real donor was reached before the freezes: Rosa G., 71. Her daughter Ana gives a statement in Spanish. Your translation may hold timeline gold.",
       lines: [
-        { s: "Compré la tableta para Mariana en marzo, para la escuela.", t: "I bought the tablet for Mariana in March, for school." },
-        { s: "Hace dos meses empezó a comportarse raro: cerraba la puerta y borraba el historial.", t: "Two months ago she started acting strange: she closed the door and cleared her history." },
-        { s: "Un día vi un mensaje de 'Dan, el entrenador'. Decía que ella era muy madura y que nadie la entendía como él.", t: "One day I saw a message from 'Dan the coach'. It said she was very mature and that nobody understood her like he did." },
-        { s: "Yo pensé que era un amigo de la escuela. No sabía que era un adulto.", t: "I thought he was a friend from school. I didn't know he was an adult." },
-        { s: "Mariana tiene 14 años. Ella es mi vida entera. Por favor, ayúdenla.", t: "Mariana is 14. She is my whole life. Please help her." }
+        { s: "Mamá donó después de la inundación; quería ayudar.", t: "Mom donated after the flood; she wanted to help." },
+        { s: "La llamaron y dijeron que su donación falló, que donara otra vez.", t: "They called her and said her donation failed, that she should donate again." },
+        { s: "Le dijeron que comprara tarjetas de regalo y que no nos contara a nosotros.", t: "They told her to buy gift cards and not to tell us." },
+        { s: "Papá se dio cuenta cuando las tarjetas no servían en la tienda.", t: "Dad noticed when the cards didn't work at the store." },
+        { s: "Mamá tiene 71 años y lloró de vergüenza. Por favor, devuélvanle su dinero.", t: "Mom is 71 and cried from shame. Please give her money back." }
       ]
     },
     {
       type: "choice",
       title: "The Timeline",
-      prompt: "The mother's statement gives you a corroborated timeline: tablet in March, behavior change two months ago, 'Coach Dan' visible in messages. What does this establish?",
+      prompt: "Ana's statement gives a corroborated timeline: a real donation after the flood, a second 'failed donation' call, gift cards that never worked. What does this establish?",
       options: [
-        { k: "a", label: "Independent corroboration linking Carleton's account to a real identified minor victim — with dates the defense can't easily explain away.", correct: true,
-          feedback: "Exactly. A parent's observations + platform logs + prior case data triangulate. Corroboration from separate sources is what turns a tip into a case." },
-        { k: "b", label: "Proof that Mariana is to blame for not telling her mother sooner.", correct: false,
-          feedback: "Never. Victims are groomed precisely so they feel unable to tell. Blaming them is both cruel and investigation-naive — secrecy is the abuser's design, not the child's fault." },
-        { k: "c", label: "Nothing — hearsay is useless in court.", correct: false,
-          feedback: "It's not useless: it directs forensics to the right device, right months, right account. Much hearsay becomes admissible through the evidence it leads to." }
+        { k: "a", label: "Independent corroboration linking the ring's script to a real, identified victim — with dates and payment records the defense can't explain away.", correct: true,
+          feedback: "Exactly. A family's observations + payment records + the tip package triangulate. Corroboration from separate sources is what turns a tip into a case." },
+        { k: "b", label: "Proof that Rosa should have known better.", correct: false,
+          feedback: "Never. Fraud scripts are engineered to rush and isolate people — shame is the scammer's design, not the victim's failure. Blaming victims only silences the next one." },
+        { k: "c", label: "Nothing — a family's story is useless in court.", correct: false,
+          feedback: "It's not useless: it directs forensics to the right days, cards, and accounts. Much hearsay becomes admissible through the evidence it leads to." }
       ]
     },
     {
       type: "order",
       title: "The Legal Ladder",
-      prompt: "Arrange the process from tip to arrest — the same ladder every U.S. child-exploitation case climbs.",
+      prompt: "Arrange the process from tip to arrest — the same ladder every financial-exploitation case climbs.",
       items: [
-        { k: "1", label: "Preserve: platform preserves data under legal hold" },
-        { k: "2", label: "Subpoena: account records, payment info, IP history" },
-        { k: "3", label: "Warrant: search home & seize devices (judge, probable cause)" },
-        { k: "4", label: "Forensics: image devices, hash-match media, build timeline" },
-        { k: "5", label: "Charging: prosecutor reviews; arrest; victim services engaged" }
+        { k: "1", label: "Preserve: look-alike site, payment records, and texts preserved under legal hold" },
+        { k: "2", label: "Subpoena: account records, phone numbers, payment-processor logs" },
+        { k: "3", label: "Warrant: search homes & seize devices (judge, probable cause)" },
+        { k: "4", label: "Forensics: image phones, trace the mule accounts, build the money timeline" },
+        { k: "5", label: "Charging: prosecutor reviews; arrests; victim refunds and services engaged" }
       ],
       correct: ["1", "2", "3", "4", "5"],
-      explain: "Preserve → subpoena → warrant → forensics → charges. Every rung creates admissible evidence. A single shortcut — searching before the warrant, contacting the suspect — can collapse everything and free a predator."
+      explain: "Preserve → subpoena → warrant → forensics → charges. Every rung creates admissible evidence. A single shortcut — searching before the warrant, contacting the suspects — can collapse everything and let the ring walk."
     },
     {
       type: "choice",
-      title: "Mariana's Interview",
-      prompt: "Mariana is found safe. An interview must happen. What does the professional model look like?",
+      title: "Rosa's Interview",
+      prompt: "Rosa agrees to talk. What does the professional model look like?",
       options: [
-        { k: "a", label: "One recorded forensic interview at a Child Advocacy Center, by a trained specialist, with family support and therapy referrals.", correct: true,
-          feedback: "Correct — the CAC model. One trauma-informed interview, recorded, so the child never has to relive it for every new adult in the system. Poor interviews re-traumatize victims AND hand defense attorneys 'tainted statement' arguments." },
-        { k: "b", label: "Question her yourself, now, quickly — you need the facts for the warrant.", correct: false,
-          feedback: "No. Untrained questioning can plant details, lead the child, and contaminate her testimony forever. Investigators wait for the specialists. Your discipline is part of her healing." },
-        { k: "c", label: "Interview her at the suspect's house so she can point out evidence.", correct: false,
-          feedback: "Never. The interview happens in a neutral, child-safe setting. Her safety and the integrity of her words both matter more than speed." }
+        { k: "a", label: "One recorded interview, at a time and place she chooses, by a trained specialist, with family support and victim-services referrals.", correct: true,
+          feedback: "Correct — the trauma-informed model. One good interview respects the victim and produces clean testimony. Poor interviews re-traumatize people AND hand defense attorneys 'tainted statement' arguments." },
+        { k: "b", label: "Call her now from the car — you need the card numbers for the warrant tonight.", correct: false,
+          feedback: "No. Untrained questioning can lead the witness and contaminate her account forever. Investigators wait for the specialists. Your discipline is part of her recovery." },
+        { k: "c", label: "Interview her on the food bank's doorstep so donors can watch.", correct: false,
+          feedback: "Never. Interviews happen in a setting the victim controls. Her dignity and the integrity of her words both matter more than speed." }
       ]
     },
     {
       type: "debrief",
-      title: "Night Light Complete",
+      title: "Helping Hand Complete",
       body: [
-        "B. Carleton is arrested at 06:12 as he leaves for 'coach duty'. Devices are imaged; the hash matches end the defense's options; Mariana and her mother are connected with victim services that speak their language — literally.",
-        "Case agent notes: 'The kid is safe because an analyst in a quiet room did boring, brilliant, patient work. Tell the next rookie that.'",
-        "One more truth to carry: most exploitation never reaches a task force. Kids stay silent. If you ever meet one — your child, a student, a neighbor — the bravest thing you can teach them is that telling an adult is safe and that they are never, ever in trouble."
+        "The ring's three numbers go dark at 07:40 as the payment freezes land. About $31,000 is recalled or refunded through the banks; the food bank's real page is restored, and the town is warned through its official channels — no names, no shame.",
+        "Case agent notes: 'The town got its generosity back because an analyst in a quiet room did boring, brilliant, patient work. Tell the next rookie that.'",
+        "One more truth to carry: fraud works on love — people give because they care. If you ever get an urgent call about money, whether it's a grandparent's voice or a charity after a storm, the bravest move is the boring one: hang up, call back on the official number, and tell a trusted adult."
       ],
-      notes: ["grooming", "ncmec", "forensic-interview", "legal-process"],
+      notes: ["legal-process", "elder-fraud", "wire-recall", "victim-centered"],
       tools: []
     }
   ]
 }
+
 ];

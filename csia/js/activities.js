@@ -35,7 +35,12 @@
 
   /* ---------------- quiz ---------------- */
   function quiz(root, act, onDone) {
-    var qs = act.questions;
+    // shuffle option order per attempt so position never gives the answer away
+    var rng = CY.makeRng((Math.random() * 1e9) | 0);
+    var qs = act.questions.map(function (q) {
+      var idx = rng.shuffle(q.options.map(function (_, i) { return i; }));
+      return { q: q.q, options: idx.map(function (i) { return q.options[i]; }), a: idx.indexOf(q.a), why: q.why };
+    });
     root.innerHTML =
       '<div class="quiz">' + qs.map(function (q, qi) {
         return '<div class="quiz-q" data-q="' + qi + '"><div class="qq-text">' + (qi + 1) + '. ' + CY.m(q.q) + '</div>' +
@@ -212,8 +217,15 @@
       var pw = CY.qs('#pwd-host', root)._getPassword();
       var info = CY.passwordInfo(pw);
       var ok = info.score >= min && pw.length >= 12 && !info.common;
-      banner(root, ok, ok ? '&#10003; Strong passphrase (' + info.bits + ' bits &mdash; cracks in ' + CY.crackTime(info.seconds) + '). Store it in a password manager and reuse it nowhere.'
-        : '&#9888;&#65039; Not strong enough yet. Aim for 3+ random words or 16+ mixed characters, and avoid common passwords.');
+      if (ok) {
+        banner(root, true, '&#10003; Strong passphrase (' + info.bits + ' bits &mdash; cracks in ' + CY.crackTime(info.seconds) + '). Store it in a password manager and reuse it nowhere.');
+      } else {
+        var tips = [];
+        if (info.common) tips.push('it appears on every breach wordlist, so attackers try it first');
+        if (pw.length < 12) tips.push('length matters more than cleverness &mdash; aim for 12+ characters (three random words is an easy way)');
+        if (info.score < min) tips.push('it is too predictable &mdash; mixing words, numbers or symbols raises the crack cost');
+        banner(root, false, '&#9888;&#65039; Not strong enough: ' + tips.join('; ') + '. Try again &mdash; a passphrase like three unrelated words works better than one mangled word.');
+      }
       onDone(ok, ok ? 100 : 0, { bits: info.bits });
     };
   }

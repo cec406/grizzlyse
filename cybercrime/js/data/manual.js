@@ -45,7 +45,7 @@ var MANUAL = [
   { id: "forensic-interview", cat: "Human Threats", en: "Forensic Interview (CAC)", es: "Entrevista forense (CAC)", ru: "Экспертное интервью (CAC)",
     def: "Child interviews happen once, in a Child Advocacy Center, by trained specialists — trauma-informed, non-leading, recorded. Done wrong, interviews re-traumatize and taint evidence." },
   { id: "social-engineering", cat: "Human Threats", en: "Social Engineering", es: "Ingeniería social", ru: "Социальная инженерия",
-    def: "Hacking humans instead of machines: pretexting, honeytraps, urgency, authority claims. The defense is verification, not cleverness." },
+    def: "Hacking humans instead of machines: fake personas, pretexting, urgency, authority claims. The defense is verification, not cleverness." },
   { id: "opsec", cat: "Human Threats", en: "OPSEC & Geotags", es: "OPSEC y geolocalización", ru: "ОПСБ и геотеги",
     def: "Operations security: never publish routines, locations, or schedules. Geotagged photos have burned deployments; metadata never forgets." },
   { id: "elder-fraud", cat: "Human Threats", en: "Elder Fraud", es: "Fraude a adultos mayores", ru: "Мошенничество против пожилых",
@@ -68,10 +68,10 @@ var MANUAL = [
     def: "A service that scrambles coin trails. It complicates tracing but never erases it — patterns, timing, and exchange records still tell the story." },
 
   // --- Guardian path ---
-  { id: "trafficking", cat: "Human Threats", en: "Human Trafficking Indicators", es: "Indicadores de trata de personas", ru: "Признаки торговли людьми",
-    def: "Confiscated documents, restricted movement, debt/manipulated 'rent', controlled communication, deceptive recruitment, fear. Victims are victims until proven otherwise — never defendants." },
+  { id: "money-mule", cat: "Human Threats", en: "Money Mule Red Flags", es: "Señales de mulas de dinero", ru: "Признаки денежных курьеров",
+    def: "A 'job' that moves strangers' money through YOUR bank account. Red flags: keep-a-cut offers, prepaid phones, secrecy. Recruits are victims, not masterminds." },
   { id: "victim-centered", cat: "Human Threats", en: "Victim-Centered Response", es: "Enfoque centrado en la víctima", ru: "Подход с опорой на жертву",
-    def: "Victims first: safety-plan before arrest, one trauma-informed interview, support (shelter, medical, legal, T-visa certification) before prosecutorial convenience. Rescue and case success rise together." },
+    def: "Victims first: safety-plan before arrest, one trauma-informed interview, support (counseling, restitution, legal guidance) before prosecutorial convenience. Rescue and case success rise together." },
 
   // --- Sentinel path ---
   { id: "killchain", cat: "Malware & Networks", en: "Cyber Kill Chain", es: "Cadena de ataque cibernético", ru: "Цепочка атаки",

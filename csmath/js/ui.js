@@ -65,8 +65,8 @@
     renderHUD();
     if (h.indexOf('#/skill/') === 0) {
       var sid = h.slice(8);
-      App.go('#/map');
-      setTimeout(function () { App.startSkill(sid); }, 60);
+      App.go('#/map');          // backdrop
+      App.startSkill(sid);      // session opens on top, no flash
       return;
     }
     if (h.indexOf('#/lesson/') === 0) return App.viewLesson(h.slice(9));
@@ -403,7 +403,7 @@
       var p = MH.buildProblem(id, MH.skillLevel(id));
       if (p) problems.push(p);
     }
-    begin({ mode: 'boss', title: r.name + ' Trial', realmId: realmId, problems: problems, level: 0, lives: 3, timePer: 25 });
+    begin({ mode: 'boss', title: r.name + ' Trial', realmId: realmId, problems: problems, level: 0, lives: 3, timePer: MH.state.settings.timer === false ? 0 : 25 });
   };
 
   App.startReview = function () {
@@ -517,7 +517,7 @@
 
     MH.qs('#btn-quit').onclick = quitConfirm;
     var lb = MH.qs('#btn-lesson');
-    if (lb) lb.onclick = function () { var sid = session.skillId; hideOverlay(); App.go('#/lesson/' + sid); };
+    if (lb) lb.onclick = function () { App.peekLesson(session.skillId); };
 
     if (isChoice) {
       [].forEach.call(overlay().querySelectorAll('.choice'), function (b) {
@@ -608,6 +608,7 @@
     }
     var inp = MH.qs('#ansinput'); if (inp) inp.disabled = true;
     var sb = overlay().querySelector('.ansform .btn'); if (sb) sb.disabled = true;
+    var lb2 = MH.qs('#btn-lesson'); if (lb2) lb2.disabled = true;
     if (timerHandle && !session.globalTimer) { clearInterval(timerHandle); timerHandle = null; }
 
     var fb = MH.qs('#feedback');
@@ -663,7 +664,7 @@
       if (correct >= 20) MH.award(5, 'Lightning bonus');
     }
     if (session.mode === 'review') MH.state.reviewDone = (MH.state.reviewDone || 0) + correct;
-    if (session.mode === 'daily') MH.completeDaily();
+    if (session.mode === 'daily' && !quit) MH.completeDaily();
     if (session.mode === 'exam') {
       var pct = total ? Math.round((correct / total) * 100) : 0;
       MH.state.exams.unshift({ at: Date.now(), correct: correct, total: total, pct: pct, realms: session.realmIds });
@@ -880,6 +881,37 @@
     };
   };
 
+  /* Lesson "peek" during a session: show the lesson inside the session overlay
+     without throwing away the run. Back re-renders the current problem. */
+  App.peekLesson = function (id, onBack) {
+    var skill = MH.skillById(id);
+    var les = MH.getLesson(id);
+    if (!skill || !les) return;
+    var vizzes = [];
+    var html = '<div class="sheet peek">' +
+      '<div class="peek-top"><button class="btn ghost" id="peek-back">&larr; Back to problem</button>' +
+      '<span class="ses-title">' + skill.name + '</span></div>' +
+      '<div class="lesson-hero" style="--c:' + ((MH.CURRICULUM.realms.filter(function (r) { return r.id === skill.realm; })[0] || {}).color || 'var(--accent)') + '">' +
+        '<p class="lesson-hook">' + MH.m(les.hook) + '</p></div>';
+    if (les.viz) html += renderBlock(['viz', les.viz], vizzes);
+    (les.s || []).forEach(function (sec) {
+      html += '<div class="lesson-section"><h2>' + MH.m(sec.h) + '</h2>' +
+        (sec.b || []).map(function (b) { return renderBlock(b, vizzes); }).join('') + '</div>';
+    });
+    if (les.f && les.f.length) {
+      html += '<div class="lesson-section formulas"><h2>Formula sheet</h2><ul class="formula-list">' +
+        les.f.map(function (f) { return '<li>' + MH.m(f) + '</li>'; }).join('') + '</ul></div>';
+    }
+    html += '</div>';
+    if (timerHandle) { clearInterval(timerHandle); timerHandle = null; }
+    overlay().innerHTML = html;
+    mountVizzes(overlay(), vizzes);
+    MH.qs('#peek-back').onclick = function () {
+      overlay().scrollTop = 0;
+      renderProblem();
+    };
+  };
+
   /* ---------------------------------------------------------- */
   /* LEARNING PATHS                                              */
   /* ---------------------------------------------------------- */
@@ -1063,7 +1095,10 @@
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') { if (!overlay().classList.contains('hidden')) quitConfirm(); }
     if (session && !overlay().classList.contains('hidden')) {
-      if (e.key === 'Enter' && MH.qs('#btn-next') && document.activeElement === document.body) next();
+      // Enter advances when nothing useful has focus (buttons handle their own Enter)
+      var ae = document.activeElement;
+      var free = !ae || ae === document.body || ae === overlay() || (ae.tagName !== 'BUTTON' && ae.tagName !== 'INPUT' && ae.tagName !== 'SELECT' && ae.tagName !== 'TEXTAREA');
+      if (e.key === 'Enter' && MH.qs('#btn-next') && free) { e.preventDefault(); next(); }
       if (session.problems[session.idx] && session.problems[session.idx].answer.type === 'choice' && /^[1-4]$/.test(e.key)) {
         var b = overlay().querySelector('.choice[data-i="' + (parseInt(e.key, 10) - 1) + '"]');
         if (b && !b.disabled) b.click();

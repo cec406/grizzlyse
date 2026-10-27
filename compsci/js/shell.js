@@ -300,10 +300,16 @@ export class Shell {
   /* ---------------- built-in help ---------------- */
 
   listCommands(filter = '') {
+    // prefer dashed cmdlet spellings (Get-ChildItem) over camelCase twins (GetChildItem)
+    const dashedFor = new Map();
+    for (const [k, v] of Object.entries(this.registry)) {
+      if (k.includes('-') && !dashedFor.has(v)) dashedFor.set(v, k);
+    }
     const seen = new Map();
     for (const [k, v] of Object.entries(this.registry)) {
       if (v.hidden) continue;
       if (filter && !k.includes(filter)) continue;
+      if (!k.includes('-') && /^[A-Z]/.test(k) && dashedFor.has(v)) continue;
       if (!seen.has(k)) seen.set(k, v);
     }
     return [...seen.entries()].sort((a, b) => a[0].localeCompare(b[0]));

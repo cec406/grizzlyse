@@ -100,7 +100,7 @@ async function suite(){
   await Game.victory();
   o = CAPTURE.join("\n");
   check("victory shows final flag", o.indexOf(FINAL_FLAG) !== -1, o.slice(0, 80));
-  check("victory shows GODMODE rank", o.indexOf("GODMODE") !== -1);
+  check("victory shows top rank", o.indexOf("RANGE CHAMPION") !== -1);
 
   REALPRINT("\n== misc ==");
   setup(0);

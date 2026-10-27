@@ -487,7 +487,7 @@ export const BASH_COMMANDS = {
         if (n.isLink) return `${a}: symbolic link to ${n.linkTo}`;
         if (n.type === 'dir') return `${a}: directory`;
         const c = n.content;
-        if (/^#!/.test(c)) return `${a}: POSIX shell script, ASCII text executable${(n.mode & 0o111) ? '' : ''}`;
+        if (/^#!/.test(c)) return `${a}: POSIX shell script, ASCII text executable${(n.mode & 0o111) ? '' : ' (but not executable)'}`;
         if (/^<\?xml/.test(c)) return `${a}: XML document text`;
         if (/\{\s*"[a-z]+"\s*:/.test(c)) return `${a}: JSON text data`;
         if (/^-----BEGIN/.test(c)) return `${a}: PEM certificate or key data`;

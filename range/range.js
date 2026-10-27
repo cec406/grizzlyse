@@ -165,11 +165,11 @@
     { id: 'ZERO-03', machine: 'compsci', title: 'Read the logs', points: 65,
       brief: 'The web tier is noisy. Use the text tools to isolate the failing requests, count them, and write the finding down.',
       criteria: [{ label: 'Complete "Mission: Triage the Web Logs"', test: function () { return compsciDid('log-triage'); } }] },
-    { id: 'GHOST-01', machine: 'gsehack', title: 'Make entry', points: 60,
-      brief: 'Five enemy systems stand between you and the vault. Clear the first GSEHACK mission using only the terminal.',
+    { id: 'GHOST-01', machine: 'gsehack', title: 'Get into the first system', points: 60,
+      brief: 'The GSEHACK terminal has five training targets, each teaching one classic technique. Clear the first one using only the terminal.',
       criteria: [{ label: 'Complete any GSEHACK mission', test: function () { return gsCount(1); } }] },
-    { id: 'GHOST-02', machine: 'gsehack', title: 'Clear the range', points: 120,
-      brief: 'Finish all five GSEHACK missions: password cracking, unauthorised access, recon, log forensics, stego, and injection.',
+    { id: 'GHOST-02', machine: 'gsehack', title: 'Finish every mission', points: 120,
+      brief: 'Clear all five GSEHACK missions: password cracking, recon, log forensics, steganography, and SQL injection.',
       criteria: [{ label: 'Complete all 5 GSEHACK missions', test: function () { return gsCount(5); } }] },
     { id: 'BUILD-01', machine: 'gitcicd', title: 'First commit', points: 45,
       brief: 'Initialize a repository, stage a real file, and commit it. The lab checks the live repository, not a quiz answer.',
@@ -239,11 +239,12 @@
               return '<li class="' + (ok ? 'ok' : 'bad') + '"><span class="oc-ico">' + (ok ? '&#10003;' : '&#10007;') + '</span><span>' + esc(c.label) + '</span></li>';
             }).join('') + '</ul>' +
             '<div class="ops-actions">' +
-              '<button class="btn btn-gold" data-a="course">Open course</button>' +
+              '<button class="btn btn-gold" data-a="course">Open machine</button>' +
               '<button class="btn" data-a="practice">Practice sandbox</button>' +
+              '<button class="btn btn-ghost" data-a="labview">Lab view</button>' +
               '<button class="btn btn-ghost" data-a="validate">Validate work</button>' +
             '</div>' +
-            '<div class="ops-note">Open course takes you to the machine where the graded work lives. Practice sandbox is free play - useful, but it does not complete the criteria. Validation reads the app\'s own local save.</div>' +
+            '<div class="ops-note">Open machine boots the app where the graded work lives. Practice sandbox is free play - useful, but it does not complete the criteria. Lab view opens the dedicated single-machine workspace. Validation reads the app\'s own local save.</div>' +
           '</div>' +
         '</div>' +
       '</div>';
@@ -260,6 +261,11 @@
       if (a === 'course') {
         var ct = OPS.filter(function (t) { return t.id === (ctx.state.sel || OPS[0].id); })[0];
         if (ct) openMachine(ct.machine, {});
+        return;
+      }
+      if (a === 'labview') {
+        var lt = OPS.filter(function (t) { return t.id === (ctx.state.sel || OPS[0].id); })[0];
+        if (lt) window.open('machine.html?m=' + lt.machine, '_blank', 'noopener');
         return;
       }
       if (a === 'validate') {
@@ -614,15 +620,15 @@
           '<div>' + ringSvg(agg.pct, '#fbbf24') + '</div>' +
           '<div style="flex:1;min-width:200px">' +
             '<h1>Machine Bay</h1>' +
-            '<p>Five training machines, one operator desktop. Boot a machine to work inside it; your progress stays in this browser. Nothing here touches a real network.</p>' +
+            '<p>' + rows.length + ' training machines, one operator desktop. Boot a machine to work inside it; your progress stays in this browser. Nothing here touches a real network.</p>' +
             '<div class="bay-kpis">' +
               '<div class="kpi"><b>' + agg.modulesDone + '</b><span>items complete</span></div>' +
-              '<div class="kpi"><b>' + rows.filter(function (r) { return r.progress.pct > 0; }).length + '/5</b><span>machines touched</span></div>' +
+              '<div class="kpi"><b>' + rows.filter(function (r) { return r.progress.pct > 0; }).length + '/' + rows.length + '</b><span>machines touched</span></div>' +
               '<div class="kpi"><b>' + agg.xp.toLocaleString() + '</b><span>total XP / points</span></div>' +
             '</div>' +
           '</div>' +
           '<div style="display:flex;flex-direction:column;gap:7px;min-width:176px">' +
-            '<button class="btn btn-gold" data-a="resume" data-id="' + (nextMachine ? nextMachine.machine.id : '') + '">' + ico('play') + ' ' + (resume && resume.last ? 'Resume' : 'Start') + ': ' + esc(nextMachine ? nextMachine.machine.short : 'Machine Bay') + '</button>' +
+            '<button class="btn btn-gold" data-a="resume" data-id="' + (nextMachine ? nextMachine.machine.id : '') + '">' + ico('play') + ' ' + (nextMachine && nextMachine.last ? 'Resume' : 'Start') + ': ' + esc(nextMachine ? nextMachine.machine.short : 'Machine Bay') + '</button>' +
             '<button class="btn btn-ghost" data-a="ops">Range Ops board</button>' +
             '<button class="btn btn-ghost" data-a="notes">Open field notes</button>' +
             '<button class="btn btn-ghost" data-a="refresh">' + ico('refresh') + ' Rescan progress</button>' +
@@ -683,7 +689,7 @@
       if (!ctx.state.lines) {
         ctx.state.lines = [
           { cls: 't-dim', text: 'GRIZZLY RANGE // operator console' },
-          { cls: 't-dim', text: 'Type help for commands. Five machines are registered.' },
+          { cls: 't-dim', text: 'Type help for commands. ' + RANGE_MACHINES.length + ' machines are registered.' },
           { cls: '', text: '' }
         ];
         ctx.state.history = [];
@@ -764,7 +770,7 @@
     if (cmd === 'help' || cmd === '?') {
       addConsole(ctx, out, [
         'RANGE CONTROL COMMANDS',
-        '  machines              list the five machines and progress',
+        '  machines              list every machine and its progress',
         '  status                aggregate readiness',
         '  scan                  rescan local saves',
         '  launch <machine>      boot a machine window (aliases: open, boot)',
@@ -772,7 +778,7 @@
         '  view <machine>        open the lab frame in a new tab',
         '  direct <machine>      open the app standalone',
         '  reset <machine> confirm   clear that machine\'s local save',
-        '  whoami | date | site | clear | help',
+        '  whoami | date | site | clear | exit | help',
         '',
         'MACHINE IDS: compsci, gsehack, cybercrime, gitcicd, csia'
       ].join('\n'), 't-dim');
@@ -786,7 +792,11 @@
     if (cmd === 'machines' || cmd === 'ls') { table(); return; }
     if (cmd === 'scan') {
       addConsole(ctx, out, 'scanning local progress bus...', 't-dim');
-      rows.forEach(function (r) { addConsole(ctx, out, '  [ok] ' + r.machine.code + ' ' + r.machine.host + ' -> ' + r.progress.pct + '%', 't-ok'); });
+      rows.forEach(function (r) {
+        var found = r.progress.label !== 'Not started';
+        addConsole(ctx, out, '  [' + (found ? 'ok' : '--') + '] ' + r.machine.code + ' ' + r.machine.host + ' -> ' +
+          (found ? r.progress.pct + '%' : 'no save found yet'), found ? 't-ok' : 't-dim');
+      });
       table();
       return;
     }
@@ -795,7 +805,7 @@
       addConsole(ctx, out, 'RANGE READINESS  ' + agg.pct + '%', 't-head');
       addConsole(ctx, out, '  items complete   : ' + agg.modulesDone + ' / ' + agg.total);
       addConsole(ctx, out, '  XP / points      : ' + agg.xp.toLocaleString());
-      addConsole(ctx, out, '  machines touched : ' + rows.filter(function (r) { return r.progress.pct > 0; }).length + ' / 5');
+      addConsole(ctx, out, '  machines touched : ' + rows.filter(function (r) { return r.progress.pct > 0; }).length + ' / ' + rows.length);
       addConsole(ctx, out, '  storage          : localStorage (this browser only)', 't-dim');
       return;
     }
@@ -1069,6 +1079,15 @@
     ];
     var out = $('#boot-log');
     var i = 0;
+    var skipBtn = $('#boot-skip');
+    function finishBoot() {
+      $('#boot').classList.add('hide');
+      setTimeout(function () { $('#boot').style.display = 'none'; }, 500);
+      $('#lock').hidden = false;
+      S.booted = true;
+      saveShell();
+    }
+    if (skipBtn) skipBtn.onclick = function () { i = lines.length; finishBoot(); };
     function tick() {
       if (i < lines.length) {
         var line = lines[i++];
@@ -1079,13 +1098,7 @@
         $('#boot-bar').style.width = Math.round((i / lines.length) * 100) + '%';
         setTimeout(tick, line[2] || 160);
       } else {
-        setTimeout(function () {
-          $('#boot').classList.add('hide');
-          setTimeout(function () { $('#boot').style.display = 'none'; }, 500);
-          $('#lock').hidden = false;
-          S.booted = true;
-          saveShell();
-        }, 420);
+        setTimeout(finishBoot, 420);
       }
     }
     tick();
@@ -1110,7 +1123,7 @@
       title: 'RANGE CONTROL // operator briefing',
       width: 660,
       body:
-        '<p style="margin-top:0">You are signed in as <b>operator</b> on a synthetic training network. Five machines are online.</p>' +
+        '<p style="margin-top:0">You are signed in as <b>operator</b> on a training network that runs entirely in your browser. ' + RANGE_MACHINES.length + ' machines are online.</p>' +
         '<div class="stack" style="gap:10px">' +
           '<div class="row" style="align-items:flex-start"><span class="tag gold">1</span><div><b>Take a work order.</b><div class="tiny dim">Range Ops gives you a graded task, the machine to do it on, and a validate step. That is the lab loop.</div></div></div>' +
           '<div class="row" style="align-items:flex-start"><span class="tag gold">2</span><div><b>Practice or open the course.</b><div class="tiny dim">Practice drops you into the app\'s sandbox, Git playground, Tool box, or terminal. Open course goes to the mission that satisfies the work order.</div></div></div>' +

@@ -37,8 +37,10 @@ Accents don't matter. Type `n` for `ñ` and `u` for `ú`. Case doesn't matter ei
 | **A–Z** | Type your answer. It appears at the bottom of the screen. |
 | **Enter** | Submit the answer right now. |
 | **Backspace** | Delete the last letter. |
-| **Esc** | Clear everything you've typed. |
+| **Esc** | Clear what you've typed — or, with nothing typed, pause. |
 | **Arrow keys** | Enter stratagem codes (see below). |
+
+While paused you can reopen the **FIELD GLOSSARY**: every word in the current practice mode with the answers the game accepts. Use it between waves to study.
 
 ## Killing bugs
 

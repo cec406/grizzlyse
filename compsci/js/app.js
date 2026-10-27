@@ -281,7 +281,7 @@ function renderBrief() {
   $('#missionEyebrow').textContent = session.mode === 'ctf'
     ? `CTF · ${m.category || 'Challenge'} · ${m.difficulty}`
     : `Chapter ${m.chapter} · Mission ${m.order}`;
-  $('#missionTitle').textContent = session.mode === 'ctf' ? m.title : m.title;
+  $('#missionTitle').textContent = m.title;
   $('#missionBrief').innerHTML = markdownish(m.brief);
   $('#teach').innerHTML = (m.teach || []).map((t) => `<span>${escapeHtml(t)}</span>`).join('');
   if (session.mode === 'ctf') {
@@ -351,14 +351,15 @@ function renderObjectives() {
 function checkObjectives() {
   const m = session.mission;
   if (!m || session.mode !== 'mission') return;
+  const firstTime = !state.missionsDone.includes(m.id);
   let all = true;
   for (const o of m.objectives) {
     let ok = false;
     try { ok = !!o.check(session.vm, session.shell, session.fs); } catch { ok = false; }
     if (ok && !session.completed.has(o.id)) {
       session.completed.add(o.id);
-      state.xp += o.xp;
-      printHtml(`<span class="ok">✓ Objective complete: ${escapeHtml(stripMarkdown(o.text))}</span>`, 'ok');
+      if (firstTime) state.xp += o.xp;
+      printHtml(`<span class="ok">✓ Objective complete: ${escapeHtml(stripMarkdown(o.text))}${firstTime ? '' : ' <span class="dimline">(replay — XP already banked)</span>'}</span>`, 'ok');
     }
     if (!ok) all = false;
   }
@@ -530,6 +531,7 @@ function greet(mission, withBanner = false) {
   printHtml(`<span class="sys">${escapeHtml(mission.title)}</span>`, 'sys');
   print(markdownToText(mission.brief), 'out');
   if (mission.objectives) print(`\nObjectives: ${mission.objectives.length}. Type a command, or ask for a hint with the 💡 button.\n`, 'dimline');
+  if (state.missionsDone.includes(mission.id)) print('(Replay: you have finished this mission before. Objectives still tick, but the XP is already banked.)\n', 'dimline');
   print('Type `help` to see every command this shell knows.\n', 'dimline');
 }
 
@@ -965,8 +967,10 @@ function wire() {
   }));
 
   document.addEventListener('click', (e) => {
+    // On small screens, tapping outside the drawer should CLOSE it, not open it.
     if (window.innerWidth <= 820 && !e.target.closest('#sidebar') && !e.target.closest('#toggleSidebar')) {
-      $('#sidebar').classList.remove('hidden');
+      const sidebar = $('#sidebar');
+      if (!sidebar.classList.contains('hidden')) sidebar.classList.add('hidden');
     }
   });
 }

@@ -40,7 +40,11 @@
 
   /* ---- Union & independence ---- */
   def('prb.union', function (r, lvl) {
-    var pa = r.int(1, 8) / 10, pb = r.int(1, 8) / 10, pab = r.int(1, 4) / 10;
+    var pa = r.int(2, 8) / 10, pb = r.int(2, 8) / 10;
+    // keep P(A∩B) legal: ≤ min(P(A),P(B)) and ≥ P(A)+P(B)−1 so P(A∪B) ≤ 1
+    var lo = Math.max(1, Math.ceil((pa + pb - 1) * 10));
+    var hi = Math.floor(Math.min(pa, pb) * 10);
+    var pab = r.int(lo, hi) / 10;
     var mode = r.pick(['union', 'indep', 'complement']);
     if (mode === 'union') return { prompt: 'P(A) = ' + pa + ', P(B) = ' + pb + ', P(A&cap;B) = ' + pab + '. What is P(A&cup;B)?',
       answer: { type: 'number', value: MH.nice(pa + pb - pab, 6) }, hint: 'P(A&cup;B) = P(A) + P(B) &minus; P(A&cap;B).',
@@ -96,12 +100,14 @@
         answer: { type: 'number', value: sum / n }, hint: 'Mean = (1 + n)/2.',
         steps: ['E[X] = (1 + ' + n + ')/2 = ' + MH.nice(sum / n, 4)] };
     }
+    // lottery-style with tidy probability sets (each sums to 1)
+    var sets = [[0.2, 0.3, 0.5], [0.1, 0.4, 0.5], [0.25, 0.25, 0.5], [0.3, 0.3, 0.4], [0.1, 0.2, 0.7]];
+    var probs = r.pick(sets);
     var vals = [r.int(1, 10), r.int(1, 10), r.int(1, 10)];
-    var probs = [0.2, 0.3, 0.5];
-    var ev = vals[0] * 0.2 + vals[1] * 0.3 + vals[2] * 0.5;
-    return { prompt: 'X takes values ' + vals[0] + ', ' + vals[1] + ', ' + vals[2] + ' with probabilities 0.2, 0.3, 0.5. What is E[X]?',
+    var ev = vals[0] * probs[0] + vals[1] * probs[1] + vals[2] * probs[2];
+    return { prompt: 'X takes values ' + vals[0] + ', ' + vals[1] + ', ' + vals[2] + ' with probabilities ' + probs.join(', ') + '. What is E[X]?',
       answer: { type: 'number', value: MH.nice(ev, 6) }, hint: 'E[X] = &sum; x·P(x).',
-      steps: [vals[0] + '(0.2) + ' + vals[1] + '(0.3) + ' + vals[2] + '(0.5) = ' + MH.nice(ev, 4)] };
+      steps: [vals[0] + '(' + probs[0] + ') + ' + vals[1] + '(' + probs[1] + ') + ' + vals[2] + '(' + probs[2] + ') = ' + MH.nice(ev, 4)] };
   });
 
   /* ---- Variance & SD ---- */

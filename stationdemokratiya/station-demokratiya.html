@@ -30,10 +30,10 @@ const $=id=>document.getElementById(id),cv=$('c'),g=cv.getContext('2d'),ov=$('ov
 const norm=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const ALPHA=[['А','a'],['Б','b'],['В','v'],['Г','g'],['Д','d'],['Е','ye/e'],['Ё','yo/e'],['Ж','zh'],['З','z'],['И','i'],['Й','y/j/i'],['К','k'],['Л','l'],['М','m'],['Н','n'],['О','o'],['П','p'],['Р','r'],['С','s'],['Т','t'],['У','u'],['Ф','f'],['Х','kh/h'],['Ц','ts/c'],['Ч','ch'],['Ш','sh'],['Щ','shch/sch'],['Ы','y/i'],['Э','e'],['Ю','yu'],['Я','ya']];
-const VOC=[['Хлеб','bread','pan'],['Вода','water','agua'],['Мир','peace','paz'],['Друг','friend','amigo'],['Солнце','sun','sol'],['Звезда','star','estrella'],['Свобода','freedom','libertad'],['Жук','bug','bicho'],['Огонь','fire','fuego'],['Оружие','weapon','arma'],['Помощь','help','ayuda'],['Враг','enemy','enemigo'],['Дом','home','casa'],['Ночь','night','noche'],['Свет','light','luz'],['Воздух','air','aire'],['Победа','victory','victoria'],['Солдат','soldier','soldado'],['Бежать','run','correr'],['Смерть','death','muerte'],['Гражданин','citizen','ciudadano'],['Щит','shield','escudo'],['Туннель','tunnel','túnel'],['Фильтр','filter','filtro'],['Патроны','ammo','munición'],['Выбор','choice','elección'],['Закон','law','ley'],['Страх','fear','miedo'],['Спасибо','thanks','gracias'],['Привет','hello','hola']];
+const VOC=[['Хлеб','bread','pan'],['Вода','water','agua'],['Мир','peace','paz'],['Друг','friend','amigo'],['Солнце','sun','sol'],['Звезда','star','estrella'],['Свобода','freedom','libertad'],['Жук','bug','bicho'],['Огонь','fire','fuego'],['Флаг','flag','bandera'],['Помощь','help','ayuda'],['Враг','enemy','enemigo'],['Дом','home','casa'],['Ночь','night','noche'],['Свет','light','luz'],['Воздух','air','aire'],['Победа','victory','victoria'],['Солдат','soldier','soldado'],['Бежать','run','correr'],['Смерть','death','muerte'],['Гражданин','citizen','ciudadano'],['Щит','shield','escudo'],['Туннель','tunnel','túnel'],['Фильтр','filter','filtro'],['Патроны','ammo','munición'],['Выбор','choice','elección'],['Закон','law','ley'],['Страх','fear','miedo'],['Спасибо','thanks','gracias'],['Привет','hello','hola']];
 const MODES={alpha:'Cyrillic letters → Latin sounds','ru-en':'Russian → English','ru-es':'Russian → Spanish','es-en':'Spanish → English','en-es':'English → Spanish'};
 const IDX={ru:0,en:1,es:2};
-const SLOGANS=['Would you like to know more?','Service guarantees citizenship.','Bugs cannot vote. Democracy can.','The Ministry hears every voice. Loudly.','Your filters are a gift from the people.'];
+const SLOGANS=['Would you like to know more?','Service keeps the lights on.','Bugs cannot spell. Democracy can.','The Ministry hears every voice. Loudly.','Your filters are a gift from the people.'];
 const PROPS=[
  {n:'Liberty Tax',d:'+2 stratagem charges, gate -20 integrity.',f:()=>{charges+=2;gate=Math.max(1,gate-20)}},
  {n:'Mandatory Optimism',d:'Bugs 12% slower, score x0.85.',f:()=>{mods.sp*=.88;mods.sc*=.85}},
@@ -51,8 +51,21 @@ function buildPool(){
  else{const[f,t]=mode.split('-');pool=VOC.map(w=>({p:w[IDX[f]],show:w[IDX[t]],a:[norm(w[IDX[t]])]}))}}
 function say(s){log.push(s);if(log.length>3)log.shift()}
 function menu(){st='menu';ov.style.display='flex';
- ov.innerHTML=`<h1>STATION DEMOKRATIYA</h1><p>The last metro station under the ash. The Ministry says you are free. The bugs say otherwise.</p><p>Each bug carries a word. <b>Type what it means</b> to kill it. Let one reach the gate and you lose integrity, and the Ministry will make you learn its name.</p><p>Arrow codes call stratagems: <b>↑→↓→</b> strike, <b>←↓↑→</b> repair (you earn a charge every 8 kills). Backspace edits, Esc clears. Keyboard needed.</p><label>Practice: <select id="md">${Object.entries(MODES).map(([k,v])=>`<option value="${k}"${k===mode?' selected':''}>${v}</option>`).join('')}</select></label><button id="go">ENLIST (best: ${best})</button>`;
- $('md').onchange=e=>{mode=e.target.value;e.target.blur()};$('go').onclick=e=>{e.target.blur();start()}}
+ ov.innerHTML=`<h1>STATION DEMOKRATIYA</h1><p>The last metro station under the ash. The Ministry says you are free. The bugs say otherwise.</p><p>Each bug carries a word. <b>Type what it means</b> to kill it. Let one reach the gate and you lose integrity, and the Ministry will make you learn its name.</p><p>Arrow codes call stratagems: <b>↑→↓→</b> strike, <b>←↓↑→</b> repair (you earn a charge every 8 kills). Backspace edits, Esc pauses. <b>Keyboard needed</b> — on a phone, pair a keyboard.</p><label>Practice: <select id="md">${Object.entries(MODES).map(([k,v])=>`<option value="${k}"${k===mode?' selected':''}>${v}</option>`).join('')}</select></label><button id="gl">FIELD GLOSSARY</button><button id="go">ENLIST (best: ${best})</button>`;
+ $('md').onchange=e=>{mode=e.target.value;e.target.blur()};
+ $('gl').onclick=e=>{e.target.blur();glossary('menu')};
+ $('go').onclick=e=>{e.target.blur();start()}}
+function glossary(from){
+ buildPool();st='gloss';
+ ov.innerHTML=`<h2>FIELD GLOSSARY</h2><p style="font-size:12px">${MODES[mode]||''} — the accepted answers, straight from the Ministry's typing corps.</p><div style="max-height:56vh;overflow:auto;text-align:left;margin:6px 0"><table style="width:100%;border-collapse:collapse;font-size:13px">${pool.map(w=>`<tr style="border-bottom:1px solid #3a2f26"><td style="padding:4px 6px"><b>${w.p}</b></td><td style="padding:4px 6px">${w.show}</td><td style="padding:4px 6px;color:#8a7a60">${w.a.join(' / ')}</td></tr>`).join('')}</table></div><button id="bk">BACK</button>`;
+ $('bk').onclick=e=>{e.target.blur();from==='menu'?menu():pause()}}
+
+function pause(){st='pause';ov.style.display='flex';
+ ov.innerHTML=`<h2>PAUSED</h2><p>The bugs wait for no one — but the Ministry allows exactly one breather.</p><button id="rs">RESUME (Esc)</button><button id="gl2">FIELD GLOSSARY</button><button id="mq">ABANDON RUN</button>`;
+ $('rs').onclick=e=>{e.target.blur();resume()};
+ $('gl2').onclick=e=>{e.target.blur();glossary('pause')};
+ $('mq').onclick=e=>{e.target.blur();menu()}}
+function resume(){ov.style.display='none';st='play';last=performance.now()}
 function start(){buildPool();weak=[];wave=0;score=0;combo=0;gate=100;bugs=[];parts=[];log=[];buf='';charges=1;kills=0;code='';codeT=0;shake=0;flash=0;missed=[];
  mods={sp:1,sc:1,n:1,hint:0};say('FOR DEMOCRACY!');nextWave()}
 function nextWave(){wave++;toSpawn=Math.round((5+wave*2.5)*mods.n);spT=1;st='play';ov.style.display='none';banner={t:2.2,s:`WAVE ${wave}`};say(rnd(SLOGANS))}
@@ -79,11 +92,12 @@ function strat(c){const s=c.join('');codeT=1.3;
  if(s==='↑→↓→'&&charges>0&&c.length===4){charges--;bugs.slice().forEach(b=>kill(b,0));flash=1;beep(80,.6,'sawtooth',.15);say('ORBITAL LIBERTY STRIKE. NO SURVIVORS TO VOTE.');code=''}
  else if(s==='←↓↑→'&&charges>0&&c.length===4){charges--;gate=Math.min(100,gate+30);beep(300,.4,'sine',.1);say('GATE REPAIRED. THANK THE MINISTRY.');code=''}
  else if(c.length>=4)code=''}
-addEventListener('keydown',e=>{if(st!=='play')return;if(e.ctrlKey||e.metaKey||e.altKey)return;
+addEventListener('keydown',e=>{if(st!=='play'&&st!=='pause')return;if(e.ctrlKey||e.metaKey||e.altKey)return;
  const A={ArrowUp:'↑',ArrowDown:'↓',ArrowLeft:'←',ArrowRight:'→'};
+ if(st==='pause'){if(e.key==='Escape'){e.preventDefault();resume()}return}
  if(A[e.key]){e.preventDefault();code=(code+A[e.key]).slice(-4);strat([...code]);return}
  if(e.key==='Backspace'){buf=buf.slice(0,-1);e.preventDefault()}
- else if(e.key==='Escape')buf='';
+ else if(e.key==='Escape'){if(buf)buf='';else{e.preventDefault();pause()}}
  else if(e.key==='Enter'){submit();e.preventDefault()}
  else if(/^[a-zA-Z]$/.test(e.key)){buf+=e.key.toLowerCase();typed()}
  if(e.key===' ')e.preventDefault()});

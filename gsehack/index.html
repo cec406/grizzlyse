@@ -8,10 +8,10 @@
 <style>
   :root{
     --bg:#0f172a;          /* Grizzly deep slate */
-    --green:#f4b942;       /* terminal amber */
-    --green-dim:#9a7530;   /* dim amber */
-    --cyan:#d97706;        /* Grizzly primary amber */
-    --amber:#ffd166;       /* highlight gold */
+    --amber:#f4b942;       /* main terminal text */
+    --amber-dim:#9a7530;   /* dim amber */
+    --accent:#d97706;      /* Grizzly primary amber */
+    --gold:#ffd166;        /* highlight gold */
     --red:#ff6b6b;
     --violet:#e0a3ff;
     --line:rgba(217,119,6,.30);
@@ -20,7 +20,7 @@
   html,body{height:100%;margin:0;padding:0}
   body{
     background:radial-gradient(ellipse at center,#1a2338 0%,#0b1120 62%,#0f172a 100%);
-    color:var(--green);
+    color:var(--amber);
     font-family:"SFMono-Regular","Menlo","Consolas","Courier New",ui-monospace,monospace;
     font-size:15px;
     line-height:1.45;
@@ -47,46 +47,46 @@
     background:rgba(0,0,0,.55);backdrop-filter:blur(2px);
     position:relative;z-index:3;
   }
-  #logo{font-weight:bold;letter-spacing:3px;color:var(--cyan);text-shadow:0 0 10px rgba(217,119,6,.65)}
-  #logo span{color:var(--green)}
-  .hud{margin-left:auto;display:flex;align-items:center;gap:18px;font-size:13px;color:var(--green-dim)}
-  .hud b{color:var(--amber);font-weight:bold;text-shadow:0 0 8px rgba(255,209,102,.5)}
+  #logo{font-weight:bold;letter-spacing:3px;color:var(--accent);text-shadow:0 0 10px rgba(217,119,6,.65)}
+  #logo span{color:var(--amber)}
+  .hud{margin-left:auto;display:flex;align-items:center;gap:18px;font-size:13px;color:var(--amber-dim)}
+  .hud b{color:var(--gold);font-weight:bold;text-shadow:0 0 8px rgba(255,209,102,.5)}
   .btn{
     cursor:pointer;border:1px solid var(--line);background:rgba(217,119,6,.10);
-    color:var(--green);padding:4px 10px;border-radius:4px;font:inherit;font-size:12px;
+    color:var(--amber);padding:4px 10px;border-radius:4px;font:inherit;font-size:12px;
     transition:background .15s,border-color .15s;
   }
-  .btn:hover{background:rgba(217,119,6,.22);border-color:var(--green)}
+  .btn:hover{background:rgba(217,119,6,.22);border-color:var(--amber)}
   .btn.off{opacity:.45}
 
   #app{flex:1;display:flex;min-height:0;position:relative;z-index:3}
   #term{flex:1;display:flex;flex-direction:column;min-width:0;padding:16px 18px 10px}
   #output{
     flex:1;overflow-y:auto;white-space:pre-wrap;word-break:break-word;
-    scrollbar-width:thin;scrollbar-color:var(--green-dim) transparent;
+    scrollbar-width:thin;scrollbar-color:var(--amber-dim) transparent;
   }
   #output::-webkit-scrollbar{width:8px}
-  #output::-webkit-scrollbar-thumb{background:var(--green-dim);border-radius:4px}
+  #output::-webkit-scrollbar-thumb{background:var(--amber-dim);border-radius:4px}
   .line{animation:rise .12s ease-out}
   @keyframes rise{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
-  .ok{color:var(--green)}
+  .ok{color:var(--amber)}
   .err{color:var(--red);text-shadow:0 0 6px rgba(255,107,107,.4)}
-  .warn{color:var(--amber);text-shadow:0 0 6px rgba(255,209,102,.35)}
-  .dim{color:var(--green-dim);text-shadow:none}
-  .accent{color:var(--cyan);text-shadow:0 0 8px rgba(217,119,6,.45)}
+  .warn{color:var(--gold);text-shadow:0 0 6px rgba(255,209,102,.35)}
+  .dim{color:var(--amber-dim);text-shadow:none}
+  .accent{color:var(--accent);text-shadow:0 0 8px rgba(217,119,6,.45)}
   .violet{color:var(--violet);text-shadow:0 0 8px rgba(224,163,255,.4)}
-  .head{color:var(--cyan);font-weight:bold;letter-spacing:1px}
-  .echo .cmdtext{color:var(--green);text-shadow:0 0 8px rgba(244,185,66,.5)}
-  .echo .ps1{color:var(--cyan)}
+  .head{color:var(--accent);font-weight:bold;letter-spacing:1px}
+  .echo .cmdtext{color:var(--amber);text-shadow:0 0 8px rgba(244,185,66,.5)}
+  .echo .ps1{color:var(--accent)}
 
   #inputrow{
     display:flex;gap:8px;align-items:center;margin-top:10px;
     border-top:1px solid var(--line);padding-top:10px;
   }
-  #ps1{color:var(--cyan);white-space:nowrap;font-weight:bold}
+  #ps1{color:var(--accent);white-space:nowrap;font-weight:bold}
   #cmd{
-    flex:1;background:transparent;border:0;outline:0;color:var(--green);
-    font:inherit;caret-color:var(--green);text-shadow:inherit;
+    flex:1;background:transparent;border:0;outline:0;color:var(--amber);
+    font:inherit;caret-color:var(--amber);text-shadow:inherit;
   }
   #cmd:disabled{opacity:.4}
   .blink{animation:blink 1s steps(1) infinite}
@@ -95,32 +95,32 @@
   #sidebar{
     width:290px;border-left:1px solid var(--line);padding:16px;
     overflow-y:auto;background:rgba(0,0,0,.35);
-    scrollbar-width:thin;scrollbar-color:var(--green-dim) transparent;
+    scrollbar-width:thin;scrollbar-color:var(--amber-dim) transparent;
   }
-  #sidebar h3{margin:0 0 10px;font-size:12px;letter-spacing:2px;color:var(--cyan);text-transform:uppercase}
+  #sidebar h3{margin:0 0 10px;font-size:12px;letter-spacing:2px;color:var(--accent);text-transform:uppercase}
   #missions{list-style:none;margin:0 0 22px;padding:0}
   #missions li{
     display:flex;gap:10px;align-items:flex-start;padding:7px 9px;margin-bottom:6px;
-    border:1px solid transparent;border-radius:5px;font-size:13px;color:var(--green-dim);
+    border:1px solid transparent;border-radius:5px;font-size:13px;color:var(--amber-dim);
     transition:all .2s;
   }
   #missions li .badge{
-    flex:none;width:20px;text-align:center;color:var(--green-dim);
+    flex:none;width:20px;text-align:center;color:var(--amber-dim);
   }
-  #missions li.active{border-color:var(--green);color:var(--green);background:rgba(217,119,6,.12)}
-  #missions li.done{color:var(--green);opacity:.85}
-  #missions li.done .badge{color:var(--green)}
+  #missions li.active{border-color:var(--amber);color:var(--amber);background:rgba(217,119,6,.12)}
+  #missions li.done{color:var(--amber);opacity:.85}
+  #missions li.done .badge{color:var(--amber)}
   #missions li.locked{opacity:.4}
   #missions .mname{display:block;font-weight:bold;letter-spacing:.5px}
-  #missions .mdesc{display:block;font-size:11px;color:var(--green-dim)}
+  #missions .mdesc{display:block;font-size:11px;color:var(--amber-dim)}
   .achv{display:inline-block;font-size:11px;padding:3px 7px;margin:3px 3px 0 0;border:1px solid var(--violet);border-radius:20px;color:var(--violet)}
-  #stats{font-size:12px;color:var(--green-dim);line-height:1.9}
-  #stats b{color:var(--amber)}
+  #stats{font-size:12px;color:var(--amber-dim);line-height:1.9}
+  #stats b{color:var(--gold)}
   .sep{border:0;border-top:1px solid var(--line);margin:16px 0}
 
-  .progressbar{color:var(--cyan)}
+  .progressbar{color:var(--accent)}
   .flag{color:var(--violet);font-weight:bold;text-shadow:0 0 10px rgba(224,163,255,.6)}
-  .ascii{color:var(--cyan);text-shadow:0 0 10px rgba(217,119,6,.45);line-height:1.15}
+  .ascii{color:var(--accent);text-shadow:0 0 10px rgba(217,119,6,.45);line-height:1.15}
 
   #toast{
     position:fixed;left:50%;top:70px;transform:translate(-50%,-20px);z-index:60;
@@ -131,11 +131,21 @@
   #toast.show{opacity:1;transform:translate(-50%,0)}
 
   @media (max-width:860px){
-    #sidebar{display:none}
+    #app{flex-direction:column}
+    #sidebar{
+      width:100%;order:2;max-height:42vh;border-left:0;
+      border-top:1px solid var(--line);background:rgba(0,0,0,.6);
+    }
     .hide-sm{display:none}
     .hud{gap:10px;font-size:12px}
     body{font-size:14px}
     #term{padding:12px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .line{animation:none}
+    #crt::before{animation:none}
+    #crt::after{display:none}
+    #matrix{display:none}
   }
 </style>
 <link rel="stylesheet" href="../range/labshell.css">
@@ -232,6 +242,12 @@ function liveLine(cls){
 let skipTyping = false;
 function typeText(text, cls, speed){
   speed = speed || 12;
+  const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduced){
+    const e = makeEl("div", "line" + (cls ? " " + cls : ""), text);
+    out.appendChild(e); scrollBottom();
+    return Promise.resolve();
+  }
   return new Promise((resolve) => {
     const e = makeEl("div", "line" + (cls ? " " + cls : ""), "");
     out.appendChild(e);
@@ -467,25 +483,28 @@ const Game = {
     print("  ██║  ██║╚██████╔╝╚██████╔╝   ██║   ", "ascii");
     print("  ╚═╝  ╚═╝ ╚═════╝  ╚═════╝    ╚═╝   ", "ascii");
     print("");
-    await this.narrate("You own the network. The vault is open. The flag is yours.", "accent", 18);
+    await this.narrate("You cleared the range. Five systems fell to skill and patience, not damage.", "accent", 18);
     print("");
     print("  ★ FINAL FLAG: " + FINAL_FLAG, "flag");
     print("");
     print("  FINAL SCORE: " + this.state.score + " / " + MAX_SCORE, "ok");
     this.rank();
-    this.award("Root");
+    this.award("Range Champion");
     print("");
-    print("  Thank you for playing the GRIZZLY_SE Cyber Range. Type `reset` to try for a perfect run.", "dim");
+    print("  Take it further the legal way: TryHackMe, picoCTF, and your school's cyber club.", "dim");
+    print("  Remember the rule: only ever test machines you own or have permission to test.", "dim");
+    print("");
+    print("  Thank you for playing the GRIZZLY_SE Training Range. Type `reset confirm` to try for a perfect run.", "dim");
     print("  Grizzly System Engineering  //  Rugged Engineering. Forensic Precision.", "dim");
     print("");
   },
   rank(){
     const pct = this.state.score / MAX_SCORE;
     let r = "SCRIPT KIDDIE";
-    if (pct >= 1) r = "GODMODE // GRIZZLY_SE";
-    else if (pct >= 0.9) r = "ELITE HACKER";
-    else if (pct >= 0.75) r = "GREY HAT";
-    else if (pct >= 0.55) r = "PEN TESTER";
+    if (pct >= 1) r = "RANGE CHAMPION // GRIZZLY_SE";
+    else if (pct >= 0.9) r = "WHITE HAT";
+    else if (pct >= 0.75) r = "ANALYST";
+    else if (pct >= 0.55) r = "TRAINEE";
     print("  RANK: " + r, "violet");
   },
 
@@ -572,7 +591,16 @@ COMMANDS.cat = { desc:"print a file  (cat <file>)", run(args, input){
 
 COMMANDS.pwd = { desc:"print working directory", run(){ return [Game.current ? Game.current.pwd || "/home/guest" : "/"]; } };
 COMMANDS.whoami = { desc:"print current user", run(){ return [Game.current ? Game.current.user || "guest" : "guest"]; } };
-COMMANDS.whois = { desc:"look up an IP  (whois <ip>)", run(args){ return ["whois: querying records for " + (args[0]||"?") + " ... (no external network in sandbox)"]; } };
+COMMANDS.whois = { desc:"look up an IP in the simulated registry  (whois <ip>)", run(args){
+  const ip = args[0] || "";
+  const records = {
+    "203.0.113.45": ["whois: simulated record for " + ip, "  netname:   DOC-EXAMPLENET-45", "  org:       Example Threat Actor Collective", "  country:   US", "  abuse:     abuse@example.org", "  note:      documented brute-force source in this lab"],
+    "192.168.1.42": ["whois: simulated record for " + ip, "  netname:   LAB-PRIVATE-42", "  org:       Grizzly Range (RFC 1918 private address)", "  note:      private lab host, no public registry entry"],
+  };
+  if (records[ip]) return records[ip];
+  return ["whois: no record for " + ip + " (the sandbox has no external network,",
+          "so only lab IPs resolve. Real whois queries registries like ARIN/RIPE.)"];
+}};
 COMMANDS.date = { desc:"show system time", run(){ return [new Date().toString()]; } };
 COMMANDS.echo = { desc:"repeat text", run(args){ return [args.join(" ")]; } };
 COMMANDS.hint = { desc:"get a hint (costs points)", run(){ Game.useHint(); return null; } };
@@ -581,7 +609,12 @@ COMMANDS.next = { desc:"advance after a completed mission", run(){
   if (Game.state.mission >= MISSIONS.length-1 && Object.keys(Game.state.completed).length===MISSIONS.length){ return null; }
   return ["nothing to advance to right now."];
 }};
-COMMANDS.reset = { desc:"wipe progress and restart", run(){
+COMMANDS.reset = { desc:"wipe progress and restart  (reset confirm)", run(args){
+  if (!args.includes("confirm")){
+    print("This erases your score, achievements and save file.", "warn");
+    print("If you are sure, type:  reset confirm", "warn");
+    return null;
+  }
   print("Resetting...", "warn"); Game.hardReset(); return null;
 }};
 COMMANDS.sound = { desc:"toggle sound on/off", run(){ toggleSound(); return null; } };
@@ -659,13 +692,23 @@ COMMANDS.wc = { desc:"count lines  (wc [-l])", run(args, input){
 
 COMMANDS.head = { desc:"first N lines  (head [-n N])", run(args, input){
   if (!input) return ["head: no input"];
-  const n = parseInt(args[args.indexOf("-n")+1],10) || parseInt(args[0],10) || 10;
+  const nArg = args.find(a => /^-n?$/.test(a));
+  let n;
+  if (nArg === "-n") n = parseInt(args[args.indexOf("-n") + 1], 10);
+  else if (nArg === "-") { /* ignored */ }
+  const short = args.find(a => /^-\d+$/.test(a));
+  if (!Number.isFinite(n) || n <= 0) n = short ? parseInt(short.slice(1), 10) : parseInt(args[0], 10);
+  if (!Number.isFinite(n) || n <= 0) n = 10;
   return input.slice(0, n);
 }};
 
 COMMANDS.tail = { desc:"last N lines  (tail [-n N])", run(args, input){
   if (!input) return ["tail: no input"];
-  const n = parseInt(args[args.indexOf("-n")+1],10) || parseInt(args[0],10) || 10;
+  let n;
+  if (args.includes("-n")) n = parseInt(args[args.indexOf("-n") + 1], 10);
+  const short = args.find(a => /^-\d+$/.test(a));
+  if (!Number.isFinite(n) || n <= 0) n = short ? parseInt(short.slice(1), 10) : parseInt(args[0], 10);
+  if (!Number.isFinite(n) || n <= 0) n = 10;
   return input.slice(-n);
 }};
 
@@ -708,13 +751,16 @@ MISSIONS.push({
   user:"cracker",
   fs:{
     "readme.txt":
-`== ENGAGEMENT BRIEF: ACME MAIL SERVER ==
-Target   : mail.acme-corp.net
-Objective: recover valid credentials, then authenticate.
+`== AUTHORIZED TRAINING LAB: ACME MAIL SERVER ==
+Target   : mail.acme-corp.net (lab copy)
+Objective: recover the admin's weak password, then authenticate.
 
 We sniffed the login form and pulled the local wordlist.
 Usernames are in users.txt, the wordlist is rockyou.txt.
 IT just updated their password policy - check notes.txt.
+
+Remember: this mailbox is a training machine. Cracking skills are
+only legal on systems you own or have written permission to test.
 `,
     "users.txt":
 `# username        full name
@@ -725,13 +771,17 @@ guest            Guest Account
 backup           Backup Service
 `,
     "notes.txt":
-`IT POLICY MEMO - CONFIDENTIAL
------------------------------
+`IT POLICY MEMO - INTERNAL
+-------------------------
 Reminder: all staff passwords follow the old habit --
 pick ONE dictionary word and append the current year.
 Symbols are forbidden ('too hard to type' - Dave).
 
 So a password looks like: <word><year>   e.g. sunshine2021
+
+A defender should read this and cry. Anyone with this memo
+and a wordlist can guess every password in the building.
+That is why password policies ban it now.
 `,
     "rockyou.txt":
 `123456
@@ -760,6 +810,10 @@ welcome
         if (!["admin","jsmith","guest","backup","root"].includes(user)){
           return ["crack: unknown user '" + user + "'. See users.txt"];
         }
+        if (user !== "admin"){
+          return ["[-] No password hash is mounted for '" + user + "' in this lab.",
+                  "[i] The exercise targets the admin account. Try: crack admin --rules"];
+        }
         const rules = args.includes("--rules");
         const words = ["123456","password","qwerty","letmein","dragon","monkey","iloveyou","trustno1","sunshine","princess","football","shadow"];
         print("[*] john --wordlist=rockyou.txt --format=raw " + user, "dim");
@@ -780,6 +834,8 @@ welcome
           return null;
         }
         print("[+] Match found!  " + user + " : sunshine2024", "ok");
+        print("[i] The word was in rockyou.txt and the policy said to add a year.", "dim");
+        print("[i] A mutation rule a kid could write broke it in seconds. Length beats tricks.", "dim");
         print("[i] Now authenticate:  login " + user + " sunshine2024", "dim");
         Game.award("Wordlist Warrior");
         return null;
@@ -914,7 +970,7 @@ database = acme_prod
           return null;
         }
         if (f === "backup.sql"){
-          Game.current.fs["backup.sql"] = "-- schema only, no data here. Try the web app at port 80.";
+          Game.current.fs["backup.sql"] = "-- schema only, no data here.";
           return ["226 Transfer complete: backup.sql (schema only)"];
         }
         return ["550 Failed to open file."];
@@ -926,10 +982,14 @@ database = acme_prod
         const [ip,port] = args;
         if (ip !== "192.168.1.42") return ["Host not in scope."];
         if (port === "3306"){
-          return ["ERROR 1045 (28000): Access denied for 'root'@'localhost'. Need credentials from config.txt"];
+          return ["ERROR 1045 (28000): Access denied for 'root'@'localhost'.",
+                  "[i] This lab stops at recon. Poking the database directly is out of scope",
+                  "[i] for this exercise -- and out of scope in real work without written",
+                  "[i] permission. Good operators stop at the edge of their authorization."];
         }
         if (port === "80"){
-          return ["[!] The web app needs the SQL skills from a later mission."];
+          return ["[!] The web app here becomes the target in a later mission.",
+                  "[i] Note the page for now: recon means documenting, not touching."];
         }
         return ["nothing useful on port " + port];
       }
@@ -960,8 +1020,11 @@ Someone brute-forced SSH on 03/10. auth.log is in this dir.
 
 Count failed logins per source IP and find the attacker.
 The best tool here is the PIPE ( | ). Examples:
-  cat auth.log | grep Failed | head -5
+  cat auth.log | grep Failed | head -n 5
   grep -o "<regex>" auth.log | sort | uniq -c | sort -nr
+
+The regex [0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+ matches an IP address:
+one or more digits, then a literal dot, three more times.
 Then submit:  report <ip>
 `,
     "auth.log": (function(){
@@ -1002,7 +1065,7 @@ Then submit:  report <ip>
   },
   hint(n){
     if (n === 1) return "Find failed lines: `grep Failed auth.log | head`.";
-    if (n === 2) return "Extract just IPs, then count them:\n  grep -o \"[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\" auth.log | sort | uniq -c | sort -nr";
+    if (n === 2) return "Extract just IPs, then count them:\n  grep -o \"[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+\" auth.log | sort | uniq -c | sort -nr\n(+ means one-or-more, \\. is a literal dot)";
     return "The IP with the most hits is `203.0.113.45`. Submit: report 203.0.113.45";
   }
 });
@@ -1023,6 +1086,9 @@ Files can hide data in metadata or after their EOF marker.
 
 Tools:  exiftool <file>   strings <file>   base64 -d <text>
 Submit the flag once you find it:  submit <FLAG{...}>
+
+Exif metadata is the label a camera or editor writes INSIDE a file.
+Most people forget it is there - which is exactly why investigators check it.
 `,
     "evidence.jpg":{
       size: 48321,
@@ -1031,7 +1097,7 @@ Submit the flag once you find it:  submit <FLAG{...}>
 Software: Adobe Photoshop 24.0
 Model   : Canon EOS R5
 GPS     : 51.5074 N, 0.1278 W
-Comment : SW5zcGVjdG9yOiB0aGUgcmVhbCBzZWNyZXQgaXMgY2FycmllZCBpbiB0aGUgYmluIGZpbGUuIERlY29kZSBiZWxvdzoKRkxBR3ttM3Q0ZDQ3NF9uM3Yzcl9sMTNzfQ==
+Comment : SW5zcGVjdG9yOiBtZXRhZGF0YSBuZXZlciBsaWVzLgpGTEFHe20zdDRkNDc0X24zdjNyX2wxM3N9
 `
     },
     "recovered.bin":{
@@ -1056,7 +1122,7 @@ Comment : SW5zcGVjdG9yOiB0aGUgcmVhbCBzZWNyZXQgaXMgY2FycmllZCBpbiB0aGUgYmluIGZpbG
             "Create Date                     : 2024:02:11 22:41:03",
             "GPS Latitude                    : 51 deg 30' 26.64\" N",
             "GPS Longitude                   : 0 deg 7' 40.08\" W",
-            "Comment                         : SW5zcGVjdG9yOiB0aGUgcmVhbCBzZWNyZXQgaXMgY2FycmllZCBpbiB0aGUgYmluIGZpbGUuIERlY29kZSBiZWxvdzoKRkxBR3ttM3Q0ZDQ3NF9uM3Yzcl9sMTNzfQ==",
+            "Comment                         : SW5zcGVjdG9yOiBtZXRhZGF0YSBuZXZlciBsaWVzLgpGTEFHe20zdDRkNDc0X24zdjNyX2wxM3N9",
             "",
             "[i] That Comment is base64. Decode it: `base64 -d <comment>`"
           ];
@@ -1069,7 +1135,7 @@ Comment : SW5zcGVjdG9yOiB0aGUgcmVhbCBzZWNyZXQgaXMgY2FycmllZCBpbiB0aGUgYmluIGZpbG
   hint(n){
     if (n === 1) return "Run `exiftool evidence.jpg` and read the Comment field.";
     if (n === 2) return "The Comment is base64. Decode it with `base64 -d <the long string>`.";
-    return "Also try `strings recovered.bin` for a partial flag, and decode the comment to get the full flag.";
+    return "The decoded Comment holds the whole flag. `strings recovered.bin` only shows a decoy fragment.";
   },
   onComplete(){}
 });
@@ -1095,6 +1161,10 @@ Find the admin's password - it IS the final flag.
 
 Classic move:  ' OR '1'='1' -- 
 Then UNION SELECT to pull columns you can see.
+
+Why this works: the app glues your input into the query instead of
+passing it as data. Real apps stop this with parameterized queries,
+which send input separately so it can never change the query's shape.
 `,
     "schema.txt":
 `TABLE: users
@@ -1208,7 +1278,7 @@ async function handleInput(raw){
   Game.syncHUD(); Game.save();
 
   if (Game.awaitingNext && raw !== "next"){
-    print("(finish the transition first - press Enter)", "dim");
+    print("(mission complete - press ENTER or type `next` to continue. This command still runs.)", "dim");
   }
 
   const stages = raw.split("|").map(s => s.trim()).filter(Boolean);
@@ -1272,7 +1342,15 @@ cmdInput.addEventListener("keydown", (e) => {
 
 function autocomplete(){
   const val = cmdInput.value;
-  if (!val || val.includes(" ")) return;
+  const parts = val.split(/\s+/).filter(Boolean);
+  if (parts.length > 1 && !val.endsWith(" ")){
+    const last = parts.pop();
+    const files = Game.current ? fsList() : [];
+    const matches = files.filter(f => f.startsWith(last));
+    if (matches.length === 1){ parts.push(matches[0]); cmdInput.value = parts.join(" ") + " "; }
+    else if (matches.length > 1) print("  " + matches.join("   "), "dim");
+    return;
+  }
   const table = CMDS_TABLE();
   const matches = Object.keys(table).filter(c => c.startsWith(val));
   if (matches.length === 1) cmdInput.value = matches[0] + " ";
@@ -1284,6 +1362,9 @@ document.addEventListener("click", (e) => {
   if (e.target.closest("#sidebar") || e.target.tagName === "BUTTON") return;
   if (!busy) cmdInput.focus();
 });
+/* any keypress or click skips the typewriter so fast readers are never stuck */
+document.addEventListener("keydown", () => { skipTyping = true; });
+document.addEventListener("click", () => { skipTyping = true; });
 document.addEventListener("keydown", (e) => {
   if (document.activeElement !== cmdInput && !busy && e.key.length === 1){ cmdInput.focus(); }
 });
@@ -1313,14 +1394,14 @@ async function boot(){
   $("#soundBtn").classList.toggle("off", !Audio.enabled);
 
   const bootLines = [
-    "GRIZZLY_SE SECURE TERMINAL v4.2.1 -- initializing cyber range...",
+    "GRIZZLY_SE TRAINING TERMINAL v4.2.1 -- initializing practice range...",
     "  range:      grizzlyse.com  (Grizzly System Engineering)",
-    "  clearance:  operator // TS/SCI eligible",
+    "  mode:       practice sandbox -- no real networks, ever",
     "[ OK ] mounting /dev/ghost0 on /mnt/ghost",
     "[ OK ] loading kernel modules: netfilter, cryptoloop, keyring",
-    "[ OK ] establishing encrypted uplink to range enclave",
-    "[ OK ] routing through 7 relays",
-    "> welcome, operator. Rugged engineering. Forensic precision.",
+    "[ OK ] loading the five training targets",
+    "[ OK ] sandbox link verified: nothing here can leave the lab",
+    "> welcome, operator. Learn the skills. Stay ethical.",
     ""
   ];
   for (const l of bootLines){
@@ -1349,12 +1430,14 @@ async function boot(){
   print("  █   █ █ █     █    █     █    █       █", "ascii");
   print("   ████ █  ██ █████ █████ █████ █████   █", "ascii");
   print("");
-  print("  GRIZZLY SYSTEMS ENGINEERING // CYBER RANGE", "accent");
+  print("  GRIZZLY SYSTEMS ENGINEERING // TRAINING RANGE", "accent");
   print("  Rugged Engineering. Forensic Precision.", "dim");
   print("");
-  await typeText("Operator identification accepted. Five enemy systems stand between you and the vault.", "accent", 18);
+  await typeText("Five training systems stand between you and graduation. Every one of them lives in this sandbox.", "accent", 18);
   await sleep(200);
-  await typeText("Train real skills: password cracking, recon, log forensics, stego, SQL injection.", null, 14);
+  await typeText("Learn real skills: password cracking, recon, log forensics, stego, SQL injection.", null, 14);
+  await sleep(200);
+  await typeText("Rule of the range: only ever test machines you own or have written permission to test.", "warn", 14);
   print("");
   print("Type `help` for commands, `hint` when stuck. Click anywhere to focus the terminal.", "dim");
   print("");

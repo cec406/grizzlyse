@@ -108,20 +108,39 @@
   /* ---- Eigenvalues ---- */
   def('lin.eigen', function (r, lvl) {
     var l1 = r.nonzero(-6, 6), l2 = r.nonzero(-6, 6);
-    var b = r.chance(0.5) ? r.nonzero(-5, 5) : 0;
-    var a = l1, d = l2, c = 0;
-    // matrix [[l1, b],[0, l2]] is upper triangular: eigenvalues on the diagonal
     var ask = r.pick(['larger', 'smaller', 'trace']);
     if (ask === 'trace') return { prompt: 'A 2&times;2 matrix has eigenvalues ' + l1 + ' and ' + l2 + '. What is its trace (sum of the diagonal)?',
       answer: { type: 'number', value: l1 + l2 }, hint: 'Trace = sum of eigenvalues = a + d.',
       steps: ['trace = ' + l1 + ' + ' + l2 + ' = ' + (l1 + l2)] };
+    // half the time: a general matrix with those eigenvalues (b = ±1 keeps every entry an integer)
+    if (r.chance(0.5)) {
+      var tr = l1 + l2, det = l1 * l2;
+      var a0 = r.int(-3, 3), b0 = r.chance(0.5) ? 1 : -1;
+      var d0 = tr - a0;
+      var c0 = (a0 * d0 - det) / b0;
+      if (Math.abs(c0) <= 40) {
+        var lo0 = Math.min(l1, l2), hi0 = Math.max(l1, l2);
+        return { prompt: 'Find the ' + ask + ' eigenvalue of [' + a0 + ' ' + b0 + '; ' + c0 + ' ' + d0 + '].',
+          answer: { type: 'number', value: ask === 'larger' ? hi0 : lo0 },
+          hint: 'Solve det(A &minus; &lambda;I) = 0, i.e. &lambda;&sup2; &minus; (trace)&lambda; + det = 0.',
+          steps: ['trace = ' + (a0 + d0) + ', det = ' + (a0 * d0 - b0 * c0),
+            '&lambda;&sup2; &minus; ' + (a0 + d0) + '&lambda; + ' + (a0 * d0 - b0 * c0) + ' = (&lambda; &minus; ' + l1 + ')(&lambda; &minus; ' + l2 + ')',
+            'Eigenvalues: ' + lo0 + ' and ' + hi0] };
+      }
+    }
+    return eigenTriangular(r, l1, l2, ask);
+  });
+
+  function eigenTriangular(r, l1, l2, ask) {
+    var b = r.chance(0.5) ? r.nonzero(-5, 5) : 0;
+    var a = l1, d = l2, c = 0;
     var lo = Math.min(l1, l2), hi = Math.max(l1, l2);
     return { prompt: 'Find the ' + ask + ' eigenvalue of [' + a + ' ' + b + '; ' + c + ' ' + d + ']. (Hint: it is triangular.)',
       answer: { type: 'number', value: ask === 'larger' ? hi : lo },
       hint: 'The eigenvalues of a triangular matrix are its diagonal entries. Otherwise solve det(A &minus; &lambda;I) = 0.',
       steps: ['Solve &lambda;&sup2; &minus; (trace)&lambda; + det = 0', 'trace = ' + (a + d) + ', det = ' + (a * d - b * c),
         'Eigenvalues: ' + lo + ' and ' + hi] };
-  });
+  }
 
   /* ---- Span & independence ---- */
   def('lin.independence', function (r, lvl) {

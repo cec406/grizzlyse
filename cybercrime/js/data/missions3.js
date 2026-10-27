@@ -24,7 +24,7 @@ var MISSIONS_C = [
       title: "NIGHTBAZAAR",
       body: [
         "NIGHTBAZAAR is a fictional dark-web market where stolen data, access, and forged documents change hands. Real markets like it have sold the personal files of millions — schools, hospitals, defense contractors.",
-        "A vendor signing 'КОБРА' ('COBRA') is listing access to a defense contractor's network. Your task: build the financial case. The blockchain never forgets — every coin is a breadcrumb.",
+        "A vendor signing 'КОБРА' ('COBRA') is listing remote access to a city hospital's network. Your task: build the financial case. The blockchain never forgets — every coin is a breadcrumb.",
         "You are a certified undercover analyst. Which means: you may OBSERVE and PURCHASE AUTHORIZED SAMPLES under supervision. You may never facilitate violence, never fabricate evidence, never 'get creative' beyond your signed operational plan."
       ],
       callout: { style: "good", label: "WHY MONEY MATTERS", text: "Markets die; money survives. You can seize a server and the market reopens next week — but a traced, frozen, forfeited fortune follows a human through every alias they ever make." }
@@ -37,7 +37,7 @@ var MISSIONS_C = [
         { id: "g1", name: "Listing (RU)", icon: "🛒",
           body: "TRANSLATOR REQUIRED — the listing is in Russian, naturally." },
         { id: "g2", name: "Listing, translated", icon: "🌐",
-          body: "FOR SALE: access to a defense contractor network (VPN + 2FA seed secrets).\nEscrow service ('garant'). Commission 5%.\nPayment in bitcoin only. Contact: @cobra_operator.\nVendor stats: 61 sales, 97% positive, member since 2024.\nANALYST NOTE: 'Access to X' listings are how ransomware crews SHOP. Somebody pays COBRA, and next month that contractor makes headline obituaries of its data." },
+          body: "FOR SALE: remote access to a city hospital network (VPN credentials + 2FA seeds).\nEscrow service ('garant'). Commission 5%.\nPayment in bitcoin only. Contact: @cobra_operator.\nVendor stats: 61 sales, 97% positive, member since 2024.\nANALYST NOTE: 'Access to X' listings are how ransomware crews SHOP. Somebody pays COBRA, and next month that hospital makes headlines for all the wrong reasons." },
         { id: "g3", name: "Wallet: 1Cobra...8xq", icon: "🪙",
           body: "ChainTrace cluster: 'cobra-cashout-1'\nIN: 214 deposits from market escrow (garant wallet)\nOUT pattern: consolidates every 6 days → single output → mixer 'Koschei' (fictional)\nPost-mixer: dust-pattern correlation matches deposits at BitSevilla exchange (Sevilla, Spain — KYC jurisdiction).\nTHE PATTERN NEVER DIES. Mixers just make you work for it." }
       ]
@@ -48,7 +48,7 @@ var MISSIONS_C = [
       lang: "ru",
       context: "The raw listing text, line by line:",
       lines: [
-        { s: "Продажа: доступ к сети оборонного подрядчика (VPN + секреты 2FA).", t: "For sale: access to a defense contractor network (VPN + 2FA secrets)." },
+        { s: "Продажа: удалённый доступ к сети городской больницы (VPN + секреты 2FA).", t: "For sale: remote access to a city hospital network (VPN + 2FA secrets)." },
         { s: "Гарант-сервис. Комиссия 5%.", t: "Escrow service. 5% commission." },
         { s: "Оплата только в биткоинах. Связь: @cobra_operator", t: "Payment in bitcoin only. Contact: @cobra_operator" },
         { s: "Работаю 2 года. Репутация — всё.", t: "Working for 2 years. Reputation is everything." }
@@ -83,12 +83,12 @@ var MISSIONS_C = [
     {
       type: "choice",
       title: "The Undercover Line",
-      prompt: "During the operation, @cobra_operator offers you (as your persona) a 'special bundle': access PLUS a decommissioned military drone unit's control keys. Your operational plan covers data-access purchases ONLY. What do you do?",
+      prompt: "During the operation, @cobra_operator offers you (as your persona) a 'special bundle': the hospital access PLUS a ready-to-run ransomware builder and a stash of patient records. Your operational plan covers observing the listing ONLY. What do you do?",
       options: [
-        { k: "a", label: "Decline, break contact per protocol, and document the offer for the case agent — weapons-adjacent capability goes to the task force, not the wallet.", correct: true,
-          feedback: "Correct. undercover work has bright lines. Buying weapons-adjacent capability could facilitate real-world harm — and no dataset is worth a life. The offer itself becomes evidence; the sale never happens." },
-        { k: "b", label: "Buy it — inside info on drone systems is a career-making seizure.", correct: false,
-          feedback: "No. Facilitating acquisition of a weapons capability crosses the line between investigator and accomplice. Evidence never justifies becoming the supply chain for harm." },
+        { k: "a", label: "Decline, break contact per protocol, and document the offer for the case agent — the bundle would directly harm patients, and it goes to the task force, not the wallet.", correct: true,
+          feedback: "Correct. Undercover work has bright lines. Buying a ransomware kit or stolen patient records would make you the supply chain for real harm to real people. The offer itself becomes evidence; the sale never happens." },
+        { k: "b", label: "Buy it — a hospital-wide dataset is a career-making seizure.", correct: false,
+          feedback: "No. Facilitating a ransomware hit on a hospital crosses the line between investigator and accomplice. Evidence never justifies becoming the supply chain for harm." },
         { k: "c", label: "Stall and negotiate to keep him talking, but never confirm intent to buy.", correct: false,
           feedback: "Tempting, but unauthorized continued engagement on a NEW criminal line exceeds your signed plan. Undercover discipline means handing new leads to the case agent, not freelancing them." }
       ]
@@ -97,7 +97,7 @@ var MISSIONS_C = [
       type: "debrief",
       title: "Ghost Market Complete",
       body: [
-        "Erik M. — the man behind КОБРА — is arrested in Valencia eight months later, trying to board a ferry with a new passport. 41 BTC frozen. His laptop holds the contractor access he never sold: the defense contractor patches in time. Crisis prevented.",
+        "Erik M. — the man behind КОБРА — is arrested in Valencia eight months later, trying to board a ferry with a new passport. 41 BTC frozen. His laptop holds the hospital access he never sold: the hospital rotates every credential in time and no patient record leaks. Crisis prevented.",
         "The MLAT paperwork took 14 weeks. It felt slow. It was also the reason everything stuck.",
         "Reyes: 'Dark markets feel like chaos. They're actually ledgers. Money remembers everything, and someday, somewhere, it testifies.'"
       ],
@@ -329,14 +329,14 @@ var MISSIONS_C = [
    FINAL EXAM POOL — 20 questions; 12 drawn at random
    ------------------------------------------------------------ */
 var EXAM_POOL = [
-  { q: "First action upon receiving a child-exploitation cyber tip?", opts: ["Contact the suspect to scare him", "Preserve data and escalate to the ICAC task force under legal process", "Post the suspect's photo publicly to warn parents", "Interview the child immediately"], correct: 1,
-    why: "Preserve → escalate under legal process. Untrained contact tips offenders, taints evidence, and can entrap. Trained specialists do the rest." },
+  { q: "First action upon receiving a fraud tip about a fake charity?", opts: ["Contact the scammer to scare him", "Preserve data and escalate to the financial-crimes task force under legal process", "Post the scammers' photos publicly to warn donors", "Call the donors immediately for statements"], correct: 1,
+    why: "Preserve → escalate under legal process. Untrained contact tips the ring, taints evidence, and can entrap. Trained specialists do the rest." },
   { q: "Chain of custody: what comes FIRST with seized media?", opts: ["Hash it", "Photograph/document it as received, then log it", "Boot it to check contents", "Copy it to your workstation"], correct: 1,
     why: "Document → log → hash → copy. The record starts before any technical step." },
   { q: "Why hash evidence (e.g., SHA-256)?", opts: ["To prove a copy is bit-perfect", "To detect lies in interviews", "To encrypt files", "To compress archives"], correct: 0,
     why: "Identical files → identical hashes. It's the integrity backbone of forensic copies." },
   { q: "Phishing header tells: which is the STRONGEST sign of fraud?", opts: ["Formal wording", "Reply-To pointing to an unrelated throwaway domain + SPF fail", "PDF attachment", "Email sent at 9 AM"], correct: 1,
-    why: "Headers don't lie like prose does. Mismatched Reply-To and failed authentication are machine-vergable red flags." },
+    why: "Headers don't lie like prose does. Mismatched Reply-To and failed authentication are machine-verifiable red flags." },
   { q: "Live ransomware response begins with:", opts: ["Pay the ransom", "Power off everything immediately", "Isolate infected segments while keeping safe clinical/safety systems up", "Reformat all servers"], correct: 2,
     why: "Contain without amputation: segmentation protects life-safety systems while cutting attacker paths. Wiping also destroys evidence." },
   { q: "The professional position on paying ransomware crews:", opts: ["Always pay fast", "Negotiate hard then pay", "Don't pay: report (FBI/CISA), restore from verified offline backups, screen for OFAC sanctions", "Pay only in privacy coins"], correct: 2,
@@ -348,14 +348,14 @@ var EXAM_POOL = [
   { q: "Which is a STRONG indicator of compromise (IOC)?", opts: ["File size 412 KB", "User is new at the company", "SHA-256 hash + C2 domain + 60s beacon pattern", "Email written in Spanish"], correct: 2,
     why: "Precise, machine-readable, behavioral indicators hunt. Sizes and demographics don't." },
   { q: "A soldier posts geotagged gym runs and a deployment countdown. Biggest risk?", opts: ["Embarrassment", "Ads", "Adversaries reconstruct base location and deployment timeline", "Slow phone"], correct: 2,
-    why: "Geotag + schedule = operational readiness intelligence. This is how honeytraps and targeting start." },
-  { q: "You confirm a honeytrap targeting a service member. You:", opts: ["Confront the persona publicly", "Hand it to counterintelligence; brief the member; let CI control the channel", "Block the account immediately everywhere", "Pose as the soldier to unmask the handler"], correct: 1,
+    why: "Geotag + schedule = operational readiness intelligence. This is how fake-persona recruitment and targeting start." },
+  { q: "You confirm a fake online persona targeting a service member. You:", opts: ["Confront the persona publicly", "Hand it to counterintelligence; brief the member; let CI control the channel", "Block the account immediately everywhere", "Pose as the soldier to unmask the handler"], correct: 1,
     why: "Controlled engagement maps networks; freelancing burns them." },
   { q: "In ICS/OT environments, the FIRST priority is:", opts: ["Confidentiality of schematics", "Availability and human safety", "Aesthetic dashboards", "Email continuity"], correct: 1,
     why: "You can't reboot a substation carrying a city. OT plays by life-safety physics." },
   { q: "An 'EMP-style' grid attack via cyber means works by:", opts: ["Deleting Facebook pages", "Coordinated remote breaker tripping across substations causing cascade", "Sending angry emails", "Melting wires with lasers"], correct: 1,
     why: "Ukraine 2015/2016 proved keyboards can blackout regions. Defense: remote-access control, signed firmware, manual-operation drills." },
-  { q: "Best anti-honeytrap defense for service members:", opts: ["Better pickup lines", "OPSEC: no geotags, no countdowns, report suspicious contacts to CI", "A second burner phone", "Using a VPN"], correct: 1,
+  { q: "Best defense against fake-persona recruitment for service members:", opts: ["Better pickup lines", "OPSEC: no geotags, no countdowns, report suspicious contacts to CI", "A second burner phone", "Using a VPN"], correct: 1,
     why: "Deny collection first; report second. Never engage adversary personas yourself." },
   { q: "Spanish-language 'government agent' scam script red flags:", opts: ["Polite greeting in Spanish", "Uses victim's full name", "Urgency + cash courier pickup + enforced secrecy", "Formal vocabulary"], correct: 2,
     why: "No real agency collects cash door-to-door or forbids you to tell family. Urgency+cash+secrecy = scam." },
@@ -363,7 +363,7 @@ var EXAM_POOL = [
     why: "Wire recall windows are hours, not days. Speed is the rescue." },
   { q: "Crypto tracing works because:", opts: ["Bitcoin is anonymous", "Blockchains are public ledgers and exchanges enforce KYC — trails end at named humans", "Police can edit the blockchain", "Mixers delete history"], correct: 1,
     why: "Clustering + exchange KYC + MLAT = real names behind wallets. Mixers slow, never erase." },
-  { q: "Undercover cyber analyst receives an offer to buy weapons-adjacent access beyond the operation plan:", opts: ["Buy it — bigger case", "Decline, break contact per protocol, document for the case agent", "Negotiate for weeks", "Tip off the vendor"], correct: 1,
+  { q: "Undercover cyber analyst is offered a ready-to-run ransomware kit beyond the operation plan:", opts: ["Buy it — bigger case", "Decline, break contact per protocol, document for the case agent", "Negotiate for weeks", "Tip off the vendor"], correct: 1,
     why: "Bright lines exist so investigators never facilitate real-world harm. New leads go up the chain, never into your wallet." },
   { q: "A trauma-informed child victim interview means:", opts: ["Many interviews to verify consistency", "One recorded forensic interview at a Child Advocacy Center by a trained specialist", "Interview at the suspect's home", "Let the press ask her"], correct: 1,
     why: "The CAC model: once, recorded, specialist-led. Repeated or leading interviews re-traumatize and taint testimony." },

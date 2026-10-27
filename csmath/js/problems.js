@@ -21,6 +21,7 @@
       .replace(/×/g, '*').replace(/·/g, '*')
       .replace(/÷/g, '/')
       .replace(/−/g, '-')
+      .replace(/√\s*([0-9]+(?:\.[0-9]+)?|[a-z]+)/gi, 'sqrt($1)')   // √2 → sqrt(2), √x → sqrt(x)
       .replace(/√/g, 'sqrt(')
       .replace(/π/g, 'pi');
   }

@@ -54,7 +54,7 @@
           ]
         },
         activity: {
-          kind: 'quiz', pass: 70,
+          kind: 'quiz', pass: 66,
           questions: [
             { q: 'What does the "Availability" part of the CIA triad protect?', options: ['That data is secret', 'That data is accurate', 'That systems and data are accessible when needed', 'That data is encrypted'], a: 2, why: 'Availability means the service and data are there when people need them &mdash; what ransomware destroys.' },
             { q: 'What is the most common way attackers get into organisations?', options: ['Physical break-in', 'Phishing and social engineering', 'Guessing the Wi-Fi password', 'Bribing staff'], a: 1, why: 'Human-targeted attacks (phishing, social engineering) dominate because they bypass technology.' },
@@ -110,7 +110,7 @@
           ]
         },
         activity: {
-          kind: 'quiz', pass: 70,
+          kind: 'quiz', pass: 66,
           questions: [
             { q: 'What does MFA add to a password?', options: ['A longer password', 'A second, independent proof of who you are', 'A backup password', 'A security question'], a: 1, why: 'Two independent factors &mdash; a stolen password alone is not enough.' },
             { q: 'Which second factor is strongest?', options: ['SMS code', 'Email code', 'A hardware security key / passkey', 'Your mother&#8217;s maiden name'], a: 2, why: 'Hardware keys and passkeys are phishing-resistant because the secret never leaves the device.' },
@@ -136,7 +136,7 @@
           ]
         },
         activity: {
-          kind: 'phish', pass: 80,
+          kind: 'phish', pass: 75,
           prompt: 'Triage this inbox. For each message, decide whether to report it as phishing or trust it.',
           emails: [
             {
@@ -194,7 +194,7 @@
             n1: { text: 'Your phone rings. The caller ID shows your IT department. "Hi, this is Dave from IT. We are seeing a virus on your laptop &mdash; I need to remote in right now to clean it. What is your login so I can fix it fast?"', options: [
               { label: 'Give Dave your username and password &mdash; IT can be trusted, right?', score: 0, outcome: { text: '&#128678; You just handed over your credentials. Real IT never needs your password. The attacker now has full access.', good: false } },
               { label: 'Say you will hang up and call the IT helpdesk on the number from the intranet to confirm.', score: 2, next: 'n2' },
-              { label: 'Refuse and hang up immediately without saying anything.', score: 1, outcome: { text: 'Better &mdash; you did not hand anything over. But reporting it would protect your colleagues from the same call.', good: true } }
+              { label: 'Refuse and hang up immediately without saying anything.', score: 1, outcome: { text: 'You kept your credentials safe &mdash; good reflex. But the scammer will simply call the next person on the list. **Report the call** so IT can warn everyone and block the number.', good: false } }
             ] },
             n2: { text: 'You call the real helpdesk. They confirm there is **no** ticket for your laptop and Dave does not work there. What now?', options: [
               { label: 'Report the call to the security team and move on.', score: 2, outcome: { text: '&#10003; Perfect. You verified out-of-band, avoided the trap, and reported it &mdash; protecting everyone else who gets the same call.', good: true } },
@@ -282,7 +282,7 @@
           ]
         },
         activity: {
-          kind: 'quiz', pass: 70,
+          kind: 'quiz', pass: 66,
           questions: [
             { q: 'You must join a work call from a hotel. The safest option is…', options: ['The open hotel Wi-Fi', 'Hotel Wi-Fi with the company VPN, or your phone hotspot', 'Any Wi-Fi, it does not matter', 'Ask a stranger for theirs'], a: 1, why: 'A VPN (or your own hotspot) protects you from others on the network.' },
             { q: 'You left your work laptop on a train. The first thing to do is…', options: ['Wait to see if it turns up', 'Report it immediately so it can be wiped and access revoked', 'Change your desktop wallpaper', 'Buy a new one'], a: 1, why: 'Fast reporting lets IT lock the account and remote-wipe the device.' },
@@ -338,11 +338,15 @@
           ]
         },
         activity: {
-          kind: 'quiz', pass: 70,
-          questions: [
-            { q: 'A colleague asks to borrow your login "just for five minutes". You should…', options: ['Share it, they are trusted', 'Refuse and help them get their own access', 'Share it then change it', 'Write it down for them'], a: 1, why: 'Accounts are personal. Sharing breaks accountability and policy &mdash; request proper access instead.' },
-            { q: 'Insider risk includes…', options: ['Only malicious employees', 'Also well-meaning staff who overshare or use unapproved tools', 'Only external attackers', 'Only after you leave'], a: 1, why: 'Accidental insider risk is often the bigger problem.' },
-            { q: 'Handling data covered by HIPAA/GDPR correctly is…', options: ['Optional', 'The responsibility of the compliance team only', 'Everyone&#8217;s responsibility through good daily habits', 'Only for IT'], a: 2, why: 'Rules only work if daily habits follow them.' }
+          kind: 'pick', pass: 100,
+          prompt: 'You are on the front desk for a day. Tick every move that follows the rules of the road.',
+          items: [
+            { text: 'A visitor asks to borrow an unlocked staff laptop "just to check email".', correct: true, why: 'Company systems are for authorised users only &mdash; log them in as a guest or use the visitor machine.' },
+            { text: 'You prop the secure door open with a chair while carrying boxes.', correct: true, why: 'Tailgating is a classic physical attack. Badges close behind you &mdash; that is the point of the door.' },
+            { text: 'A colleague texts a photo of the whiteboard full of customer names "for the meeting notes".', correct: true, why: 'Photos of customer data leave company control instantly. Use the approved system of record.' },
+            { text: 'You sign in to the work portal from your personal phone over hotel Wi-Fi &mdash; without the VPN.', correct: true, why: 'BYOD rules exist for exactly this. Untrusted networks need the VPN (or wait for trusted Wi-Fi).' },
+            { text: 'You put printouts with payment details in the recycling bin.', correct: true, why: 'Clean desk means clean bins too &mdash; shred anything with personal data.' },
+            { text: 'You tell the helpdesk your session ID so they can look up your ticket.', correct: false, why: 'Reference numbers are not credentials &mdash; the helpdesk may ask for identifiers, never your password or MFA codes.' }
           ]
         }
       }

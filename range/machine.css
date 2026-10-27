@@ -89,7 +89,7 @@ button{font-family:inherit;color:inherit;cursor:pointer}
   .r-kv{grid-template-columns:92px 1fr}
 }
 @media (max-width:560px){
-  .m-brand span:last-child{display:none}
   .m-stage{min-height:440px}
   .m-top .btn{display:none}
 }
+.m-unknown{margin:10px;padding:10px 14px;border:1px solid #6b5a2a;background:#241d10;color:#ffd166;border-radius:8px;font:12px/1.5 ui-monospace,monospace}

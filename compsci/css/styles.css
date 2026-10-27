@@ -165,7 +165,7 @@ code, kbd, pre, .mono { font-family: var(--mono); }
 }
 .mission-item:hover { background: var(--bg-3); }
 .mission-item.current { background: var(--bg-3); border-color: var(--accent); }
-.mission-item.locked { opacity: .42; cursor: not-allowed; }
+.mission-item.locked { opacity: .58; cursor: not-allowed; }
 .mission-item .dot {
   width: 16px; height: 16px; border-radius: 50%; flex: none; margin-top: 3px;
   border: 1.5px solid var(--line); display: grid; place-items: center; font-size: 10px;

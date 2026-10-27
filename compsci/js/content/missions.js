@@ -64,7 +64,7 @@ Your job: get your bearings, look around, and say hello.`,
     },
     objectives: [
       { id: 'pwd', text: 'Find out where you are with `pwd`', hint: 'The "print working directory" command shows your current folder.', xp: 10, check: (vm) => cmd(vm, /^\s*pwd\b/) },
-      { id: 'ls', text: 'List what is here with `ls`', hint: 'ls is short for "list". Try it with no arguments.', xp: 10, check: (vm) => cmd(vm, /^\s*ls\s*$/) },
+      { id: 'ls', text: 'List what is here with `ls`', hint: 'ls is short for "list". Try it with no arguments.', xp: 10, check: (vm) => cmd(vm, /^\s*ls(?:\s+-{1,2}[\w-]+)*\s*$/) },
       { id: 'cat', text: 'Read welcome.txt with `cat`', hint: 'cat prints the contents of a file. Try `cat welcome.txt`.', xp: 15, check: (vm) => out(vm, /Welcome to ZeroDay Lab/) },
       { id: 'echo', text: 'Print a message of your own with `echo`', hint: 'echo prints whatever you give it. Try `echo hello world`.', xp: 15, check: (vm) => out(vm, /hello/i) },
     ],
@@ -95,7 +95,7 @@ a path without it is **relative** (from wherever you are). \`..\` means "one lev
       { id: 'into-projects', text: 'cd into `projects`', hint: 'cd takes the folder name: `cd projects`.', xp: 10, check: (vm) => out(vm, /\/home\/player\/projects$/) },
       { id: 'into-rocket', text: 'Keep going into `rocket`', hint: 'Try `cd rocket` from inside projects.', xp: 10, check: (vm) => out(vm, /projects\/rocket$/) },
       { id: 'read-notes', text: 'Read notes.txt from here', hint: 'cat notes.txt', xp: 15, check: (vm) => out(vm, /Payload: 1 probe/) },
-      { id: 'up', text: 'Go back up two levels with `..`', hint: '`cd ../..` climbs two levels at once.', xp: 15, check: (vm, sh) => sh.cwd === '/home/player' && cmd(vm, /\.\.\//) },
+      { id: 'up', text: 'Climb back up to /home/player', hint: '`cd ../..` climbs two levels at once. Plain `cd ..` twice works too.', xp: 15, check: (vm, sh) => sh.cwd === '/home/player' && cmd(vm, /cd\s+(\.\.|\.\.\/)/) },
       { id: 'absolute', text: 'Use an absolute path to read /etc/hostname', hint: 'Absolute paths start with `/`: `cat /etc/hostname`.', xp: 20, check: (vm) => out(vm, /zer0day-lab/) },
     ],
     script: ['cd projects', 'pwd', 'cd rocket', 'pwd', 'cat notes.txt', 'cd ../..', 'pwd', 'cat /etc/hostname'],
@@ -122,7 +122,7 @@ Read carefully: \`echo hi > note.txt\` writes the file, while \`echo hi >> note.
         const t = text(fs, '/home/player/backup/day1.txt');
         return t.includes('first line') && t.includes('second line');
       } },
-      { id: 'count', text: 'Check the file now has two lines', hint: 'wc -l counts lines.', xp: 15, check: (vm) => out(vm, /^\s*2\s*$/m) },
+      { id: 'count', text: 'Check the file now has two lines', hint: 'wc -l counts lines. Try: wc -l backup/day1.txt', xp: 15, check: (vm) => cmd(vm, /wc\s+-l/) && out(vm, /^\s*2\b/m) },
     ],
     script: ['mkdir backup', 'echo first line > backup/day1.txt', 'echo second line >> backup/day1.txt', 'wc -l backup/day1.txt'],
   },
@@ -272,7 +272,7 @@ Everything about a shell session is configured by dotfiles in your home director
       { id: 'ls-a', text: 'List hidden files with `ls -a`', hint: 'The -a flag means "all".', xp: 10, check: (vm) => cmd(vm, /ls\s+-[al]/) },
       { id: 'read-hidden', text: 'Read .bashrc', hint: 'cat .bashrc — hidden files open normally.', xp: 15, check: (vm) => out(vm, /EDITOR=nano/) },
       { id: 'alias', text: 'Create an alias so `ll` runs `ls -la`', hint: 'alias ll="ls -la" (the .bashrc already suggests it)', xp: 20, check: (vm) => cmd(vm, /alias\s+ll/) },
-      { id: 'use-alias', text: 'Run `ll` and see the hidden files', hint: 'Now just type ll.', xp: 20, check: (vm) => cmd(vm, /^\s*ll\s*$/) },
+      { id: 'use-alias', text: 'Run `ll` and see the hidden files', hint: 'Now just type ll.', xp: 20, check: (vm) => cmd(vm, /^\s*ll\b/) },
     ],
     script: ['ls -a', 'cat .bashrc', 'alias ll="ls -la"', 'll'],
   },
@@ -426,7 +426,7 @@ Answer three questions using pipes only:
 3. Which path was hammered the most?
 
 This is exactly how a security analyst starts an investigation.`,
-    teach: ['Count with wc -l', 'Isolate with grep, then count again', 'awk -F" " field 7 is the HTTP status'],
+    teach: ['Count with wc -l', 'Isolate with grep, then count again', 'awk -F\'"\' pulls the request out of each log line'],
     fs: {
       '/home/player/': {},
       '/home/player/access.log': [
@@ -441,7 +441,7 @@ This is exactly how a security analyst starts an investigation.`,
       ].join('\n') + '\n',
     },
     objectives: [
-      { id: 'q1', text: 'Count requests from 10.0.0.5 (the answer is 5)', hint: 'grep "10.0.0.5" access.log | wc -l', xp: 20, check: (vm) => vm.commands.some((c) => /10\.0\.0\.5/.test(c.input) && /\b5\b/.test(c.out)) },
+      { id: 'q1', text: 'Count requests from 10.0.0.5 (the answer is 5)', hint: 'grep "10.0.0.5" access.log | wc -l', xp: 20, check: (vm) => vm.commands.some((c) => /10\.0\.0\.5/.test(c.input) && /wc|grep\s+-c/.test(c.input) && /^\s*5\s*$/m.test(c.out)) },
       { id: 'q2', text: 'Count how many of those were 404s (the answer is 4)', hint: 'grep "10.0.0.5" access.log | grep -c " 404 "', xp: 25, check: (vm) => vm.commands.some((c) => /404/.test(c.input) && /^\s*4\s*$/m.test(c.out)) },
       { id: 'q3', text: 'Find the most requested path', hint: 'awk -F\'"\' \'{print $2}\' access.log | awk \'{print $2}\' | sort | uniq -c | sort -rn', xp: 35, check: (vm) => vm.commands.some((c) => /uniq\s+-c/.test(c.input) && /\/admin/.test(c.out)) },
       { id: 'report', text: 'Write your findings into findings.txt with a redirect', hint: 'grep "10.0.0.5" access.log > findings.txt', xp: 20, check: (vm, sh, fs) => text(fs, '/home/player/findings.txt').includes('10.0.0.5') },
@@ -587,7 +587,7 @@ reports folder to a backup folder at 03:00 every day, then install it with \`cro
     title: 'Windows Command Prompt',
     shell: 'cmd', cwd: '/C:/Users/Player',
     brief: `Windows administrators live in **cmd.exe**. The verbs are the same idea as Linux with
-different names: \`dir\` lists, \`cd\` changes, \`type\` prints, \`copy\`\`, \`move\`, \`del\`.
+different names: \`dir\` lists, \`cd\` changes, \`type\` prints, \`copy\` copies, \`move\` moves, \`del\` deletes.
 
 Paths use backslashes and a drive letter: \`C:\\Users\\Player\`.`,
     teach: ['dir / cd / type / copy / move / del', 'Backslashes and drive letters', 'cls clears the screen'],
@@ -613,7 +613,7 @@ Paths use backslashes and a drive letter: \`C:\\Users\\Player\`.`,
     chapter: 5, order: 2,
     title: 'PowerShell: Verbs and Nouns',
     shell: 'powershell', cwd: '/C:/Users/Player',
-    brief: `PowerShell is not a typing of cmd — it is built around small programs called **cmdlets**
+    brief: `PowerShell is more than a rewrite of cmd — it is built around small programs called **cmdlets**
 named \`Verb-Noun\`: \`Get-ChildItem\`, \`Get-Content\`, \`Set-Content\`, \`Remove-Item\`.
 
 Most have short aliases (\`ls\`, \`cat\`, \`cp\`, \`rm\`), so your muscle memory from Linux still works.`,
@@ -894,8 +894,9 @@ security and are used here only for compatibility checks.`,
     brief: `You are the administrator of your own training machine. There is a password list from a
 practice CTF challenge, and a hashes file from your own machine.
 
-Your job: find which weak passwords are in the list, and explain why that is dangerous.
-This is defensive work — you are auditing your own systems.`,
+Your job: recover which weak passwords the hashes hide, then look at what is left over — the
+hashes that did **not** match anything in the list. Those are the strong ones. This is defensive
+work — you are auditing your own systems.`,
     teach: ['Cracking is just computing hashes fast and comparing', 'Real defences: length, MFA, lockouts, rate limiting', 'You only ever test accounts you administer'],
     fs: {
       '/home/player/': {},
@@ -919,8 +920,8 @@ This is defensive work — you are auditing your own systems.`,
         }
         return cracked.size >= 3;
       } },
-      { id: 'compare', text: 'Show which hashes are NOT in the word list', hint: 'md5sum rockyou-lite.txt > computed.txt then Compare-Object or grep -v', xp: 30, check: (vm) => {
-        const e = vm.commands.find((c) => /rockyou/.test(c.input) && (/\|\s*md5sum/.test(c.input) || /md5sum\s+rockyou/.test(c.input)));
+      { id: 'compare', text: 'Show which hashes are NOT in the word list', hint: 'for w in $(cat rockyou-lite.txt); do echo -n $w | md5sum; done computes every candidate hash — compare them against hashes.txt to see which entries nothing matched', xp: 30, check: (vm) => {
+        const e = vm.commands.find((c) => /rockyou/.test(c.input) && (/\|\s*md5sum/.test(c.input) || /md5sum\s+rockyou/.test(c.input) || /for\s+\w+\s+in/.test(c.input)));
         return !!e;
       } },
       { id: 'report', text: 'Save the recovered passwords into cracked.txt', hint: 'echo "password" >> cracked.txt', xp: 25, check: (vm, sh, fs) => {
@@ -1102,8 +1103,8 @@ everyday job of a security engineer.`,
     brief: `You are a normal user on your own machine. A backup job runs as root, and its config
 file is world-readable — and has the password in it.
 
-Escalate to root, read the protected file, then log back out. Everything here happens on a
-machine that belongs to you.`,
+Escalate to root and read the protected file. Everything here happens on a machine that
+belongs to you.`,
     teach: ['sudo runs a single command as root', 'Passwords in config files are a classic finding', 'Least privilege: do not run as root all day'],
     fs: {
       '/home/player/': {},
@@ -1158,7 +1159,7 @@ system**, the impact, and a suggested fix. No exploitation of real systems. No s
         const t = text(fs, '/home/player/findings/new-finding.md').toLowerCase();
         return t.includes('summary') && t.includes('impact') && t.includes('fix') && t.length > 80;
       } },
-      { id: 'respect', text: 'Include a line confirming you stayed inside the authorised scope', hint: 'echo "Scope: tested only on lab-owned systems, with written authorisation." >> the file', xp: 20, check: (vm, sh, fs) => /scope|authoris|authoriz/i.test(text(fs, '/home/player/findings/new-finding.md')) },
+      { id: 'respect', text: 'Include a line confirming you stayed inside the authorised scope', hint: 'echo "Scope: tested only on lab-owned systems, with written authorisation." >> findings/new-finding.md', xp: 20, check: (vm, sh, fs) => /scope|authoris|authoriz/i.test(text(fs, '/home/player/findings/new-finding.md')) },
     ],
     script: [
       'cat disclosure-policy.txt',
@@ -1184,14 +1185,14 @@ system**, the impact, and a suggested fix. No exploitation of real systems. No s
 (base 10), hex (base 16) or binary (base 2). A byte is 8 bits, 256 possible values.
 
 Networking, memory addresses and hashes are all easier to read in hex.`,
-    teach: ['1 byte = 8 bits = 256 values', '0x is hex, 0b is binary, 0 is octal', 'Convert between bases with printf'],
+    teach: ['1 byte = 8 bits = 256 values', '0x is hex, 0b is binary, 0 is octal', 'Convert with printf, or $((BASE#digits)) for any base'],
     fs: {
       '/home/player/': {},
       '/home/player/math.txt': '255 = 0xff = 11111111b\n1024 = 0x400 = 10000000000b\n',
     },
     objectives: [
-      { id: 'hex', text: 'Print 255 in hexadecimal', hint: "printf '%x\\n' 255  →  ff", xp: 20, check: (vm) => out(vm, /\bff\b/i) },
-      { id: 'binary', text: 'Print 5 in binary', hint: "printf '%b\\n' 5 — hmm, %b is not binary. Try: printf '%d\\n' $((2#101))", xp: 20, check: (vm) => out(vm, /\b5\b/) },
+      { id: 'hex', text: 'Print 255 in hexadecimal', hint: "printf '%x\\n' 255  →  ff", xp: 20, check: (vm) => cmd(vm, /printf\s+.?%x/) && out(vm, /\bff\b/i) },
+      { id: 'binary', text: 'Decode the binary number 101 into decimal', hint: 'bash can read numbers in any base: $((2#101)) means "digits 101 in base 2" — so this prints 5', xp: 20, check: (vm) => cmd(vm, /2#101/) && out(vm, /\b5\b/) },
       { id: 'verify', text: 'Check that 0xff really is 255', hint: "printf '%d\\n' 0xff", xp: 25, check: (vm) => out(vm, /^\s*255\s*$/m) },
       { id: 'arith', text: 'Do some shell arithmetic', hint: 'echo $((17 * 3 + 2))', xp: 20, check: (vm) => out(vm, /\b53\b/) },
       { id: 'hexdump', text: 'Hex dump a file to see raw bytes', hint: "printf 'AZ' | xxd", xp: 15, check: (vm) => out(vm, /41 5a/) },
@@ -1213,7 +1214,7 @@ Networking, memory addresses and hashes are all easier to read in hex.`,
     brief: `An algorithm is a recipe. Two things matter: **correctness** (does it work?) and
 **complexity** (how does the work grow as the input grows?).
 
-Sort 200 numbers with the same tool the operating system uses, then feel the difference between
+Sort 40 numbers with the same tool the operating system uses, then feel the difference between
 \`grep\` looking at every line and \`grep\` stopping early.`,
     teach: ['O(n) vs O(n log n): search vs sort', 'Pipes let you choose the algorithm', 'Measure before you optimise'],
     fs: {

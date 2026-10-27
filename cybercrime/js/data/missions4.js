@@ -1,7 +1,7 @@
 /* ============================================================
    CODEWATCH — Missions 10–11 (specialization tracks)
-   10. Operation Hidden Harbor  (GUARDIAN path — human trafficking)
-   11. Operation Firebreak      (SENTINEL path — state-sponsored APT)
+   10. Operation Easy Money    (GUARDIAN path — money-mule recruitment)
+   11. Operation Firebreak     (SENTINEL path — state-sponsored APT)
    ============================================================ */
 'use strict';
 
@@ -10,133 +10,128 @@ var MISSIONS_D = [
 /* ---------------------------------------------------------- */
 {
   id: "m10",
-  code: "OPERATION HIDDEN HARBOR",
-  title: "Hidden Harbor",
-  icon: "🚢",
+  code: "OPERATION EASY MONEY",
+  title: "Easy Money",
+  icon: "💸",
   difficulty: 3,
   xp: 520,
   track: "guardian",
-  tag: { en: "A labor-trafficking ring exploits the new arrivals.", es: "Una red de trata explota a los recién llegados.", ru: "Сеть торговли людьми эксплуатирует новоприбывших." },
+  tag: { en: "A 'summer job' is recruiting students as money mules.", es: "Un 'trabajo de verano' recluta estudiantes como mulas de dinero.", ru: "«Летняя работа» вербует студентов как курьеров денег." },
   steps: [
     {
       type: "brief",
-      title: "The Fictional Casa Deli Ring",
+      title: "The Mule Desk",
       body: [
-        "Riverbend's Spanish-language news accounts keep boosting a 'help wanted' post: restaurant jobs, 'cama incluida' — bed included. Clean, warm, weekly pay. Immigrant families cheer it in the comments.",
-        "But the missing-person desk has a name: LUZ R., 19, arrived eight weeks ago on that 'job referral'. Her family back home hasn't seen her face-on-camera in five weeks. Her last message to her aunt was short and wrong.",
-        "Traffickers hunt with job ads, love promises, and family debts. Your partner desk is a fictionalized HSI human-trafficking group, and their rule never changes: VICTIMS FIRST — catch the network around the person, never the person around the network."
+        "Riverbend High's counselor sends a tip: three students came back from spring break flashing cash, and a 'Summer Remote Assistant' ad is circulating in the class group chats. No interview. No résumé. $500 a week, 'just use your bank account'.",
+        "Here is the part that matters: the students are not suspects. Money-mule rings deliberately recruit teenagers because teens have clean bank accounts, small legal knowledge, and big summer plans. The recruiters know exactly what they are doing.",
+        "Your partner desk is a fictionalized financial-crimes unit, and their rule never changes: VICTIMS FIRST — build the case around the network, and treat every recruit as a victim until the evidence says otherwise."
       ],
-      callout: { style: "good", label: "THE VICTIM-CENTERED LAW", text: "In trafficking investigations the first responders are usually victim specialists, interpreters, shelter partners, and forensic interviewers — detectives come behind them. Anyone who could be a victim is treated as a victim until proven otherwise. No exceptions, no shortcuts." }
+      callout: { style: "good", label: "THE VICTIM-CENTERED LAW", text: "In mule investigations the first responders are usually school liaisons, victim specialists, and bank fraud desks — detectives come behind them. A recruit who 'helped move money' is usually a kid who was deceived, then threatened. Anyone who could be a victim is treated as a victim until proven otherwise. No exceptions." }
     },
     {
       type: "evidence",
       title: "Evidence Board",
-      prompt: "Work the board. Three threads: the recruiting ad, the money trail, the missing-person file.",
+      prompt: "Work the board. Three threads: the recruiting ad, the money trail, the student file.",
       items: [
-        { id: "h1", name: "Recruiting ad (ES)", icon: "📰",
-          body: { lines: [
-            { s: "¡Trabajo seguro! Restaurante nuevo necesita personal.", t: "Safe job! A new restaurant needs staff." },
-            { s: "Cama y comida incluidas. Pago semanal en efectivo.", t: "Bed and food included. Weekly cash pay." },
-            { s: "Solo necesitan tu identificación. No hagas muchas preguntas.", t: "You only need your ID. Don't ask too many questions." },
-            { s: "Contáctame: Leo. Te recogemos el viernes.", t: "Contact me: Leo. We'll pick you up Friday." }
-          ], note: "ANALYST NOTE: 'no questions', 'ID only', 'we pick you up' — mobility and documentation are the first things traffickers seize." } },
-        { id: "h2", name: "Money trail (financial snapshot)", icon: "💰",
-          body: "Weekly cash deposits → 3 accounts 'operadora deli' · then routine transfers to: bus depot, 2 storage units, a backstreet phone shop.\nWorker cards: wage deposits small, but monthly 'renta' deductions EXCEED wages — wages exist on paper, debts never close.\nPattern: wages = bait · renta = chain. Real modern slavery is on the ledger." },
-        { id: "h3", name: "Missing-person file: LUZ R.", icon: "🧑",
-          body: "Age 19 · arrived via job referral 8 weeks ago · last contact: text to aunt, then number changed · mother abroad reports: 'she sounded watched, told me not to call'.\nSMS to aunt (translated at desk): see next evidence step — it is the case's hinge.\nThe aunts' messages are in Spanish; your Language Desk handles them." }
+        { id: "h1", name: "Recruiting ad (from the group chat)", icon: "📰",
+          body: "🌊 SUMMER REMOTE ASSISTANT — RIVERBEND ONLY 🌊\n• Work from your phone, 2 hrs/day\n• $500/week, first payment Friday\n• Requirements: your own bank account, a prepaid phone we send you\n• 'Don't discuss work details with family — client privacy.'\n• Apply: @easyhire_dan\nANALYST NOTE: 'use your bank account', 'we send you a phone', 'don't tell your family' — a job ad never needs your account or your silence. That is a mule pipeline in three bullet points." },
+        { id: "h2", name: "Money trail (bank snapshot)", icon: "💰",
+          body: "Pattern across 6 student accounts: deposits from strangers ($900–$2,400) → student keeps 8–10% → balance forwarded within hours to one consolidating account → onward to a crypto exchange.\nDeposit memos: 'invoice', 'consulting', 'family help' — none match any student's life.\nFlag: rapid in/out is the mule signature. Real wages sit; mule money runs." },
+        { id: "h3", name: "Student file: DANY M., 16", icon: "🧑",
+          body: "Reported to the counselor after a stranger's deposit bounced and his account froze.\nHis statement (written): 'They said it was a summer job. Then they said if I stop, they'll say I stole the money, because it came from my account.'\nHis account received $11,300 in 6 weeks. He kept $1,050.\nHis messages to a friend are in Spanish — your Language Desk handles them." }
       ]
     },
     {
       type: "translate",
       title: "Language Desk: Spanish",
       lang: "es",
-      context: "Luz's messages to her aunt, recovered from the phone shop's backup service. Translate them like a victim-identity specialist:",
+      context: "Dany's messages to his friend, recovered with his permission. Read them like a victim-identity specialist:",
       lines: [
-        { s: "Tía, dicen que todo está bien pero no me dejan salir del edificio.", t: "Auntie, they say everything is fine but they won't let me leave the building." },
-        { s: "Me quitaron mi pasaporte 'para el trámite'.", t: "They took my passport 'for the paperwork'." },
-        { s: "Si me preguntan, yo digo que estoy feliz y que trabajo en un restaurante.", t: "If anyone asks, I say I'm happy and I work at a restaurant." },
-        { s: "No sé dónde estoy. El edificio tiene rejas y siempre hay luz encendida.", t: "I don't know where I am. The building has bars on the windows and the lights are always on." },
-        { s: "Me pagan poco y me cobran 'renta' que nunca se acaba.", t: "They pay me little and charge me 'rent' that never ends." }
+        { s: "Oye, ¿tú también recibiste el mensaje del trabajo de verano?", t: "Hey, did you get that summer job message too?" },
+        { s: "Dijo que solo usara mi cuenta y me quedara con el 10%.", t: "It said I should just use my account and keep 10%." },
+        { s: "Ahora me escriben de otro número y dicen que no puedo parar.", t: "Now they write me from another number and say I can't stop." },
+        { s: "Tengo miedo de decírselo a mi mamá porque el dinero pasó por mi cuenta.", t: "I'm scared to tell my mom because the money went through my account." },
+        { s: "¿Crees que me pueden meter en la cárcel? Yo solo necesitaba dinero para las clases.", t: "Do you think I could go to jail? I just needed money for classes." }
       ]
     },
     {
       type: "translate",
       title: "Language Desk: Russian",
       lang: "ru",
-      context: "Intercepted ring Telegram channel, run by the coordinator 'Leo'. Your Russian lessons pay rent today:",
+      context: "Intercepted coordinator chat, run by '@easyhire_dan'. Your Russian lessons pay rent today:",
       lines: [
-        { s: "Сегодня выезжаем за двумя из аэропорта. Документы забираем сразу.", t: "Today we go pick two up from the airport. Take their documents immediately." },
-        { s: "Расписание: смена с 6 до 22, выходной — один день в месяц.", t: "Schedule: shifts 06:00 to 22:00, one day off per month." },
-        { s: "Если спросят — все довольны. Никому не давать телефон.", t: "If anyone asks — everyone is happy. Give no one a phone." }
+        { s: "Сегодня подключаем двух новых. Счета проверяем сразу.", t: "Today we onboard two new ones. Check the accounts right away." },
+        { s: "Процент им — 8. Говорим, что 10, они и так рады.", t: "Their cut is 8. Tell them 10 — they're happy anyway." },
+        { s: "Если кто-то упирается — напомните про его счёт. Сами всё поймут.", t: "If anyone resists — remind them about their account. They'll figure it out." }
       ]
     },
     {
       type: "multi",
-      title: "Trafficking Indicators",
-      prompt: "Flag EVERY human-trafficking indicator present across the ad, the ledger, and Luz's messages.",
+      title: "Mule-Recruitment Red Flags",
+      prompt: "Flag EVERY money-mule recruitment red flag present in the ad, the ledger, and Dany's messages.",
       options: [
-        { k: "i1", label: "Confiscated identity documents ('me quitaron mi pasaporte')", why: "Document seizure destroys mobility and identity — a signature control method." },
-        { k: "i2", label: "Restricted movement: 'won't let me leave the building', bars on windows", why: "Physical confinement or surveillance = restricted movement, a core indicator." },
-        { k: "i3", label: "Debt manipulation: 'rent' that never ends, deductions exceeding pay", why: "Debt bondage ties victims to 'work off' obligations that never close." },
-        { k: "i4", label: "Controlled communication: phone confiscated, scripted answers under duress", why: "Isolation from family + scripted 'I'm happy' = the fear-control pattern." },
-        { k: "i5", label: "Recruitment by deception: job ad with 'no questions', 'we pick you up'", why: "Fraudulent recruitment is how trafficking starts — false promises, false freedom." },
-        { k: "i6", label: "She receives cash every Friday, so she's clearly free", why: "Wages on paper are bait. Pay minus 'fees' that never end is bondage, not salary." },
-        { k: "i7", label: "She had a phone, so she could call for help anytime", why: "One phone call that was intercepted and controlled is not access to help." }
+        { k: "i1", label: "'Just use your own bank account' as a job requirement", why: "No real employer needs your account. Your account moving money for strangers IS the job — and the crime." },
+        { k: "i2", label: "'We send you a prepaid phone'", why: "Employer-issued burner devices keep recruits isolated and deniable — control equipment, not equipment." },
+        { k: "i3", label: "'Don't discuss work details with family — client privacy'", why: "Enforced secrecy isolates recruits from the adults who would shut this down in one phone call." },
+        { k: "i4", label: "Deposits that leave the account within hours", why: "Rapid pass-through is the mule signature. Real pay stays; stolen money runs." },
+        { k: "i5", label: "'Keep 8–10%' of strangers' money", why: "Skimming a cut of moved money is laundering with a bonus — the recruit takes the legal risk for someone else's profit." },
+        { k: "i6", label: "Threats after the recruit tries to stop ('we'll say YOU stole it')", why: "The fear-control pattern: deception first, then blackmail. Recruits become victims the moment they try to leave." },
+        { k: "i7", label: "A weekend babysitting job posted by the school office", why: "A real job through a real institution, with real duties and no account access. Ordinary, safe, and correct to ignore." }
       ],
-      correct: ["i1", "i2", "i3", "i4", "i5"],
-      explain: "Any ONE of these is a flicker. Two or more is a fire. Confiscated documents + confinement + debt + controlled comms + deceptive recruitment = classic labor-trafficking profile. Now act accordingly."
+      correct: ["i1", "i2", "i3", "i4", "i5", "i6"],
+      explain: "Any ONE of these is a flicker; several together are a pipeline. 'Your account + our money + tell no one' is the whole business model. Recruits are recruited BY the lesson most schools never teach — now you can."
     },
     {
       type: "choice",
       title: "First Move",
-      prompt: "You have Luz's messages, the ring's channel, and a general address (the storage units). What comes FIRST?",
+      prompt: "You have Dany's messages, the coordinator's chat, and six flagged accounts. What comes FIRST?",
       options: [
-        { k: "a", label: "Protect Luz: connect her through a confidential channel to victim services, build a safety plan, verify her location quietly — while evidence is preserved under process.", correct: true,
-          feedback: "Correct. The victim is the case. Victim services build trust, map the network from the inside, and keep her safe while subpoenas run in the background. In trafficking, patience with the victim is speed." },
-        { k: "b", label: "Raid the restaurant kitchen tonight and grab everyone.", correct: false,
-          feedback: "A premature raid scatters the ring, disperses victims who may be moved or threatened, and can sink the whole prosecution. Victims are located and safety-planned BEFORE arrests, not because of them." },
-        { k: "c", label: "Call 'Leo' and fire him.", correct: false,
-          feedback: "You don't know 'Leo' exists as a legal person, firing is a civil fantasy, and you'd tip the network — victims in other cities vanish overnight. This destroys evidence and lives." }
+        { k: "a", label: "Protect the recruits: school liaison + victim services open a confidential channel, banks freeze further pass-through, and no student is disciplined while the case builds.", correct: true,
+          feedback: "Correct. The recruits are the case. Kids who trust the process keep their phones, their chats, and their testimony — which is what actually convicts the coordinators." },
+        { k: "b", label: "Suspend all six students and announce it at assembly to warn the school.", correct: false,
+          feedback: "That punishes victims in public, teaches every other recruit to delete everything, and hands the ring its best recruiting pitch: 'cooperate and get expelled.'" },
+        { k: "c", label: "Message '@easyhire_dan' pretending to be a student to get him to confess.", correct: false,
+          feedback: "Never. Untrained contact tips the network, risks the controlled operation already running, and can amount to entrapment. Only certified officers under guidelines ever engage suspects." }
       ]
     },
     {
       type: "order",
       title: "The Operation Sequence",
-      prompt: "Order the trafficking play from board to indictment.",
+      prompt: "Order the mule-case play from board to indictment.",
       items: [
-        { k: "1", label: "Preserve evidence under process: financial, phone, IP, storage-unit logs" },
-        { k: "2", label: "Reach Luz through a confidential channel; safety-plan; verify she is not in immediate danger" },
-        { k: "3", label: "Coordinate extraction logistics: HSI, local police, shelter, interpreter, victim specialist" },
-        { k: "4", label: "Extract Luz and connect ongoing services: medical, legal, T-visa certification support" },
-        { k: "5", label: "Build the organizational case: subpoenas, financial tracing to the organizers behind 'Leo'" },
-        { k: "6", label: "Arrest organizers; every arrest flanked by victim services" }
+        { k: "1", label: "Preserve evidence: the ad, the chats, the six account ledgers" },
+        { k: "2", label: "Reach the recruits through the school liaison; explain their real legal position; stop the panic" },
+        { k: "3", label: "Freeze pass-through at the banks; keep accounts open under subpoena" },
+        { k: "4", label: "Coordinate support: victim services, counseling, and restitution guidance for the recruits" },
+        { k: "5", label: "Build the organizational case: trace consolidation accounts to the coordinators behind '@easyhire_dan'" },
+        { k: "6", label: "Arrest the organizers; every step flanked by school and victim services" }
       ],
       correct: ["1", "2", "3", "4", "5", "6"],
-      explain: "Preserve → protect → extract → serve → prosecute → arrest-with-support. Victim outcomes and case outcomes rise and fall together — that ordering is the professional model."
+      explain: "Preserve → protect → freeze → support → build → arrest-with-support. Recruit outcomes and case outcomes rise and fall together — that ordering is the professional model."
     },
     {
       type: "choice",
-      title: "Extraction Day",
-      prompt: "Extraction day. Two paths for the arrest window. Commanders pick the operation that protects the person AND the case:",
+      title: "Takedown Day",
+      prompt: "Arrest day for the coordinator. Two windows. Commanders pick the one that protects the recruits AND the case:",
       options: [
-        { k: "a", label: "Orchestrated extraction first: Luz walks out with victim specialists and an interpreter at 06:15 during shift change, before any arrest; she is then interviewed once, at a trusted setting, and offered shelter.", correct: true,
-          feedback: "Correct. Extraction before arrest, support before interrogation, one interview, no cameras on her face. That is victim-centered law enforcement — it produces witnesses, not casualties." },
-        { k: "b", label: "Simultaneous raid at the building, arrests and extraction together for maximum impact.", correct: false,
-          feedback: "Risky and wrong-headed: victim-first means the victim controls the how and when. A raid can re-traumatize, and her main value is safety — not a news-cycle headline." },
-        { k: "c", label: "Send Luz a bus ticket through a sympathetic coworker and let her escape on her own.", correct: false,
-          feedback: "Uncoordinated 'escapes' put victims back in danger: she may be intercepted, the ring learns to tighten controls, and no services, shelter, or case protection follows her. Highly noble, completely wrong." }
+        { k: "a", label: "Quiet morning arrest away from campus, after the bank freezes are confirmed, with the school liaison briefing the recruits the same day on what happens next.", correct: true,
+          feedback: "Correct. Recruits learn the truth from a trusted adult, not from rumors. No sirens at a school, no public perp walk for kids — that is what victim-centered looks like on the calendar." },
+        { k: "b", label: "Arrest him at the school gates at lunchtime for maximum deterrence.", correct: false,
+          feedback: "Theater, not strategy: it re-traumatizes recruits in front of peers, and deterrence does not need an audience of minors." },
+        { k: "c", label: "Wait a month so the ring 'forgets' about the students, then act.", correct: false,
+          feedback: "Delay is not protection. Unfrozen accounts keep moving, recruits stay under threat, and evidence ages badly. Speed and support go together." }
       ]
     },
     {
       type: "debrief",
-      title: "Hidden Harbor Complete",
+      title: "Easy Money Complete",
       body: [
-        "Luz walks out at 06:15. By 09:00 she is in a shelter with a trauma-informed interpreter, a health screening, and legal assistance pursuing trafficking-victim certification — she is treated as a survivor, never a suspect.",
-        "Seventy-one hours later the 'Casa Deli' organizers — 'Leo', a financier, and a recruiter — are arrested on labor-trafficking charges. The storage units yield ten prepaid phones and the bus depot logs tie five prior recruitment cycles to the same network. Ten more victims are contacted from the recovered phone records; three accept services.",
-        "Your Spanish surfaced the messages before the case had a name. Your Russian decoded the ring's shop talk. Victims are found by people who meet them where they live — in their language."
+        "The consolidation account links to two coordinators, both arrested 71 hours later. The six recruits keep clean records: they are documented as deceived victims, their restitution is handled through the banks, and Dany writes the counselor a two-line note: 'You made it okay to tell you.'",
+        "The ad kept circulating for two more weeks — from a copycat. The school's new one-slide lesson ('a job that needs YOUR bank account is not a job') closes it in a day.",
+        "Lesson locked in: mule recruiters hunt trust, not skills. A teen who knows the three red flags — your account, their money, tell no one — is a recruit the pipeline never gets."
       ],
-      notes: ["trafficking", "victim-centered"],
-      tools: []
+      notes: ["victim-centered", "social-engineering", "money-mule", "legal-process"],
+      tools: ["chaintrace"]
     }
   ]
 },

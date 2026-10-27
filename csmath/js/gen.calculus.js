@@ -99,12 +99,12 @@
     var yv = a * xv * xv + b * xv + c;
     var mode = r.pick(['x', 'y']);
     if (mode === 'x') return { prompt: 'Find the x-value of the vertex (the extremum) of f(x) = ' + a + 'x&sup2; ' + (b >= 0 ? '+ ' + b : '&minus; ' + Math.abs(b)) + 'x ' + (c >= 0 ? '+ ' + c : '&minus; ' + Math.abs(c)) + '.',
-      answer: { type: 'number', value: MH.nice(xv, 4) }, hint: 'Set f&prime;(x) = 2ax + b = 0.',
+      answer: { type: 'number', value: xv, tol: 1e-4, display: MH.nice(xv, 4) }, hint: 'Set f&prime;(x) = 2ax + b = 0.',
       steps: ['2(' + a + ')x + ' + b + ' = 0', 'x = ' + MH.nice(xv, 4)] };
     return { prompt: 'Find the minimum or maximum value of f(x) = ' + a + 'x&sup2; ' + (b >= 0 ? '+ ' + b : '&minus; ' + Math.abs(b)) + 'x ' + (c >= 0 ? '+ ' + c : '&minus; ' + Math.abs(c)) + '.',
-      answer: { type: 'number', value: MH.nice(yv, 4) },
+      answer: { type: 'number', value: yv, tol: 1e-4, display: MH.nice(yv, 4) },
       hint: 'The extremum is at x = &minus;b/2a; substitute back.',
-      steps: ['x* = &minus;b/2a = ' + MH.nice(xv, 4), 'f(x*) = ' + MH.nice(yv, 4), a > 0 ? 'a &gt; 0 so it is a minimum.' : ''] };
+      steps: ['x* = &minus;b/2a = ' + MH.nice(xv, 4), 'f(x*) = ' + MH.nice(yv, 4), a > 0 ? 'a &gt; 0 so it is a minimum.' : 'a &lt; 0 so it is a maximum.'] };
   });
 
   /* ---- Definite integrals ---- */

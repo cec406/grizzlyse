@@ -159,7 +159,8 @@ function openSettings() {
       var ta = m.querySelector("#io-area");
       try {
         var s = JSON.parse(ta.value);
-        if (!s || s.v !== 2) throw new Error("bad");
+        if (!s || (s.v !== 2 && s.v !== 3)) throw new Error("bad");
+        if (typeof migrateState === "function" && s.v === 2) s = migrateState(s);
         state = s; saveState(); applyScanlines(); close(); renderRoute();
         toast("✔ " + t("continueGame"));
       } catch (e) { toast("✖ " + t("invalidSave")); }
@@ -516,7 +517,12 @@ function renderMissionScreen(app) {
       mm.appendChild(el("p", "dim", "Progress in this case file will reset." + (missionProg(missionRT.mid).doneOnce ? " XP is not re-earned on replays." : "")));
       var ok = el("button", "btn danger", "↺");
       ok.addEventListener("click", function () {
+        // wipe step/misses for a clean replay, but remember doneOnce and the best
+        // star rating so a replay can improve them without re-earning the XP
+        var wasDone = !!(state.missions[missionRT.mid] && state.missions[missionRT.mid].doneOnce);
+        var best = wasDone ? (state.missions[missionRT.mid].bestStars || 0) : 0;
         delete state.missions[missionRT.mid];
+        if (wasDone) state.missions[missionRT.mid] = { doneOnce: true, step: 0, misses: 0, bestStars: best };
         saveState();
         close();
         startMission(missionRT.mid);
@@ -597,15 +603,15 @@ function renderGuide(app) {
   section("4 · WHO HIRES CYBERCRIME FIGHTERS (US)", [
     "🏛 FBI — Forensic Examiner / Computer Scientist / Special Agent (cyber) — fbi.gov/work-for-us",
     "🛡 CISA — cyber defense, ICS defense, vulnerability analysis — cisa.gov/careers",
-    "🚁 HSI (Homeland Security Investigations) — cyber crimes & child exploitation — ice.gov/careers",
+    "🚁 HSI (Homeland Security Investigations) — cyber crimes & financial investigation — ice.gov/careers",
     "🕵️ Secret Service — financial cybercrime, e-crimes task forces — secretservice.gov",
     "🧸 NCMEC — analysts on the child-safety front line — missingkids.org careers",
     "👮 State/local: ICAC task forces, state fusion centers, county digital forensics labs — often the fastest entry point.",
     "🎖️ Military & intelligence: USAF/Army/USN Cyber, NSOCM, CIA digital innovation — for cyber operations tracks."
   ]);
   section("5 · ETHICS — THE PART THAT MAKES YOU THE GOOD GUY", [
-    "⚖️ Never investigate people on your own. No scanning strangers, no 'testing' sites, no vigilante stings. L shining = authorization.",
-    "🧸 If you encounter child-exploitation material by accident: don't save/forward/delete it yourself — report (CyberTipline) and preserve for authorities.",
+    "⚖️ Never investigate people on your own. No scanning strangers, no 'testing' sites, no vigilante stings. Written authorization is the only green light.",
+    "🧸 If you ever see something scary or wrong online — or someone pressures you to keep a secret — don't share it: tell a trusted adult. Reporting is always the brave move.",
     "🧠 If you struggle with harmful urges: confidential help exists (Stop It Now, 1-888-773-8368). Asking early is strength.",
     "🤝 Report scams, fraud, and threats — most victims never do. Every report builds the pattern that catches the network."
   ]);
@@ -616,12 +622,12 @@ function renderGuide(app) {
     "📅 Ongoing: keep a case-notes habit. Investigators are hired for their writing as much as their hacking."
   ]);
   section("7 · THE TWO FORKS (mirrors this game)", [
-    "🕊️ GUARDIAN — Protective missions: crimes against children, human trafficking, elder & financial fraud, victims-first forensics. Real homes: NCMEC + ICAC task forces, HSI trafficking & child-exploitation units, FBI Violent Crimes Against Children, state DOJ labs. Certs: CFCE/CCE, HTCIA, OVC victim-centered trainings, CFE (fraud).",
+    "🕊️ GUARDIAN — Protective missions: fraud rings, fake charities, scam waves, mule recruitment, victims-first forensics. Real homes: FTC & state consumer-protection desks, FBI financial crimes squads, USPS Inspection Service, bank fraud units. Certs: CFE (fraud), CFCE/CCE, HTCIA.",
     "🛰️ SENTINEL — National security: espionage implants, APT hunting, counterintelligence, ICS/grid defense, defense industrial base protection. Real homes: FBI Cyber Division & Counterintelligence, CISA threat hunting, HSI Cyber Crimes Center, USCYBERCOM / DIB analysts, CTI (cyber threat intel) teams. Certs: GCIH, GCFA, GCTI, GREM.",
     "🏆 DUAL: cross-trained specialists are rare and prized — an ICAC analyst who also reads APT indicators, a threat hunter who understands victim trauma responses. Let your case files decide where you start; let passion decide what you finish."
   ]);
-  section("8 · LANGUAGES ARE FULL-ON WEAPONS", [
-    "🇪🇸 SPANISH: the language of victims, of LATAM fraud rings, of trafficking corridors, of border-adjacent evidence. Your Guardian case files (Porch Light, Hidden Harbor) are Spanish-heavy on purpose — that is the real job.",
+  section("8 · LANGUAGES ARE SUPERPOWERS", [
+    "🇪🇸 SPANISH: the language of victims, of LATAM fraud rings, of border-adjacent evidence. Your Guardian case files (Porch Light, Helping Hand) are Spanish-heavy on purpose — that is the real job.",
     "🇷🇺 RUSSIAN: the language of ransomware 'support numbers', APT config strings, dark-market shop talk, and state-adjacent crews. Your Sentinel case files (Deadbolt, Ghost Market, Firebreak) are Russian-heavy for the same reason.",
     "📚 Keep it sharp: free duolingo/Coursera, plus translate real headlines; a polyglot analyst walks into rooms few others can."
   ]);

@@ -145,7 +145,7 @@
           objectives: [
             { t: 'Two jobs exist', fn: function (w) { return jobCount(w) >= 2; } },
             { t: 'deploy declares needs: build', fn: function (w) { return hasNeeds(w, 'deploy'); } },
-            { t: 'An artifact is uploaded', fn: function (w, run) { return uses(w, /upload-artifact@/) || (run && run.artifacts && run.artifacts.length); } },
+            { t: 'An artifact is uploaded', fn: function (w, run) { return !!(run && run.artifacts && run.artifacts.length); } },
             { t: 'Pipeline passes', fn: function (w, run) { return run && run.ok; } }
           ],
           hint: 'In deploy add `needs: build`. In build add `- run: npm run build` and an upload-artifact step.'

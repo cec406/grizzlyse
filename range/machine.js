@@ -13,7 +13,18 @@
   };
 
   var params = new URLSearchParams(location.search);
-  var m = rangeById(params.get('m')) || RANGE_MACHINES[0];
+  var asked = params.get('m');
+  var resolved = asked ? rangeById(asked) : null;
+  var m = resolved || RANGE_MACHINES[0];
+  if (asked && !resolved) {
+    // unknown machine id: tell the operator instead of silently loading M-01
+    document.addEventListener('DOMContentLoaded', function () {
+      var note = document.createElement('div');
+      note.className = 'm-unknown';
+      note.textContent = 'Unknown machine "' + asked + '" — showing ' + m.code + ' ' + m.name + ' instead.';
+      document.body.insertBefore(note, document.body.firstChild);
+    });
+  }
   var poll = null;
 
   function ring(pct, accent) {

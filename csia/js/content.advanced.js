@@ -29,7 +29,7 @@
           ]
         },
         activity: {
-          kind: 'quiz', pass: 70,
+          kind: 'quiz', pass: 66,
           questions: [
             { q: 'Passwords should be stored as…', options: ['Plain text', 'Encrypted (reversible)', 'A slow salted hash such as bcrypt/argon2', 'Base64'], a: 2, why: 'Hashing is one-way and salting defeats pre-computation and rainbow tables.' },
             { q: 'Encryption differs from hashing because it is…', options: ['Faster', 'Reversible with the right key', 'One-way', 'Only for passwords'], a: 1, why: 'Encryption is designed to be reversed by the key holder.' },
@@ -75,7 +75,7 @@
           ]
         },
         activity: {
-          kind: 'quiz', pass: 70,
+          kind: 'quiz', pass: 66,
           questions: [
             { q: 'Under the shared responsibility model, the customer is responsible for…', options: ['The physical data centre', 'Their own configuration, data, identities and code', 'Nothing', 'Only the network cable'], a: 1, why: 'The provider secures the platform; you secure what you put in it.' },
             { q: 'Running a container as root is risky because…', options: ['It is slower', 'A container escape could grant root on the host', 'It needs more memory', 'It is not risky'], a: 1, why: 'Least privilege applies inside containers too.' },
@@ -98,7 +98,7 @@
           ]
         },
         activity: {
-          kind: 'quiz', pass: 70,
+          kind: 'quiz', pass: 66,
           questions: [
             { q: 'The correct fix for SQL injection is…', options: ['Filtering out quote characters', 'Using parameterised queries / prepared statements', 'Making the query shorter', 'Hiding error messages'], a: 1, why: 'Separating code from data, not blacklisting characters.' },
             { q: 'Broken access control is best prevented by…', options: ['Hiding the button in the UI', 'Enforcing authorisation on the server for every request', 'Using HTTPS', 'Obfuscating the URL'], a: 1, why: 'Client-side checks can be bypassed; the server must decide.' },
@@ -126,7 +126,7 @@
           ]
         },
         activity: {
-          kind: 'quiz', pass: 70,
+          kind: 'quiz', pass: 66,
           questions: [
             { q: 'A CVE is…', options: ['A type of malware', 'A public identifier for a specific vulnerability', 'A patch', 'A firewall rule'], a: 1, why: 'CVE = Common Vulnerabilities and Exposures identifier.' },
             { q: 'The highest patching priority is usually…', options: ['The oldest server', 'An internet-facing system with an actively exploited flaw', 'Any optional update', 'The newest hardware'], a: 1, why: 'Exposure plus active exploitation means immediate action.' },
