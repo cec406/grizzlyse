@@ -50,6 +50,8 @@ section { padding-block: clamp(48px, 7vw, 86px); }
 .split, .hero-grid { display: grid; gap: clamp(24px, 5vw, 64px); grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
 .hero-grid { align-items: center; }
 .hero h1 span { color: var(--gold); }
+.business-title { font-size: clamp(2.1rem, 5.2vw, 4.05rem); }
+.business-title span { display: block; }
 .portfolio-title span { display: block; margin-top: 8px; font-size: clamp(1.65rem, 4.1vw, 3.15rem); letter-spacing: -.035em; }
 .hero .lede { font-size: clamp(1.06rem, 2vw, 1.23rem); max-width: 54ch; }
 .eyebrow { display: block; margin: 0 0 14px; color: var(--gold); font: 700 .76rem/1.5 var(--mono); text-transform: uppercase; letter-spacing: .09em; }
@@ -65,11 +67,16 @@ section { padding-block: clamp(48px, 7vw, 86px); }
 .console { background: var(--deep); overflow: hidden; box-shadow: 0 24px 65px #0004; }
 .console-title { padding: 13px 20px; background: var(--panel); color: var(--muted); border-bottom: 1px solid var(--line); font: .78rem/1.5 var(--mono); }
 .console-title span { color: var(--gold); margin-right: 6px; }
+.demo { margin: 0; }
+.demo img { display: block; width: 100%; height: auto; }
+.demo figcaption { padding: 16px 20px; border-top: 1px solid var(--line); font-size: .92rem; }
+.demo .link { display: inline-block; margin-top: 8px; font-weight: 750; }
 .manifest { margin: 0; padding: 6px 20px; list-style: none; }
 .manifest li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; padding: 14px 0; align-items: baseline; }
 .manifest li + li { border-top: 1px solid var(--line); }
 .manifest b { color: var(--gold); font: .78rem var(--mono); }
-.manifest strong { display: block; }
+.manifest a { display: inline-block; color: var(--white); font-weight: 750; }
+.manifest a:hover { color: var(--gold); }
 .manifest p { color: var(--muted); font-size: .9rem; }
 .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .card { background: var(--panel); padding: clamp(18px, 3vw, 27px); }

@@ -5,15 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#10151c">
   <title>Caleb Clark | Forward-Deployed Systems Engineer</title>
-  <meta name="description" content="Caleb Clark's engineering portfolio: operational software, local infrastructure, and hands-on deployment. Explore selected projects, technical decisions, and working demos.">
+  <meta name="description" content="Caleb Clark's independent engineering projects and infrastructure lab. Explore working demos, source code, and notes on systems integration and deployment.">
   <link rel="canonical" href="https://grizzlyse.com/portfolio/">
   <link rel="icon" href="../assets/grizzly-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/field.css">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Caleb Clark | Forward-Deployed Systems Engineer">
-  <meta property="og:description" content="Selected projects in operational software, infrastructure, and deployment, with working demos and engineering notes.">
+  <meta property="og:description" content="Independent systems lab and projects: a shop operations demo, self-hosted infrastructure, and an offline app shipped through CI/CD. Demos, source code, and tradeoffs.">
   <meta property="og:url" content="https://grizzlyse.com/portfolio/">
-  <meta property="og:image" content="https://grizzlyse.com/grizzly-logo.png">
+  <meta property="og:image" content="https://grizzlyse.com/assets/share-caleb-clark.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Caleb Clark, forward-deployed systems engineer, with a preview of the GrizzWorks work-order board.">
+  <meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -24,7 +28,7 @@
         <a href="#work">Selected work</a>
         <a href="../lab.html">Engineering Lab</a>
         <a href="../projects/">Project catalog</a>
-        <a class="nav-secondary" href="../">Grizzly business site ↗</a>
+        <a class="nav-primary" href="#contact">Recruiter contact</a>
       </nav>
     </div>
   </header>
@@ -35,18 +39,18 @@
         <div>
           <p class="eyebrow">Engineering portfolio · East Helena, MT</p>
           <h1 class="portfolio-title">Caleb Clark <span>Forward-deployed systems engineer</span></h1>
-          <p class="lede">I work with the people who use a system to define what it needs to do. I build the software and infrastructure around their workflow, then plan how the team will deploy, operate, and recover it.</p>
+          <p class="lede">I use my engineering lab and independent projects to practice the full delivery cycle: turn an operator's workflow into a working tool, deploy it, and document how someone else could run and recover it.</p>
           <div class="actions">
             <a class="button" href="#work">See selected work</a>
-            <a class="button outline" href="#contact">Recruiter contact</a>
+            <a class="button outline" href="https://github.com/cec406">View GitHub ↗</a>
           </div>
         </div>
         <div class="console">
-          <p class="console-title"><span aria-hidden="true">&gt;_</span> What I bring to a delivery team</p>
+          <p class="console-title"><span aria-hidden="true">&gt;_</span> Start with a work sample</p>
           <ul class="manifest">
-            <li><b aria-hidden="true">01</b><div><strong>Workflow to working software</strong><p>Clarify who does what, then make those steps easier to carry out and verify.</p></div></li>
-            <li><b aria-hidden="true">02</b><div><strong>Build through deployment</strong><p>Work across the application, its environment, and the path from source to release.</p></div></li>
-            <li><b aria-hidden="true">03</b><div><strong>Operational handoff</strong><p>Account for access, documentation, support, backups, and recovery.</p></div></li>
+            <li><b aria-hidden="true">01</b><div><a href="#grizzworks">GrizzWorks ↘</a><p>Follow a shop workflow through work orders, invoicing, and a wall display.</p></div></li>
+            <li><b aria-hidden="true">02</b><div><a href="#infrastructure">Local infrastructure lab ↘</a><p>See how I separate host, guest, application, and remote access.</p></div></li>
+            <li><b aria-hidden="true">03</b><div><a href="#aft-forge">AFT Forge ↘</a><p>Inspect an offline web app and the CI/CD workflow that publishes it.</p></div></li>
           </ul>
         </div>
       </div>
@@ -57,20 +61,20 @@
         <div class="section-head">
           <p class="eyebrow">01 / Selected work</p>
           <h2>What I built and why</h2>
-          <p class="lede">These are personal builds and lab projects. The demos use sample data; the notes describe design decisions, not client deployments or measured business results.</p>
+          <p class="lede">Independent projects and lab work. Each example shows what I built, a tradeoff I made, and what you can verify yourself.</p>
         </div>
         <div class="proof">
           <article class="card" id="grizzworks">
             <div>
               <span class="eyebrow">01 / Operational software · public demo</span>
               <h3>GrizzWorks</h3>
-              <ul class="tags" aria-label="Technologies"><li>JavaScript</li><li>Shared data model</li><li>Shop LAN</li></ul>
-              <a class="link" href="../dashboard/">Try the sample shop ↗</a>
+              <ul class="tags" aria-label="Technical details"><li>JavaScript</li><li>Shared data model</li><li>Local storage</li></ul>
+              <a class="link" href="../dashboard/?demo=1#/workorders">Try the sample shop ↗</a>
             </div>
             <div>
-              <p><strong>Problem:</strong> A shop needs to move between jobs, work orders, inventory, and invoices without tracking the same work in multiple places.</p>
-              <p><strong>Design decision:</strong> Share the business logic between a browser-only demo and a design for shared LAN use. Posted documents are corrected by reversing entries rather than rewriting history.</p>
-              <p><strong>What to try:</strong> Open a job, follow a quote into an invoice, and compare the editable shop view with the <a href="../dashboard/display.html">wall-board display</a>. The public build stores sample changes in your browser. The <a href="https://github.com/cec406/grizzlyse/tree/main/dashboard">dashboard source</a> includes the shared data model.</p>
+              <p><strong>What I built:</strong> A shop operations app that links work orders and inventory to jobs, quotes, and invoices. The crew gets a work board and the office can track the same job through billing.</p>
+              <p><strong>Tradeoff:</strong> Drafts are editable, but corrections to posted invoices create reversing entries instead of overwriting the record. The public demo is easy to try because it stores fictional data in your browser, not in a shared deployment.</p>
+              <p><strong>Verify it:</strong> Move a work order or open the <a href="../dashboard/display.html">wall display</a>. For the accounting side, inspect the <a href="https://github.com/cec406/grizzlyse/blob/main/dashboard/shared/erp.js">posting and reversal logic</a>.</p>
             </div>
           </article>
           <article class="card" id="infrastructure">
@@ -81,9 +85,9 @@
               <a class="link" href="../lab.html#hardware">Inspect the lab hardware ↗</a>
             </div>
             <div>
-              <p><strong>Problem:</strong> I needed an environment to try deployment and access patterns without depending on a hosted service for every experiment.</p>
-              <p><strong>Design decision:</strong> Run Ubuntu guests on Proxmox on a Dell PowerEdge. Use Docker for app services and Tailscale for private remote access to locally hosted systems.</p>
-              <p><strong>What to review:</strong> The lab describes the hardware, the service stack, and <a href="../lab.html#delivery">the checks I consider before handing off a deployment</a>.</p>
+              <p><strong>What I built:</strong> A self-hosted test environment on a Dell PowerEdge: Proxmox for virtualization, Ubuntu guests running Docker services, and Tailscale for private remote access.</p>
+              <p><strong>Tradeoff:</strong> Running locally gives me control over the host and deployment environment, but it also makes patching, access, and recovery my responsibility.</p>
+              <p><strong>Inspect it:</strong> Explore the hardware and service stack, then compare it with the <a href="../solutions.html#programs">worked rollout example</a> for what I'd verify before an operator depends on a deployment.</p>
             </div>
           </article>
           <article class="card" id="aft-forge">
@@ -94,9 +98,9 @@
               <a class="link" href="../aft-forge/">Open AFT Forge ↗</a>
             </div>
             <div>
-              <p><strong>Problem:</strong> A fitness planner should work from a phone without requiring an account or reliable network access.</p>
-              <p><strong>Design decision:</strong> Ship an installable web app that stores profiles and logs on-device. GitHub Actions builds the app and checks that the static artifact includes its manifest, service worker, and icons before publishing.</p>
-              <p><strong>What to review:</strong> Try the first-run flow and see how the <a href="https://github.com/cec406/grizzlyse/blob/main/.github/workflows/deploy.yml">Pages workflow</a> publishes the compiled app alongside the rest of the site.</p>
+              <p><strong>What I built:</strong> An installable fitness planner that works offline and stores profiles and training logs on the phone, without an account.</p>
+              <p><strong>Tradeoff:</strong> Local storage simplifies setup, but there's no cloud copy. Users can export a backup before clearing browser data or changing devices.</p>
+              <p><strong>Verify it:</strong> Try the first-run flow. Read the <a href="https://github.com/cec406/grizzlyse/blob/main/.github/workflows/deploy.yml">GitHub Actions workflow</a> to see how it checks for the manifest, service worker, and icons before publishing the app.</p>
             </div>
           </article>
         </div>
@@ -117,9 +121,10 @@
     <section id="contact" class="shade">
       <div class="wrap">
         <p class="eyebrow">03 / Recruiting</p>
-        <h2>Let's talk about the systems your team ships.</h2>
-        <p class="lede">I'd be glad to walk through a project, explain a technical tradeoff, or talk about a forward-deployed engineering or systems integration role.</p>
+        <h2>What does your team need to get live?</h2>
+        <p class="lede">I'm interested in forward-deployed engineering, implementation engineering, and systems integration roles where I can work directly with customers and own the work through rollout and handoff.</p>
         <div class="actions"><a class="button" href="mailto:info@grizzlyse.com?subject=Recruiting%20inquiry%20for%20Caleb%20Clark">Email Caleb about a role</a><a class="button outline" href="https://github.com/cec406">View GitHub ↗</a></div>
+        <p class="note">Direct email: info@grizzlyse.com</p>
       </div>
     </section>
   </main>
