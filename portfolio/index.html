@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10151c">
+  <title>Caleb Clark | Forward-Deployed Systems Engineer</title>
+  <meta name="description" content="Caleb Clark's engineering portfolio: operational software, local infrastructure, and hands-on deployment. Explore selected projects, technical decisions, and working demos.">
+  <link rel="canonical" href="https://grizzlyse.com/portfolio/">
+  <link rel="icon" href="../assets/grizzly-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/field.css">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Caleb Clark | Forward-Deployed Systems Engineer">
+  <meta property="og:description" content="Selected projects in operational software, infrastructure, and deployment, with working demos and engineering notes.">
+  <meta property="og:url" content="https://grizzlyse.com/portfolio/">
+  <meta property="og:image" content="https://grizzlyse.com/grizzly-logo.png">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="./" aria-current="page"><span class="mark" aria-hidden="true">&gt;_</span><span>Caleb Clark<small>Engineering portfolio</small></span></a>
+      <nav class="site-nav" aria-label="Portfolio navigation">
+        <a href="#work">Selected work</a>
+        <a href="../lab.html">Engineering Lab</a>
+        <a href="../projects/">Project catalog</a>
+        <a class="nav-secondary" href="../">Grizzly business site ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow">Engineering portfolio · East Helena, MT</p>
+          <h1 class="portfolio-title">Caleb Clark <span>Forward-deployed systems engineer</span></h1>
+          <p class="lede">I work with the people who use a system to define what it needs to do. I build the software and infrastructure around their workflow, then plan how the team will deploy, operate, and recover it.</p>
+          <div class="actions">
+            <a class="button" href="#work">See selected work</a>
+            <a class="button outline" href="#contact">Recruiter contact</a>
+          </div>
+        </div>
+        <div class="console">
+          <p class="console-title"><span aria-hidden="true">&gt;_</span> What I bring to a delivery team</p>
+          <ul class="manifest">
+            <li><b aria-hidden="true">01</b><div><strong>Workflow to working software</strong><p>Clarify who does what, then make those steps easier to carry out and verify.</p></div></li>
+            <li><b aria-hidden="true">02</b><div><strong>Build through deployment</strong><p>Work across the application, its environment, and the path from source to release.</p></div></li>
+            <li><b aria-hidden="true">03</b><div><strong>Operational handoff</strong><p>Account for access, documentation, support, backups, and recovery.</p></div></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="work" class="shade">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">01 / Selected work</p>
+          <h2>What I built and why</h2>
+          <p class="lede">These are personal builds and lab projects. The demos use sample data; the notes describe design decisions, not client deployments or measured business results.</p>
+        </div>
+        <div class="proof">
+          <article class="card" id="grizzworks">
+            <div>
+              <span class="eyebrow">01 / Operational software · public demo</span>
+              <h3>GrizzWorks</h3>
+              <ul class="tags" aria-label="Technologies"><li>JavaScript</li><li>Shared data model</li><li>Shop LAN</li></ul>
+              <a class="link" href="../dashboard/">Try the sample shop ↗</a>
+            </div>
+            <div>
+              <p><strong>Problem:</strong> A shop needs to move between jobs, work orders, inventory, and invoices without tracking the same work in multiple places.</p>
+              <p><strong>Design decision:</strong> Share the business logic between a browser-only demo and a design for shared LAN use. Posted documents are corrected by reversing entries rather than rewriting history.</p>
+              <p><strong>What to try:</strong> Open a job, follow a quote into an invoice, and compare the editable shop view with the <a href="../dashboard/display.html">wall-board display</a>. The public build stores sample changes in your browser. The <a href="https://github.com/cec406/grizzlyse/tree/main/dashboard">dashboard source</a> includes the shared data model.</p>
+            </div>
+          </article>
+          <article class="card" id="infrastructure">
+            <div>
+              <span class="eyebrow">02 / Infrastructure · hands-on lab</span>
+              <h3>Local infrastructure lab</h3>
+              <ul class="tags" aria-label="Technologies"><li>Proxmox VE</li><li>Ubuntu Server</li><li>Docker</li><li>Tailscale</li></ul>
+              <a class="link" href="../lab.html#hardware">Inspect the lab hardware ↗</a>
+            </div>
+            <div>
+              <p><strong>Problem:</strong> I needed an environment to try deployment and access patterns without depending on a hosted service for every experiment.</p>
+              <p><strong>Design decision:</strong> Run Ubuntu guests on Proxmox on a Dell PowerEdge. Use Docker for app services and Tailscale for private remote access to locally hosted systems.</p>
+              <p><strong>What to review:</strong> The lab describes the hardware, the service stack, and <a href="../lab.html#delivery">the checks I consider before handing off a deployment</a>.</p>
+            </div>
+          </article>
+          <article class="card" id="aft-forge">
+            <div>
+              <span class="eyebrow">03 / Product delivery · live app</span>
+              <h3>AFT Forge</h3>
+              <ul class="tags" aria-label="Technologies"><li>TypeScript</li><li>React</li><li>Offline PWA</li><li>GitHub Actions</li></ul>
+              <a class="link" href="../aft-forge/">Open AFT Forge ↗</a>
+            </div>
+            <div>
+              <p><strong>Problem:</strong> A fitness planner should work from a phone without requiring an account or reliable network access.</p>
+              <p><strong>Design decision:</strong> Ship an installable web app that stores profiles and logs on-device. GitHub Actions builds the app and checks that the static artifact includes its manifest, service worker, and icons before publishing.</p>
+              <p><strong>What to review:</strong> Try the first-run flow and see how the <a href="https://github.com/cec406/grizzlyse/blob/main/.github/workflows/deploy.yml">Pages workflow</a> publishes the compiled app alongside the rest of the site.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="more">
+      <div class="wrap">
+        <div class="section-head"><p class="eyebrow">02 / Dig deeper</p><h2 id="more">More engineering work</h2></div>
+        <div class="grid">
+          <article class="card"><h3>Deployment playbook</h3><p>How I work from operator discovery through launch checks, rollback planning, and handoff.</p><a class="link" href="../solutions.html">Read the delivery notes ↗</a></article>
+          <article class="card"><h3>Engineering Lab</h3><p>Infrastructure notes, delivery practices, browser-based Python tools, and an interactive terminal.</p><a class="link" href="../lab.html">Explore the Lab ↗</a></article>
+          <article class="card"><h3>Project catalog</h3><p>Training tools, educational apps, simulations, and independent experiments.</p><a class="link" href="../projects/">Browse all projects ↗</a></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="shade">
+      <div class="wrap">
+        <p class="eyebrow">03 / Recruiting</p>
+        <h2>Let's talk about the systems your team ships.</h2>
+        <p class="lede">I'd be glad to walk through a project, explain a technical tradeoff, or talk about a forward-deployed engineering or systems integration role.</p>
+        <div class="actions"><a class="button" href="mailto:info@grizzlyse.com?subject=Recruiting%20inquiry%20for%20Caleb%20Clark">Email Caleb about a role</a><a class="button outline" href="https://github.com/cec406">View GitHub ↗</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap foot">
+      <p>Caleb Clark · Engineering portfolio</p>
+      <nav aria-label="Footer navigation"><a href="https://github.com/cec406/grizzlyse">Site source ↗</a><a href="../">Grizzly business site ↗</a></nav>
+    </div>
+  </footer>
+</body>
+</html>
