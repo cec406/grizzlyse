@@ -97,6 +97,21 @@ section { padding-block: clamp(48px, 7vw, 86px); }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 0; padding: 0; list-style: none; }
 .tags li { border: 1px solid var(--line); border-radius: 5px; padding: 4px 7px; font: .72rem/1.35 var(--mono); color: var(--muted); }
 
+/* Shared portfolio and catalog components */
+.field-band { background: radial-gradient(ellipse at 85% 0, #71511929, transparent 70%), var(--panel); border-top: 1px solid var(--line); }
+.field-band .split { align-items: center; }
+.site-nav a[aria-current="page"] { color: var(--gold); text-decoration: underline; }
+.section-nav { padding-block: 15px; border-block: 1px solid var(--line); background: var(--panel); }
+.section-nav .wrap, .evidence-links { display: flex; flex-wrap: wrap; align-items: baseline; gap: 7px 20px; }
+.section-nav a, .evidence-links a { display: inline-block; padding-block: 4px; font-weight: 700; }
+.evidence-links { list-style: none; margin: 14px 0 0; padding: 0; font-size: .89rem; }
+.project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.project-grid .card { display: flex; flex-direction: column; align-items: start; }
+.project-grid .card > p { flex: 1; }
+.project-grid .eyebrow { font-size: .68rem; margin-bottom: 9px; }
+.proof .card .evidence-links a { margin-top: 0; }
+.preview { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 7px; margin-top: 16px; }
+
 @media (max-width: 850px) {
   .split, .hero-grid { grid-template-columns: 1fr; }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

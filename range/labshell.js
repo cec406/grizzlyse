@@ -145,6 +145,7 @@
           '<button class="gl-btn" id="gl-hint">Hint</button>' +
           '<a class="gl-btn" href="../range/machine.html?m=' + esc(machine.id) + '">Lab view</a>' +
           '<a class="gl-btn" href="../range/index.html">Range home</a>' +
+          '<a class="gl-btn" href="../projects/#education">Project catalog</a>' +
           '<button class="gl-btn danger" id="gl-reset">Reset progress</button>' +
           '<a class="gl-btn" href="../range/index.html#ops">Range Ops</a>' +
         '</div>' +

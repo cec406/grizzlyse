@@ -1,0 +1,13 @@
+.project-return {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 22px;
+  padding: 14px 16px;
+  background: #10151c;
+  color: #fbbf24;
+  border-top: 1px solid #354150;
+  font: 650 .9rem/1.5 system-ui, sans-serif;
+}
+.project-return a { color: inherit; text-decoration: underline; text-underline-offset: .25em; }
+.project-return a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }

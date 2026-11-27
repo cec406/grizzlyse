@@ -1,5 +1,7 @@
 # GrizzWorks — the mini-ERP for shops that hate subscriptions
 
+**This checkout is the static demo.** For the Node server, packaging, and operational docs referenced below, use the [full application repository](https://github.com/cec406/applications/tree/main/dashboard). [Open the seeded demo](https://grizzlyse.com/dashboard/?demo=1#/workorders) or [read the engineering case study](https://grizzlyse.com/portfolio/#grizzworks).
+
 One app that runs the whole business: **jobs, quotes, invoices, payments,
 purchase orders, vendor bills, stock, work orders, time and reports** —
 plus the maintenance machinery (assets, PM schedules, crew, kiosk wall board)

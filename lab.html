@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="amber"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#14181f">
 <title>Engineering Lab | Caleb Clark's Portfolio</title>
-<meta name="description" content="Caleb Clark's hands-on engineering lab: containerized services, deployment workflows, private infrastructure, and browser-based tools.">
+<meta name="description" content="Caleb Clark’s engineering lab: K3s and GitOps, private VPN access, local AI, Proxmox, deployment workflows, and defensive browser tools.">
 <meta property="og:type" content="website"><meta property="og:title" content="Engineering Lab | Caleb Clark's Portfolio"><meta property="og:description" content="Explore software, containers, delivery workflows, infrastructure, and security experiments from Caleb Clark's engineering portfolio.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2314181f'/%3E%3Ctext x='4' y='23' font-family='monospace' font-size='20' font-weight='bold' fill='%23fbbf24'%3E%3E_%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
@@ -96,7 +96,7 @@ footer{background:var(--deep);border-top:2px solid var(--amber);padding:28px 0;f
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header><div id="prog"></div><div class="container head"><a class="logo" href="portfolio/">caleb<span>@portfolio</span></a>
-<nav aria-label="Lab navigation"><a href="#projects">systems</a><a href="#delivery">delivery</a><a href="#security">security</a><a href="#tool">python tools</a><a href="#hardware">infrastructure</a><a href="#process">process</a><a class="projects-link" href="projects/">../project-catalog</a>
+<nav aria-label="Lab navigation"><a href="portfolio/">portfolio</a><a href="#projects">systems</a><a href="#vpn">VPN</a><a href="#delivery">delivery</a><a href="#security">security</a><a href="#tool">python tools</a><a class="projects-link" href="projects/">project catalog</a>
 <button class="tg" id="b-crt" aria-pressed="false" type="button" title="Toggle CRT scanlines">crt</button><button class="tg" id="b-rain" aria-pressed="false" type="button" title="Toggle digital rain">rain</button><button class="tg on" id="b-theme" type="button" aria-label="Cycle color theme">theme:amber</button></nav></div></header>
 <main id="main" tabindex="-1">
 
@@ -117,17 +117,17 @@ footer{background:var(--deep);border-top:2px solid var(--amber);padding:28px 0;f
 
 <section id="projects"><div class="container">
 <h2>ls engineering/</h2>
-<p class="lead">A field notebook of my software, infrastructure, and security work. It includes lab builds, tools I've worked with, and delivery practices—not client case studies.</p>
+<p class="lead">A field notebook of lab builds, defensive tools, and delivery practices. For documented workplace experience and live demos, see the <a href="portfolio/#work">selected work</a>.</p>
 <div class="filters" hidden role="group" aria-label="Filter engineering examples">
 <button class="filter" data-filter="all" aria-pressed="true" type="button">all</button><button class="filter" data-filter="software" aria-pressed="false" type="button">software</button><button class="filter" data-filter="infrastructure" aria-pressed="false" type="button">infrastructure</button><button class="filter" data-filter="delivery" aria-pressed="false" type="button">devsecops</button><button class="filter" data-filter="security" aria-pressed="false" type="button">specialist security</button><button class="filter" data-filter="hardware" aria-pressed="false" type="button">hardware</button></div>
 <p id="count" class="count" role="status" aria-live="polite">10 systems, workflows, and capabilities</p>
 <div class="cards">
 <article class="card" data-category="software"><span class="tag">software</span><h3>GrizzWorks shop software</h3><p class="hook">A shop-floor view and an office view of the same work.</p><p>GrizzWorks ties work orders, jobs, and inventory together and includes a dedicated wall display. The <a href="dashboard/">public demo</a> is browser-only and uses sample data.</p><ul class="chips"><li>JavaScript</li><li>Work orders</li><li>TV dashboards</li></ul></article>
-<article class="card" data-category="infrastructure"><span class="tag">infrastructure</span><h3>Container services</h3><p class="hook">Make applications easier to deploy and maintain.</p><p>Docker and Ubuntu Server for application hosting and automation. A scoped deployment should account for configuration, storage, credentials, updates, and recovery.</p><ul class="chips"><li>Docker</li><li>Ubuntu Server</li><li>Local hosting</li></ul></article>
-<article class="card" data-category="delivery"><span class="tag">devsecops</span><h3>Secure delivery workflow</h3><p class="hook">Treat the path to production as part of the system.</p><p>Plan repeatable builds and releases around version control, automated checks, secret handling, access boundaries, and documented rollback. The right pipeline depends on the codebase and operating environment.</p><ul class="chips"><li>Git</li><li>CI/CD</li><li>Security checks</li><li>Release process</li></ul></article>
-<article class="card" data-category="infrastructure"><span class="tag">infrastructure</span><h3>Private remote access</h3><p class="hook">Your systems, within reach.</p><p>Tailscale-based connectivity to locally hosted systems. It starts with who needs access, to which resources, and how that access is managed.</p><ul class="chips"><li>Tailscale</li><li>Remote access</li><li>Access planning</li></ul></article>
-<article class="card" data-category="infrastructure"><span class="tag">infrastructure</span><h3>Local LLMs</h3><p class="hook">AI on infrastructure you control.</p><p>Containerized local models for automation and coding assistance. Privacy depends on the full configuration and any connected external services.</p><ul class="chips"><li>Local LLMs</li><li>Containers</li><li>Coding assistance</li></ul></article>
-<article class="card" data-category="security"><span class="tag">security</span><h3>Security automation</h3><p class="hook">Less repetitive tool work, more investigation.</p><p>Python workflows linking Nmap discovery, Tomcat identification, request-pattern inspection, and targeted Hydra testing. Only with explicit permission and agreed scope.</p><ul class="chips"><li>Python</li><li>Nmap</li><li>Tomcat</li><li>Hydra</li></ul></article>
+<article class="card" data-category="infrastructure"><span class="tag">platform reference lab</span><h3>Disconnected K3s workload</h3><p class="hook">Package the workload before the site loses public registry access.</p><p>The Zarf example bundles a web image and Kubernetes manifests. A separate Flux example shows reconciliation of persistent services. <a href="portfolio/#kubernetes">See the packaging and GitOps boundaries</a>.</p><ul class="chips"><li>Kubernetes / K3s</li><li>Zarf</li><li>Flux CD</li><li>Kustomize</li></ul></article>
+<article class="card" data-category="delivery"><span class="tag">delivery reference</span><h3>Scan and smoke-test an image</h3><p class="hook">Check the artifact you intend to ship.</p><p>The <a href="https://github.com/cec406/Projects/tree/main/container-delivery">container delivery template</a> tags an image by commit, gates on High and Critical Trivy findings, and checks its HTTP response. The example does not publish or deploy the image.</p><ul class="chips"><li>Docker</li><li>CI/CD</li><li>Trivy</li><li>Smoke check</li></ul></article>
+<article class="card" data-category="infrastructure"><span class="tag">workplace and lab experience</span><h3>Private remote access</h3><p class="hook">Reach an intended service without making it public.</p><p>Tailscale and MagicDNS supported named access in the workplace environment; my independent lab uses Tailscale to reach self-hosted systems. <a href="#vpn">Read the VPN field notes</a>.</p><ul class="chips"><li>Tailscale</li><li>MagicDNS</li><li>Remote access</li></ul></article>
+<article class="card" data-category="infrastructure"><span class="tag">local AI</span><h3>Portable local inference</h3><p class="hook">Stage models and tools once, then run them on site.</p><p>Arch WSL and GPU-backed Ollama for local models and task-specific agents. The <a href="portfolio/#local-ai">public reference</a> separates local execution, remote access to on-site inference, and opt-in cloud use.</p><ul class="chips"><li>Ollama</li><li>WSL</li><li>GPU inference</li></ul></article>
+<article class="card" data-category="security"><span class="tag">defensive tooling</span><h3>Python security utilities</h3><p class="hook">Give an operator feedback they can act on.</p><p>Python CLI and Tkinter work includes an inventory and reporting project and a <a href="https://github.com/cec406/Cyber/tree/main/GrizzlySE/SecurityTools/password_checker">local password-strength checker</a>. Use fictional inputs; a score is not a security guarantee.</p><ul class="chips"><li>Python</li><li>Tkinter</li><li>Reporting</li></ul></article>
 <article class="card" data-category="security"><span class="tag">security</span><h3>Digital forensics</h3><p class="hook">Follow the artifacts. Explain the findings.</p><p>Hands-on with Autopsy, Volatility, Velociraptor, Sysinternals, and Process Monitor, plus coursework and lab experience with EnCase and FTK. Findings include their limits.</p><ul class="chips"><li>Autopsy</li><li>FTK</li><li>EnCase (lab)</li><li>Volatility</li><li>Velociraptor</li></ul></article>
 <article class="card" data-category="security"><span class="tag">security</span><h3>Password recovery &amp; auditing</h3><p class="hook">Understand exposure. Attempt authorized recovery.</p><p>Hashcat alongside credential-analysis tools. Requires ownership or explicit authorization; recovery is not guaranteed. Try the <a href="#tool">keyspace estimator</a>.</p><ul class="chips"><li>Hashcat</li><li>Credential analysis</li><li>Authorized testing</li></ul></article>
 <article class="card" data-category="infrastructure"><span class="tag">infrastructure</span><h3>Virtualization</h3><p class="hook">Build and investigate on systems you understand.</p><p>A Dell PowerEdge R630 running Proxmox VE, with Ubuntu Server and Docker stacks for local development and testing.</p><ul class="chips"><li>Proxmox</li><li>PowerEdge R630</li><li>Ubuntu Server</li></ul></article>
@@ -153,7 +153,7 @@ footer{background:var(--deep);border-top:2px solid var(--amber);padding:28px 0;f
 <div class="three">
 <article class="tile"><h3>Forensic examination</h3><p>What can the available artifacts reconstruct? Examine the evidence and explain the limits.</p><p class="tools">Autopsy · Volatility · Velociraptor · EnCase &amp; FTK (lab coursework)</p></article>
 <article class="tile"><h3>Endpoint &amp; binary inspection</h3><p>What is running, and what is it doing? Alternate boot environments and binary identification as needed.</p><p class="tools">Sysinternals · Process Monitor · Windows PE · Detect It Easy · Kali live boot</p></article>
-<article class="tile"><h3>Authorized security testing</h3><p>What can a defined, authorized test reveal about exposure? Testing is planned around agreed systems, boundaries, and handling of findings.</p><p class="tools">Hashcat · Hydra · Nmap · Metasploit · DIRB · Responder · Ettercap</p></article>
+<article class="tile"><h3>Defensive triage and training</h3><p>Practice reviewing evidence and documenting findings in <a href="range/">Grizzly Range</a>. The exercises use fictional cases with browser-local progress, not live networks.</p><p class="tools">Log triage · Security awareness · Incident reporting</p></article>
 </div>
 <div class="btns"><a class="btn alt" href="incident.html">Read the first-hour incident guide ↗</a></div>
 </div></section>
@@ -198,6 +198,17 @@ footer{background:var(--deep);border-top:2px solid var(--amber);padding:28px 0;f
 <button class="unit" type="button" data-d="NODE / Reclaimed Dell OptiPlex with a Quadro P2200 and Segotep SG-550 supply. Second life as a compute node."><b>node</b><i class="g"></i><i></i><i></i><em>OptiPlex · Quadro P2200 · SG-550</em></button>
 <button class="unit" type="button" data-d="SLABTOP / MSI Raider GE75 board repurposed for headless media and file hosting."><b>slabtop</b><i></i><i class="g"></i><i class="g"></i><em>MSI Raider GE75 · headless</em></button>
 <p class="rdet" id="rdet" role="status" aria-live="polite">Select a machine. LEDs are decorative, not live telemetry.</p></div>
+</div></section>
+
+<section id="vpn" class="alt-bg"><div class="container">
+<h2>Private access and VPN field notes</h2>
+<p class="lead">Tailscale served different needs in the workplace deployment, my independent lab, and the on-site AI environment. The public examples describe those boundaries without exposing private configurations.</p>
+<div class="three">
+<article class="tile"><h3>Workplace</h3><p>Tailscale and MagicDNS gave users named access to resources alongside the site's existing router, firewall, and storage. <a href="https://github.com/cec406/Projects/blob/main/infrastructure-project/architecture.md">Read the workplace capability map ↗</a>.</p></article>
+<article class="tile"><h3>Lab and local AI</h3><p>The Proxmox lab separates the host, Ubuntu guests, and services. For remote AI, Tailscale provides a network path while inference stays on the GPU host. That path still needs connectivity. <a href="https://github.com/cec406/Projects/tree/main/local-ai-deployment#remote-access-to-on-site-ai-over-tailscale">Read the inference access notes ↗</a>.</p></article>
+<article class="tile"><h3>What I’d verify at handoff</h3><p>From an approved device, check that the service name resolves and the intended workflow works. Check that an unapproved device cannot reach it. Record how access is granted, revoked, and recovered. DNS naming is not authorization.</p></article>
+</div>
+<p class="note">These are proposed acceptance checks, not published test results or tailnet policy. The public Compose examples do not configure VPN access.</p>
 </div></section>
 
 <section id="process"><div class="container">
@@ -257,14 +268,14 @@ addEventListener('keydown',e=>{ki=e.key===K[ki]?ki+1:(e.key===K[0]?1:0);if(ki===
 const out=$('#tout'),inp=$('#tin');
 const say=(t,c)=>{const d=document.createElement('div');if(c)d.className=c;d.textContent=t;out.appendChild(d);out.scrollTop=out.scrollHeight};
 const go=id=>document.getElementById(id).scrollIntoView({behavior:R?'auto':'smooth'});
-const secs=['projects','delivery','security','tool','evidence','hardware','process','contact'];
+const secs=['projects','delivery','security','tool','evidence','hardware','vpn','process','contact'];
 const fortunes=['There is no cloud. It is just someone else\'s computer.','A backup that was never restored is just a hope.','Segment the network before you need to.','Read the logs. Then read them again.','Scope first. Then scan.'];
 const CTF='VEZSe2ZwYmNyX3N2ZWZnX2d1cmFfZnBuYX0=';const rot=s=>s.replace(/[a-z]/gi,c=>{const b=c<='Z'?65:97;return String.fromCharCode((c.charCodeAt(0)-b+13)%26+b)});
 const cmds={
  help:()=>['ls              list sections','cd <section>     jump to a section','cat hardware     the lab rig','neofetch         system info','stack            what the lab runs','engage           open the deployment notes','contact','theme <amber|green|ice>','matrix · crt     toggle rain / scanlines','xxd · history · hack · fortune · clear','ctf              a small puzzle for hackers'],
  ls:()=>secs.map(s=>s+'/'),
  cat:a=>a[0]==='hardware'?['primary  Ryzen 9 5950X / RX 7900 GRE','virt     PowerEdge R630 / Proxmox VE','node     OptiPlex / Quadro P2200 / SG-550','slabtop  MSI Raider GE75 / headless']:['usage: cat hardware'],
- stack:()=>['languages  Python, JavaScript','platform   Linux, Docker, Proxmox, Tailscale','security   Nmap, Hydra, Hashcat, Volatility, Autopsy','ai         local LLMs in containers'],
+ stack:()=>['languages  Python, JavaScript, TypeScript','platform   Linux, Docker, Proxmox, Tailscale','edge lab   K3s, Zarf, Flux CD','security   Trivy, Volatility, Autopsy','ai         Ollama, Arch WSL, containers'],
  neofetch:()=>{const a=['  .--.  .--.','(    \\/    )','  \\  o  o  /','   (  ()  )','    `----\''],i=['caleb@grizzly','-------------','lab    East Helena, MT','host   PowerEdge R630','virt   Proxmox VE','cpu    Ryzen 9 5950X','gpu    RX 7900 GRE','langs  Python, JS, Docker'];return i.map((s,n)=>(a[n]||'').padEnd(17)+s)},
  contact:()=>{go('contact');return['Recruiter contact: portfolio/#contact']},
  cd:a=>{const t=(a[0]||'').replace('/','');if(secs.includes(t)){go(t);return['-> '+t]}return['cd: no such section: '+(a[0]||''),'try: ls']},

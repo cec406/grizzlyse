@@ -1,5 +1,7 @@
 # GRIZZLY RANGE / GRIZZLY LAB
 
+[Open the browser desktop](https://grizzlyse.com/range/) · [Read the engineering case study](https://grizzlyse.com/portfolio/#range) · [Browse the training catalog](https://grizzlyse.com/projects/#education)
+
 The lab shell now lives **inside the five training apps**. `/range/` is an optional operator desktop built on the same machine registry. Nothing in the app engines was rewritten.
 
 ## Layer 1 - the in-app lab shell

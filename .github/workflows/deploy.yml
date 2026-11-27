@@ -63,6 +63,9 @@ jobs:
           fi
           echo "AFT Forge build is self-contained."
 
+      - name: Verify portfolio navigation and assets
+        run: python3 .github/scripts/check-portfolio.py _site --built
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

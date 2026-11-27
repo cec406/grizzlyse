@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#10151c">
-  <title>Caleb Clark | Forward-Deployed Systems Engineer</title>
-  <meta name="description" content="Caleb Clark's independent engineering projects and infrastructure lab. Explore working demos, source code, and notes on systems integration and deployment.">
+  <title>Caleb Clark | Forward-Deployed Engineer Portfolio</title>
+  <meta name="description" content="Caleb Clark’s forward-deployed engineering portfolio: workplace infrastructure, K3s and GitOps, shop operations software, local AI, Python, and browser-based training.">
   <link rel="canonical" href="https://grizzlyse.com/portfolio/">
   <link rel="icon" href="../assets/grizzly-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/field.css">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Caleb Clark | Forward-Deployed Systems Engineer">
-  <meta property="og:description" content="Independent systems lab and projects: a shop operations demo, self-hosted infrastructure, and an offline app shipped through CI/CD. Demos, source code, and tradeoffs.">
+  <meta property="og:title" content="Caleb Clark | Forward-Deployed Engineer Portfolio">
+  <meta property="og:description" content="Working demos, deployment runbooks, source code, and tests. Explore workplace infrastructure, disconnected Kubernetes delivery, shop software, local AI, and operator training.">
   <meta property="og:url" content="https://grizzlyse.com/portfolio/">
   <meta property="og:image" content="https://grizzlyse.com/assets/share-caleb-clark.png">
   <meta property="og:image:width" content="1200">
@@ -26,8 +26,8 @@
       <a class="brand" href="./" aria-current="page"><span class="mark" aria-hidden="true">&gt;_</span><span>Caleb Clark<small>Engineering portfolio</small></span></a>
       <nav class="site-nav" aria-label="Portfolio navigation">
         <a href="#work">Selected work</a>
-        <a href="../lab.html">Engineering Lab</a>
         <a href="../projects/">Project catalog</a>
+        <a href="../lab.html">Engineering Lab</a>
         <a class="nav-primary" href="#contact">Recruiter contact</a>
       </nav>
     </div>
@@ -37,20 +37,23 @@
     <section class="hero">
       <div class="wrap hero-grid">
         <div>
-          <p class="eyebrow">Engineering portfolio · East Helena, MT</p>
+          <p class="eyebrow">Engineering portfolio · East Helena, Montana</p>
           <h1 class="portfolio-title">Caleb Clark <span>Forward-deployed systems engineer</span></h1>
-          <p class="lede">I use my engineering lab and independent projects to practice the full delivery cycle: turn an operator's workflow into a working tool, deploy it, and document how someone else could run and recover it.</p>
+          <p class="lede">I turn field workflows into software teams can run on the hardware and networks they already have. My work spans shop-floor applications, workplace infrastructure, and deploying workloads where public internet access isn’t an option.</p>
           <div class="actions">
-            <a class="button" href="#work">See selected work</a>
-            <a class="button outline" href="https://github.com/cec406">View GitHub ↗</a>
+            <a class="button" href="#work">Review the work samples</a>
+            <a class="button outline" href="https://github.com/cec406/Projects">Inspect the GitHub evidence ↗</a>
           </div>
+          <p class="note">Hiring for a customer-facing engineering role? <a href="#contact">Ask for a technical walkthrough.</a></p>
         </div>
         <div class="console">
-          <p class="console-title"><span aria-hidden="true">&gt;_</span> Start with a work sample</p>
+          <p class="console-title"><span aria-hidden="true">&gt;_</span> Pick a work sample</p>
           <ul class="manifest">
-            <li><b aria-hidden="true">01</b><div><a href="#grizzworks">GrizzWorks ↘</a><p>Follow a shop workflow through work orders, invoicing, and a wall display.</p></div></li>
-            <li><b aria-hidden="true">02</b><div><a href="#infrastructure">Local infrastructure lab ↘</a><p>See how I separate host, guest, application, and remote access.</p></div></li>
-            <li><b aria-hidden="true">03</b><div><a href="#aft-forge">AFT Forge ↘</a><p>Inspect an offline web app and the CI/CD workflow that publishes it.</p></div></li>
+            <li><b aria-hidden="true">01</b><div><a href="#grizzworks">Build for operators</a><p>Move a work order on the demo board, then trace it through to invoicing.</p></div></li>
+            <li><b aria-hidden="true">02</b><div><a href="#infrastructure">Integrate at a real site</a><p>Review how I brought workplace applications, storage, and private remote access together.</p></div></li>
+            <li><b aria-hidden="true">03</b><div><a href="#kubernetes">Deploy under constraints</a><p>Inspect how I package a K3s workload for a site without public registry access.</p></div></li>
+            <li><b aria-hidden="true">04</b><div><a href="#range">Train the team</a><p>See how one browser workspace tracks practice across five independent training apps.</p></div></li>
+            <li><b aria-hidden="true">05</b><div><a href="#local-ai">Run AI where the work happens</a><p>Review how I staged GPU inference and task-specific agents for low-bandwidth sites.</p></div></li>
           </ul>
         </div>
       </div>
@@ -60,61 +63,121 @@
       <div class="wrap">
         <div class="section-head">
           <p class="eyebrow">01 / Selected work</p>
-          <h2>What I built and why</h2>
-          <p class="lede">Independent projects and lab work. Each example shows what I built, a tradeoff I made, and what you can verify yourself.</p>
+          <h2>What I built and how to verify it</h2>
+          <p class="lede">Start with a demo, source file, or runbook. Each sample identifies what ran in a workplace, what you can try in a browser, and what is a reference lab.</p>
         </div>
         <div class="proof">
           <article class="card" id="grizzworks">
             <div>
-              <span class="eyebrow">01 / Operational software · public demo</span>
-              <h3>GrizzWorks</h3>
-              <ul class="tags" aria-label="Technical details"><li>JavaScript</li><li>Shared data model</li><li>Local storage</li></ul>
-              <a class="link" href="../dashboard/?demo=1#/workorders">Try the sample shop ↗</a>
+              <p class="eyebrow">Operational software · Browser demo + self-hosted app</p>
+              <h3>GrizzWorks shop operations</h3>
+              <ul class="tags" aria-label="Technologies"><li>JavaScript</li><li>Node.js</li><li>Server-Sent Events</li><li>Docker</li></ul>
+              <img class="preview" src="../assets/grizzworks-demo.webp" width="1228" height="614" loading="lazy" alt="GrizzWorks board with sample work orders across four statuses.">
             </div>
             <div>
-              <p><strong>What I built:</strong> A shop operations app that links work orders and inventory to jobs, quotes, and invoices. The crew gets a work board and the office can track the same job through billing.</p>
-              <p><strong>Tradeoff:</strong> Drafts are editable, but corrections to posted invoices create reversing entries instead of overwriting the record. The public demo is easy to try because it stores fictional data in your browser, not in a shared deployment.</p>
-              <p><strong>Verify it:</strong> Move a work order or open the <a href="../dashboard/display.html">wall display</a>. For the accounting side, inspect the <a href="https://github.com/cec406/grizzlyse/blob/main/dashboard/shared/erp.js">posting and reversal logic</a>.</p>
+              <p><strong>The workflow:</strong> The crew moves work through a board and sees status on a wall display. The office follows jobs through quotes, inventory, and invoices without treating each step as a separate tracker.</p>
+              <p><strong>The design:</strong> The browser demo and locally hosted app share business rules. The demo uses fictional records; the server handles shared state and pushes changes to connected screens. Posting updates receivables, the journal, and linked inventory. Corrections append reversing entries rather than silently editing posted history.</p>
+              <ul class="evidence-links" aria-label="GrizzWorks evidence"><li><a href="../dashboard/?demo=1#/workorders">Try the work-order board ↗</a></li><li><a href="../dashboard/display.html">Open the wall display ↗</a></li><li><a href="https://github.com/cec406/Projects/tree/main/grizzworks-engine">Read the engine and tests ↗</a></li><li><a href="https://github.com/cec406/applications/tree/main/dashboard">Review the local deployment ↗</a></li></ul>
+            </div>
+          </article>
+          <article class="card" id="migration">
+            <div>
+              <p class="eyebrow">Customer implementation · Verified lab rehearsal</p>
+              <h3>GrizzWorks data migration</h3>
+              <ul class="tags" aria-label="Technologies"><li>Python</li><li>CSV validation</li><li>GrizzWorks REST API</li><li>Reconciliation</li></ul>
+            </div>
+            <div>
+              <p><strong>The cutover decision:</strong> I built a dry-run importer that blocks ambiguous dates, unresolved customer or job mappings, and duplicate IDs. Apply requires approval of the exact inputs and writes a new backup rather than editing the original.</p>
+              <p><strong>What I verified:</strong> In a disposable GrizzWorks server, the corrected fixture imported four work orders totaling 7.50 estimated hours, preserved the original row, and survived a server restart. A replay proposed zero new orders. This was synthetic data, not a customer migration.</p>
+              <ul class="evidence-links" aria-label="Data migration evidence"><li><a href="https://github.com/cec406/Projects/blob/main/grizzworks-migration/reports/blocked.json">Review rejected rows ↗</a></li><li><a href="https://github.com/cec406/Projects/blob/main/grizzworks-migration/reports/lab-result.json">Read the recorded restore result ↗</a></li><li><a href="https://github.com/cec406/Projects/tree/main/grizzworks-migration">Try the CLI and read the cutover plan ↗</a></li></ul>
             </div>
           </article>
           <article class="card" id="infrastructure">
             <div>
-              <span class="eyebrow">02 / Infrastructure · hands-on lab</span>
-              <h3>Local infrastructure lab</h3>
-              <ul class="tags" aria-label="Technologies"><li>Proxmox VE</li><li>Ubuntu Server</li><li>Docker</li><li>Tailscale</li></ul>
-              <a class="link" href="../lab.html#hardware">Inspect the lab hardware ↗</a>
+              <p class="eyebrow">Systems integration · Workplace deployment</p>
+              <h3>Private field services and VPN access</h3>
+              <ul class="tags" aria-label="Technologies"><li>Ubuntu Server</li><li>Docker Compose</li><li>Dockge</li><li>Tailscale / MagicDNS</li><li>TAK</li></ul>
             </div>
             <div>
-              <p><strong>What I built:</strong> A self-hosted test environment on a Dell PowerEdge: Proxmox for virtualization, Ubuntu guests running Docker services, and Tailscale for private remote access.</p>
-              <p><strong>Tradeoff:</strong> Running locally gives me control over the host and deployment environment, but it also makes patching, access, and recovery my responsibility.</p>
-              <p><strong>Inspect it:</strong> Explore the hardware and service stack, then compare it with the <a href="../solutions.html#programs">worked rollout example</a> for what I'd verify before an operator depends on a deployment.</p>
+              <p><strong>The integration:</strong> I built an Ubuntu Server environment that ran TAK for ATAK and WinTAK alongside internal tools. I used Compose to start Dockge and managed the other services through it, working with Starlink connectivity, a Cisco router, firewall services, and NAS storage.</p>
+              <p><strong>The access decision:</strong> Tailscale and MagicDNS provided private, named access to resources. I also use Tailscale in my separate Proxmox lab. The public workplace write-up is a capability map, not an export of the live configuration.</p>
+              <ul class="evidence-links" aria-label="Infrastructure evidence"><li><a href="https://github.com/cec406/Projects/blob/main/infrastructure-project/architecture.md">Read the workplace architecture ↗</a></li><li><a href="https://github.com/cec406/Projects/blob/main/infrastructure-project/operations.md">Review sample operations checks ↗</a></li><li><a href="../lab.html#hardware">Tour the independent lab ↗</a></li></ul>
             </div>
           </article>
-          <article class="card" id="aft-forge">
+          <article class="card" id="kubernetes">
             <div>
-              <span class="eyebrow">03 / Product delivery · live app</span>
-              <h3>AFT Forge</h3>
-              <ul class="tags" aria-label="Technologies"><li>TypeScript</li><li>React</li><li>Offline PWA</li><li>GitHub Actions</li></ul>
-              <a class="link" href="../aft-forge/">Open AFT Forge ↗</a>
+              <p class="eyebrow">Edge delivery · Kubernetes reference lab</p>
+              <h3>K3s delivery for disconnected sites</h3>
+              <ul class="tags" aria-label="Technologies"><li>Kubernetes / K3s</li><li>Zarf</li><li>Flux CD</li><li>Kustomize</li><li>NetworkPolicy</li></ul>
             </div>
             <div>
-              <p><strong>What I built:</strong> An installable fitness planner that works offline and stores profiles and training logs on the phone, without an account.</p>
-              <p><strong>Tradeoff:</strong> Local storage simplifies setup, but there's no cloud copy. Users can export a backup before clearing browser data or changing devices.</p>
-              <p><strong>Verify it:</strong> Try the first-run flow. Read the <a href="https://github.com/cec406/grizzlyse/blob/main/.github/workflows/deploy.yml">GitHub Actions workflow</a> to see how it checks for the manifest, service worker, and icons before publishing the app.</p>
+              <p><strong>The constraint:</strong> The destination can’t pull images from a public registry. I wrote a sample Zarf package that bundles a web workload and its image, plus a runbook that checks rollout readiness and which registry the pod uses.</p>
+              <p><strong>What ran:</strong> I deployed the sample workload in a disconnected K3s lab. The repository documents the validation checks; it doesn’t include a transcript of that run. The Flux platform is a separate reference: it shows persistent services and network policy, but still needs mirrors for fully offline use.</p>
+              <ul class="evidence-links" aria-label="Kubernetes evidence"><li><a href="https://github.com/cec406/Projects/blob/main/k3s-airgap-gitops-platform/validation.md">Read the validation notes ↗</a></li><li><a href="https://github.com/cec406/Projects/blob/main/k3s-airgap-gitops-platform/zarf-packages/airgap-web/zarf.yaml">Inspect the Zarf package ↗</a></li><li><a href="https://github.com/cec406/Projects/tree/main/k3s-airgap-gitops-platform/clusters/edge-node">Review the Flux manifests ↗</a></li></ul>
+            </div>
+          </article>
+          <article class="card" id="edge-readiness">
+            <div>
+              <p class="eyebrow">Release verification · Runnable Python sample</p>
+              <h3>Edge Deployment Readiness Kit</h3>
+              <ul class="tags" aria-label="Technologies"><li>Python</li><li>SHA-256</li><li>HTTP smoke test</li><li>JSON report</li></ul>
+            </div>
+            <div>
+              <p><strong>The handoff decision:</strong> A field site can’t download a replacement package on demand. I built a CLI that checks the target architecture and verifies every staged file against an approved release manifest before an operator proceeds.</p>
+              <p><strong>What you can verify:</strong> Both sample files are present in the broken release, but one is the wrong revision. The CLI blocks it and tells the operator to restage the file. The corrected fixture passes staging; a separate optional HTTP check never implies that a cluster was deployed. The published reports use synthetic files, not a live K3s run.</p>
+              <ul class="evidence-links" aria-label="Edge readiness evidence"><li><a href="https://github.com/cec406/Projects/blob/main/edge-readiness/reports/blocked.json">See the blocked report ↗</a></li><li><a href="https://github.com/cec406/Projects/blob/main/edge-readiness/reports/staged.json">Compare the passing report ↗</a></li><li><a href="https://github.com/cec406/Projects/tree/main/edge-readiness">Run the tool and tests ↗</a></li></ul>
+            </div>
+          </article>
+          <article class="card" id="range">
+            <div>
+              <p class="eyebrow">Training and handoff · Live simulation</p>
+              <h3>Grizzly Range</h3>
+              <ul class="tags" aria-label="Technical details"><li>JavaScript</li><li>5 training apps</li><li>12 graded work orders</li><li>Local progress</li></ul>
+            </div>
+            <div>
+              <p><strong>The workflow:</strong> A learner opens a browser desktop, picks a work order, launches a training app, and checks their work against acceptance criteria. Exercises cover Git, command-line fundamentals, security awareness, and incident investigation using synthetic scenarios.</p>
+              <p><strong>The design:</strong> A shared registry reads progress from each app’s existing browser save format. The work-order board stores its own completions without changing app saves when it validates them. The five apps still work on their own.</p>
+              <ul class="evidence-links" aria-label="Range evidence"><li><a href="../range/">Open the operator desktop ↗</a></li><li><a href="../range/machine.html?m=gitcicd">Try the GitCI/CD simulator ↗</a></li><li><a href="https://github.com/cec406/grizzlyse/tree/main/range">Review the shell and progress adapters ↗</a></li></ul>
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <section aria-labelledby="more">
+    <section id="more" aria-labelledby="more-heading">
       <div class="wrap">
-        <div class="section-head"><p class="eyebrow">02 / Dig deeper</p><h2 id="more">More engineering work</h2></div>
-        <div class="grid">
-          <article class="card"><h3>Deployment playbook</h3><p>How I work from operator discovery through launch checks, rollback planning, and handoff.</p><a class="link" href="../solutions.html">Read the delivery notes ↗</a></article>
-          <article class="card"><h3>Engineering Lab</h3><p>Infrastructure notes, delivery practices, browser-based Python tools, and an interactive terminal.</p><a class="link" href="../lab.html">Explore the Lab ↗</a></article>
-          <article class="card"><h3>Project catalog</h3><p>Training tools, educational apps, simulations, and independent experiments.</p><a class="link" href="../projects/">Browse all projects ↗</a></article>
+        <div class="section-head">
+          <p class="eyebrow">02 / More work samples</p>
+          <h2 id="more-heading">From local AI to offline apps</h2>
+          <p class="lede">Other examples of how I handle deployment constraints, automate small workflows, and make a system easier to learn.</p>
         </div>
+        <div class="grid project-grid">
+          <article class="card" id="local-ai">
+            <p class="eyebrow">Local AI · Hands-on build + public reference</p>
+            <h3>Portable GPU inference</h3>
+            <p>I bundled Ollama, models, and task-specific agents into a portable Arch WSL environment. I selected models up to 24B parameters based on available GPU memory and used Tailscale to reach on-site inference remotely. The public sample separates local inference from opt-in cloud use.</p>
+            <ul class="evidence-links"><li><a href="https://github.com/cec406/Projects/blob/main/local-ai-deployment/wsl-portability.md">Read the portability runbook ↗</a></li><li><a href="https://github.com/cec406/Projects/tree/main/local-ai-deployment">Inspect the synthetic container lab ↗</a></li></ul>
+          </article>
+          <article class="card" id="python">
+            <p class="eyebrow">Python · Automation, desktop apps, and games</p>
+            <h3>Python from scripts to interfaces</h3>
+            <p>A Python/SQLite reference shows how fixed event IDs prevent duplicate postings and preserve balanced ledger entries. Smaller projects include a Tkinter note taker, a Pygame arcade game, and defensive security utilities such as a local password-strength checker.</p>
+            <ul class="evidence-links"><li><a href="../projects/#python">Browse Python projects ↗</a></li><li><a href="https://github.com/cec406/Projects/tree/main/shop-operations">Review the runnable SQLite reference ↗</a></li></ul>
+          </article>
+          <article class="card" id="aft-forge">
+            <p class="eyebrow">Product delivery · Live offline app</p>
+            <h3>AFT Forge</h3>
+            <p>An installable React/TypeScript fitness planner with local profiles, training logs, and backup export instead of an account. The GitHub Pages build checks that the packaged app includes its manifest, service worker, and icons.</p>
+            <ul class="evidence-links"><li><a href="../aft-forge/">Open the planner ↗</a></li><li><a href="https://github.com/cec406/grizzlyse/blob/main/.github/workflows/deploy.yml">Read the Pages workflow ↗</a></li></ul>
+          </article>
+          <article class="card" id="delivery">
+            <p class="eyebrow">Delivery · Playbook and reference pipeline</p>
+            <h3>Repeatable releases and operator handoff</h3>
+            <p>A versioned container reference illustrates an image build, a vulnerability scan, and a smoke test. My deployment playbook shows how I’d set go-live criteria, verify a workflow from an operator’s device, and document who owns recovery.</p>
+            <ul class="evidence-links"><li><a href="../solutions.html">Read the deployment playbook ↗</a></li><li><a href="https://github.com/cec406/Projects/tree/main/container-delivery">Inspect the container delivery reference ↗</a></li></ul>
+          </article>
+        </div>
+        <div class="actions"><a class="button" href="../projects/">Browse the full project catalog</a><a class="button outline" href="../lab.html">Explore the Engineering Lab</a></div>
       </div>
     </section>
 
@@ -122,8 +185,8 @@
       <div class="wrap">
         <p class="eyebrow">03 / Recruiting</p>
         <h2>What does your team need to get live?</h2>
-        <p class="lede">I'm interested in forward-deployed engineering, implementation engineering, and systems integration roles where I can work directly with customers and own the work through rollout and handoff.</p>
-        <div class="actions"><a class="button" href="mailto:info@grizzlyse.com?subject=Recruiting%20inquiry%20for%20Caleb%20Clark">Email Caleb about a role</a><a class="button outline" href="https://github.com/cec406">View GitHub ↗</a></div>
+        <p class="lede">I’m interested in forward-deployed engineering, implementation engineering, and systems integration roles where I can work directly with customers and own a system through rollout and handoff. In a technical walkthrough, I can take you through an operator workflow, the code behind it, or how I’d verify a release on site.</p>
+        <div class="actions"><a class="button" href="mailto:info@grizzlyse.com?subject=Recruiting%20inquiry%20for%20Caleb%20Clark">Email Caleb about a role</a><a class="button outline" href="https://www.linkedin.com/in/caleb-clark-4a638b28b/">LinkedIn ↗</a><a class="button outline" href="https://github.com/cec406">GitHub profile ↗</a></div>
         <p class="note">Direct email: info@grizzlyse.com</p>
       </div>
     </section>
@@ -132,7 +195,7 @@
   <footer class="site-footer">
     <div class="wrap foot">
       <p>Caleb Clark · Engineering portfolio</p>
-      <nav aria-label="Footer navigation"><a href="https://github.com/cec406/grizzlyse">Site source ↗</a><a href="../">Grizzly business site ↗</a></nav>
+      <nav aria-label="Footer navigation"><a href="https://github.com/cec406/Projects">GitHub evidence index ↗</a><a href="https://github.com/cec406/grizzlyse">Site source ↗</a><a href="../">Grizzly business site ↗</a></nav>
     </div>
   </footer>
 </body>

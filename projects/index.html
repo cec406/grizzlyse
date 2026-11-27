@@ -1,456 +1,112 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Catalog | Caleb Clark's Engineering Portfolio</title>
-    <meta name="description" content="Caleb Clark's project catalog: operational software, browser-based training, interactive simulations, and language-learning apps.">
-    <link rel="canonical" href="https://grizzlyse.com/projects/">
-    <link rel="icon" href="../assets/grizzly-mark.svg" type="image/svg+xml">
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter for UI, JetBrains Mono for Technical feel -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#d97706',
-                        dark: '#0f172a',
-                        surface: '#1e293b',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { background-color: #0f172a; color: #f8fafc; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); }
-        .grid-glow {
-            background-image:
-                radial-gradient(circle at 1px 1px, rgba(217, 119, 6, 0.18) 1px, transparent 0);
-            background-size: 32px 32px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10151c">
+  <title>Project Catalog | Caleb Clark</title>
+  <meta name="description" content="Browse Caleb Clark’s engineering projects: edge infrastructure, local AI, dashboards, Python applications, training simulations, and games.">
+  <link rel="canonical" href="https://grizzlyse.com/projects/">
+  <link rel="icon" href="../assets/grizzly-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/field.css">
 </head>
-<body class="font-sans antialiased">
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../portfolio/"><span class="mark" aria-hidden="true">&gt;_</span><span>Caleb Clark<small>Engineering portfolio</small></span></a>
+      <nav class="site-nav" aria-label="Portfolio navigation">
+        <a href="../portfolio/#work">Selected work</a>
+        <a href="./" aria-current="page">Project catalog</a>
+        <a href="../lab.html">Engineering Lab</a>
+        <a class="nav-primary" href="../portfolio/#contact">Recruiter contact</a>
+      </nav>
+    </div>
+  </header>
 
-    <a href="#main" class="sr-only focus:not-sr-only focus:inline-block focus:p-3">Skip to content</a>
-    <header class="glass border-b border-slate-700">
-        <nav class="max-w-7xl mx-auto px-6 py-4 flex flex-wrap items-center justify-between gap-4" aria-label="Portfolio navigation">
-            <a href="../portfolio/" class="text-xl font-black tracking-tighter">Caleb Clark <span class="text-amber-400 font-mono">/ Portfolio</span></a>
-            <div class="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium">
-                <a href="../portfolio/#work" class="hover:text-amber-400 transition">Selected work</a>
-                <a href="../lab.html" class="hover:text-amber-400 transition">Engineering Lab</a>
-                <a href="../" class="hover:text-amber-400 transition">Grizzly business site &nearr;</a>
-            </div>
-        </nav>
-    </header>
+  <main id="main" tabindex="-1">
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Engineering portfolio / Project index</p>
+        <h1>Project <span>catalog</span></h1>
+        <p class="lede">Find a working demo, read a deployment runbook, or go straight to the code. If you’re hiring, start with the selected work for the problem, design choices, and scope behind each sample.</p>
+        <div class="actions"><a class="button" href="../portfolio/#work">Start with selected work</a><a class="button outline" href="https://github.com/cec406/Projects">Browse GitHub evidence ↗</a></div>
+      </div>
+    </section>
+    <nav class="section-nav" aria-label="Project categories"><div class="wrap"><a href="#platform">Infrastructure &amp; AI</a><a href="#tools">Apps &amp; dashboards</a><a href="#python">Python</a><a href="#education">Training</a><a href="#games">Games</a><a href="#languages">Language apps</a></div></nav>
 
-    <main id="main" tabindex="-1">
-    <!-- Hero -->
-    <section class="grid-glow pt-16 pb-12 border-b border-slate-800">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="inline-block px-3 py-1 mb-6 border border-primary/30 rounded-full bg-primary/10 text-primary text-xs font-mono uppercase tracking-widest">
-                Engineering portfolio / Additional work
-            </div>
-            <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-6">
-                Project <span class="text-amber-400">catalog</span>
-            </h1>
-            <p class="text-lg text-slate-400 max-w-2xl leading-relaxed">
-                Working demos and independent experiments in operations software, simulation, and education. If you're here to evaluate my systems engineering work, start with the <a href="../portfolio/#work" class="text-amber-400 underline">selected projects and design notes</a>.
-            </p>
-            <nav class="flex flex-wrap gap-x-5 gap-y-2 mt-6 text-sm text-amber-400" aria-label="Project categories">
-                <a href="#tools" class="underline">Tools &amp; dashboards</a>
-                <a href="#education" class="underline">Education &amp; training</a>
-                <a href="#games" class="underline">Games &amp; simulations</a>
-                <a href="#languages" class="underline">Language apps</a>
-            </nav>
+    <section id="platform">
+      <div class="wrap">
+        <div class="section-head"><p class="eyebrow">01 / Infrastructure and delivery</p><h2>Deploy on the hardware you have</h2><p class="lede">Workplace integration, edge Kubernetes, and local inference with limited connectivity.</p></div>
+        <div class="grid project-grid">
+          <article class="card"><p class="eyebrow">Workplace deployment / public documentation</p><h3>TAK and private VPN access</h3><p>Ubuntu Server, Dockge-managed containers, and TAK for ATAK/WinTAK. Tailscale and MagicDNS provided named access in a workplace environment with Starlink, firewall services, and NAS.</p><ul class="evidence-links"><li><a href="../portfolio/#infrastructure">Read the case study</a></li><li><a href="../lab.html#vpn">Explore VPN and lab notes</a></li><li><a href="https://github.com/cec406/Projects/tree/main/infrastructure-project">Architecture and sample checks ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Kubernetes reference lab</p><h3>Disconnected K3s and GitOps</h3><p>A Zarf package bundles the sample web workload and its image. Separate Flux manifests show how to reconcile persistent services and network policy; the full platform is not packaged for offline use.</p><ul class="evidence-links"><li><a href="../portfolio/#kubernetes">Read the case study</a></li><li><a href="https://github.com/cec406/Projects/tree/main/k3s-airgap-gitops-platform">Manifests and runbook ↗</a></li><li><a href="https://github.com/cec406/Projects/blob/main/k3s-airgap-gitops-platform/validation.md">Validation notes ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Hands-on build / public reference</p><h3>Portable local AI</h3><p>Arch WSL, Ollama, GPU inference, and models sized to available VRAM. The public example illustrates staging assets ahead of time and checking local inference without silently falling back to the cloud.</p><ul class="evidence-links"><li><a href="../portfolio/#local-ai">Read the work sample</a></li><li><a href="https://github.com/cec406/Projects/tree/main/local-ai-deployment">Runbooks and smoke check ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Runnable Python sample / fixture reports</p><h3>Edge Deployment Readiness Kit</h3><p>Checks the target architecture and staged file integrity before a disconnected release. Compare a passing staging report with a blocked release that contains the wrong package revision.</p><ul class="evidence-links"><li><a href="../portfolio/#edge-readiness">Read the case study</a></li><li><a href="https://github.com/cec406/Projects/tree/main/edge-readiness">Source, tests, and generated reports ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Reference pipeline / field notes</p><h3>Container releases and handoff</h3><p>A build, Trivy scan, and HTTP smoke check for a versioned container fixture. The deployment playbook covers launch criteria, operator verification, fallback, and recovery ownership.</p><ul class="evidence-links"><li><a href="https://github.com/cec406/Projects/tree/main/container-delivery">Release template ↗</a></li><li><a href="../solutions.html">Deployment playbook</a></li></ul></article>
         </div>
+      </div>
     </section>
 
-    <!-- GRIZZLY RANGE -->
-    <section class="py-12 bg-dark border-b border-slate-800">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="relative overflow-hidden rounded-xl border border-primary/40 bg-surface p-8 md:p-10 grid md:grid-cols-[1fr_auto] gap-6 items-center">
-                <div>
-                    <div class="inline-block px-3 py-1 mb-3 border border-primary/30 rounded-full bg-primary/10 text-primary text-xs font-mono uppercase tracking-widest">
-                        Operator desktop &middot; 5 machines
-                    </div>
-                    <h2 class="text-2xl md:text-4xl font-black uppercase tracking-tighter mb-3">
-                        GRIZZLY <span class="text-primary">RANGE</span>
-                    </h2>
-                    <p class="text-slate-400 max-w-2xl text-sm leading-relaxed">
-                        Boot all five training machines from one workstation: ZeroDay Academy, GSEHACK,
-                        CODEWATCH, GitCI/CD Hero, and Cyber Aware. The content is the same. The shell is new:
-                        one desktop, a progress board, an operator console, and a lab frame around every machine.
-                    </p>
-                </div>
-                <div class="flex flex-col gap-3">
-                    <a href="../range/index.html" class="px-5 py-3 rounded-md bg-primary text-dark font-bold uppercase tracking-widest text-xs text-center hover:brightness-110 transition">
-                        Enter the Range &rarr;
-                    </a>
-                    <span class="text-[10px] font-mono uppercase tracking-widest text-slate-500 text-center">
-                        No install &middot; local saves
-                    </span>
-                </div>
-            </div>
+    <section id="tools" class="shade">
+      <div class="wrap">
+        <div class="section-head"><p class="eyebrow">02 / Product engineering</p><h2>Apps and dashboards</h2><p class="lede">Operator-facing tools for a browser, a local network, or an offline phone.</p></div>
+        <div class="grid project-grid">
+          <article class="card"><p class="eyebrow">Browser demo / self-hosted app</p><h3>GrizzWorks</h3><p>One workflow from the work-order board and wall display through inventory, quotes, and invoicing. The local Node.js version synchronizes shared data; the demo uses sample records in your browser.</p><ul class="evidence-links"><li><a href="../dashboard/?demo=1#/workorders">Try the board ↗</a></li><li><a href="../dashboard/display.html">Try the wall display ↗</a></li><li><a href="https://github.com/cec406/applications/tree/main/dashboard">Server, testing, and rollout docs ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Browser walkthrough / local network app</p><h3>Shop Ops dashboard</h3><p>A scheduling board, calendar, and wall display for equipment drop-off and pickup. The self-hosted version has a tested import path for legacy CSVs and can synchronize data across a trusted LAN. The public walkthrough starts empty; use sample entries only.</p><ul class="evidence-links"><li><a href="../MTMAdash/">Open the dashboard ↗</a></li><li><a href="https://github.com/cec406/applications/blob/main/MTMAdash/shared/legacy.js">Review the CSV migration code ↗</a></li><li><a href="https://github.com/cec406/applications/tree/main/MTMAdash">Source and deployment options ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Live offline PWA</p><h3>AFT Forge</h3><p>A React and TypeScript fitness planner with local profiles, training logs, and backup export. The site workflow builds and checks the offline artifacts before publishing.</p><ul class="evidence-links"><li><a href="../aft-forge/">Open AFT Forge ↗</a></li><li><a href="https://github.com/cec406/grizzlyse/tree/main/aft-forge">App source ↗</a></li></ul></article>
         </div>
+      </div>
     </section>
 
-    <!-- Games & Simulations -->
-    <section id="games" class="py-20 bg-dark">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="mb-12">
-                <h2 class="text-3xl md:text-4xl font-black uppercase tracking-tighter">Games &amp; Simulations</h2>
-                <div class="h-1 w-20 bg-primary mt-4"></div>
-                <p class="text-slate-400 mt-6 max-w-2xl">
-                    Terminal games and simulations that teach real technical skills through play &mdash;
-                    defence-first, and honest about the fiction.
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- ZeroDay Academy -->
-                <a href="../range/machine.html?m=compsci" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
-                    <div class="text-primary mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-primary transition">ZeroDay Academy</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        A complete computer science academy in your browser. Linux and Windows command lines,
-                        real programming practice, networking, and authorised security &mdash; from your first
-                        <span class="font-mono text-slate-300">ls</span> to a full incident response.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
-                        <span class="px-2 py-1 border border-slate-700 rounded">9 chapters</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">35 missions</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">Code Lab</span>
-                    </div>
-                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
-                        Launch Academy &rarr;
-                    </div>
-                </a>
-
-                <!-- Cyber Range -->
-                <a href="../range/machine.html?m=gsehack" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
-                    <div class="text-primary mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9c0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-primary transition">GRIZZLY_SE // Cyber Range</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        A defence-first training range. Play six blue-team missions that show how common
-                        attacks work so you can recognise and stop them &mdash; password security, unauthorised
-                        access, network reconnaissance, log forensics, hidden data, and injection defence.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
-                        <span class="px-2 py-1 border border-slate-700 rounded">6 blue-team missions</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">Defence-first</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">Single file</span>
-                    </div>
-                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
-                        Enter the Range &rarr;
-                    </div>
-                </a>
-
-                <!-- CODEWATCH -->
-                <a href="../range/machine.html?m=cybercrime" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
-                    <div class="text-primary mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7.864 4.243A7.5 7.5 0 0119.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 004.5 10.5a7.464 7.464 0 01-1.15 3.993m1.989 3.559A11.209 11.209 0 008.25 10.5a3.75 3.75 0 117.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 01-3.6 9.75m6.633-4.596a18.666 18.666 0 01-2.485 5.33" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-primary transition">CODEWATCH // Cybercrime</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        A fictional forensics sim where you rise through the ranks of a national cyber
-                        investigation bureau. Trace malware, protect the vulnerable, refuse hospital
-                        ransomware, defend the grid, follow the crypto, and shut down scam waves &mdash;
-                        learning to be the good guy.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
-                        <span class="px-2 py-1 border border-slate-700 rounded">11 missions</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">2 specializations</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">EN / ES / RU</span>
-                    </div>
-                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
-                        Open a Case File &rarr;
-                    </div>
-                </a>
-
-                <!-- ZONE PDA -->
-                <a href="https://grizzlyse.com/zone" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
-                    <div class="text-primary mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-primary transition">ZONE PDA // Говори, Сталкер</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        A S.T.A.L.K.E.R.-flavoured Russian course you talk your way through. Negotiate
-                        checkpoints, markets, and mutants by listening, speaking, and building the phrases
-                        that keep you alive &mdash; with romanisation, speech synthesis, and a codex.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
-                        <span class="px-2 py-1 border border-slate-700 rounded">Story missions</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">Russian</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">Speech</span>
-                    </div>
-                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
-                        Enter the Zone &rarr;
-                    </div>
-                </a>
-
-                <!-- Station Demokratiya -->
-                <a href="https://grizzlyse.com/stationdemokratiya" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
-                    <div class="text-primary mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8.25a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm0 0a3.75 3.75 0 013.75 3.75v2a3.75 3.75 0 01-7.5 0v-2A3.75 3.75 0 0112 8.25zM6.75 11.25H4.5m15 0h-2.25M6.75 17.25l-1.5 1.5m12-1.5l1.5 1.5M6.9 8.1L5.4 6.6m12.7 1.5l1.5-1.5" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-primary transition">Station Demokratiya</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        A typing-defence game where you learn Russian and Spanish by killing bugs. Every
-                        bug carries a word &mdash; type its meaning before it reaches the gate, survive the
-                        waves, spend stratagems, and try not to let the Ministry make you learn its name.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
-                        <span class="px-2 py-1 border border-slate-700 rounded">Russian &amp; Spanish</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">Endless waves</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">Keyboard</span>
-                    </div>
-                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
-                        Enlist &rarr;
-                    </div>
-                </a>
-            </div>
+    <section id="python">
+      <div class="wrap">
+        <div class="section-head"><p class="eyebrow">03 / Python</p><h2>Automation, interfaces, and defensive tools</h2><p class="lede">Review samples for data integrity, desktop UI, and reporting. Local projects are source downloads unless marked as browser demos.</p></div>
+        <div class="grid project-grid">
+          <article class="card"><p class="eyebrow">Python / implementation rehearsal</p><h3>GrizzWorks data migration</h3><p>Preview and correct a messy work-order export before approving a candidate backup. A disposable GrizzWorks server verified four imports, preserved them through restart, and a repeat preview found zero new rows.</p><ul class="evidence-links"><li><a href="../portfolio/#migration">Read the case study</a></li><li><a href="https://github.com/cec406/Projects/tree/main/grizzworks-migration">CLI, fixtures, and cutover notes ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Python / SQLite reference</p><h3>Local-first shop operations</h3><p>Shows how SQLite can preserve balanced ledger entries and avoid double posting when the same event is processed again. This is a separate reference sample, not the GrizzWorks backend.</p><ul class="evidence-links"><li><a href="https://github.com/cec406/Projects/tree/main/shop-operations">Review the runnable reference ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Tkinter / command line</p><h3>Desktop and console utilities</h3><p>A note taker with a Tkinter interface and a console version, both using plain-text files. A separate chore generator turns entered names into randomized assignments.</p><ul class="evidence-links"><li><a href="https://github.com/cec406/Python-applications/tree/main/Python%20Apps/Note%20taker">Note taker source ↗</a></li><li><a href="https://github.com/cec406/Python-applications/tree/main/Python%20Apps/chore%20generator">Chore generator source ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Defensive security / source and browser tools</p><h3>Python security utilities</h3><p>A local Python/Tkinter password-strength checker. In the Engineering Lab, browser-based tools demonstrate credential-strength concepts and file inspection with sample inputs.</p><ul class="evidence-links"><li><a href="https://github.com/cec406/Cyber/tree/main/GrizzlySE/SecurityTools/password_checker">Review the local password checker ↗</a></li><li><a href="../lab.html#tool">Engineering Lab tools</a></li><li><a href="../incident.html">First-hour incident guide</a></li></ul></article>
         </div>
+      </div>
     </section>
 
-    <!-- Education & Training -->
-    <section id="education" class="py-20 bg-slate-900 border-y border-slate-800">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="mb-12">
-                <h2 class="text-3xl md:text-4xl font-black uppercase tracking-tighter">Education &amp; Training</h2>
-                <div class="h-1 w-20 bg-primary mt-4"></div>
-                <p class="text-slate-400 mt-6 max-w-2xl">
-                    Free, self-paced courses that go from zero to competent. Every one runs entirely in the
-                    browser with progress saved locally &mdash; no accounts, no data leaves your machine.
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Cyber Aware -->
-                <a href="../range/machine.html?m=csia" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
-                    <div class="text-primary mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-primary transition">Cyber Aware</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        Free, practical cybersecurity &amp; information-assurance awareness training for
-                        employees: phishing, passwords, MFA, safe browsing, data protection, devices and
-                        incident response &mdash; plus an optional technical track. Finish in one sitting and
-                        print a certificate.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
-                        <span class="px-2 py-1 border border-slate-700 rounded">16 modules</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">9 interactive tools</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">Certificate</span>
-                    </div>
-                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
-                        Start training &rarr;
-                    </div>
-                </a>
-
-                <!-- CSMath Hero -->
-                <a href="https://grizzlyse.com/csmath" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
-                    <div class="text-primary mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7h6m-6 4h6m-6 4h3m-8 5h16a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v14a1 1 0 001 1z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-primary transition">CSMath Hero</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        A gamified math trainer disguised as an RPG. 11 realms and 84 skills take you from
-                        arithmetic to calculus, discrete math, linear algebra, probability, and algorithm
-                        analysis &mdash; with interactive lessons, boss trials, mock exams, and spaced review.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
-                        <span class="px-2 py-1 border border-slate-700 rounded">11 realms</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">84 skills</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">Boss trials</span>
-                    </div>
-                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
-                        Go zero to hero &rarr;
-                    </div>
-                </a>
-
-                <!-- GitCI/CD Hero -->
-                <a href="../range/machine.html?m=gitcicd" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
-                    <div class="text-primary mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 3v12m0 0a3 3 0 103 3M6 15a3 3 0 11-6 0 3 3 0 016 0zm12-9a3 3 0 11-3 3 3 3 0 013-3zm0 0a6 6 0 01-6 6H9" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-primary transition">GitCI/CD Hero</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        Zero to hero in Git, CI/CD, GitHub Actions, containers and DevSecOps. It runs a real
-                        Git engine and a CI/CD engine in your browser &mdash; type actual
-                        <span class="font-mono text-slate-300">git</span> commands against a live repository,
-                        and write and run real workflow YAML.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
-                        <span class="px-2 py-1 border border-slate-700 rounded">8 tracks</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">46 missions</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">Capstone</span>
-                    </div>
-                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
-                        Open the pipeline &rarr;
-                    </div>
-                </a>
-            </div>
+    <section id="education" class="shade">
+      <div class="wrap">
+        <div class="section-head"><p class="eyebrow">04 / Enablement</p><h2>Hands-on training</h2><p class="lede">Learners can practice, inspect what happened, and try again without using a live system.</p></div>
+        <div class="grid project-grid">
+          <article class="card"><p class="eyebrow">Live browser workspace</p><h3>Grizzly Range</h3><p>One operator desktop for five independent apps, with a shared progress registry and 12 graded work orders. The exercises use synthetic scenarios and browser-local saves; they do not run against a real network.</p><ul class="evidence-links"><li><a href="../range/">Open the Range ↗</a></li><li><a href="../portfolio/#range">Read the design notes</a></li><li><a href="../range/machine.html?m=gsehack">Defensive training simulation ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Live simulation / curriculum and engines</p><h3>GitCI/CD Hero</h3><p>Eight tracks and 46 chapters with simulated Git and CI engines. Learners can inspect a pipeline failure and retry without a live repository, runner, or credentials.</p><ul class="evidence-links"><li><a href="../range/machine.html?m=gitcicd">Launch the simulator ↗</a></li><li><a href="https://github.com/cec406/Projects/tree/main/gitcicd-hero">Inspect the engines and self-test ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Live browser courses</p><h3>ZeroDay Academy and Cyber Aware</h3><p>A computer science academy with simulated terminals and programming exercises, plus an employee cybersecurity course with modules and an assessment.</p><ul class="evidence-links"><li><a href="../range/machine.html?m=compsci">Open ZeroDay Academy ↗</a></li><li><a href="../csia/">Open Cyber Aware ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Live practice / worked lessons</p><h3>CSMath Hero</h3><p>Interactive math practice from arithmetic through the foundations used in computer science, including discrete math, linear algebra, probability, and algorithm analysis.</p><ul class="evidence-links"><li><a href="../csmath/">Open CSMath Hero ↗</a></li></ul></article>
         </div>
+      </div>
     </section>
 
-    <!-- Language Applications -->
-    <section id="languages" class="py-20 bg-dark">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="mb-12">
-                <h2 class="text-3xl md:text-4xl font-black uppercase tracking-tighter">Language Applications</h2>
-                <div class="h-1 w-20 bg-primary mt-4"></div>
-                <p class="text-slate-400 mt-6 max-w-2xl">
-                    Written-first, no-framework courses for English speakers. Graded units, grammar references,
-                    spaced repetition, and a dozen games each &mdash; all with offline-friendly audio via the
-                    browser's speech synthesis, plus a searchable dictionary and a keyboard trainer.
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- SpanishPod -->
-                <a href="https://grizzlyse.com/spanish" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="text-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-                            </svg>
-                        </div>
-                        <span class="text-[11px] font-mono uppercase tracking-widest text-slate-500">EN &rarr; ES</span>
-                    </div>
-                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-primary transition">SpanishPod</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        Learn Spanish from zero to fluency across 48 graded units (A1&ndash;C1) with 20 reading
-                        texts and regional slang. Built for a family heading to Puerto Rico and anyone training
-                        toward a proficiency exam &mdash; Latin-American Spanish by default. Now includes a
-                        searchable dictionary, an accent &amp; keyboard trainer, and a zero &rarr; hero roadmap.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
-                        <span class="px-2 py-1 border border-slate-700 rounded">48 units</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">12 games</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">1,300+ word dictionary</span>
-                    </div>
-                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
-                        Start Spanish &rarr;
-                    </div>
-                </a>
-
-                <!-- RussianPod -->
-                <a href="https://grizzlyse.com/russian" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="text-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-                            </svg>
-                        </div>
-                        <span class="text-[11px] font-mono uppercase tracking-widest text-slate-500">EN &rarr; RU</span>
-                    </div>
-                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-primary transition">RussianPod</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        Learn Russian from zero to hero. Master the 33-letter Cyrillic alphabet, work through
-                        44 graded units, drill with 12 games, review with spaced repetition, and read graded
-                        texts. Now includes a searchable English &harr; Russian dictionary, a Russian keyboard
-                        touch-typing trainer, and a zero &rarr; hero roadmap to professional Russian.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
-                        <span class="px-2 py-1 border border-slate-700 rounded">44 units</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">12 games</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">Keyboard trainer</span>
-                    </div>
-                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
-                        Start Russian &rarr;
-                    </div>
-                </a>
-            </div>
+    <section id="games">
+      <div class="wrap">
+        <div class="section-head"><p class="eyebrow">05 / Interactive systems</p><h2>Games and simulations</h2><p class="lede">Experiments in game state, input handling, replayable scenarios, and learning through narrative.</p></div>
+        <div class="grid project-grid">
+          <article class="card"><p class="eyebrow">Live browser simulation</p><h3>CODEWATCH</h3><p>A fictional cybercrime investigation simulator with case files, incident reporting, specializations, and English, Spanish, and Russian interfaces.</p><ul class="evidence-links"><li><a href="../range/machine.html?m=cybercrime">Open a case file ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Python / Pygame / text adventures</p><h3>Arcade games and branching stories</h3><p>Harambe Escape explores frame updates, collision detection, and pixel art drawn in code. The Titanic games experiment with different controls. Crusader Fantasy and Hogwarts Adventure use branching stories and character state.</p><ul class="evidence-links"><li><a href="https://github.com/cec406/Python-applications/tree/main/Python%20Games">Browse Python games ↗</a></li><li><a href="https://github.com/cec406/Python-applications/tree/main/Python%20Games/harambe">Review the Pygame source ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Live browser game / multilingual</p><h3>Station Demokratiya</h3><p>A typing-defense game that turns Russian and Spanish vocabulary into a timed recognition exercise with escalating waves. A physical keyboard is required.</p><ul class="evidence-links"><li><a href="../stationdemokratiya/">Play Station Demokratiya ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Live browser game / speech</p><h3>ZONE PDA</h3><p>A Russian-learning story game with phrase-building, romanization, and speech synthesis. Learners apply vocabulary in scenarios instead of only reading a word list.</p><ul class="evidence-links"><li><a href="../zone/">Enter the Zone ↗</a></li></ul></article>
         </div>
+      </div>
     </section>
 
-    <!-- Tools & Dashboards -->
-    <section id="tools" class="py-20 bg-slate-900 border-y border-slate-800">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="mb-12">
-                <h2 class="text-3xl md:text-4xl font-black uppercase tracking-tighter">Tools &amp; Dashboards</h2>
-                <div class="h-1 w-20 bg-primary mt-4"></div>
-                <p class="text-slate-400 mt-6 max-w-2xl">
-                    Working examples for the shop floor, the office, and mobile use. Start with sample data in GrizzWorks or open AFT Forge to see an installable, offline web app.
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- GrizzWorks -->
-                <a href="../dashboard/" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
-                    <div class="text-primary mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10-3a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1v-7z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-primary transition">GrizzWorks</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        Shop operations software connecting jobs, work orders, inventory, and invoicing, with a dedicated wall display. The hosted version is an interactive, browser-only demo with sample data.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
-                        <span class="px-2 py-1 border border-slate-700 rounded">Demo mode</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">Local-first</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">Kiosk</span>
-                    </div>
-                    <div class="mt-6 text-primary text-sm font-bold uppercase tracking-widest group-hover:translate-x-1 transition-transform inline-block">
-                        Open the demo &rarr;
-                    </div>
-                </a>
-                <a href="../aft-forge/" class="group block p-8 bg-surface border border-slate-700 rounded-lg hover:border-primary/60 hover:-translate-y-1 transition duration-200">
-                    <p class="text-amber-400 font-mono text-sm mb-6">INSTALLABLE WEB APP</p>
-                    <h3 class="text-xl font-bold uppercase tracking-tight mb-3 group-hover:text-amber-400 transition">AFT Forge</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">A mobile fitness planner that works offline. Profiles, plans, and training logs stay on the device, and a GitHub Actions workflow builds and publishes the app.</p>
-                    <div class="flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-widest text-slate-400">
-                        <span class="px-2 py-1 border border-slate-700 rounded">React</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">TypeScript</span>
-                        <span class="px-2 py-1 border border-slate-700 rounded">Offline PWA</span>
-                    </div>
-                    <div class="mt-6 text-amber-400 text-sm font-bold uppercase tracking-widest">Open AFT Forge &rarr;</div>
-                </a>
-            </div>
+    <section id="languages" class="shade">
+      <div class="wrap">
+        <div class="section-head"><p class="eyebrow">06 / Learning apps</p><h2>Language practice</h2></div>
+        <div class="grid project-grid">
+          <article class="card"><p class="eyebrow">Live browser application</p><h3>SpanishPod</h3><p>Latin American Spanish lessons and games, with locally saved progress.</p><ul class="evidence-links"><li><a href="../spanish/">Practice Spanish ↗</a></li></ul></article>
+          <article class="card"><p class="eyebrow">Live browser application</p><h3>RussianPod</h3><p>Russian lessons and games with alphabet and vocabulary practice and locally saved progress.</p><ul class="evidence-links"><li><a href="../russian/">Practice Russian ↗</a></li></ul></article>
         </div>
+      </div>
     </section>
-
-    </main>
-    <footer class="py-12 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-400">
-            <p>Caleb Clark · Engineering portfolio</p>
-            <nav class="flex flex-wrap items-center gap-x-6 gap-y-2" aria-label="Footer navigation">
-                <a href="../portfolio/#contact" class="hover:text-amber-400 transition">Recruiter contact</a>
-                <a href="https://github.com/cec406" class="hover:text-amber-400 transition">GitHub</a>
-                <a href="../" class="hover:text-amber-400 transition">Grizzly business site</a>
-            </nav>
-        </div>
-    </footer>
-
+  </main>
+  <footer class="site-footer">
+    <div class="wrap foot"><p>Caleb Clark · Engineering portfolio</p><nav aria-label="Footer navigation"><a href="../portfolio/#work">Selected work</a><a href="../portfolio/#contact">Recruiter contact</a><a href="https://github.com/cec406">GitHub ↗</a><a href="../">Grizzly business site ↗</a></nav></div>
+  </footer>
 </body>
 </html>

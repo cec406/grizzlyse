@@ -16,6 +16,7 @@ h1,h2{font-family:"Russo One",sans-serif;font-weight:400;margin:0 0 8px;color:va
 h1{font-size:clamp(28px,6vw,48px)}h2{font-size:clamp(20px,4vw,30px)}
 p{margin:6px 0;max-width:560px;line-height:1.45;font-size:14px}
 .red{color:var(--red)}
+#ov a{color:var(--lamp)}
 button,select{font:inherit;color:var(--bone);background:#241d18;border:2px solid var(--lamp);padding:9px 14px;margin:6px;cursor:pointer}
 button:hover,button:focus-visible{background:var(--lamp);color:var(--ink);outline:none}
 .opt{display:block;width:min(520px,90%);text-align:left}
@@ -51,7 +52,7 @@ function buildPool(){
  else{const[f,t]=mode.split('-');pool=VOC.map(w=>({p:w[IDX[f]],show:w[IDX[t]],a:[norm(w[IDX[t]])]}))}}
 function say(s){log.push(s);if(log.length>3)log.shift()}
 function menu(){st='menu';ov.style.display='flex';
- ov.innerHTML=`<h1>STATION DEMOKRATIYA</h1><p>The last metro station under the ash. The Ministry says you are free. The bugs say otherwise.</p><p>Each bug carries a word. <b>Type what it means</b> to kill it. Let one reach the gate and you lose integrity, and the Ministry will make you learn its name.</p><p>Arrow codes call stratagems: <b>↑→↓→</b> strike, <b>←↓↑→</b> repair (you earn a charge every 8 kills). Backspace edits, Esc pauses. <b>Keyboard needed</b> — on a phone, pair a keyboard.</p><label>Practice: <select id="md">${Object.entries(MODES).map(([k,v])=>`<option value="${k}"${k===mode?' selected':''}>${v}</option>`).join('')}</select></label><button id="gl">FIELD GLOSSARY</button><button id="go">ENLIST (best: ${best})</button>`;
+ ov.innerHTML=`<h1>STATION DEMOKRATIYA</h1><p>The last metro station under the ash. The Ministry says you are free. The bugs say otherwise.</p><p>Each bug carries a word. <b>Type what it means</b> to kill it. Let one reach the gate and you lose integrity, and the Ministry will make you learn its name.</p><p>Arrow codes call stratagems: <b>↑→↓→</b> strike, <b>←↓↑→</b> repair (you earn a charge every 8 kills). Backspace edits, Esc pauses. <b>Keyboard needed</b> — on a phone, pair a keyboard.</p><label>Practice: <select id="md">${Object.entries(MODES).map(([k,v])=>`<option value="${k}"${k===mode?' selected':''}>${v}</option>`).join('')}</select></label><button id="gl">FIELD GLOSSARY</button><button id="go">ENLIST (best: ${best})</button><p><a href="../projects/#games">Game catalog</a></p>`;
  $('md').onchange=e=>{mode=e.target.value;e.target.blur()};
  $('gl').onclick=e=>{e.target.blur();glossary('menu')};
  $('go').onclick=e=>{e.target.blur();start()}}

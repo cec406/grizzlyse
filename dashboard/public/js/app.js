@@ -238,6 +238,7 @@ function buildSidebar() {
   SIDEBAR.append(h('div', { class: 'sidebar-foot' },
     h('div', { class: 'muted small' }, `${APP_NAME} v${APP_VERSION}`),
     h('div', { class: 'muted small' }, 'Local · no subscriptions'),
+    h('a', { class: 'small', href: new URL('../../../portfolio/#grizzworks', import.meta.url).href }, 'GrizzWorks case study ↗'),
   ));
   // Tapping dead space inside the drawer also closes it — the drawer overlaps
   // the menu button when open, so "click the button again" is not an option.

@@ -302,6 +302,7 @@ function App() {
         <footer className="app-footer">
           <span>AFT FORGE / LOCAL-FIRST / NO ACCOUNT</span>
           <span>Built for the 60–90 minute Soldier. Not medical advice.</span>
+          <a href="../portfolio/#aft-forge">AFT Forge case study</a>
         </footer>
       </main>
 
